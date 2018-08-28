@@ -3,3 +3,9 @@
 ################################################################################
 
 /.vs
+/packages
+/QQ.Framework/.vs/QQ-King
+/QQ.Framework/bin/Debug
+/QQ.Framework/obj/Debug
+/QQLoginTest/bin/Debug
+/QQLoginTest/obj/Debug
