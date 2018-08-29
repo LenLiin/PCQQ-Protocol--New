@@ -18,10 +18,12 @@ namespace QQ.Framework.Packets.Send.Message
             Sequence = GetNextSeq();
             _secretKey = user.QQ_SessionKey;
             Command = QQCommand.Message0x00CD;
-            _message = Message;
+            _message = Encoding.UTF8.GetBytes(Message);
             _messageType = messageType;
             _toQQ = ToQQ;
         }
+        private byte _packetCount = 1;
+        private byte _packetIndex = 0;
         /// <summary>
         /// 好友QQ
         /// </summary>
@@ -30,7 +32,7 @@ namespace QQ.Framework.Packets.Send.Message
         /// 消息类型
         /// </summary>
         public FriendMessageType _messageType { get; set; }
-        private string _message { get; set; }
+        private byte[] _message { get; set; }
         protected override void PutHeader(ByteBuffer buf)
         {
             base.PutHeader(buf);
@@ -43,7 +45,6 @@ namespace QQ.Framework.Packets.Send.Message
         protected override void PutBody(ByteBuffer buf)
         {
             var _DateTime = Util.GetTimeSeconds(DateTime.Now);
-            var MessageData =Util.HexStringToByteArray( Util.ConvertStringToHex(_message));
             if (_messageType == FriendMessageType.Shake)
             {
                 buf.PutLong(user.QQ);
@@ -62,7 +63,7 @@ namespace QQ.Framework.Packets.Send.Message
             }
             else
             {
-                var _Md5 = Util.HexStringToByteArray(Util.ToHex(user.QQ_SessionKey));
+                var _Md5 = user.QQ_SessionKey;
                 buf.PutLong(user.QQ);
                 buf.PutLong(_toQQ);
                 buf.Put(new byte[] { 0x00, 0x00, 0x00, 0x0D, 0x00, 0x01, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x01,0x01 });
@@ -73,7 +74,7 @@ namespace QQ.Framework.Packets.Send.Message
                 buf.Put(new byte[] { 0x00, 0x0B });
                 buf.Put(Util.RandomKey(2));
                 buf.PutLong(_DateTime);
-                buf.Put(new byte[] { 0x02, 0x34, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x4D, 0x53, 0x47, 0x00, 0x00, 0x00, 0x00, 0x00 });
+                buf.Put(new byte[] { 0x02, 0x34, 0x00, 0x00, 0x00, 0x00, _packetCount, _packetIndex, 0x00, 0x00, 0x01, 0x4D, 0x53, 0x47, 0x00, 0x00, 0x00, 0x00, 0x00 });
                 buf.PutLong(_DateTime);
                 buf.Put(Util.RandomKey(4));
                 buf.Put(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00 });
@@ -82,12 +83,44 @@ namespace QQ.Framework.Packets.Send.Message
                 buf.Put(new byte[] { 0x00, 0x00 });
                 buf.Put(new byte[] { 0x01 });
                 buf.Put( 0x00 );
-                buf.Put((byte)(MessageData.Length + 3));
+                buf.Put((byte)(_message.Length + 3));
                 buf.Put(new byte[] { 0x01 });
                 buf.Put(0x00);
-                buf.Put((byte)MessageData.Length);
-                buf.Put(MessageData);
+                buf.Put((byte)_message.Length);
+                buf.Put(_message);
             }
+        }
+        public static List<Send_0x00CD> SendLongMessage(QQUser User, string Message, FriendMessageType messageType, long ToQQ)
+        {
+            var buffer = new ByteBuffer();
+            var list = new List<byte[]>();
+            foreach (var chr in Message)
+            {
+                var bytes = Encoding.UTF8.GetBytes(chr.ToString());
+                if (buffer.Length + bytes.Length > 699)
+                {
+                    list.Add(buffer.ToByteArray());
+                    buffer.Initialize();
+                }
+
+                buffer.Put(bytes);
+            }
+            list.Add(buffer.ToByteArray());
+            buffer.Initialize();
+
+            byte index = 0;
+            var ret = new List<Send_0x00CD>();
+            foreach (var byteBuffer in list)
+            {
+                ret.Add(new Send_0x00CD(User, "", messageType, ToQQ)
+                {
+                    _packetCount = (byte) list.Count,
+                    _packetIndex = index++,
+                    _message = byteBuffer
+                });
+            }
+
+            return ret;
         }
     }
 }
