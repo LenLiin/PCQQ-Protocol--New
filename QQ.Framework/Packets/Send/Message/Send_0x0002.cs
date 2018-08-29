@@ -57,8 +57,7 @@ namespace QQ.Framework.Packets.Send.Message
                 
                 buf.Put(new byte[] { 0x2A });
                 buf.PutLong(group);
-                buf.Put(new byte[] { 0x00 });
-                buf.Put((byte)Length);
+                buf.PutUShort((ushort)Length);
 
                 buf.Put(new byte[] { 0x00, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4D, 0x53, 0x47, 0x00, 0x00, 0x00, 0x00, 0x00 });
                 buf.PutLong(_DateTime);
@@ -69,11 +68,9 @@ namespace QQ.Framework.Packets.Send.Message
                 buf.Put(new byte[] { 0x00, 0x00 });
 
                 buf.Put(new byte[] { 0x01 });
-                buf.Put(0x00);
-                buf.Put((byte)(MessageData.Length + 3));
+                buf.PutUShort((ushort)(MessageData.Length + 3));
                 buf.Put(new byte[] { 0x01 });
-                buf.Put(0x00);
-                buf.Put((byte)MessageData.Length);
+                buf.PutUShort((ushort)MessageData.Length);
                 buf.Put(MessageData);
 
             }
