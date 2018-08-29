@@ -26,9 +26,6 @@ namespace QQ.Framework.Sockets
             this.client = client;
             EndPoint point = new IPEndPoint(IPAddress.Parse(client.LoginServerHost), client.LoginPort);
             client.Point = point;
-            //定时发送心跳包
-            TimersInvoke timersInvoke = new TimersInvoke(client);
-            timersInvoke.StartTimer();
         }
         public void Init()
         {
@@ -102,7 +99,9 @@ namespace QQ.Framework.Sockets
                         else if (_0836Packet.GetPacketLength() == 871)
                         {
                             client.MessageLog("需要验证码登录");
-                            //client.OnReceive_0x0836_871(_0836e);
+                            client.OnReceive_0x0836_871(_0836e);
+                            break;
+
                         }
                         else if (_0836Packet.GetPacketLength() > 700)
                         {
@@ -113,6 +112,11 @@ namespace QQ.Framework.Sockets
                         var _0828Packet = new Receive_0x0828(tempBuf, client.QQUser);
                         QQEventArgs<Receive_0x0828> _0828e = new QQEventArgs<Receive_0x0828>(client, _0828Packet);
                         client.OnReceive_0x0828(_0828e);
+
+                        //定时发送心跳包
+                        TimersInvoke timersInvoke = new TimersInvoke(client);
+                        timersInvoke.StartTimer();
+
                         break;
                     case QQCommand.Login0x00EC:
                         var _00ECPacket = new Receive_0x00EC(tempBuf, client.QQUser);
@@ -148,6 +152,11 @@ namespace QQ.Framework.Sockets
                         var _0058Packet = new Receive_0x0058(tempBuf, client.QQUser);
                         QQEventArgs<Receive_0x0058> _0058e = new QQEventArgs<Receive_0x0058>(client, _0058Packet);
                         client.OnReceive_0x0058(_0058e);
+                        break;
+                    case QQCommand.Login0x00BA:
+                        var _00BAPacket = new Receive_0x00BA(tempBuf, client.QQUser);
+                        QQEventArgs<Receive_0x00BA> _00BAe = new QQEventArgs<Receive_0x00BA>(client, _00BAPacket);
+                        client.OnReceive_0x00BA(_00BAe);
                         break;
                     default:
                         var _CurrencyPacket = new Receive_Currency(tempBuf, client.QQUser);

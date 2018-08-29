@@ -14,6 +14,7 @@ namespace QQ.Framework.Packets.Send.Login
         /// 数据包类型默认为第一种
         /// </summary>
         Login0x0836Type _type = Login0x0836Type.Login0x0836_622;
+        bool isVerify { get; set; } = false;
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -21,13 +22,14 @@ namespace QQ.Framework.Packets.Send.Login
         /// <param name="User"></param>
         /// <param name="type">包类型</param>
         /// <param name="Key">数据包密钥</param>
-        public Send_0x0836(QQUser User, Login0x0836Type type)
+        public Send_0x0836(QQUser User, Login0x0836Type type, bool isVerify = false)
             : base(User)
         {
             Sequence = GetNextSeq();
             _secretKey = user.QQ_SHARE_KEY;
             _type = type;
             Command = QQCommand.Login0x0836;
+            this.isVerify = isVerify;
         }
         protected override void PutHeader(ByteBuffer buf)
         {
@@ -44,7 +46,7 @@ namespace QQ.Framework.Packets.Send.Login
         protected override void PutBody(ByteBuffer buf)
         {
             user.QQ_tlv_001A_encr = QQTea.Encrypt(user.QQ_PACKET_FIX2, user.QQ_PACKET_TgtgtKey);
-            if (_type == Login0x0836Type.Login0x0836_622)
+            if (_type == Login0x0836Type.Login0x0836_622 || isVerify)
             {
                 user.QQ_tlv_0006_encr = GET_TLV_0006(user.LoginTime, user.ServerIp);
             }

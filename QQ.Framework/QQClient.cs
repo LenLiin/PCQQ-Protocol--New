@@ -38,7 +38,7 @@ namespace QQ.Framework
         /// 服务器地址
         /// </summary>
         /// <value></value>
-        public string LoginServerHost { get; set; } = Util.GetHostAddresses("sz3.tencent.com");////sz.tencent.com,sz{2-9}.tencent.com
+        public string LoginServerHost { get; set; } = Util.GetHostAddresses("sz2.tencent.com");////sz.tencent.com,sz{2-9}.tencent.com
         /// <summary>
         /// 登录端口
         /// </summary>
@@ -204,6 +204,13 @@ namespace QQ.Framework
         /// <param name="e"></param>
         internal void OnReceive_0x0836_871(QQEventArgs<Receive_0x0836> e)
         {
+            //请求验证码
+            if (e.ReceivePacket.VerifyCommand == 0x01)
+            {
+                var buf = new ByteBuffer();
+                new Send_0x00BA(e.ReceivePacket.user, "").Fill(buf);
+                Send(buf);
+            }
             EventReceive_0x0836_871?.Invoke(this, e);
         }
         #endregion
@@ -245,6 +252,41 @@ namespace QQ.Framework
             Send(buf);
 
             EventReceive_0x00EC?.Invoke(this, e);
+        }
+        #endregion
+        
+
+        #region 00BA
+        /// <summary>
+        /// 验证码事件
+        /// </summary>
+        public event EventHandler<QQEventArgs<Receive_0x00BA>> EventReceive_0x00BA;
+        /// <summary>
+        /// 验证码事件
+        /// </summary>
+        /// <param name="e"></param>
+        internal void OnReceive_0x00BA(QQEventArgs<Receive_0x00BA> e)
+        {
+            if (e.ReceivePacket.Status == 0x01)
+            {
+                if (e.ReceivePacket.VerifyCommand == 0x01)
+                {
+                    var buf = new ByteBuffer();
+                    new Send_0x00BA(e.ReceivePacket.user, "").Fill(buf);
+                    Send(buf);
+                }
+            }
+            else
+            {
+                e.QQClient.QQUser.QQ_0836Token = e.QQClient.QQUser.QQ_PACKET_00BAVerifyToken;
+                e.QQClient.QQUser.QQ_PACKET_00BASequence = 0x00;
+                e.QQClient.QQUser.QQ_PACKET_TgtgtKey = Util.RandomKey();
+                //验证码验证成功后发送0836登录包
+                var buf = new ByteBuffer();
+                new Send_0x0836(e.ReceivePacket.user, Login0x0836Type.Login0x0836_686, true).Fill(buf);
+                Send(buf);
+            }
+            EventReceive_0x00BA?.Invoke(this, e);
         }
         #endregion
 
@@ -308,9 +350,6 @@ namespace QQ.Framework
             new Send_0x0017(e.ReceivePacket.user, DataBuf.GetByteArray(0x10), e.ReceivePacket.Sequence).Fill(buf);
             Send(buf);
             
-            //TODO:确认查看猜测为0x0360
-
-
             //重复接收包不再重复触发事件并且不处理自己的消息
             if (!QQUser.ReceiveSequences.Contains(e.ReceivePacket.Sequence) && !e.ReceivePacket.FromQQ.Equals(QQUser.QQ))
             {
@@ -341,7 +380,10 @@ namespace QQ.Framework
             new Send_0x00CE(e.ReceivePacket.user, DataBuf.GetByteArray(0x10), e.ReceivePacket.Sequence).Fill(buf);
             Send(buf);
             
-            //TODO:确认查看猜测为0x0319
+            //回复已接收成功
+            //buf = new ByteBuffer();
+            //new Send_0x0319(e.ReceivePacket.user, e.ReceivePacket.MessageDateTime).Fill(buf);
+            //Send(buf);
 
             //重复接收包不再重复触发事件并且不处理自己的消息
             if (!QQUser.ReceiveSequences.Contains(e.ReceivePacket.Sequence)&& !e.ReceivePacket.FromQQ.Equals(QQUser.QQ))

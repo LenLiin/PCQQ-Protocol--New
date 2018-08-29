@@ -77,6 +77,10 @@ namespace QQ.Framework
         /// 重定向密钥
         /// </summary>
         public byte[] QQ_PACKET_REDIRECTIONKEY { get; set; } = Util.RandomKey();
+        /// <summary>
+        /// 验证码报文秘钥
+        /// </summary>
+        public byte[] QQ_PACKET_00BA_Key { get; set; } = Util.RandomKey();
 
 
         /// <summary>
@@ -86,11 +90,6 @@ namespace QQ.Framework
             0x25, 0xAF, 0xAF, 0xD3, 0xEA, 0xB4, 0xC8, 0xBC, 0xE7 };
         public byte[] QQ_PACKET_TgtgtKey { get; set; } = Util.RandomKey();
         public byte[] QQ_PACKET_Crc32_Code { get; set; } = Util.RandomKey();
-        /// <summary>
-        /// 00BA密钥
-        /// </summary>
-        public byte[] QQ_PACKET_00BA_KEY { get; set; } = new byte[] { 0xC1, 0x9C, 0xB8, 0xC8, 0x7B, 0x8C, 0x81, 0xBA,
-            0x9E, 0x9E, 0x7A, 0x89, 0xE1, 0x7A, 0xEC, 0x94 };
 
         /// <summary>
         /// 00BA占位段(暂时未解析出具体含义)
@@ -127,6 +126,10 @@ namespace QQ.Framework
         public byte[] QQ_tlv_0006_encr { get; set; }
         public byte[] QQ_tlv_001A_encr { get; set; }
         public byte[] QQ_tlv_0105 { get; set; }
+        public byte[] QQ_PACKET_00BAToken { get; set; }
+        public byte[] QQ_PACKET_00BAVerifyToken { get; set; }
+        public byte[] QQ_PACKET_00BAVerifyCode { get; set; }
+        public byte QQ_PACKET_00BASequence { get; set; } = 0x01;
         /// <summary>
         /// 0828解密密钥
         /// </summary>

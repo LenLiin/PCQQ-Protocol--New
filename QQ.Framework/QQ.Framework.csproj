@@ -32,6 +32,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -99,6 +100,7 @@
     <Compile Include="Utils\CRC32cs.cs" />
     <Compile Include="Utils\DesignByContract.cs" />
     <Compile Include="Utils\ECDHCrypter.cs" />
+    <Compile Include="Utils\ImageHelper.cs" />
     <Compile Include="Utils\QQTea.cs" />
     <Compile Include="Utils\Util.cs" />
   </ItemGroup>

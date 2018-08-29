@@ -261,6 +261,10 @@ namespace QQ.Framework
         /// </summary>
         Login0x00EC = 0x00EC,
         /// <summary>
+        /// 验证码提交
+        /// </summary>
+        Login0x00BA = 0x00BA,
+        /// <summary>
         /// 请求一些操作需要的密钥，比如文件中转，视频也有可能  目前用来获取Skey
         /// </summary>
         Data0x001D = 0x001D,

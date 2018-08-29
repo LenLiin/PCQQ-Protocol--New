@@ -27,9 +27,26 @@ namespace QQLoginTest
             client.EventReceive_0x0017 += Client_EventReceive_0x0017;
             client.EventReceive_0x00CE += Client_EventReceive_0x00CE;
 
+            client.EventReceive_0x00BA += Client_EventReceive_0x00BA;
+
             client.Login();
 
             Console.ReadKey();
+        }
+        private static void Client_EventReceive_0x00BA(object sender, QQEventArgs<QQ.Framework.Packets.Receive.Login.Receive_0x00BA> e)
+        {
+            if (e.ReceivePacket.VerifyCommand == 0x02)
+            {
+                string path = AppDomain.CurrentDomain.BaseDirectory + "//yanzhengma";
+                var img = ImageHelper.CreateImageFromBytes(path, e.QQClient.QQUser.QQ_PACKET_00BAVerifyCode);
+                string VerifyCode = Console.ReadLine();
+                if (!string.IsNullOrEmpty(VerifyCode))
+                {
+                    var buf = new ByteBuffer();
+                    new Send_0x00BA(e.ReceivePacket.user, VerifyCode).Fill(buf);
+                    e.QQClient.Send(buf);
+                }
+            }
         }
 
         /// <summary>
