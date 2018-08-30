@@ -478,5 +478,26 @@ namespace QQ.Framework
             EventReceive_0x0058?.Invoke(this, e);
         }
         #endregion
+        
+        public void SendLongGroupMessage(string message, long group)
+        {
+            message = message.Replace("\n", "\r").Trim();
+            foreach (var packet in Send_0x0002.SendLongMessage(QQUser, message, FriendMessageType.GroupMessage, group))
+            {
+                var sendBuffer = new ByteBuffer();
+                packet.Fill(sendBuffer);
+                Send(sendBuffer);
+            }
+        }
+        public void SendLongUserMessage(string message, long user)
+        {
+            message = message.Replace("\n", "\r").Trim();
+            foreach (var packet in Send_0x00CD.SendLongMessage(QQUser, message, FriendMessageType.GroupMessage, user))
+            {
+                var sendBuffer = new ByteBuffer();
+                packet.Fill(sendBuffer);
+                Send(sendBuffer);
+            }
+        }
     }
 }

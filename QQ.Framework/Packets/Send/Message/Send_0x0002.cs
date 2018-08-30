@@ -12,15 +12,14 @@ namespace QQ.Framework.Packets.Send.Message
     /// </summary>
     public class Send_0x0002 : SendPacket
     {
-        public Send_0x0002(QQUser User, string Message, FriendMessageType messageType, long ToQQ, long Group)
+        public Send_0x0002(QQUser User, string Message, FriendMessageType messageType, long Group)
             : base(User)
         {
             Sequence = GetNextSeq();
             _secretKey = user.QQ_SessionKey;
             Command = QQCommand.Message0x0002;
-            _message = Message;
+            _message = Encoding.UTF8.GetBytes(Message);
             _messageType = messageType;
-            _toQQ = ToQQ;
             _group = Group;
         }
         protected override void PutHeader(ByteBuffer buf)
@@ -28,16 +27,15 @@ namespace QQ.Framework.Packets.Send.Message
             base.PutHeader(buf);
             buf.Put(user.QQ_PACKET_FIXVER);
         }
-        /// <summary>
-        /// 好友QQ
-        /// </summary>
-        long _toQQ;
+
+        private byte _packetCount = 1;
+        private byte _packetIndex = 0;
         long _group;
         /// <summary>
         /// 消息类型
         /// </summary>
         public FriendMessageType _messageType { get; set; }
-        private string _message { get; set; }
+        private byte[] _message { get; set; }
         /// <summary>
         /// 初始化包体
         /// </summary>
@@ -46,20 +44,19 @@ namespace QQ.Framework.Packets.Send.Message
         {
             var _DateTime = Util.GetTimeSeconds(DateTime.Now);
             var group = GroupToGid(_group);
-            var MessageData = Util.HexStringToByteArray(Util.ConvertStringToHex(_message));
             if (_messageType == FriendMessageType.Xml)
             {
 
             }
             else if (_messageType == FriendMessageType.GroupMessage)
             {
-                var Length = MessageData.Length + 56;
+                var Length = _message.Length + 56;
                 
                 buf.Put(new byte[] { 0x2A });
                 buf.PutLong(group);
                 buf.PutUShort((ushort)Length);
 
-                buf.Put(new byte[] { 0x00, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4D, 0x53, 0x47, 0x00, 0x00, 0x00, 0x00, 0x00 });
+                buf.Put(new byte[] { 0x00, 0x01, _packetCount, _packetIndex, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4D, 0x53, 0x47, 0x00, 0x00, 0x00, 0x00, 0x00 });
                 buf.PutLong(_DateTime);
                 buf.Put(Util.RandomKey(4));
                 buf.Put(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00 });
@@ -68,10 +65,10 @@ namespace QQ.Framework.Packets.Send.Message
                 buf.Put(new byte[] { 0x00, 0x00 });
 
                 buf.Put(new byte[] { 0x01 });
-                buf.PutUShort((ushort)(MessageData.Length + 3));
+                buf.PutUShort((ushort)(_message.Length + 3));
                 buf.Put(new byte[] { 0x01 });
-                buf.PutUShort((ushort)MessageData.Length);
-                buf.Put(MessageData);
+                buf.PutUShort((ushort)_message.Length);
+                buf.Put(_message);
 
             }
             else if (_messageType == FriendMessageType.ExitGroup)
@@ -129,6 +126,39 @@ namespace QQ.Framework.Packets.Send.Message
                 return groupid;
             }
             return Convert.ToInt64(gid);
+        }
+
+        public static List<Send_0x0002> SendLongMessage(QQUser User, string Message, FriendMessageType messageType, long Group)
+        {
+            var buffer = new ByteBuffer();
+            var list = new List<byte[]>();
+            foreach (var chr in Message)
+            {
+                var bytes = Encoding.UTF8.GetBytes(chr.ToString());
+                if (buffer.Length + bytes.Length > 699)
+                {
+                    list.Add(buffer.ToByteArray());
+                    buffer.Initialize();
+                }
+
+                buffer.Put(bytes);
+            }
+            list.Add(buffer.ToByteArray());
+            buffer.Initialize();
+
+            byte index = 0;
+            var ret = new List<Send_0x0002>();
+            foreach (var byteBuffer in list)
+            {
+                ret.Add(new Send_0x0002(User, "", messageType, Group)
+                {
+                    _packetCount = (byte)list.Count,
+                    _packetIndex = index++,
+                    _message = byteBuffer
+                });
+            }
+
+            return ret;
         }
     }
 }
