@@ -1,11 +1,112 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{155BC652-D6ED-4DBF-82D2-A9188CB57C52}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>QQ.Framework</RootNamespace>
+    <AssemblyName>QQ.Framework</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
   </PropertyGroup>
-
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin_netfx\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin_netfx\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <!-- Needed due to old project and new project in same directory: https://github.com/NuGet/Home/issues/5126 -->
+    <BaseIntermediateOutputPath>obj_netfx\</BaseIntermediateOutputPath>
+  </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="System.Drawing.Common" Version="4.5.0" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
   </ItemGroup>
-
+  <ItemGroup>
+    <Compile Include="..\QQ.Framework\Events\QQSendEventArgs.cs" />
+    <Compile Include="..\QQ.Framework\Events\QQEventArgs.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Receive\Message\Receive_0x0360.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Receive\Message\Receive_0x0319.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Receive\Message\Receive_0x01C0.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Receive\Message\Receive_0x0058.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Send\Message\Send_0x0360.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Send\Message\Send_0x0319.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Send\Message\Send_0x01C0.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Send\Message\Send_0x0058.cs" />
+    <Compile Include="..\QQ.Framework\Sockets\TimersInvoke.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Packet.cs" />
+    <Compile Include="..\QQ.Framework\Packets\ReceivePacket.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Receive\Data\Receive_0x001D.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Receive\Login\Receive_0x00BA.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Receive\Login\Receive_0x00EC.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Receive\Message\Receive_Currency.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Receive\Message\Receive_0x0388.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Receive\Message\Receive_0x00CD.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Receive\Message\Receive_0x0002.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Receive\Interactive\Receive_0x00A8.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Receive\Interactive\Receive_0x0115.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Receive\Message\Receive_0x03E3.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Send\Data\Send_0x001D.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Send\Data\Send_0x005C.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Send\Login\Send_0x00BA.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Send\Login\Send_0x00EC.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Send\Message\Send_Currency.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Send\Message\Send_0x0388.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Send\Message\Send_0x0002.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Receive\Interactive\Receive_0x00AE.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Send\Interactive\Send_0x00A7.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Send\Interactive\Send_0x00A8.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Send\Interactive\Send_0x00AE.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Send\Interactive\Send_0x0115.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Receive\Interactive\Receive_0x00A7.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Receive\Message\Receive_0x0017.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Receive\Data\Receive_0x005C.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Receive\Message\Receive_0x00CE.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Receive\Login\Receive_0x0836.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Receive\Login\Receive_0x0828.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Receive\Login\Receive_0x0825.cs" />
+    <Compile Include="..\QQ.Framework\Packets\SendPacket.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Send\Login\Send_0x0825.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Send\Login\Send_0x0828.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Send\Login\Send_0x0836.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Send\Message\Send_0x0017.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Send\Message\Send_0x00CD.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Send\Message\Send_0x00CE.cs" />
+    <Compile Include="..\QQ.Framework\Packets\Send\Message\Send_0x03E3.cs" />
+    <Compile Include="..\QQ.Framework\QQClient.cs" />
+    <Compile Include="..\QQ.Framework\QQGlobal.cs" />
+    <Compile Include="..\QQ.Framework\QQUser.cs" />
+    <Compile Include="..\QQ.Framework\Sockets\MessageManage.cs" />
+    <Compile Include="..\QQ.Framework\Utils\ByteBuffer.cs" />
+    <Compile Include="..\QQ.Framework\Utils\CRC32cs.cs" />
+    <Compile Include="..\QQ.Framework\Utils\DesignByContract.cs" />
+    <Compile Include="..\QQ.Framework\Utils\ECDHCrypter.cs" />
+    <Compile Include="..\QQ.Framework\Utils\ImageHelper.cs" />
+    <Compile Include="..\QQ.Framework\Utils\QQTea.cs" />
+    <Compile Include="..\QQ.Framework\Utils\Util.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -12,13 +12,11 @@ using System.Threading.Tasks;
 
 namespace QQLoginTest
 {
-    public class Program
+    public partial class Program
     {
         static QQClient client;
         static void Main(string[] args)
         {
-            long MyQQ = 0;
-            string MyPassWord = "";
             QQUser user = new QQUser(MyQQ, MyPassWord);
             client = new QQClient()
             {
