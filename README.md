@@ -16,5 +16,5 @@ PCQQ协议
 ------------------------------------------
 我的TOXID：536F06809AAE9F29B8440B308E310AF8A26B9F93ADB60CAE086EEB26AB8F0D167486F38F39ED
 <br>
-<img src="/tox_save.png?raw=true" style="width:275px;" alt="联系方式">
+<!--img src="/tox_save.png?raw=true" style="width:275px;" alt="联系方式"-->
 <br>
