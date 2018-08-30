@@ -5,9 +5,13 @@
 /.vs
 /packages
 /QQ.Framework/.vs/QQ-King
-/QQ.Framework/bin/Debug
-/QQ.Framework/obj/Debug
-/QQLoginTest/bin/Debug
-/QQLoginTest/obj/Debug
+/QQ.Framework/bin
+/QQ.Framework/obj
+/QQLoginTest/bin
+/QQLoginTest/obj
 /QQ.Framework/obj
 /QQLoginTest/obj
+/QQ.Framework(Framework)/bin
+/QQ.Framework(Framework)/obj
+/QQLoginTest(Framework)/bin
+/QQLoginTest(Framework)/obj

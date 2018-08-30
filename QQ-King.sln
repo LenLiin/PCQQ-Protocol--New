@@ -3,9 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2018
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QQ.Framework", "QQ.Framework\QQ.Framework.csproj", "{155BC652-D6ED-4DBF-82D2-A9188CB57C52}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QQ.Framework", "QQ.Framework\QQ.Framework.csproj", "{155BC652-D6ED-4DBF-82D2-A9188CB57C52}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QQLoginTest", "QQLoginTest\QQLoginTest.csproj", "{D8B56D74-D61C-4498-9A3A-499C615877E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QQLoginTest", "QQLoginTest\QQLoginTest.csproj", "{D8B56D74-D61C-4498-9A3A-499C615877E2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QQ.Framework(Framework)", "QQ.Framework(Framework)\QQ.Framework(Framework).csproj", "{645F1B4A-A2F5-4BCD-B362-83667294187C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QQLoginTest(Framework)", "QQLoginTest(Framework)\QQLoginTest(Framework).csproj", "{50F2ED68-1B38-4C44-BD4B-95D148186AD7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{D8B56D74-D61C-4498-9A3A-499C615877E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D8B56D74-D61C-4498-9A3A-499C615877E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D8B56D74-D61C-4498-9A3A-499C615877E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{645F1B4A-A2F5-4BCD-B362-83667294187C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{645F1B4A-A2F5-4BCD-B362-83667294187C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{645F1B4A-A2F5-4BCD-B362-83667294187C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{645F1B4A-A2F5-4BCD-B362-83667294187C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50F2ED68-1B38-4C44-BD4B-95D148186AD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50F2ED68-1B38-4C44-BD4B-95D148186AD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50F2ED68-1B38-4C44-BD4B-95D148186AD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50F2ED68-1B38-4C44-BD4B-95D148186AD7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
