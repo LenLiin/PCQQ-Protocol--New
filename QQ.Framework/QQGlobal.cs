@@ -23,7 +23,7 @@ namespace QQ.Framework
         /// <summary>
         ///  QQ缺省编码方式
         /// </summary>
-        public const string QQ_CHARSET_DEFAULT = "GBK";
+        public const string QQ_CHARSET_DEFAULT = "UTF-8";
 
         /// <summary>
         ///  密钥长度 
