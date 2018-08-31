@@ -36,6 +36,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Net;
+using System.Net.Http;
 using System.Text.RegularExpressions;
 
 namespace QQ.Framework.Utils
@@ -44,8 +45,7 @@ namespace QQ.Framework.Utils
     {
         static Encoding DefaultEncoding = Encoding.GetEncoding(QQGlobal.QQ_CHARSET_DEFAULT);
         static DateTime baseDateTime = DateTime.Parse("1970-1-01 00:00:00.000");
-
-
+        
         public static Random Random = new Random();
         /// <summary>
         /// 把字节数组从offset开始的len个字节转换成一个unsigned int，
@@ -197,15 +197,7 @@ namespace QQ.Framework.Utils
         /// <returns></returns>
         public static int GetInt(string s, int defaultValue)
         {
-            int value;
-            if (int.TryParse(s, out value))
-            {
-                return value;
-            }
-            else
-            {
-                return defaultValue;
-            }
+            return int.TryParse(s, out var value) ? value : defaultValue;
         }
 
         /// <summary>
@@ -236,7 +228,7 @@ namespace QQ.Framework.Utils
         public static byte[] RandomKey(int length)
         {
             byte[] key = new byte[length];
-            (new Random()).NextBytes(key);
+            new Random().NextBytes(key);
             return key;
         }
 
@@ -287,15 +279,7 @@ namespace QQ.Framework.Utils
         /// <returns></returns>
         public static String GetIpStringFromBytes(byte[] ip)
         {
-            StringBuilder sb = new StringBuilder();
-            sb.Append(ip[0] & 0xFF);
-            sb.Append('.');
-            sb.Append(ip[1] & 0xFF);
-            sb.Append('.');
-            sb.Append(ip[2] & 0xFF);
-            sb.Append('.');
-            sb.Append(ip[3] & 0xFF);
-            return sb.ToString();
+            return $"{ip[0]}.{ip[1]}.{ip[2]}.{ip[3]}";
         }
         public static string ToHex(byte[] bs, string NewLine = "", string Format = "{0} ")
         {
@@ -330,26 +314,20 @@ namespace QQ.Framework.Utils
         }
 
         /// <summary>
-        /// 获取本地外网 IP
+        ///     获取本地外网 IP
         /// </summary>
         /// <returns></returns>
         public static string GetExternalIp()
         {
-            WebClient client = new WebClient();
-            client.Encoding = System.Text.Encoding.UTF8;
-            string response = client.DownloadString("http://www.baidu.com/s?wd=ip&rsv_spt=1&rsv_iqid=0xa699f31100003c46&issp=1&f=3&rsv_bp=0&rsv_idx=2&ie=utf-8&tn=baiduhome_pg&rsv_enter=0&rsv_sug3=2&rsv_sug1=1&rsv_sug7=100&prefixsug=ip&rsp=1&inputT=1711&rsv_sug4=1711");//百度
-            string myReg = @"<span class=""c-gap-right"">([\s\S]+?)<\/span>";
-            Match mc = Regex.Match(response, myReg, RegexOptions.Singleline);
+            var mc = Regex.Match(
+                new HttpClient().GetStringAsync("http://www.net.cn/static/customercare/yourip.asp").Result,
+                @"您的本地上网IP是：<h2>(\d+\.\d+\.\d+\.\d+)</h2>");
             if (mc.Success && mc.Groups.Count > 1)
             {
-                response = mc.Groups[1].Value.Replace("本机IP:&nbsp;", "");
-                return response;
-            }
-            else
-            {
-                throw new Exception("获取IP失败");
+                return mc.Groups[1].Value;
             }
 
+            throw new Exception("获取IP失败");
         }
         /// <summary>
         /// 根据域名获取IP
@@ -358,9 +336,7 @@ namespace QQ.Framework.Utils
         /// <returns></returns>
         public static string GetHostAddresses(string hostname)
         {
-            IPAddress[] ips;
-
-            ips = Dns.GetHostAddresses(hostname);
+            var ips = Dns.GetHostAddresses(hostname);
 
             return ips[0].ToString();
         }
@@ -372,7 +348,7 @@ namespace QQ.Framework.Utils
             for (int i = 0, len = str.Length; i < len; ++i)
             {
                 hash += (hash << 5) + (int)str[i];
-                hashstr = "((" + hashstr + "<<5)+" + ((int)str[i]).ToString() + ")";
+                hashstr = $"(({hashstr}<<5)+{(int) str[i]})";
             }
             return (hash & 0x7fffffff).ToString();
         }
@@ -400,10 +376,10 @@ namespace QQ.Framework.Utils
         #region TLV专属操作方法
         public static void int16_to_buf(byte[] TEMP_BYTE_ARRAY, int index, int Num)
         {
-            TEMP_BYTE_ARRAY[index] = (byte)(((Num & 0xff000000) >> 24) & 0xff);
-            TEMP_BYTE_ARRAY[index + 1] = (byte)(((Num & 0x00ff0000) >> 16) & 0xff);
-            TEMP_BYTE_ARRAY[index + 2] = (byte)(((Num & 0x0000ff00) >> 8) & 0xff);
-            TEMP_BYTE_ARRAY[index + 3] = (byte)((Num & 0x000000ff) & 0xff);
+            TEMP_BYTE_ARRAY[index] = (byte)((Num & 0xff000000) >> 24);
+            TEMP_BYTE_ARRAY[index + 1] = (byte)((Num & 0x00ff0000) >> 16);
+            TEMP_BYTE_ARRAY[index + 2] = (byte)((Num & 0x0000ff00) >> 8);
+            TEMP_BYTE_ARRAY[index + 3] = (byte)(Num & 0x000000ff);
         }
         public static int buf_to_int16(byte[] TEMP_BYTE_ARRAY, int index)
         {
@@ -471,12 +447,12 @@ namespace QQ.Framework.Utils
 
         public static int BEReadInt32(this BinaryReader br)
         {
-            return (br.ReadByte() << 24) + (br.ReadByte() << 16) + (br.ReadByte() << 8) + br.ReadByte();
+            return br.ReadByte() << 24 | br.ReadByte() << 16 | br.ReadByte() << 8 | br.ReadByte();
         }
 
         public static uint BEReadUInt32(this BinaryReader br)
         {
-            return (uint) ((br.ReadByte() << 24) + (br.ReadByte() << 16) + (br.ReadByte() << 8) + br.ReadByte());
+            return (uint) (br.ReadByte() << 24 | br.ReadByte() << 16 | br.ReadByte() << 8 | br.ReadByte());
         }
 
         #endregion

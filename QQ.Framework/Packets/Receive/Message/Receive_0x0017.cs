@@ -73,7 +73,7 @@ namespace QQ.Framework.Packets.Receive.Message
                 reader.ReadBytes(12);
                 Font = reader.ReadBytes(reader.BEReadChar()); //字体
                 reader.ReadBytes(6);
-                Message = Util.ConvertHexToString(Util.ToHex(reader.ReadBytes(reader.BEReadChar()))); //消息
+                Message = Encoding.UTF8.GetString(reader.ReadBytes(reader.BEReadChar())); //消息
                 reader.ReadBytes(58);
                 reader.ReadBytes(reader.BEReadChar()); //消息
                 reader.ReadBytes(11);

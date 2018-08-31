@@ -313,7 +313,17 @@ namespace QQ.Framework
         {
             if (!string.IsNullOrEmpty(e.ReceivePacket.Message))
             {
+                if (!QQGlobal.DebugLog && e.ReceivePacket.Message.Count(c => c == '\0') > 5)
+                {
+                    QQUser.MessageLog($"收到群{e.ReceivePacket.Group}的{e.ReceivePacket.FromQQ}的乱码消息。");
+                    return;
+                }
                 QQUser.MessageLog($"收到群{e.ReceivePacket.Group}的{e.ReceivePacket.FromQQ}的消息:{e.ReceivePacket.Message}");
+            }
+            else
+            {
+                QQUser.MessageLog($"收到群{e.ReceivePacket.Group}的{e.ReceivePacket.FromQQ}的空消息。");
+                return;
             }
             //提取数据
             var dataReader = new BinaryReader(new MemoryStream(e.ReceivePacket.bodyDecrypted));
@@ -346,7 +356,20 @@ namespace QQ.Framework
         /// <param name="e"></param>
         internal void OnReceive_0x00CE(QQEventArgs<Receive_0x00CE> e)
         {
-            QQUser.MessageLog($"收到好友{e.ReceivePacket.FromQQ}的消息:{e.ReceivePacket.MessageData}");
+            if (!string.IsNullOrEmpty(e.ReceivePacket.Message))
+            {
+                if (!QQGlobal.DebugLog && e.ReceivePacket.Message.Count(c => c == '\0') > 5)
+                {
+                    QQUser.MessageLog($"收到好友{e.ReceivePacket.FromQQ}的乱码消息。");
+                    return;
+                }
+                QQUser.MessageLog($"收到好友{e.ReceivePacket.FromQQ}的消息:{e.ReceivePacket.Message}");
+            }
+            else
+            {
+                QQUser.MessageLog($"收到好友{e.ReceivePacket.FromQQ}的空消息。");
+                return;
+            }
             //提取数据
             var dataReader = new BinaryReader(new MemoryStream(e.ReceivePacket.bodyDecrypted));
 

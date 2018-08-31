@@ -40,7 +40,7 @@ namespace QQ.Framework.Packets.Receive.Message
         /// <summary>
         /// 消息内容
         /// </summary>
-        public string MessageData { get; set; }
+        public string Message { get; set; }
 
         /// <summary>
         /// 好友消息
@@ -75,7 +75,7 @@ namespace QQ.Framework.Packets.Receive.Message
             FontStyle = reader.ReadBytes(reader.BEReadChar());
             reader.ReadBytes(6);
             MessageLength = reader.BEReadChar();
-            MessageData = Util.ConvertHexToString(Util.ToHex(reader.ReadBytes(MessageLength)));
+            Message = Encoding.UTF8.GetString(reader.ReadBytes(MessageLength));
             reader.ReadBytes(22);
         }
     }

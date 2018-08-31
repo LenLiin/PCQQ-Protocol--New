@@ -99,7 +99,7 @@ namespace QQ.Framework.Packets.Receive.Login
                     user.QQ_ClientKey = reader.ReadBytes(112);
                     reader.ReadBytes(28);
                     var nick_length = reader.ReadByte();
-                    user.NickName = Util.ConvertHexToString(Util.ToHex(reader.ReadBytes(nick_length)));
+                    user.NickName = Encoding.UTF8.GetString(reader.ReadBytes(nick_length));
                     user.Gender = reader.ReadByte();
                     reader.ReadBytes(4);
                     user.Age = reader.ReadByte();
