@@ -7,11 +7,9 @@
 /QQ.Framework/.vs/QQ-King
 /QQ.Framework/bin
 /QQ.Framework/obj
+/QQ.Framework/bin_netfx
+/QQ.Framework/obj_netfx
 /QQLoginTest/bin
 /QQLoginTest/obj
-/QQ.Framework/obj
-/QQLoginTest/obj
-/QQ.Framework(Framework)/bin
-/QQ.Framework(Framework)/obj
-/QQLoginTest(Framework)/bin
-/QQLoginTest(Framework)/obj
+/QQLoginTest/bin_netfx
+/QQLoginTest/obj_netfx
