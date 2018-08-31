@@ -11,6 +11,8 @@ PCQQ协议
 2018-8-31
 <br/>
 合并Core和Framework到同一个文件夹@sgkoishi（如果编译出错删除bin、obj和.vs重新编译）
+<br/>
+添加发送系统表情(格式为“[face{num}.gif]”)，num为系统表情对应索引
 
 2018-8-30
 <br/>
