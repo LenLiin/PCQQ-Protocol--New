@@ -131,5 +131,109 @@ namespace QQ.Framework.Packets
             byte[] body = buf.GetByteArray(bodyLen);
             return body;
         }
+
+
+        /// <summary>
+        /// 带表情消息
+        /// </summary>
+        /// <param name="Message"></param>
+        /// <returns></returns>
+        public static byte[] ConstructMessage(string Message)
+        {
+            ByteBuffer buf = new ByteBuffer();
+            Regex r = new Regex(@"([^\[]+)*(\[face\d+\.gif\])([^\[]+)*");
+            if (r.IsMatch(Message))
+            {
+                var Faces = r.Matches(Message);
+                for (var i = 0; i < Faces.Count; i++)
+                {
+                    var face = Faces[i];
+                    for (var j = 1; j < face.Groups.Count; j++)
+                    {
+                        var group = face.Groups[j].Value;
+                        if (group.Contains("[face") && group.Contains(".gif]"))
+                        {
+                            var faceIndex = Convert.ToByte(group.Substring(5, group.Length - group.LastIndexOf(".") - 4));
+                            if (faceIndex > 199)
+                                faceIndex = 0;
+                            //表情
+                            buf.Put(new byte[] { 0x02, 0x00, 0x14, 0x01, 0x00, 0x01 });
+                            buf.Put(faceIndex);
+                            buf.Put(new byte[] { 0xFF, 0x00, 0x02, 0x14 });
+                            buf.Put((byte)(faceIndex + 65));
+                            buf.Put(new byte[] { 0x0B, 0x00, 0x08, 0x00, 0x01, 0x00, 0x04, 0x52, 0xCC, 0x85, 0x50 });
+                        }
+                        else if (!string.IsNullOrEmpty(group))
+                        {
+                            var GroupMsg = Encoding.UTF8.GetBytes(group);
+                            //普通消息
+                            ConstructMessage(buf, GroupMsg);
+                        }
+                    }
+                }
+            }
+            return buf.ToByteArray();
+        }
+        /// <summary>
+        /// 普通消息
+        /// </summary>
+        /// <param name="buf"></param>
+        /// <param name="GroupMsg"></param>
+        public static void ConstructMessage(ByteBuffer buf, byte[] GroupMsg)
+        {
+            buf.Put(new byte[] { 0x01 });
+            buf.PutUShort((ushort)(GroupMsg.Length + 3));
+            buf.Put(new byte[] { 0x01 });
+            buf.PutUShort((ushort)GroupMsg.Length);
+            buf.Put(GroupMsg);
+        }
+
+
+        public static void SendAudio(uint QQ, string file)
+        {
+
+        }
+
+
+        public static void SendOfflineFile(uint QQ, string file)
+        {
+
+        }
+
+        public static List<byte[]> SendXML(string Message)
+        {
+            List<byte[]> list = new List<byte[]>();
+            byte[] buffer = Encoding.UTF8.GetBytes(Message.Trim());
+            ByteBuffer byteBuffer = new ByteBuffer();
+            byteBuffer.Put(1);
+            byteBuffer.Put(buffer);
+            byte[] token = byteBuffer.ToByteArray();
+            byteBuffer = new ByteBuffer();
+            byteBuffer.Put(1);
+            byteBuffer.Put(token);
+            byteBuffer.Put(new byte[7] { 2, 0, 4, 0, 0, 0, 1 });
+            token = byteBuffer.ToByteArray();
+            byteBuffer = new ByteBuffer();
+            byteBuffer.Put(20);
+            byteBuffer.Put(token);
+            list.Add(byteBuffer.ToByteArray());
+            return list;
+        }
+        public static List<byte[]> SendJson(string Message)
+        {
+            List<byte[]> list = new List<byte[]>();
+            byte[] buffer = Encoding.UTF8.GetBytes(Message);
+            ByteBuffer byteBuffer = new ByteBuffer();
+            byteBuffer.Put(1);
+            byteBuffer.Put(buffer);
+            byte[] array = byteBuffer.ToByteArray();
+            byteBuffer = new ByteBuffer();
+            byteBuffer.Put(25);
+            byteBuffer.PutUShort((ushort)(array.Length + 3));
+            byteBuffer.Put(1);
+            byteBuffer.Put(array);
+            list.Add(byteBuffer.ToByteArray());
+            return list;
+        }
     }
 }

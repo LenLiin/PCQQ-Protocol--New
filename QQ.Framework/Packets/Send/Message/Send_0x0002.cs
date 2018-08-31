@@ -64,12 +64,19 @@ namespace QQ.Framework.Packets.Send.Message
                 buf.Put(new byte[] { 0xE5, 0xBE, 0xAE, 0xE8, 0xBD, 0xAF, 0xE9, 0x9B, 0x85, 0xE9, 0xBB, 0x91 });
                 buf.Put(new byte[] { 0x00, 0x00 });
 
-                buf.Put(new byte[] { 0x01 });
-                buf.PutUShort((ushort)(_message.Length + 3));
-                buf.Put(new byte[] { 0x01 });
-                buf.PutUShort((ushort)_message.Length);
-                buf.Put(_message);
-
+                if (Encoding.UTF8.GetString(_message).Contains("[face") && Encoding.UTF8.GetString(_message).Contains(".gif]"))
+                {
+                    var MessageData = ConstructMessage(Encoding.UTF8.GetString(_message));
+                    if (MessageData.Length != 0)
+                    {
+                        buf.Put(MessageData);
+                    }
+                }
+                else
+                {
+                    //普通消息
+                    ConstructMessage(buf, _message);
+                }
             }
             else if (_messageType == FriendMessageType.ExitGroup)
             {
