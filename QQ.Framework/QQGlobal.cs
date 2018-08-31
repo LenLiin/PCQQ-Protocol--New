@@ -139,8 +139,7 @@ namespace QQ.Framework
         /// </summary>
         public const char QQ_SERVER_VERSION_0100 = (char)0x0100;
 
-
-
+        
     }
     /// <summary>
     /// 性别

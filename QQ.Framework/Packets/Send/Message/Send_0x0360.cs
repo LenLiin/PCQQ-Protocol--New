@@ -14,15 +14,15 @@ namespace QQ.Framework.Packets.Send.Message
         /// </summary>
         /// <param name="byteBuffer"></param>
         /// <param name="User"></param>
-        public Send_0x0360(QQUser User, byte[] timeLast)
+        public Send_0x0360(QQUser User, byte[] Data)
             : base(User)
         {
             Sequence = GetNextSeq();
             _secretKey = user.QQ_SessionKey;
             Command = QQCommand.Message0x0360;
-            _timeLast = timeLast;
+            _Data = Data;
         }
-        byte[] _timeLast;
+        byte[] _Data { get; set; }
         protected override void PutHeader(ByteBuffer buf)
         {
             base.PutHeader(buf);
@@ -35,15 +35,12 @@ namespace QQ.Framework.Packets.Send.Message
         protected override void PutBody(ByteBuffer buf)
         {
             buf.Put(new byte[] { 0x00, 0x00, 0x00, 0x07, 0x00, 0x00 });
-
             //数据长度
-            buf.Put(new byte[] { 0x00, 0x10 });
-
-
-            buf.Put(new byte[] { 0x08, 0x01, 0x12, 0x03, 0x98, 0x01, 0x00 });
-
+            buf.PutUShort((ushort)_Data.Length);
+            buf.Put(new byte[] { 0x08, 0x01, 0x12, 0x03, 0x98, 0x01, 0x00, 0x0A, 0x0E, 0x08 });
             //数据
-            buf.Put(new byte[] { 0x08, 0x04, 0x2A, 0x0E, 0x08, 0xE7, 0xF6, 0xEC, 0x9C, 0x0E, 0x12, 0x06, 0x08, 0xED, 0xCB, 0x8B, 0x8D, 0x04 });
+            buf.Put(_Data);
+            buf.Put(new byte[] { 0xA7, 0xFF, 0xDB, 0x05, 0x20, 0x00 });
         }
 
     }

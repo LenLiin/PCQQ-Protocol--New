@@ -17,8 +17,6 @@ namespace QQLoginTest
         static QQClient client;
         static void Main(string[] args)
         {
-            var MyQQ = 0;
-            var MyPassWord = "";
             QQUser user = new QQUser(MyQQ, MyPassWord);
             client = new QQClient()
             {

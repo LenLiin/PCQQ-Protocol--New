@@ -25,6 +25,7 @@ namespace System
         /// </summary>
         private byte[] TEMP_BYTE_ARRAY;
 
+
         /// <summary>
         /// 当前数组长度
         /// </summary>
@@ -489,6 +490,12 @@ namespace System
         public override int GetHashCode()
         {
             return base.GetHashCode();
+        }
+
+        
+        internal byte[] GetToken()
+        {
+            return GetByteArray(0x38);
         }
 
     }

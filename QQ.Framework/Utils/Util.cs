@@ -42,6 +42,8 @@ namespace QQ.Framework.Utils
     {
         static Encoding DefaultEncoding = Encoding.GetEncoding(QQGlobal.QQ_CHARSET_DEFAULT);
         static DateTime baseDateTime = DateTime.Parse("1970-1-01 00:00:00.000");
+
+
         public static Random Random = new Random();
         /// <summary>
         /// 把字节数组从offset开始的len个字节转换成一个unsigned int，
@@ -321,7 +323,7 @@ namespace QQ.Framework.Utils
             (new Random()).NextBytes(key);
             return key;
         }
-        
+
 
         /// <summary>
         /// 用于代替 System.currentTimeMillis()
@@ -479,5 +481,28 @@ namespace QQ.Framework.Utils
             temp = temp.Substring(0, temp.Length - 8) + "0" + temp1;
             return Util.LongToHexString(Convert.ToInt64(temp, 2));
         }
+        #region TLV专属操作方法
+        public static void int16_to_buf(byte[] TEMP_BYTE_ARRAY, int index, int Num)
+        {
+            TEMP_BYTE_ARRAY[index] = (byte)(((Num & 0xff000000) >> 24) & 0xff);
+            TEMP_BYTE_ARRAY[index + 1] = (byte)(((Num & 0x00ff0000) >> 16) & 0xff);
+            TEMP_BYTE_ARRAY[index + 2] = (byte)(((Num & 0x0000ff00) >> 8) & 0xff);
+            TEMP_BYTE_ARRAY[index + 3] = (byte)((Num & 0x000000ff) & 0xff);
+        }
+        public static int buf_to_int16(byte[] TEMP_BYTE_ARRAY, int index)
+        {
+            return TEMP_BYTE_ARRAY[index] << 24 | TEMP_BYTE_ARRAY[index + 1] << 16 | TEMP_BYTE_ARRAY[index + 2] << 8 | TEMP_BYTE_ARRAY[index + 3];
+        }
+
+        public static long currentTimeMillis()
+        {
+           return GetTimeMillis(DateTime.Now);
+        }
+
+        internal static string MapPath(string directory)
+        {
+            return AppDomain.CurrentDomain.BaseDirectory + "//" + directory;
+        }
+        #endregion
     }
 }

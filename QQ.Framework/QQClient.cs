@@ -328,13 +328,13 @@ namespace QQ.Framework
         #endregion
 
 
-        #region 群消息
+        #region 收到群消息
         /// <summary>
-        /// 群消息
+        /// 收到群消息
         /// </summary>
         public event EventHandler<QQEventArgs<Receive_0x0017>> EventReceive_0x0017;
         /// <summary>
-        /// 群消息
+        /// 收到群消息
         /// </summary>
         /// <param name="e"></param>
         internal void OnReceive_0x0017(QQEventArgs<Receive_0x0017> e)
@@ -349,7 +349,12 @@ namespace QQ.Framework
             var buf = new ByteBuffer();
             new Send_0x0017(e.ReceivePacket.user, DataBuf.GetByteArray(0x10), e.ReceivePacket.Sequence).Fill(buf);
             Send(buf);
-            
+
+            //回复已接收成功
+            //buf = new ByteBuffer();
+            //new Send_0x0360(e.ReceivePacket.user, DataBuf.GetByteArray(4)).Fill(buf);
+            //Send(buf);
+
             //重复接收包不再重复触发事件并且不处理自己的消息
             if (!QQUser.ReceiveSequences.Contains(e.ReceivePacket.Sequence) && !e.ReceivePacket.FromQQ.Equals(QQUser.QQ))
             {
@@ -361,13 +366,13 @@ namespace QQ.Framework
         #endregion
 
 
-        #region 好友消息
+        #region 收到好友消息
         /// <summary>
-        /// 好友消息
+        /// 收到好友消息
         /// </summary>
         public event EventHandler<QQEventArgs<Receive_0x00CE>> EventReceive_0x00CE;
         /// <summary>
-        /// 好友消息
+        /// 收到好友消息
         /// </summary>
         /// <param name="e"></param>
         internal void OnReceive_0x00CE(QQEventArgs<Receive_0x00CE> e)
@@ -379,11 +384,12 @@ namespace QQ.Framework
             var buf = new ByteBuffer();
             new Send_0x00CE(e.ReceivePacket.user, DataBuf.GetByteArray(0x10), e.ReceivePacket.Sequence).Fill(buf);
             Send(buf);
-            
+
             //回复已接收成功
             //buf = new ByteBuffer();
-            //new Send_0x0319(e.ReceivePacket.user, e.ReceivePacket.MessageDateTime).Fill(buf);
+            //new Send_0x0319(e.ReceivePacket.user, DataBuf.GetByteArray(4)).Fill(buf);
             //Send(buf);
+            //SendLongUserMessage("嘿嘿嘿[face1.gif]嘿嘿嘿[face2.gif]哈哈哈嘿嘿嘿[face1.gif]嘿嘿嘿[face2.gif]哈哈哈嘿嘿嘿[face1.gif]嘿嘿嘿[face2.gif]哈哈哈嘿嘿嘿[face1.gif]嘿嘿嘿[face2.gif]哈哈哈嘿嘿嘿[face1.gif]嘿嘿嘿[face2.gif]哈哈哈", e.ReceivePacket.FromQQ);
 
             //重复接收包不再重复触发事件并且不处理自己的消息
             if (!QQUser.ReceiveSequences.Contains(e.ReceivePacket.Sequence)&& !e.ReceivePacket.FromQQ.Equals(QQUser.QQ))
@@ -478,7 +484,13 @@ namespace QQ.Framework
             EventReceive_0x0058?.Invoke(this, e);
         }
         #endregion
-        
+
+        #region 方法集
+        /// <summary>
+        /// 发送群消息
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="group"></param>
         public void SendLongGroupMessage(string message, long group)
         {
             message = message.Replace("\n", "\r").Trim();
@@ -489,6 +501,11 @@ namespace QQ.Framework
                 Send(sendBuffer);
             }
         }
+        /// <summary>
+        /// 发送好友消息
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="user"></param>
         public void SendLongUserMessage(string message, long user)
         {
             message = message.Replace("\n", "\r").Trim();
@@ -499,5 +516,6 @@ namespace QQ.Framework
                 Send(sendBuffer);
             }
         }
+        #endregion
     }
 }

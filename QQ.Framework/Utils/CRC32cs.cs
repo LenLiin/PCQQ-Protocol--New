@@ -138,6 +138,18 @@ namespace QQ.Framework.Utils
             }
             return value ^ 0xffffffff;
         }
+        public static ulong GetCRC32(byte[] buffer)
+        {
+            //Éú³ÉÂë±í
+            GetCRC32Table();
+            ulong value = 0xffffffff;
+            int len = buffer.Length;
+            for (int i = 0; i < len; i++)
+            {
+                value = (value >> 8) ^ Crc32Table[(value & 0xFF) ^ buffer[i]];
+            }
+            return value ^ 0xffffffff;
+        }
 
         private static uint CRC32(string AString, Encoding AEncoding)
 		{
