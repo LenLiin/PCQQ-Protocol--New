@@ -516,6 +516,42 @@ namespace QQ.Framework
                 Send(sendBuffer);
             }
         }
+        
+        public static List<byte[]> SendXML(string Message)
+        {
+            List<byte[]> list = new List<byte[]>();
+            byte[] buffer = Encoding.UTF8.GetBytes(Message.Trim());
+            ByteBuffer byteBuffer = new ByteBuffer();
+            byteBuffer.Put(1);
+            byteBuffer.Put(buffer);
+            byte[] token = byteBuffer.ToByteArray();
+            byteBuffer = new ByteBuffer();
+            byteBuffer.Put(1);
+            byteBuffer.Put(token);
+            byteBuffer.Put(new byte[7] { 2, 0, 4, 0, 0, 0, 1 });
+            token = byteBuffer.ToByteArray();
+            byteBuffer = new ByteBuffer();
+            byteBuffer.Put(20);
+            byteBuffer.Put(token);
+            list.Add(byteBuffer.ToByteArray());
+            return list;
+        }
+        public static List<byte[]> SendJson(string Message)
+        {
+            List<byte[]> list = new List<byte[]>();
+            byte[] buffer = Encoding.UTF8.GetBytes(Message);
+            ByteBuffer byteBuffer = new ByteBuffer();
+            byteBuffer.Put(1);
+            byteBuffer.Put(buffer);
+            byte[] array = byteBuffer.ToByteArray();
+            byteBuffer = new ByteBuffer();
+            byteBuffer.Put(25);
+            byteBuffer.PutUShort((ushort)(array.Length + 3));
+            byteBuffer.Put(1);
+            byteBuffer.Put(array);
+            list.Add(byteBuffer.ToByteArray());
+            return list;
+        }
         #endregion
     }
 }

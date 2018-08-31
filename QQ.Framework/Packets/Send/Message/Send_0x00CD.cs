@@ -167,8 +167,7 @@ namespace QQ.Framework.Packets.Send.Message
                             buf.Put(new byte[] { 0x02, 0x00, 0x14, 0x01, 0x00, 0x01 });
                             buf.Put(faceIndex);
                             buf.Put(new byte[] { 0xFF, 0x00, 0x02, 0x14 });
-                            //face_add_65 ＝ DecToHex (到整数 (取文本中间 (msg_part, 6, 取文本长度 (msg_part) － 9)) ＋ 65)
-                            buf.Put((byte)(faceIndex+65));//face_add_65
+                            buf.Put((byte)(faceIndex+65));
                             buf.Put(new byte[] { 0x0B, 0x00, 0x08, 0x00, 0x01, 0x00, 0x04, 0x52, 0xCC, 0x85, 0x50 });
                         }
                         else if (!string.IsNullOrEmpty(group))
@@ -194,42 +193,6 @@ namespace QQ.Framework.Packets.Send.Message
             buf.Put(new byte[] { 0x01 });
             buf.PutUShort((ushort)GroupMsg.Length);
             buf.Put(GroupMsg);
-        }
-
-        public static List<byte[]> SendXML(string Message)
-        {
-            List<byte[]> list = new List<byte[]>();
-            byte[] buffer = Encoding.UTF8.GetBytes(Message.Trim());
-            ByteBuffer byteBuffer = new ByteBuffer();
-            byteBuffer.Put(1);
-            byteBuffer.Put(buffer);
-            byte[] token = byteBuffer.ToByteArray();
-            byteBuffer = new ByteBuffer();
-            byteBuffer.Put(1);
-            byteBuffer.Put(token);
-            byteBuffer.Put(new byte[7]{ 2,0, 4,0,0,0,1});
-            token = byteBuffer.ToByteArray();
-            byteBuffer = new ByteBuffer();
-            byteBuffer.Put(20);
-            byteBuffer.Put(token);
-            list.Add(byteBuffer.ToByteArray());
-            return list;
-        }
-        public static List<byte[]> SendJson(string Message)
-        {
-            List<byte[]> list = new List<byte[]>();
-            byte[] buffer = Encoding.UTF8.GetBytes(Message);
-            ByteBuffer byteBuffer = new ByteBuffer();
-            byteBuffer.Put(1);
-            byteBuffer.Put(buffer);
-            byte[] array = byteBuffer.ToByteArray();
-            byteBuffer = new ByteBuffer();
-            byteBuffer.Put(25);
-            byteBuffer.PutUShort((ushort)(array.Length + 3));
-            byteBuffer.Put(1);
-            byteBuffer.Put(array);
-            list.Add(byteBuffer.ToByteArray());
-            return list;
         }
     }
 }
