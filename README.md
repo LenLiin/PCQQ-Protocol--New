@@ -10,7 +10,7 @@ PCQQ协议
 ------------------------------------------
 2018-8-31
 <br/>
-合并Core和Framework到同一个文件夹@sgkoishi（如果编译出错删除bin和obj重新编译）
+合并Core和Framework到同一个文件夹@sgkoishi（如果编译出错删除bin、obj和.vs重新编译）
 
 2018-8-30
 <br/>
