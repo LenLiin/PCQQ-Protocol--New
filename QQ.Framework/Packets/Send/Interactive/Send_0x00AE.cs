@@ -12,7 +12,7 @@ namespace QQ.Framework.Packets.Send.Interactive
         /// 初始化包体
         /// </summary>
         /// <param name="buf">The buf.</param>
-        protected override void PutBody(ByteBuffer buf)
+        protected override void PutBody()
         {
             throw new NotImplementedException();
         }

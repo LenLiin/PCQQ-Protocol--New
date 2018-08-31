@@ -43,14 +43,12 @@ namespace QQ.Framework.Sockets
                 var hexStr = Util.ToHex(buffer);
                 hexStr = hexStr.Substring(0, hexStr.LastIndexOf("03 00") + 2);
                 //包装到ByteBuffer
-                ByteBuffer tempBuf = new ByteBuffer(Util.HexStringToByteArray(hexStr)) { Position = 0 };
+                var tempBuf = Util.HexStringToByteArray(hexStr);
                 //需要一个基础包 
                 var _ReceivePacket = new ReceivePacket(tempBuf, client.QQUser, null);
                 //接收消息后触发事件
                 QQEventArgs<ReceivePacket> ReceiveEvent = new QQEventArgs<ReceivePacket>(client, _ReceivePacket);
                 client.OnReceive(ReceiveEvent);
-                //数据包指针归零
-                tempBuf.Position = 0;
                 switch (_ReceivePacket.Command)
                 {
                     case QQCommand.Login0x0825:

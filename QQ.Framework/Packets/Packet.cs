@@ -1,6 +1,7 @@
 ﻿using QQ.Framework.Utils;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,24 +17,28 @@ namespace QQ.Framework.Packets
         /// 加密密钥
         /// </summary>
         public byte[] _secretKey { get; set; }
+
         /// <summary>
-        /// 包体缓冲区，有back array，用来存放未加密时的包体，子类应该在putBody方法中
-        /// 使用这个缓冲区。使用之前先执行clear() 
+        /// 原始数据。对于接收的包，这个值为未解密的。
         /// </summary>
-        public ByteBuffer bodyBuf = new ByteBuffer(QQGlobal.QQ_PACKET_MAX_SIZE);
+        public byte[] buffer = new byte[QQGlobal.QQ_PACKET_MAX_SIZE];
+
         /// <summary>
         /// 包头字节
         /// </summary>
         public byte Header { get; set; }
+
         /// <summary>
         /// 版本标志
         /// </summary>
         public char Version { get; set; }
+
         /// <summary>
         /// 包命令, 如：0x0825
         /// </summary>
         /// <value></value>
         public QQCommand Command { get; set; }
+
         /// <summary>
         /// 包序号
         /// </summary>
@@ -43,6 +48,7 @@ namespace QQ.Framework.Packets
         /// 密文包体
         /// </summary>
         public byte[] bodyEcrypted;
+
         /// <summary>
         /// 明文包体
         /// </summary>
@@ -60,18 +66,20 @@ namespace QQ.Framework.Packets
         {
             this.DateTime = DateTime.Now;
         }
+
         public Packet(QQUser User)
-            :this()
+            : this()
         {
             this.user = User;
         }
+
         /// <summary>
         /// 构造一个指定参数的包
         /// </summary>
-        public Packet(ByteBuffer byteBuffer, QQUser User) 
+        public Packet(byte[] byteBuffer, QQUser User)
             : this(User)
         {
-            this.bodyBuf = byteBuffer;
+            this.buffer = byteBuffer;
         }
 
         /// <summary>
@@ -105,11 +113,13 @@ namespace QQ.Framework.Packets
         {
             if (obj is Packet)
             {
-                Packet packet = (Packet)obj;
+                Packet packet = (Packet) obj;
                 return Header == packet.Header && Command == packet.Command && Sequence == packet.Sequence;
             }
+
             return base.Equals(obj);
         }
+
         /// <summary>
         /// Serves as a hash function for a particular type.
         /// </summary>
@@ -129,7 +139,7 @@ namespace QQ.Framework.Packets
         /// <returns></returns>
         public static int Hash(char sequence, QQCommand command)
         {
-            return (sequence << 16) | (ushort)command;
+            return (sequence << 16) | (ushort) command;
         }
 
         /// <summary>
@@ -140,6 +150,7 @@ namespace QQ.Framework.Packets
         {
             return "未知数据包";
         }
+
         /// <summary>
         /// 包的接收时间或发送时间
         /// </summary>

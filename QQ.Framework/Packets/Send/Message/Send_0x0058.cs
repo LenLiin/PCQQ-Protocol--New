@@ -20,17 +20,18 @@ namespace QQ.Framework.Packets.Send.Message
             Command = QQCommand.Message0x0058;
         }
 
-        protected override void PutHeader(ByteBuffer buf)
+        protected override void PutHeader()
         {
-            base.PutHeader(buf);
-            buf.Put(user.QQ_PACKET_FIXVER);
+            base.PutHeader();
+            writer.Write(user.QQ_PACKET_FIXVER);
         }
+
         /// <summary>
         /// 初始化包体
         /// </summary>
-        protected override void PutBody(ByteBuffer buf)
+        protected override void PutBody()
         {
-            buf.PutLong(user.QQ);
+            bodyWriter.BEWrite(user.QQ);
         }
     }
 }

@@ -40,9 +40,7 @@ namespace QQLoginTest
                 string VerifyCode = Console.ReadLine();
                 if (!string.IsNullOrEmpty(VerifyCode))
                 {
-                    var buf = new ByteBuffer();
-                    new Send_0x00BA(e.ReceivePacket.user, VerifyCode).Fill(buf);
-                    e.QQClient.Send(buf);
+                    e.QQClient.Send(new Send_0x00BA(e.ReceivePacket.user, VerifyCode).WriteData());
                 }
             }
         }
@@ -59,6 +57,10 @@ namespace QQLoginTest
         /// </summary>
         private static void Client_EventReceive_0x0017(object sender, QQEventArgs<QQ.Framework.Packets.Receive.Message.Receive_0x0017> e)
         {
+            if (e.ReceivePacket.FromQQ == Someone)
+            {
+                e.QQClient.SendLongGroupMessage(e.ReceivePacket.Message, e.ReceivePacket.Group);
+            }
         }
 
     }

@@ -1,8 +1,10 @@
 ﻿using QQ.Framework.Utils;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace QQ.Framework.Packets
@@ -11,8 +13,12 @@ namespace QQ.Framework.Packets
     {
         public SendPacket() : base()
         {
-
         }
+
+        public BinaryWriter writer = new BinaryWriter(new MemoryStream());
+        public BinaryWriter bodyWriter;
+        public MemoryStream bodyStream;
+
         /// <summary>
         /// 构造一个指定参数的包
         /// </summary>
@@ -33,85 +39,97 @@ namespace QQ.Framework.Packets
         {
             return QQTea.Encrypt(buf, offset, length, _secretKey);
         }
+
         /// <summary>
         /// 包起始序列号
         /// </summary>
-        protected static char seq = (char)Util.Random.Next();
+        protected static char seq = (char) Util.Random.Next();
+
         /// <summary>
         /// 将包头部转化为字节流, 写入指定的ByteBuffer对象.
         /// </summary>
         /// <param name="buf">The buf.</param>
-        protected virtual void PutHeader(ByteBuffer buf)
+        protected virtual void PutHeader()
         {
-            buf.Put(QQGlobal.QQ_HEADER_BASIC_FAMILY);
-            buf.PutChar(Version);
-            buf.PutUShort((ushort)Command);
-            buf.PutChar(Sequence);
-            buf.PutLong(user.QQ);
+            writer.Write(QQGlobal.QQ_HEADER_BASIC_FAMILY);
+            writer.BEWrite(Version);
+            writer.BEWrite((ushort) Command);
+            writer.BEWrite(Sequence);
+            writer.BEWrite(user.QQ);
         }
+
         protected static char GetNextSeq()
         {
             seq++;
             // 为了兼容iQQ
             // iQQ把序列号的高位都为0，如果为1，它可能会拒绝，wqfox称是因为TX是这样做的
-            seq &= (char)0x7FFF;
+            seq &= (char) 0x7FFF;
             if (seq == 0)
             {
                 seq++;
             }
+
             return seq;
         }
+
         /// <summary>
         /// 初始化包体
         /// </summary>
         /// <param name="buf">The buf.</param>
-        protected abstract void PutBody(ByteBuffer buf);
+        protected abstract void PutBody();
 
         /// <summary>
         /// 将包尾部转化为字节流, 写入指定的ByteBuffer对象.
         /// </summary>
         /// <param name="buf">The buf.</param>
-        protected virtual void PutTail(ByteBuffer buf)
+        protected virtual void PutTail()
         {
-            buf.Put(QQGlobal.QQ_HEADER_03_FAMILY);
+            writer.Write(QQGlobal.QQ_HEADER_03_FAMILY);
         }
+
         /// <summary>
-        ///  将整个包转化为字节流, 并写入指定的ByteBuffer对象.
-        ///  一般而言, 前后分别需要写入包头部和包尾部.
+        ///  将整个包转化为字节流, 并返回其值。
+        ///  可直接使用QQClient.Send(new Send_0x__().WriteData())。
         /// </summary>
         /// <param name="buf">The buf.</param>
-        public void Fill(ByteBuffer buf)
+        public byte[] WriteData()
         {
             //保存当前pos
-            int pos = buf.Position;
+            int pos = (int) writer.BaseStream.Position;
             //填充头部
-            PutHeader(buf);
+            PutHeader();
             //填充包体
-            bodyBuf.Initialize();
-            PutBody(bodyBuf);
+            bodyStream = new MemoryStream();
+            bodyWriter = new BinaryWriter(bodyStream);
+            PutBody();
             //需要加密的包体
-            bodyDecrypted = bodyBuf.ToByteArray();
-            byte[] enc = EncryptBody(bodyDecrypted, 0, bodyDecrypted.Length);
+            bodyDecrypted = bodyStream.ToArray();
+            var enc = EncryptBody(bodyDecrypted, 0, bodyDecrypted.Length);
             // 加密内容写入最终buf
-            buf.Put(enc);
+            writer.Write(enc);
             // 填充尾部
-            PutTail(buf);
+            PutTail();
             // 回填
-            PostFill(buf, pos);
+            PostFill(pos);
+            return writer.BaseStream.ToBytesArray();
         }
+
         /// <summary>
         /// 回填，有些字段必须填完整个包才能确定其内容，比如长度字段，那么这个方法将在
         /// 尾部填充之后调用
         /// </summary>
         /// <param name="buf">The buf.</param>
         /// <param name="startPos">The start pos.</param>
-        public void PostFill(ByteBuffer buf, int startPos)
+        public void PostFill(int startPos)
         {
             // 如果是tcp包，到包的开头处填上包长度，然后回到目前的pos
             if (!user.IsUdp)
             {
-                int len = buf.Length - startPos;
-                buf.PutUShort(startPos, (ushort)len);
+                int len = (int) (writer.BaseStream.Length - startPos);
+                var currentPos = writer.BaseStream.Position;
+                writer.BaseStream.Position = startPos;
+                writer.BEWrite((ushort) len);
+                writer.BaseStream.Position = currentPos;
             }
         }
 
@@ -123,13 +141,14 @@ namespace QQ.Framework.Packets
         /// <returns>包体字节数组</returns>
         protected byte[] GetBodyBytes(int length)
         {
-            ByteBuffer buf = new ByteBuffer(QQGlobal.QQ_PACKET_MAX_SIZE);
+            var buf = new byte[QQGlobal.QQ_PACKET_MAX_SIZE];
             // 得到包体长度
             int bodyLen = length - QQGlobal.QQ_LENGTH_BASIC_FAMILY_OUT_HEADER - QQGlobal.QQ_LENGTH_BASIC_FAMILY_TAIL;
             if (!user.IsUdp) bodyLen -= 2;
             // 得到加密的包体内容
-            byte[] body = buf.GetByteArray(bodyLen);
-            return body;
+            // 没看懂，这个buf根本没被赋值，怎么读取的
+            // byte[] body = buf.ReadBytes(bodyLen);
+            return null;
         }
 
 
@@ -140,7 +159,7 @@ namespace QQ.Framework.Packets
         /// <returns></returns>
         public static byte[] ConstructMessage(string Message)
         {
-            ByteBuffer buf = new ByteBuffer();
+            var bw = new BinaryWriter(new MemoryStream());
             Regex r = new Regex(@"([^\[]+)*(\[face\d+\.gif\])([^\[]+)*");
             if (r.IsMatch(Message))
             {
@@ -153,87 +172,81 @@ namespace QQ.Framework.Packets
                         var group = face.Groups[j].Value;
                         if (group.Contains("[face") && group.Contains(".gif]"))
                         {
-                            var faceIndex = Convert.ToByte(group.Substring(5, group.Length - group.LastIndexOf(".") - 4));
+                            var faceIndex =
+                                Convert.ToByte(group.Substring(5, group.Length - group.LastIndexOf(".") - 4));
                             if (faceIndex > 199)
                                 faceIndex = 0;
                             //表情
-                            buf.Put(new byte[] { 0x02, 0x00, 0x14, 0x01, 0x00, 0x01 });
-                            buf.Put(faceIndex);
-                            buf.Put(new byte[] { 0xFF, 0x00, 0x02, 0x14 });
-                            buf.Put((byte)(faceIndex + 65));
-                            buf.Put(new byte[] { 0x0B, 0x00, 0x08, 0x00, 0x01, 0x00, 0x04, 0x52, 0xCC, 0x85, 0x50 });
+                            bw.Write(new byte[] {0x02, 0x00, 0x14, 0x01, 0x00, 0x01});
+                            bw.Write(faceIndex);
+                            bw.Write(new byte[] {0xFF, 0x00, 0x02, 0x14});
+                            bw.Write((byte) (faceIndex + 65));
+                            bw.Write(new byte[] {0x0B, 0x00, 0x08, 0x00, 0x01, 0x00, 0x04, 0x52, 0xCC, 0x85, 0x50});
                         }
                         else if (!string.IsNullOrEmpty(group))
                         {
                             var GroupMsg = Encoding.UTF8.GetBytes(group);
                             //普通消息
-                            ConstructMessage(buf, GroupMsg);
+                            ConstructMessage(bw, GroupMsg);
                         }
                     }
                 }
             }
-            return buf.ToByteArray();
+
+            return bw.BaseStream.ToBytesArray();
         }
+
         /// <summary>
         /// 普通消息
         /// </summary>
-        /// <param name="buf"></param>
+        /// <param name="writer"></param>
         /// <param name="GroupMsg"></param>
-        public static void ConstructMessage(ByteBuffer buf, byte[] GroupMsg)
+        public static void ConstructMessage(BinaryWriter writer, byte[] GroupMsg)
         {
-            buf.Put(new byte[] { 0x01 });
-            buf.PutUShort((ushort)(GroupMsg.Length + 3));
-            buf.Put(new byte[] { 0x01 });
-            buf.PutUShort((ushort)GroupMsg.Length);
-            buf.Put(GroupMsg);
+            writer.Write(new byte[] {0x01});
+            writer.BEWrite((ushort) (GroupMsg.Length + 3));
+            writer.Write(new byte[] {0x01});
+            writer.BEWrite((ushort) GroupMsg.Length);
+            writer.Write(GroupMsg);
         }
 
 
         public static void SendAudio(uint QQ, string file)
         {
-
         }
 
 
         public static void SendOfflineFile(uint QQ, string file)
         {
-
         }
 
         public static List<byte[]> SendXML(string Message)
         {
-            List<byte[]> list = new List<byte[]>();
-            byte[] buffer = Encoding.UTF8.GetBytes(Message.Trim());
-            ByteBuffer byteBuffer = new ByteBuffer();
-            byteBuffer.Put(1);
-            byteBuffer.Put(buffer);
-            byte[] token = byteBuffer.ToByteArray();
-            byteBuffer = new ByteBuffer();
-            byteBuffer.Put(1);
-            byteBuffer.Put(token);
-            byteBuffer.Put(new byte[7] { 2, 0, 4, 0, 0, 0, 1 });
-            token = byteBuffer.ToByteArray();
-            byteBuffer = new ByteBuffer();
-            byteBuffer.Put(20);
-            byteBuffer.Put(token);
-            list.Add(byteBuffer.ToByteArray());
-            return list;
+            var byteBuffer = new BinaryWriter(new MemoryStream());
+            byteBuffer.Write((byte) 20);
+            byteBuffer.Write((byte) 1);
+            byteBuffer.Write((byte) 1);
+            byteBuffer.Write(Encoding.UTF8.GetBytes(Message.Trim()));
+            byteBuffer.Write(new byte[] {2, 0, 4, 0, 0, 0, 1});
+            return new List<byte[]>
+            {
+                byteBuffer.BaseStream.ToBytesArray()
+            };
         }
+
         public static List<byte[]> SendJson(string Message)
         {
-            List<byte[]> list = new List<byte[]>();
-            byte[] buffer = Encoding.UTF8.GetBytes(Message);
-            ByteBuffer byteBuffer = new ByteBuffer();
-            byteBuffer.Put(1);
-            byteBuffer.Put(buffer);
-            byte[] array = byteBuffer.ToByteArray();
-            byteBuffer = new ByteBuffer();
-            byteBuffer.Put(25);
-            byteBuffer.PutUShort((ushort)(array.Length + 3));
-            byteBuffer.Put(1);
-            byteBuffer.Put(array);
-            list.Add(byteBuffer.ToByteArray());
-            return list;
+            var byteBuffer = new BinaryWriter(new MemoryStream());
+            var data = Encoding.UTF8.GetBytes(Message);
+            byteBuffer.Write((byte) 25);
+            byteBuffer.BEWrite((ushort) (data.Length + 4));
+            byteBuffer.Write((byte) 1);
+            byteBuffer.Write((byte) 1);
+            byteBuffer.Write(data);
+            return new List<byte[]>
+            {
+                byteBuffer.BaseStream.ToBytesArray()
+            };
         }
     }
 }

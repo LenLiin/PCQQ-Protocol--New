@@ -1,6 +1,7 @@
 ﻿using QQ.Framework.Utils;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,68 +23,77 @@ namespace QQ.Framework.Packets.Send.Message
             _messageType = messageType;
             _group = Group;
         }
-        protected override void PutHeader(ByteBuffer buf)
+
+        protected override void PutHeader()
         {
-            base.PutHeader(buf);
-            buf.Put(user.QQ_PACKET_FIXVER);
+            base.PutHeader();
+            writer.Write(user.QQ_PACKET_FIXVER);
         }
 
         private byte _packetCount = 1;
         private byte _packetIndex = 0;
         long _group;
+
         /// <summary>
         /// 消息类型
         /// </summary>
         public FriendMessageType _messageType { get; set; }
+
         private byte[] _message { get; set; }
+
         /// <summary>
         /// 初始化包体
         /// </summary>
         /// <param name="buf">The buf.</param>
-        protected override void PutBody(ByteBuffer buf)
+        protected override void PutBody()
         {
             var _DateTime = Util.GetTimeSeconds(DateTime.Now);
             var group = GroupToGid(_group);
             if (_messageType == FriendMessageType.Xml)
             {
-
             }
             else if (_messageType == FriendMessageType.GroupMessage)
             {
                 var Length = _message.Length + 56;
-                
-                buf.Put(new byte[] { 0x2A });
-                buf.PutLong(group);
-                buf.PutUShort((ushort)Length);
 
-                buf.Put(new byte[] { 0x00, 0x01, _packetCount, _packetIndex, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4D, 0x53, 0x47, 0x00, 0x00, 0x00, 0x00, 0x00 });
-                buf.PutLong(_DateTime);
-                buf.Put(Util.RandomKey(4));
-                buf.Put(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00 });
-                buf.Put(new byte[] { 0x00, 0x0C });
-                buf.Put(new byte[] { 0xE5, 0xBE, 0xAE, 0xE8, 0xBD, 0xAF, 0xE9, 0x9B, 0x85, 0xE9, 0xBB, 0x91 });
-                buf.Put(new byte[] { 0x00, 0x00 });
+                bodyWriter.Write(new byte[] {0x2A});
+                bodyWriter.BEWrite(group);
+                bodyWriter.BEWrite((ushort) Length);
 
-                if (Encoding.UTF8.GetString(_message).Contains("[face") && Encoding.UTF8.GetString(_message).Contains(".gif]"))
+                bodyWriter.Write(new byte[]
+                {
+                    0x00, 0x01, _packetCount, _packetIndex, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4D, 0x53, 0x47, 0x00,
+                    0x00, 0x00, 0x00, 0x00
+                });
+                bodyWriter.BEWrite(_DateTime);
+                bodyWriter.Write(Util.RandomKey(4));
+                bodyWriter.Write(new byte[] {0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00});
+                bodyWriter.Write(new byte[] {0x00, 0x0C});
+                bodyWriter.Write(new byte[] {0xE5, 0xBE, 0xAE, 0xE8, 0xBD, 0xAF, 0xE9, 0x9B, 0x85, 0xE9, 0xBB, 0x91});
+                bodyWriter.Write(new byte[] {0x00, 0x00});
+
+                if (Encoding.UTF8.GetString(_message).Contains("[face") &&
+                    Encoding.UTF8.GetString(_message).Contains(".gif]"))
                 {
                     var MessageData = ConstructMessage(Encoding.UTF8.GetString(_message));
                     if (MessageData.Length != 0)
                     {
-                        buf.Put(MessageData);
+                        bodyWriter.Write(MessageData);
                     }
                 }
                 else
                 {
                     //普通消息
-                    ConstructMessage(buf, _message);
+                    ConstructMessage(bodyWriter, _message);
                 }
             }
             else if (_messageType == FriendMessageType.ExitGroup)
             {
-                buf.Put(new byte[] { 0x09 });
-                buf.PutLong(group);
+                bodyWriter.Write(new byte[] {0x09});
+                bodyWriter.BEWrite(group);
             }
         }
+
         public long GroupToGid(long groupid)
         {
             var group = groupid.ToString();
@@ -132,26 +142,31 @@ namespace QQ.Framework.Packets.Send.Message
             {
                 return groupid;
             }
+
             return Convert.ToInt64(gid);
         }
 
-        public static List<Send_0x0002> SendLongMessage(QQUser User, string Message, FriendMessageType messageType, long Group)
+        public static List<Send_0x0002> SendLongMessage(QQUser User, string Message, FriendMessageType messageType,
+            long Group)
         {
-            var buffer = new ByteBuffer();
+            var buffer = new BinaryWriter(new MemoryStream());
             var list = new List<byte[]>();
             foreach (var chr in Message)
             {
                 var bytes = Encoding.UTF8.GetBytes(chr.ToString());
-                if (buffer.Length + bytes.Length > 699)
+                if (buffer.BaseStream.Length + bytes.Length > 699)
                 {
-                    list.Add(buffer.ToByteArray());
-                    buffer.Initialize();
+                    list.Add(buffer.BaseStream.ToBytesArray());
+                    buffer = new BinaryWriter(new MemoryStream());
                 }
 
-                buffer.Put(bytes);
+                buffer.Write(bytes);
             }
-            list.Add(buffer.ToByteArray());
-            buffer.Initialize();
+
+            if (buffer.BaseStream.Position != 0)
+            {
+                list.Add(buffer.BaseStream.ToBytesArray());
+            }
 
             byte index = 0;
             var ret = new List<Send_0x0002>();
@@ -159,7 +174,7 @@ namespace QQ.Framework.Packets.Send.Message
             {
                 ret.Add(new Send_0x0002(User, "", messageType, Group)
                 {
-                    _packetCount = (byte)list.Count,
+                    _packetCount = (byte) list.Count,
                     _packetIndex = index++,
                     _message = byteBuffer
                 });
