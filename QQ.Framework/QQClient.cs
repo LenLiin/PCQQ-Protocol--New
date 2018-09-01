@@ -489,7 +489,7 @@ namespace QQ.Framework
         /// <param name="message"></param>
         /// <param name="group"></param>
         /// <param name="MessageType">消息类型</param>
-        public void SendLongGroupMessage(string message, long group, FriendMessageType MessageType)
+        public void SendLongGroupMessage(string message, long group, MessageType MessageType)
         {
             message = message.Replace("\n", "\r").Trim();
             foreach (var packet in Send_0x0002.SendLongMessage(QQUser, message, MessageType, group))
@@ -503,7 +503,7 @@ namespace QQ.Framework
         /// <param name="message"></param>
         /// <param name="user"></param>
         /// <param name="MessageType">消息类型</param>
-        public void SendLongUserMessage(string message, long user, FriendMessageType MessageType)
+        public void SendLongUserMessage(string message, long user, MessageType MessageType)
         {
             message = message.Replace("\n", "\r").Trim();
             foreach (var packet in Send_0x00CD.SendLongMessage(QQUser, message, MessageType, user))

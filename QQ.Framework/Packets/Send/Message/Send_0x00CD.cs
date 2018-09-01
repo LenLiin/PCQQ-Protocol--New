@@ -14,7 +14,7 @@ namespace QQ.Framework.Packets.Send.Message
     /// </summary>
     public class Send_0x00CD : SendPacket
     {
-        public Send_0x00CD(QQUser User, string Message, FriendMessageType messageType, long ToQQ)
+        public Send_0x00CD(QQUser User, string Message, MessageType messageType, long ToQQ)
             : base(User)
         {
             Sequence = GetNextSeq();
@@ -36,7 +36,7 @@ namespace QQ.Framework.Packets.Send.Message
         /// <summary>
         /// 消息类型
         /// </summary>
-        public FriendMessageType _messageType { get; set; }
+        public MessageType _messageType { get; set; }
 
         private byte[] _message { get; set; }
 
@@ -54,7 +54,7 @@ namespace QQ.Framework.Packets.Send.Message
         {
             var _DateTime = Util.GetTimeSeconds(DateTime.Now);
             var _Md5 = user.QQ_SessionKey;
-            if (_messageType == FriendMessageType.Xml)
+            if (_messageType.HasFlag(MessageType.Xml))
             {
                 var compressMsg = GZipByteArray.CompressBytes(Encoding.UTF8.GetString(_message));
                 bodyWriter.BEWrite(user.QQ);
@@ -72,7 +72,7 @@ namespace QQ.Framework.Packets.Send.Message
                 bodyWriter.Write(SendXML( _DateTime, compressMsg));
 
             }
-            else if (_messageType == FriendMessageType.Shake)
+            else if (_messageType.HasFlag(MessageType.Shake))
             {
                 bodyWriter.BEWrite(user.QQ);
                 bodyWriter.BEWrite(_toQQ);
@@ -88,7 +88,7 @@ namespace QQ.Framework.Packets.Send.Message
                 bodyWriter.Write(Util.RandomKey(4));
                 bodyWriter.Write(new byte[] {0x00, 0x00, 0x00, 0x00});
             }
-            else if (_messageType == FriendMessageType.Message)
+            else
             {
                 bodyWriter.BEWrite(user.QQ);
                 bodyWriter.BEWrite(_toQQ);
@@ -125,7 +125,7 @@ namespace QQ.Framework.Packets.Send.Message
             }
         }
 
-        public static List<Send_0x00CD> SendLongMessage(QQUser User, string Message, FriendMessageType messageType,
+        public static List<Send_0x00CD> SendLongMessage(QQUser User, string Message, MessageType messageType,
             long ToQQ)
         {
             var buffer = new BinaryWriter(new MemoryStream());

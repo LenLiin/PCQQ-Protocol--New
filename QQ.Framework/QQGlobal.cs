@@ -317,36 +317,39 @@ namespace QQ.Framework
         /// </summary>
         Unknown = 0xFFFF,
     }
-    public enum FriendMessageType
+
+    [Flags]
+    public enum MessageType
     {
         /// <summary>
-        /// 抖动
+        ///     普通文本
         /// </summary>
-        Shake = 1,
+        Normal = 1,
+
         /// <summary>
-        /// 好友消息
+        ///     抖动
         /// </summary>
-        Message = 2,
+        Shake = 2,
+
         /// <summary>
-        /// 图片消息
+        ///     图片消息
         /// </summary>
-        Picture = 3,
+        Picture = 4,
+
         /// <summary>
-        /// 群消息
+        ///     Xml消息
         /// </summary>
-        GroupMessage = 4,
+        Xml = 8,
+
         /// <summary>
-        /// Xml消息
+        ///     Json消息
         /// </summary>
-        Xml = 5,
+        Json = 16,
+
         /// <summary>
-        /// Json消息
+        ///     退群
         /// </summary>
-        Json = 6,
-        /// <summary>
-        /// 退群
-        /// </summary>
-        ExitGroup = 7
+        ExitGroup = 32
     }
 
     public static class LoginStatus
