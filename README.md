@@ -13,22 +13,22 @@ PCQQ协议
 发送数据包的方式变更<br/>
 原方式<br/>
 ```C#
-var buf = new ByteBuffer();<br/>
-new Send_0x0000().Fill(buf);<br/>
-Send(buf);<br/>
+var buf = new ByteBuffer();
+new Send_0x0000().Fill(buf);
+Send(buf);
 //新方式
 Send(new Send_0x0000().WriteData());
-//使用以下方法替换原有的ByteBuffer.Put和Get<br/>
-//若类型为byte或byte[]<br/>
-BinaryReader.ReadByte()<br/>
+//使用以下方法替换原有的ByteBuffer.Put和Get
+//若类型为byte或byte[]
+BinaryReader.ReadByte()
 BinaryReader.ReadBytes(int count)<br/>
-BinaryWriter.Write(byte) //注意：需要进行类型转换，如Write((byte)1);<br/>
-BinaryWriter.Write(byte[])<br/>
-//对于其他类型(char, ushort, int, long)<br/>
-BinaryReader.BEReadChar()<br/>
-BinaryReader.BEReadUInt16()<br/>
-BinaryReader.BEReadInt32()<br/>
-BinaryWriter.BEWrite(ushort)<br/>
+BinaryWriter.Write(byte) //注意：需要进行类型转换，如Write((byte)1);
+BinaryWriter.Write(byte[])
+//对于其他类型(char, ushort, int, long)
+BinaryReader.BEReadChar()
+BinaryReader.BEReadUInt16()
+BinaryReader.BEReadInt32()
+BinaryWriter.BEWrite(ushort)
 //这些扩展方法定义于Utils.Util.cs内。
 ```
 <b>2018-8-31</b>
