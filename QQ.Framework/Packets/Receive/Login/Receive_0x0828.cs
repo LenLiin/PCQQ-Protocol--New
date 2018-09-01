@@ -1,21 +1,15 @@
-﻿using QQ.Framework.Utils;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QQ.Framework.Packets.Receive.Login
 {
     public class Receive_0x0828 : ReceivePacket
     {
-        public byte DataHead { get; set; }
-
         public Receive_0x0828(byte[] byteBuffer, QQUser User)
             : base(byteBuffer, User, User.QQ_0828_rec_decr_key)
         {
         }
+
+        public byte DataHead { get; set; }
 
         protected override void ParseBody()
         {

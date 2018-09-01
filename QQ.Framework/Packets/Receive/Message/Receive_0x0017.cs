@@ -1,56 +1,52 @@
-﻿using QQ.Framework.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.Receive.Message
 {
     public class Receive_0x0017 : ReceivePacket
     {
         /// <summary>
-        /// 消息来源QQ
-        /// </summary>
-        public long FromQQ { get; set; }
-
-        /// <summary>
-        /// 群号
-        /// </summary>
-        public long Group { get; set; }
-
-        /// <summary>
-        /// 消息类型
-        /// </summary>
-        public char MessageType { get; set; }
-
-        /// <summary>
-        /// 消息
-        /// </summary>
-        public string Message { get; set; }
-
-        /// <summary>
-        /// 字体
-        /// </summary>
-        public byte[] Font { get; set; }
-
-        /// <summary>
-        /// 接收时间
-        /// </summary>
-        public byte[] ReceiveTime { get; set; }
-
-        /// <summary>
-        /// 发送时间
-        /// </summary>
-        public byte[] SendTime { get; set; }
-
-        /// <summary>
-        /// 群消息
+        ///     群消息
         /// </summary>
         public Receive_0x0017(byte[] byteBuffer, QQUser User)
             : base(byteBuffer, User, User.QQ_SessionKey)
         {
         }
+
+        /// <summary>
+        ///     消息来源QQ
+        /// </summary>
+        public long FromQQ { get; set; }
+
+        /// <summary>
+        ///     群号
+        /// </summary>
+        public long Group { get; set; }
+
+        /// <summary>
+        ///     消息类型
+        /// </summary>
+        public char MessageType { get; set; }
+
+        /// <summary>
+        ///     消息
+        /// </summary>
+        public string Message { get; set; }
+
+        /// <summary>
+        ///     字体
+        /// </summary>
+        public byte[] Font { get; set; }
+
+        /// <summary>
+        ///     接收时间
+        /// </summary>
+        public byte[] ReceiveTime { get; set; }
+
+        /// <summary>
+        ///     发送时间
+        /// </summary>
+        public byte[] SendTime { get; set; }
 
         protected override void ParseBody()
         {

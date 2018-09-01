@@ -1,54 +1,50 @@
-﻿using QQ.Framework.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.Receive.Message
 {
     /// <summary>
-    /// 好友消息
+    ///     好友消息
     /// </summary>
     public class Receive_0x00CE : ReceivePacket
     {
         /// <summary>
-        /// 消息来源QQ
-        /// </summary>
-        public long FromQQ { get; set; }
-
-        /// <summary>
-        /// 消息类型
-        /// </summary>
-        public byte[] MessageType { get; set; }
-
-        /// <summary>
-        /// 消息长度
-        /// </summary>
-        public char MessageLength { get; set; }
-
-        /// <summary>
-        /// 消息时间
-        /// </summary>
-        public byte[] MessageDateTime { get; set; }
-
-        /// <summary>
-        /// 消息字体
-        /// </summary>
-        public byte[] FontStyle { get; set; }
-
-        /// <summary>
-        /// 消息内容
-        /// </summary>
-        public string Message { get; set; }
-
-        /// <summary>
-        /// 好友消息
+        ///     好友消息
         /// </summary>
         public Receive_0x00CE(byte[] byteBuffer, QQUser User)
             : base(byteBuffer, User, User.QQ_SessionKey)
         {
         }
+
+        /// <summary>
+        ///     消息来源QQ
+        /// </summary>
+        public long FromQQ { get; set; }
+
+        /// <summary>
+        ///     消息类型
+        /// </summary>
+        public byte[] MessageType { get; set; }
+
+        /// <summary>
+        ///     消息长度
+        /// </summary>
+        public char MessageLength { get; set; }
+
+        /// <summary>
+        ///     消息时间
+        /// </summary>
+        public byte[] MessageDateTime { get; set; }
+
+        /// <summary>
+        ///     消息字体
+        /// </summary>
+        public byte[] FontStyle { get; set; }
+
+        /// <summary>
+        ///     消息内容
+        /// </summary>
+        public string Message { get; set; }
 
         protected override void ParseBody()
         {

@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace QQ.Framework.Packets.Send.Message
 {
     public class Send_Currency : SendPacket
     {
         /// <summary>
-        /// 通用响应包
+        ///     通用响应包
         /// </summary>
         /// <param name="byteBuffer"></param>
         /// <param name="User"></param>
@@ -24,7 +18,7 @@ namespace QQ.Framework.Packets.Send.Message
             _data = Data;
         }
 
-        private byte[] _data { get; set; }
+        private byte[] _data { get; }
 
         protected override void PutHeader()
         {
@@ -33,7 +27,7 @@ namespace QQ.Framework.Packets.Send.Message
         }
 
         /// <summary>
-        /// 初始化包体
+        ///     初始化包体
         /// </summary>
         /// <param name="buf">The buf.</param>
         protected override void PutBody()

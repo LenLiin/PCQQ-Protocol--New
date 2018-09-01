@@ -1,25 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QQ.Framework.Utils
 {
     public static class ImageHelper
     {
         /// <summary>
-        /// Convert Image to Byte[]
+        ///     Convert Image to Byte[]
         /// </summary>
         /// <param name="image"></param>
         /// <returns></returns>
         public static byte[] ImageToBytes(Image image)
         {
-            ImageFormat format = image.RawFormat;
-            using (MemoryStream ms = new MemoryStream())
+            var format = image.RawFormat;
+            using (var ms = new MemoryStream())
             {
                 if (format.Equals(ImageFormat.Jpeg))
                 {
@@ -41,7 +36,8 @@ namespace QQ.Framework.Utils
                 {
                     image.Save(ms, ImageFormat.Icon);
                 }
-                byte[] buffer = new byte[ms.Length];
+
+                var buffer = new byte[ms.Length];
                 //Image.Save()会改变MemoryStream的Position，需要重新Seek到Begin
                 ms.Seek(0, SeekOrigin.Begin);
                 ms.Read(buffer, 0, buffer.Length);
@@ -50,28 +46,28 @@ namespace QQ.Framework.Utils
         }
 
         /// <summary>
-        /// Convert Byte[] to Image
+        ///     Convert Byte[] to Image
         /// </summary>
         /// <param name="buffer"></param>
         /// <returns></returns>
         public static Image BytesToImage(byte[] buffer)
         {
-            MemoryStream ms = new MemoryStream(buffer);
-            Image image = System.Drawing.Image.FromStream(ms);
+            var ms = new MemoryStream(buffer);
+            var image = Image.FromStream(ms);
             return image;
         }
 
         /// <summary>
-        /// Convert Byte[] to a picture and Store it in file
+        ///     Convert Byte[] to a picture and Store it in file
         /// </summary>
         /// <param name="fileName"></param>
         /// <param name="buffer"></param>
         /// <returns></returns>
         public static string CreateImageFromBytes(string fileName, byte[] buffer)
         {
-            string file = fileName;
-            Image image = BytesToImage(buffer);
-            ImageFormat format = image.RawFormat;
+            var file = fileName;
+            var image = BytesToImage(buffer);
+            var format = image.RawFormat;
             if (format.Equals(ImageFormat.Jpeg))
             {
                 file += ".jpeg";
@@ -92,8 +88,9 @@ namespace QQ.Framework.Utils
             {
                 file += ".icon";
             }
-            System.IO.FileInfo info = new System.IO.FileInfo(file);
-            System.IO.Directory.CreateDirectory(info.Directory.FullName);
+
+            var info = new FileInfo(file);
+            Directory.CreateDirectory(info.Directory.FullName);
             File.WriteAllBytes(file, buffer);
             return file;
         }

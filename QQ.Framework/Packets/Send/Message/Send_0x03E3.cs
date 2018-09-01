@@ -1,19 +1,19 @@
-﻿using QQ.Framework.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.Send.Message
 {
     /// <summary>
-    /// 点赞
+    ///     点赞
     /// </summary>
     public class Send_0x03E3 : SendPacket
     {
         /// <summary>
-        /// 点赞
+        ///     好友QQ
+        /// </summary>
+        private readonly long _toQQ;
+
+        /// <summary>
+        ///     点赞
         /// </summary>
         /// <param name="User"></param>
         /// <param name="ToQQ">要点赞的QQ</param>
@@ -25,11 +25,6 @@ namespace QQ.Framework.Packets.Send.Message
             Command = QQCommand.Interactive0x03E3;
             _toQQ = ToQQ;
         }
-
-        /// <summary>
-        /// 好友QQ
-        /// </summary>
-        long _toQQ;
 
         protected override void PutHeader()
         {

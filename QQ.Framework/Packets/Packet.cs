@@ -1,89 +1,90 @@
-﻿using QQ.Framework.Utils;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QQ.Framework.Packets
 {
     /// <summary>
-    /// 数据包
+    ///     数据包
     /// </summary>
     public abstract class Packet
     {
         /// <summary>
-        /// 加密密钥
+        ///     明文包体
         /// </summary>
-        public byte[] _secretKey { get; set; }
+        public byte[] bodyDecrypted;
 
         /// <summary>
-        /// 原始数据。对于接收的包，这个值为未解密的。
-        /// </summary>
-        public byte[] buffer = new byte[QQGlobal.QQ_PACKET_MAX_SIZE];
-
-        /// <summary>
-        /// 包头字节
-        /// </summary>
-        public byte Header { get; set; }
-
-        /// <summary>
-        /// 版本标志
-        /// </summary>
-        public char Version { get; set; }
-
-        /// <summary>
-        /// 包命令, 如：0x0825
-        /// </summary>
-        /// <value></value>
-        public QQCommand Command { get; set; }
-
-        /// <summary>
-        /// 包序号
-        /// </summary>
-        public char Sequence { get; set; }
-
-        /// <summary>
-        /// 密文包体
+        ///     密文包体
         /// </summary>
         public byte[] bodyEcrypted;
 
         /// <summary>
-        /// 明文包体
+        ///     原始数据。对于接收的包，这个值为未解密的。
         /// </summary>
-        public byte[] bodyDecrypted;
+        public byte[] buffer = new byte[QQGlobal.QQ_PACKET_MAX_SIZE];
 
-        /// <summary>QQUser
-        /// 为了支持一个JVM中创建多个QQClient，包中需要保持一个QQUser的引用以
-        /// 确定包的用户相关字段如何填写
-        /// 	<remark>abu 2008-02-18 </remark>
+        /// <summary>
+        ///     QQUser
+        ///     为了支持一个JVM中创建多个QQClient，包中需要保持一个QQUser的引用以
+        ///     确定包的用户相关字段如何填写
+        ///     <remark>abu 2008-02-18 </remark>
         /// </summary>
         /// <value></value>
         public QQUser user;
 
         public Packet()
         {
-            this.DateTime = DateTime.Now;
+            DateTime = DateTime.Now;
         }
 
         public Packet(QQUser User)
             : this()
         {
-            this.user = User;
+            user = User;
         }
 
         /// <summary>
-        /// 构造一个指定参数的包
+        ///     构造一个指定参数的包
         /// </summary>
         public Packet(byte[] byteBuffer, QQUser User)
             : this(User)
         {
-            this.buffer = byteBuffer;
+            buffer = byteBuffer;
         }
 
         /// <summary>
-        /// 标识这个包是哪个包
+        ///     加密密钥
+        /// </summary>
+        public byte[] _secretKey { get; set; }
+
+        /// <summary>
+        ///     包头字节
+        /// </summary>
+        public byte Header { get; set; }
+
+        /// <summary>
+        ///     版本标志
+        /// </summary>
+        public char Version { get; set; }
+
+        /// <summary>
+        ///     包命令, 如：0x0825
+        /// </summary>
+        /// <value></value>
+        public QQCommand Command { get; set; }
+
+        /// <summary>
+        ///     包序号
+        /// </summary>
+        public char Sequence { get; set; }
+
+        /// <summary>
+        ///     包的接收时间或发送时间
+        /// </summary>
+        /// <value></value>
+        public DateTime DateTime { get; set; }
+
+        /// <summary>
+        ///     标识这个包是哪个包
         /// </summary>
         /// <returns></returns>
         public QQCommand GetQQCommand()
@@ -92,8 +93,8 @@ namespace QQ.Framework.Packets
         }
 
         /// <summary>
-        /// 密文的起始位置，这个位置是相对于包体的第一个字节来说的，如果这个包是未知包，
-        /// 返回-1，这个方法只对某些协议族有意义
+        ///     密文的起始位置，这个位置是相对于包体的第一个字节来说的，如果这个包是未知包，
+        ///     返回-1，这个方法只对某些协议族有意义
         /// </summary>
         /// <returns></returns>
         protected virtual int GetCryptographStart()
@@ -102,18 +103,20 @@ namespace QQ.Framework.Packets
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
+        ///     Determines whether the specified <see cref="T:System.Object" /> is equal to the current
+        ///     <see cref="T:System.Object" />.
         /// </summary>
-        /// <param name="obj">The <see cref="T:System.Object"/> to compare with the current <see cref="T:System.Object"/>.</param>
+        /// <param name="obj">The <see cref="T:System.Object" /> to compare with the current <see cref="T:System.Object" />.</param>
         /// <returns>
-        /// true if the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>; otherwise, false.
+        ///     true if the specified <see cref="T:System.Object" /> is equal to the current <see cref="T:System.Object" />;
+        ///     otherwise, false.
         /// </returns>
-        /// <exception cref="T:System.NullReferenceException">The <paramref name="obj"/> parameter is null.</exception>
+        /// <exception cref="T:System.NullReferenceException">The <paramref name="obj" /> parameter is null.</exception>
         public override bool Equals(object obj)
         {
             if (obj is Packet)
             {
-                Packet packet = (Packet) obj;
+                var packet = (Packet) obj;
                 return Header == packet.Header && Command == packet.Command && Sequence == packet.Sequence;
             }
 
@@ -121,10 +124,10 @@ namespace QQ.Framework.Packets
         }
 
         /// <summary>
-        /// Serves as a hash function for a particular type.
+        ///     Serves as a hash function for a particular type.
         /// </summary>
         /// <returns>
-        /// A hash code for the current <see cref="T:System.Object"/>.
+        ///     A hash code for the current <see cref="T:System.Object" />.
         /// </returns>
         public override int GetHashCode()
         {
@@ -132,7 +135,7 @@ namespace QQ.Framework.Packets
         }
 
         /// <summary>
-        /// 得到hash值
+        ///     得到hash值
         /// </summary>
         /// <param name="sequence">The sequence.</param>
         /// <param name="command">The command.</param>
@@ -143,18 +146,12 @@ namespace QQ.Framework.Packets
         }
 
         /// <summary>
-        /// 包的描述性名称
+        ///     包的描述性名称
         /// </summary>
         /// <returns></returns>
         public virtual string GetPacketName()
         {
             return "未知数据包";
         }
-
-        /// <summary>
-        /// 包的接收时间或发送时间
-        /// </summary>
-        /// <value></value>
-        public DateTime DateTime { get; set; }
     }
 }

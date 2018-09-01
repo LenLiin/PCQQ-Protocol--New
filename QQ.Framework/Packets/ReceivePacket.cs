@@ -1,44 +1,19 @@
-﻿using QQ.Framework.Utils;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets
 {
     public class ReceivePacket : Packet
     {
-        public ReceivePacket() : base()
-        {
-        }
-
         public BinaryReader reader;
 
-        public void Decrypt(byte[] key)
+        public ReceivePacket()
         {
-            bodyDecrypted = QQTea.Decrypt(buffer, (int) reader.BaseStream.Position,
-                (int) (buffer.Length - reader.BaseStream.Position - 1), key);
-            if (bodyDecrypted == null)
-            {
-                throw new Exception($"包内容解析出错，抛弃该包: {ToString()}");
-            }
-
-            reader = new BinaryReader(new MemoryStream(bodyDecrypted));
         }
 
         /// <summary>
-        /// 包体长度
-        /// </summary>
-        /// <returns></returns>
-        public int GetPacketLength()
-        {
-            return bodyEcrypted.Length;
-        }
-
-        /// <summary>
-        /// 构造一个指定参数的包
+        ///     构造一个指定参数的包
         /// </summary>
         /// <param name="byteBuffer"></param>
         /// <param name="User"></param>
@@ -67,8 +42,31 @@ namespace QQ.Framework.Packets
             ParseTail();
         }
 
+        public long QQ { get; set; }
+
+        public void Decrypt(byte[] key)
+        {
+            bodyDecrypted = QQTea.Decrypt(buffer, (int) reader.BaseStream.Position,
+                (int) (buffer.Length - reader.BaseStream.Position - 1), key);
+            if (bodyDecrypted == null)
+            {
+                throw new Exception($"包内容解析出错，抛弃该包: {ToString()}");
+            }
+
+            reader = new BinaryReader(new MemoryStream(bodyDecrypted));
+        }
+
         /// <summary>
-        /// 从buf的当前位置解析包尾
+        ///     包体长度
+        /// </summary>
+        /// <returns></returns>
+        public int GetPacketLength()
+        {
+            return bodyEcrypted.Length;
+        }
+
+        /// <summary>
+        ///     从buf的当前位置解析包尾
         /// </summary>
         /// <param name="buf">The buf.</param>
         protected void ParseTail()
@@ -83,7 +81,7 @@ namespace QQ.Framework.Packets
         }
 
         /// <summary>
-        /// 解析包体，从buf的开头位置解析起
+        ///     解析包体，从buf的开头位置解析起
         /// </summary>
         /// <param name="reader">The buf.</param>
         protected virtual void ParseBody()
@@ -91,7 +89,7 @@ namespace QQ.Framework.Packets
         }
 
         /// <summary>
-        /// 从buf的当前位置解析包头
+        ///     从buf的当前位置解析包头
         /// </summary>
         /// <param name="reader">The buf.</param>
         protected virtual void ParseHeader()
@@ -103,7 +101,5 @@ namespace QQ.Framework.Packets
             QQ = reader.BEReadInt32();
             reader.ReadBytes(3);
         }
-
-        public long QQ { get; set; }
     }
 }

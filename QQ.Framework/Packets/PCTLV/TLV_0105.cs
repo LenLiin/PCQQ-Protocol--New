@@ -1,24 +1,25 @@
-﻿using QQ.Framework;
-using QQ.Framework.Utils;
 using System;
 using System.IO;
+using QQ.Framework;
+using QQ.Framework.Utils;
+
 namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
 {
     internal class TLV_0105 : BaseTLV
     {
         public TLV_0105()
         {
-            this.cmd = 0x0105;
-            this.Name = "TLV_m_vec0x12c";
-            this.wSubVer = 0x0001;
+            cmd = 0x0105;
+            Name = "TLV_m_vec0x12c";
+            wSubVer = 0x0001;
         }
 
         public byte[] get_tlv_0105(QQClient m_PCClient)
         {
-              var data = new BinaryWriter(new MemoryStream());
-            if (this.wSubVer == 0x0001)
+            var data = new BinaryWriter(new MemoryStream());
+            if (wSubVer == 0x0001)
             {
-                data.BEWrite(this.wSubVer); //wSubVer
+                data.BEWrite(wSubVer); //wSubVer
                 data.Write(1);
                 data.Write(2);
                 data.BEWrite(0x0014);
@@ -30,9 +31,10 @@ namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
             }
             else
             {
-                throw new Exception(string.Format("{0} 无法识别的版本号 {1}", this.Name, this.wSubVer));
+                throw new Exception(string.Format("{0} 无法识别的版本号 {1}", Name, wSubVer));
             }
-            fill_head(this.cmd);
+
+            fill_head(cmd);
             fill_body(data.BaseStream.ToBytesArray(), data.BaseStream.Length);
             set_length();
             return get_buf();
@@ -40,19 +42,19 @@ namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
 
         public void parser_tlv_0105(QQClient m_PCClient, BinaryReader buf)
         {
-            this.wSubVer = buf.BEReadUInt16(); //wSubVer
-            if (this.wSubVer == 0x0001)
+            wSubVer = buf.BEReadUInt16(); //wSubVer
+            if (wSubVer == 0x0001)
             {
-                buf.ReadByte();//UNKNOWs
+                buf.ReadByte(); //UNKNOWs
                 var Count = buf.ReadByte();
-                for (int i = 0; i < Count; i++)
+                for (var i = 0; i < Count; i++)
                 {
-                    buf.ReadBytes(0x38);//buf
+                    buf.ReadBytes(0x38); //buf
                 }
             }
             else
             {
-                throw new Exception(string.Format("{0} 无法识别的版本号 {1}", this.Name, this.wSubVer));
+                throw new Exception(string.Format("{0} 无法识别的版本号 {1}", Name, wSubVer));
             }
         }
     }

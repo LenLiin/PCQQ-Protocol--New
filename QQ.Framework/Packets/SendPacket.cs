@@ -1,26 +1,29 @@
-﻿using QQ.Framework.Utils;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets
 {
     public abstract class SendPacket : Packet
     {
-        public SendPacket() : base()
+        /// <summary>
+        ///     包起始序列号
+        /// </summary>
+        protected static char seq = (char) Util.Random.Next();
+
+        public MemoryStream bodyStream;
+        public BinaryWriter bodyWriter;
+
+        public BinaryWriter writer = new BinaryWriter(new MemoryStream());
+
+        public SendPacket()
         {
         }
 
-        public BinaryWriter writer = new BinaryWriter(new MemoryStream());
-        public BinaryWriter bodyWriter;
-        public MemoryStream bodyStream;
-
         /// <summary>
-        /// 构造一个指定参数的包
+        ///     构造一个指定参数的包
         /// </summary>
         public SendPacket(QQUser User)
             : base(User)
@@ -29,7 +32,7 @@ namespace QQ.Framework.Packets
         }
 
         /// <summary>
-        /// 加密包体
+        ///     加密包体
         /// </summary>
         /// <param name="buf">未加密的字节数组.</param>
         /// <param name="offset">包体开始的偏移.</param>
@@ -41,12 +44,7 @@ namespace QQ.Framework.Packets
         }
 
         /// <summary>
-        /// 包起始序列号
-        /// </summary>
-        protected static char seq = (char) Util.Random.Next();
-
-        /// <summary>
-        /// 将包头部转化为字节流, 写入指定的ByteBuffer对象.
+        ///     将包头部转化为字节流, 写入指定的ByteBuffer对象.
         /// </summary>
         /// <param name="buf">The buf.</param>
         protected virtual void PutHeader()
@@ -73,13 +71,13 @@ namespace QQ.Framework.Packets
         }
 
         /// <summary>
-        /// 初始化包体
+        ///     初始化包体
         /// </summary>
         /// <param name="buf">The buf.</param>
         protected abstract void PutBody();
 
         /// <summary>
-        /// 将包尾部转化为字节流, 写入指定的ByteBuffer对象.
+        ///     将包尾部转化为字节流, 写入指定的ByteBuffer对象.
         /// </summary>
         /// <param name="buf">The buf.</param>
         protected virtual void PutTail()
@@ -88,14 +86,14 @@ namespace QQ.Framework.Packets
         }
 
         /// <summary>
-        ///  将整个包转化为字节流, 并返回其值。
-        ///  可直接使用QQClient.Send(new Send_0x__().WriteData())。
+        ///     将整个包转化为字节流, 并返回其值。
+        ///     可直接使用QQClient.Send(new Send_0x__().WriteData())。
         /// </summary>
         /// <param name="buf">The buf.</param>
         public byte[] WriteData()
         {
             //保存当前pos
-            int pos = (int) writer.BaseStream.Position;
+            var pos = (int) writer.BaseStream.Position;
             //填充头部
             PutHeader();
             //填充包体
@@ -115,8 +113,8 @@ namespace QQ.Framework.Packets
         }
 
         /// <summary>
-        /// 回填，有些字段必须填完整个包才能确定其内容，比如长度字段，那么这个方法将在
-        /// 尾部填充之后调用
+        ///     回填，有些字段必须填完整个包才能确定其内容，比如长度字段，那么这个方法将在
+        ///     尾部填充之后调用
         /// </summary>
         /// <param name="buf">The buf.</param>
         /// <param name="startPos">The start pos.</param>
@@ -125,7 +123,7 @@ namespace QQ.Framework.Packets
             // 如果是tcp包，到包的开头处填上包长度，然后回到目前的pos
             if (!user.IsUdp)
             {
-                int len = (int) (writer.BaseStream.Length - startPos);
+                var len = (int) (writer.BaseStream.Length - startPos);
                 var currentPos = writer.BaseStream.Position;
                 writer.BaseStream.Position = startPos;
                 writer.BEWrite((ushort) len);
@@ -134,7 +132,7 @@ namespace QQ.Framework.Packets
         }
 
         /// <summary>
-        /// 得到包体的字节数组
+        ///     得到包体的字节数组
         /// </summary>
         /// <param name="buf">The buf.</param>
         /// <param name="length">包总长度</param>
@@ -143,8 +141,12 @@ namespace QQ.Framework.Packets
         {
             var buf = new byte[QQGlobal.QQ_PACKET_MAX_SIZE];
             // 得到包体长度
-            int bodyLen = length - QQGlobal.QQ_LENGTH_BASIC_FAMILY_OUT_HEADER - QQGlobal.QQ_LENGTH_BASIC_FAMILY_TAIL;
-            if (!user.IsUdp) bodyLen -= 2;
+            var bodyLen = length - QQGlobal.QQ_LENGTH_BASIC_FAMILY_OUT_HEADER - QQGlobal.QQ_LENGTH_BASIC_FAMILY_TAIL;
+            if (!user.IsUdp)
+            {
+                bodyLen -= 2;
+            }
+
             // 得到加密的包体内容
             // 没看懂，这个buf根本没被赋值，怎么读取的
             // byte[] body = buf.ReadBytes(bodyLen);
@@ -153,14 +155,14 @@ namespace QQ.Framework.Packets
 
 
         /// <summary>
-        /// 带表情消息
+        ///     带表情消息
         /// </summary>
         /// <param name="Message"></param>
         /// <returns></returns>
         public static byte[] ConstructMessage(string Message)
         {
             var bw = new BinaryWriter(new MemoryStream());
-            Regex r = new Regex(@"([^\[]+)*(\[face\d+\.gif\])([^\[]+)*");
+            var r = new Regex(@"([^\[]+)*(\[face\d+\.gif\])([^\[]+)*");
             if (r.IsMatch(Message))
             {
                 var Faces = r.Matches(Message);
@@ -175,7 +177,10 @@ namespace QQ.Framework.Packets
                             var faceIndex =
                                 Convert.ToByte(group.Substring(5, group.Length - group.LastIndexOf(".") - 4));
                             if (faceIndex > 199)
+                            {
                                 faceIndex = 0;
+                            }
+
                             //表情
                             bw.Write(new byte[] {0x02, 0x00, 0x14, 0x01, 0x00, 0x01});
                             bw.Write(faceIndex);
@@ -197,7 +202,7 @@ namespace QQ.Framework.Packets
         }
 
         /// <summary>
-        /// 普通消息
+        ///     普通消息
         /// </summary>
         /// <param name="writer"></param>
         /// <param name="GroupMsg"></param>
@@ -219,27 +224,28 @@ namespace QQ.Framework.Packets
         public static void SendOfflineFile(uint QQ, string file)
         {
         }
+
         /// <summary>
-        /// XML消息组装
+        ///     XML消息组装
         /// </summary>
         /// <param name="buf">报文</param>
         /// <param name="_DateTime">时间</param>
         /// <param name="compressMsg">压缩消息数组</param>
-        public static byte[] SendXML( long _DateTime, byte[] compressMsg)
+        public static byte[] SendXML(long _DateTime, byte[] compressMsg)
         {
-            BinaryWriter bw = new BinaryWriter(new MemoryStream());
+            var bw = new BinaryWriter(new MemoryStream());
             bw.BEWrite(_DateTime);
             bw.Write(Util.RandomKey(4));
-            bw.Write(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00 });
-            bw.Write(new byte[] { 0x00, 0x0C });
-            bw.Write(new byte[] { 0xE5, 0xBE, 0xAE, 0xE8, 0xBD, 0xAF, 0xE9, 0x9B, 0x85, 0xE9, 0xBB, 0x91 });
-            bw.Write(new byte[] { 0x00, 0x00, 0x14 });
-            bw.BEWrite((ushort)(compressMsg.Length + 11));
-            bw.Write((byte)0x01);
-            bw.BEWrite((ushort)(compressMsg.Length + 1));
-            bw.Write((byte)0x01);
+            bw.Write(new byte[] {0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00});
+            bw.Write(new byte[] {0x00, 0x0C});
+            bw.Write(new byte[] {0xE5, 0xBE, 0xAE, 0xE8, 0xBD, 0xAF, 0xE9, 0x9B, 0x85, 0xE9, 0xBB, 0x91});
+            bw.Write(new byte[] {0x00, 0x00, 0x14});
+            bw.BEWrite((ushort) (compressMsg.Length + 11));
+            bw.Write((byte) 0x01);
+            bw.BEWrite((ushort) (compressMsg.Length + 1));
+            bw.Write((byte) 0x01);
             bw.Write(compressMsg);
-            bw.Write(new byte[] { 0x02, 0x00, 0x04, 0x00, 0x00, 0x00, 0x4D });
+            bw.Write(new byte[] {0x02, 0x00, 0x04, 0x00, 0x00, 0x00, 0x4D});
             return bw.BaseStream.ToBytesArray();
         }
 
