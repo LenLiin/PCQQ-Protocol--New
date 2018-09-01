@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.Send.Data
 {
@@ -15,22 +16,23 @@ namespace QQ.Framework.Packets.Send.Data
             _secretKey = user.QQ_SessionKey;
             Command = QQCommand.Data0x005C;
         }
-        protected override void PutHeader(ByteBuffer buf)
+
+        protected override void PutHeader()
         {
-            base.PutHeader(buf);
+            base.PutHeader();
             Sequence = GetNextSeq();
-            buf.Put(user.QQ_PACKET_FIXVER);
+            writer.Write(user.QQ_PACKET_FIXVER);
         }
+
         /// <summary>
         /// 初始化包体
         /// </summary>
         /// <param name="buf">The buf.</param>
-        protected override void PutBody(ByteBuffer buf)
+        protected override void PutBody()
         {
-            buf.Put(0x88);
-            buf.PutLong(user.QQ);
-            buf.Put(0x00);
+            bodyWriter.Write((byte) 0x88);
+            bodyWriter.BEWrite(user.QQ);
+            bodyWriter.Write((byte) 0x00);
         }
-
     }
 }

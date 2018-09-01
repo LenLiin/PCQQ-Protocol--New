@@ -37,9 +37,7 @@ namespace QQ.Framework.Sockets
         /// </summary>
         public void InvokeFailMsg(object sender, System.Timers.ElapsedEventArgs e)
         {
-            var buf = new ByteBuffer();
-            new Send_0x0058(_client.QQUser).Fill(buf);
-            _client.Send(buf);
+            _client.Send(new Send_0x0058(_client.QQUser).WriteData());
         }
     }
 }

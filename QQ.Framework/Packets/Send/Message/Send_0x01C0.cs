@@ -22,24 +22,26 @@ namespace QQ.Framework.Packets.Send.Message
             Command = QQCommand.Message0x01C0;
             _toQQ = ToQQ;
         }
-        protected override void PutHeader(ByteBuffer buf)
+
+        protected override void PutHeader()
         {
-            base.PutHeader(buf);
-            buf.Put(user.QQ_PACKET_FIXVER);
+            base.PutHeader();
+            writer.Write(user.QQ_PACKET_FIXVER);
         }
+
         /// <summary>
         /// 好友QQ
         /// </summary>
         byte[] _toQQ;
+
         /// <summary>
         /// 初始化包体
         /// </summary>
         /// <param name="buf">The buf.</param>
-        protected override void PutBody(ByteBuffer buf)
+        protected override void PutBody()
         {
-            buf.Put(0x01);
-            buf.Put(_toQQ);
+            bodyWriter.Write(0x01);
+            bodyWriter.Write(_toQQ);
         }
-
     }
 }

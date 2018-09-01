@@ -99,6 +99,8 @@ namespace QQ.Framework.Utils
         }
         public static byte[] Decrypt(byte[] In, int offset, int len, byte[] key)
         {
+            var temp = new byte[In.Length];
+            Buffer.BlockCopy(In, 0, temp, 0, In.Length);
             if (len % 8 != 0 || len < 16)
             {
                 return null;
@@ -106,11 +108,11 @@ namespace QQ.Framework.Utils
             byte[] array = new byte[len];
             for (int i = 0; i < len; i += 8)
             {
-                QQTea.decode(In, offset, i, array, 0, i, key);
+                QQTea.decode(temp, offset, i, array, 0, i, key);
             }
             for (int j = 8; j < len; j++)
             {
-                array[j] ^= In[offset + j - 8];
+                array[j] ^= temp[offset + j - 8];
             }
             int num = (int)(array[0] & 7);
             len = len - num - 10;
@@ -124,6 +126,8 @@ namespace QQ.Framework.Utils
         }
         public static byte[] Encrypt(byte[] In, int offset, int len, byte[] key)
         {
+            var temp = new byte[In.Length];
+            Buffer.BlockCopy(In, 0, temp, 0, In.Length);
             Random random = new Random();
             int num = (len + 10) % 8;
             if (num != 0)
@@ -136,7 +140,7 @@ namespace QQ.Framework.Utils
             {
                 array[i] = (byte)(random.Next() & 255);
             }
-            Array.Copy(In, 0, array, num + 3, len);
+            Array.Copy(temp, 0, array, num + 3, len);
             for (int j = num + 3 + len; j < array.Length; j++)
             {
                 array[j] = 0;

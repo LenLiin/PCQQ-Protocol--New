@@ -1,6 +1,7 @@
 ﻿using QQ.Framework.Utils;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -14,7 +15,7 @@ namespace QQ.Framework.Packets.Send.Message
     public class Send_0x00CD : SendPacket
     {
         public Send_0x00CD(QQUser User, string Message, FriendMessageType messageType, long ToQQ)
-           : base(User)
+            : base(User)
         {
             Sequence = GetNextSeq();
             _secretKey = user.QQ_SessionKey;
@@ -23,98 +24,117 @@ namespace QQ.Framework.Packets.Send.Message
             _messageType = messageType;
             _toQQ = ToQQ;
         }
+
         private byte _packetCount = 1;
         private byte _packetIndex = 0;
+
         /// <summary>
         /// 好友QQ
         /// </summary>
         long _toQQ;
+
         /// <summary>
         /// 消息类型
         /// </summary>
         public FriendMessageType _messageType { get; set; }
+
         private byte[] _message { get; set; }
-        protected override void PutHeader(ByteBuffer buf)
+
+        protected override void PutHeader()
         {
-            base.PutHeader(buf);
-            buf.Put(user.QQ_PACKET_FIXVER);
+            base.PutHeader();
+            writer.Write(user.QQ_PACKET_FIXVER);
         }
+
         /// <summary>
         /// 初始化包体
         /// </summary>
         /// <param name="buf">The buf.</param>
-        protected override void PutBody(ByteBuffer buf)
+        protected override void PutBody()
         {
             var _DateTime = Util.GetTimeSeconds(DateTime.Now);
             if (_messageType == FriendMessageType.Shake)
             {
-                buf.PutLong(user.QQ);
-                buf.PutLong(_toQQ);
-                buf.Put(new byte[] { 0x00, 0x00, 0x00, 0x00 });
-                buf.Put(new byte[] { 0x37, 0x0F });
-                buf.PutLong(user.QQ);
-                buf.PutLong(_toQQ);
-                buf.Put(Util.RandomKey());
-                buf.Put(new byte[] { 0x00, 0xAF });
-                buf.Put(Util.RandomKey(2));
-                buf.PutLong(_DateTime);
-                buf.Put(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
-                buf.Put(Util.RandomKey(4));
-                buf.Put(new byte[] { 0x00, 0x00, 0x00, 0x00 });
+                bodyWriter.BEWrite(user.QQ);
+                bodyWriter.BEWrite(_toQQ);
+                bodyWriter.Write(new byte[] {0x00, 0x00, 0x00, 0x00});
+                bodyWriter.Write(new byte[] {0x37, 0x0F});
+                bodyWriter.BEWrite(user.QQ);
+                bodyWriter.BEWrite(_toQQ);
+                bodyWriter.Write(Util.RandomKey());
+                bodyWriter.Write(new byte[] {0x00, 0xAF});
+                bodyWriter.Write(Util.RandomKey(2));
+                bodyWriter.BEWrite(_DateTime);
+                bodyWriter.Write(new byte[] {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00});
+                bodyWriter.Write(Util.RandomKey(4));
+                bodyWriter.Write(new byte[] {0x00, 0x00, 0x00, 0x00});
             }
             else
             {
                 var _Md5 = user.QQ_SessionKey;
-                buf.PutLong(user.QQ);
-                buf.PutLong(_toQQ);
-                buf.Put(new byte[] { 0x00, 0x00, 0x00, 0x0D, 0x00, 0x01, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x01,0x01 });
-                buf.Put(new byte[] { 0x36, 0x43 });
-                buf.PutLong(user.QQ);
-                buf.PutLong(_toQQ);
-                buf.Put(_Md5);
-                buf.Put(new byte[] { 0x00, 0x0B });
-                buf.Put(Util.RandomKey(2));
-                buf.PutLong(_DateTime);
-                buf.Put(new byte[] { 0x02, 0x34, 0x00, 0x00, 0x00, 0x00, _packetCount, _packetIndex, 0x00, 0x00, 0x01, 0x4D, 0x53, 0x47, 0x00, 0x00, 0x00, 0x00, 0x00 });
-                buf.PutLong(_DateTime);
-                buf.Put(Util.RandomKey(4));
-                buf.Put(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00 });
-                buf.Put(new byte[] { 0x00, 0x06 });
-                buf.Put(new byte[] { 0xE5, 0xAE, 0x8B, 0xE4, 0xBD, 0x93 });
-                buf.Put(new byte[] { 0x00, 0x00 });
+                bodyWriter.BEWrite(user.QQ);
+                bodyWriter.BEWrite(_toQQ);
+                bodyWriter.Write(new byte[]
+                {
+                    0x00, 0x00, 0x00, 0x0D, 0x00, 0x01, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x01, 0x01
+                });
+                bodyWriter.Write(new byte[] {0x36, 0x43});
+                bodyWriter.BEWrite(user.QQ);
+                bodyWriter.BEWrite(_toQQ);
+                bodyWriter.Write(_Md5);
+                bodyWriter.Write(new byte[] {0x00, 0x0B});
+                bodyWriter.Write(Util.RandomKey(2));
+                bodyWriter.BEWrite(_DateTime);
+                bodyWriter.Write(new byte[]
+                {
+                    0x02, 0x34, 0x00, 0x00, 0x00, 0x00, _packetCount, _packetIndex, 0x00, 0x00, 0x01, 0x4D, 0x53, 0x47,
+                    0x00, 0x00, 0x00, 0x00, 0x00
+                });
+                bodyWriter.BEWrite(_DateTime);
+                bodyWriter.Write(Util.RandomKey(4));
+                bodyWriter.Write(new byte[] {0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00});
+                bodyWriter.Write(new byte[] {0x00, 0x06});
+                bodyWriter.Write(new byte[] {0xE5, 0xAE, 0x8B, 0xE4, 0xBD, 0x93});
+                bodyWriter.Write(new byte[] {0x00, 0x00});
 
-                if (Encoding.UTF8.GetString(_message).Contains("[face") && Encoding.UTF8.GetString(_message).Contains(".gif]"))
+                if (Encoding.UTF8.GetString(_message).Contains("[face") &&
+                    Encoding.UTF8.GetString(_message).Contains(".gif]"))
                 {
                     var MessageData = ConstructMessage(Encoding.UTF8.GetString(_message));
                     if (MessageData.Length != 0)
                     {
-                        buf.Put(MessageData);
+                        bodyWriter.Write(MessageData);
                     }
                 }
                 else
                 {
                     //普通消息
-                    ConstructMessage(buf, _message);
+                    ConstructMessage(bodyWriter, _message);
                 }
             }
         }
-        public static List<Send_0x00CD> SendLongMessage(QQUser User, string Message, FriendMessageType messageType, long ToQQ)
+
+        public static List<Send_0x00CD> SendLongMessage(QQUser User, string Message, FriendMessageType messageType,
+            long ToQQ)
         {
-            var buffer = new ByteBuffer();
+            var buffer = new BinaryWriter(new MemoryStream());
             var list = new List<byte[]>();
             foreach (var chr in Message)
             {
                 var bytes = Encoding.UTF8.GetBytes(chr.ToString());
-                if (buffer.Length + bytes.Length > 699)
+                if (buffer.BaseStream.Length + bytes.Length > 699)
                 {
-                    list.Add(buffer.ToByteArray());
-                    buffer.Initialize();
+                    list.Add(buffer.BaseStream.ToBytesArray());
+                    buffer = new BinaryWriter(new MemoryStream());
                 }
 
-                buffer.Put(bytes);
+                buffer.Write(bytes);
             }
-            list.Add(buffer.ToByteArray());
-            buffer.Initialize();
+
+            if (buffer.BaseStream.Position != 0)
+            {
+                list.Add(buffer.BaseStream.ToBytesArray());
+            }
 
             byte index = 0;
             var ret = new List<Send_0x00CD>();

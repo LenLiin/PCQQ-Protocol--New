@@ -9,6 +9,7 @@ using QQ.Framework.Sockets;
 using QQ.Framework.Utils;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -38,7 +39,7 @@ namespace QQ.Framework
         /// 服务器地址
         /// </summary>
         /// <value></value>
-        public string LoginServerHost { get; set; } = Util.GetHostAddresses("sz2.tencent.com");////sz.tencent.com,sz{2-9}.tencent.com
+        public string LoginServerHost { get; set; } = Util.GetHostAddresses("sz6.tencent.com");////sz.tencent.com,sz{2-9}.tencent.com
         /// <summary>
         /// 登录端口
         /// </summary>
@@ -51,11 +52,10 @@ namespace QQ.Framework
         /// <value></value>
         public bool IsLogon { get; set; }
 
-        public void Send(ByteBuffer byteBuffer)
+        public void Send(byte[] byteBuffer)
         {
             new Task(() =>{
-                byte[] sendBytes = byteBuffer.ToByteArray();
-                Server.SendTo(sendBytes, Point);
+                Server.SendTo(byteBuffer, Point);
                 //发送数据时出发事件
                 QQSendEventArgs SendEvent = new QQSendEventArgs(this, byteBuffer);
                 OnSend(SendEvent);
@@ -77,9 +77,7 @@ namespace QQ.Framework
         public void Login()
         {
             //发送请求包
-            var buf = new ByteBuffer();
-            new Send_0x0825(QQUser, false).Fill(buf);
-            Send(buf);
+            Send(new Send_0x0825(QQUser, false).WriteData());
             MessageLog($"登陆服务器{LoginServerHost}");
             messageManage.Init();
         }
@@ -104,9 +102,7 @@ namespace QQ.Framework
         {
             MessageLog($"连接服务器{Util.GetIpStringFromBytes(e.QQClient.QQUser.ServerIp)}成功");
             //Ping请求成功后发送0836登录包
-            var buf = new ByteBuffer();
-            new Send_0x0836(e.ReceivePacket.user, Login0x0836Type.Login0x0836_622).Fill(buf);
-            Send(buf);
+            Send(new Send_0x0836(e.ReceivePacket.user, Login0x0836Type.Login0x0836_622).WriteData());
 
             EventReceive_0x0825?.Invoke(this, e);
         }
@@ -130,14 +126,11 @@ namespace QQ.Framework
             //刷新重定向后服务器IP
             RefPoint();
             //重新发送登录Ping包
-            var buf = new ByteBuffer();
-            new Send_0x0825(e.ReceivePacket.user, true).Fill(buf);
-            Send(buf);
+            Send(new Send_0x0825(e.ReceivePacket.user, true).WriteData());
             //执行事件
             EventReceive_0x0825Redirect?.Invoke(this, e);
         }
         #endregion
-
 
         #region 0836_622
         /// <summary>
@@ -152,9 +145,7 @@ namespace QQ.Framework
         {
             MessageLog($"登陆成功获取个人基本信息");
             MessageLog($"账号：{e.QQClient.QQUser.QQ}，昵称：{e.QQClient.QQUser.NickName}，年龄：{e.QQClient.QQUser.Age}，性别：{e.QQClient.QQUser.Gender}");
-            var buf = new ByteBuffer();
-            new Send_0x0828(e.ReceivePacket.user).Fill(buf);
-            Send(buf);
+            Send(new Send_0x0828(e.ReceivePacket.user).WriteData());
 
             EventReceive_0x0836_622?.Invoke(this, e);
         }
@@ -172,9 +163,7 @@ namespace QQ.Framework
         {
             MessageLog($"二次登陆");
             //二次发送0836登录包
-            var buf = new ByteBuffer();
-            new Send_0x0836(e.ReceivePacket.user, Login0x0836Type.Login0x0836_686).Fill(buf);
-            Send(buf);
+            Send( new Send_0x0836(e.ReceivePacket.user, Login0x0836Type.Login0x0836_686).WriteData());
 
             EventReceive_0x0836_686?.Invoke(this, e);
         }
@@ -207,9 +196,7 @@ namespace QQ.Framework
             //请求验证码
             if (e.ReceivePacket.VerifyCommand == 0x01)
             {
-                var buf = new ByteBuffer();
-                new Send_0x00BA(e.ReceivePacket.user, "").Fill(buf);
-                Send(buf);
+                Send(new Send_0x00BA(e.ReceivePacket.user, "").WriteData());
             }
             EventReceive_0x0836_871?.Invoke(this, e);
         }
@@ -227,14 +214,11 @@ namespace QQ.Framework
         {
             MessageLog($"获取SessionKey");
             //二次发送0836登录包
-            var buf = new ByteBuffer();
-            new Send_0x00EC(e.ReceivePacket.user, LoginStatus.我在线上).Fill(buf);
-            Send(buf);
+            Send(new Send_0x00EC(e.ReceivePacket.user, LoginStatus.我在线上).WriteData());
 
             EventReceive_0x0828?.Invoke(this, e);
         }
         #endregion
-
 
         #region 00EC
         /// <summary>
@@ -247,14 +231,11 @@ namespace QQ.Framework
         /// <param name="e"></param>
         internal void OnReceive_0x00EC(QQEventArgs<Receive_0x00EC> e)
         {
-            var buf = new ByteBuffer();
-            new Send_0x001D(e.ReceivePacket.user).Fill(buf);
-            Send(buf);
+            Send(new Send_0x001D(e.ReceivePacket.user).WriteData());
 
             EventReceive_0x00EC?.Invoke(this, e);
         }
         #endregion
-        
 
         #region 00BA
         /// <summary>
@@ -271,9 +252,7 @@ namespace QQ.Framework
             {
                 if (e.ReceivePacket.VerifyCommand == 0x01)
                 {
-                    var buf = new ByteBuffer();
-                    new Send_0x00BA(e.ReceivePacket.user, "").Fill(buf);
-                    Send(buf);
+                    Send(new Send_0x00BA(e.ReceivePacket.user, "").WriteData());
                 }
             }
             else
@@ -282,14 +261,11 @@ namespace QQ.Framework
                 e.QQClient.QQUser.QQ_PACKET_00BASequence = 0x00;
                 e.QQClient.QQUser.QQ_PACKET_TgtgtKey = Util.RandomKey();
                 //验证码验证成功后发送0836登录包
-                var buf = new ByteBuffer();
-                new Send_0x0836(e.ReceivePacket.user, Login0x0836Type.Login0x0836_686, true).Fill(buf);
-                Send(buf);
+                Send(new Send_0x0836(e.ReceivePacket.user, Login0x0836Type.Login0x0836_686, true).WriteData());
             }
             EventReceive_0x00BA?.Invoke(this, e);
         }
         #endregion
-
 
         #region 001D
         /// <summary>
@@ -303,14 +279,11 @@ namespace QQ.Framework
         internal void OnReceive_0x001D(QQEventArgs<Receive_0x001D> e)
         {
             MessageLog($"获取SKey");
-            var buf = new ByteBuffer();
-            new Send_0x005C(e.ReceivePacket.user).Fill(buf);
-            Send(buf);
+            Send(new Send_0x005C(e.ReceivePacket.user).WriteData());
 
             EventReceive_0x001D?.Invoke(this, e);
         }
         #endregion
-
 
         #region 005C
         /// <summary>
@@ -327,7 +300,6 @@ namespace QQ.Framework
         }
         #endregion
 
-
         #region 收到群消息
         /// <summary>
         /// 收到群消息
@@ -341,18 +313,26 @@ namespace QQ.Framework
         {
             if (!string.IsNullOrEmpty(e.ReceivePacket.Message))
             {
+                if (!QQGlobal.DebugLog && e.ReceivePacket.Message.Count(c => c == '\0') > 5)
+                {
+                    QQUser.MessageLog($"收到群{e.ReceivePacket.Group}的{e.ReceivePacket.FromQQ}的乱码消息。");
+                    return;
+                }
                 QQUser.MessageLog($"收到群{e.ReceivePacket.Group}的{e.ReceivePacket.FromQQ}的消息:{e.ReceivePacket.Message}");
             }
+            else
+            {
+                QQUser.MessageLog($"收到群{e.ReceivePacket.Group}的{e.ReceivePacket.FromQQ}的空消息。");
+                return;
+            }
             //提取数据
-            ByteBuffer DataBuf = new ByteBuffer(e.ReceivePacket.bodyDecrypted);
-
-            var buf = new ByteBuffer();
-            new Send_0x0017(e.ReceivePacket.user, DataBuf.GetByteArray(0x10), e.ReceivePacket.Sequence).Fill(buf);
-            Send(buf);
+            var dataReader = new BinaryReader(new MemoryStream(e.ReceivePacket.bodyDecrypted));
+            
+            Send(new Send_0x0017(e.ReceivePacket.user, dataReader.ReadBytes(0x10), e.ReceivePacket.Sequence).WriteData());
 
             //回复已接收成功
             //buf = new ByteBuffer();
-            //new Send_0x0360(e.ReceivePacket.user, DataBuf.GetByteArray(4)).Fill(buf);
+            //new Send_0x0360(e.ReceivePacket.user, DataBuf.ReadBytes(4)).Fill(buf);
             //Send(buf);
 
             //重复接收包不再重复触发事件并且不处理自己的消息
@@ -365,7 +345,6 @@ namespace QQ.Framework
         }
         #endregion
 
-
         #region 收到好友消息
         /// <summary>
         /// 收到好友消息
@@ -377,17 +356,28 @@ namespace QQ.Framework
         /// <param name="e"></param>
         internal void OnReceive_0x00CE(QQEventArgs<Receive_0x00CE> e)
         {
-            QQUser.MessageLog($"收到好友{e.ReceivePacket.FromQQ}的消息:{e.ReceivePacket.MessageData}");
+            if (!string.IsNullOrEmpty(e.ReceivePacket.Message))
+            {
+                if (!QQGlobal.DebugLog && e.ReceivePacket.Message.Count(c => c == '\0') > 5)
+                {
+                    QQUser.MessageLog($"收到好友{e.ReceivePacket.FromQQ}的乱码消息。");
+                    return;
+                }
+                QQUser.MessageLog($"收到好友{e.ReceivePacket.FromQQ}的消息:{e.ReceivePacket.Message}");
+            }
+            else
+            {
+                QQUser.MessageLog($"收到好友{e.ReceivePacket.FromQQ}的空消息。");
+                return;
+            }
             //提取数据
-            ByteBuffer DataBuf = new ByteBuffer(e.ReceivePacket.bodyDecrypted);
+            var dataReader = new BinaryReader(new MemoryStream(e.ReceivePacket.bodyDecrypted));
 
-            var buf = new ByteBuffer();
-            new Send_0x00CE(e.ReceivePacket.user, DataBuf.GetByteArray(0x10), e.ReceivePacket.Sequence).Fill(buf);
-            Send(buf);
+            Send(new Send_0x00CE(e.ReceivePacket.user, dataReader.ReadBytes(0x10), e.ReceivePacket.Sequence).WriteData());
 
             //回复已接收成功
             //buf = new ByteBuffer();
-            //new Send_0x0319(e.ReceivePacket.user, DataBuf.GetByteArray(4)).Fill(buf);
+            //new Send_0x0319(e.ReceivePacket.user, DataBuf.ReadBytes(4)).Fill(buf);
             //Send(buf);
             //SendLongUserMessage("嘿嘿嘿[face1.gif]嘿嘿嘿[face2.gif]哈哈哈嘿嘿嘿[face1.gif]嘿嘿嘿[face2.gif]哈哈哈嘿嘿嘿[face1.gif]嘿嘿嘿[face2.gif]哈哈哈嘿嘿嘿[face1.gif]嘿嘿嘿[face2.gif]哈哈哈嘿嘿嘿[face1.gif]嘿嘿嘿[face2.gif]哈哈哈", e.ReceivePacket.FromQQ);
 
@@ -427,7 +417,7 @@ namespace QQ.Framework
         {
             if (QQGlobal.DebugLog)
             {
-                MessageLog($"接收数据:{Util.ToHex(e.ReceivePacket.bodyBuf.ToByteArray())}");
+                MessageLog($"接收数据:{Util.ToHex(e.ReceivePacket.buffer)}");
             }
             EventReceive?.Invoke(this, e);
         }
@@ -446,7 +436,7 @@ namespace QQ.Framework
         {
             if (QQGlobal.DebugLog)
             {
-                MessageLog($"发送数据:{Util.ToHex(e.byteBuffer.ToByteArray())}");
+                MessageLog($"发送数据:{Util.ToHex(e.byteBuffer.ToArray())}");
             }
             EventSend?.Invoke(this, e);
         }
@@ -465,7 +455,7 @@ namespace QQ.Framework
             //提取数据
             //ByteBuffer DataBuf = new ByteBuffer(e.ReceivePacket.bodyDecrypted);
             //var buf = new ByteBuffer();
-            //new Send_Currency(e.ReceivePacket.user, DataBuf.GetByteArray(0x10), e.ReceivePacket.Sequence,(char)e.ReceivePacket.GetQQCommand()).Fill(buf);
+            //new Send_Currency(e.ReceivePacket.user, DataBuf.ReadBytes(0x10), e.ReceivePacket.Sequence,(char)e.ReceivePacket.GetQQCommand()).Fill(buf);
             //Send(buf);
             EventReceive_Currency?.Invoke(this, e);
         }
@@ -496,9 +486,7 @@ namespace QQ.Framework
             message = message.Replace("\n", "\r").Trim();
             foreach (var packet in Send_0x0002.SendLongMessage(QQUser, message, FriendMessageType.GroupMessage, group))
             {
-                var sendBuffer = new ByteBuffer();
-                packet.Fill(sendBuffer);
-                Send(sendBuffer);
+                Send(packet.WriteData());
             }
         }
         /// <summary>
@@ -511,9 +499,7 @@ namespace QQ.Framework
             message = message.Replace("\n", "\r").Trim();
             foreach (var packet in Send_0x00CD.SendLongMessage(QQUser, message, FriendMessageType.GroupMessage, user))
             {
-                var sendBuffer = new ByteBuffer();
-                packet.Fill(sendBuffer);
-                Send(sendBuffer);
+                Send(packet.WriteData());
             }
         }
         
