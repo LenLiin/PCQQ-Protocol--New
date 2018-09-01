@@ -1,7 +1,7 @@
-﻿using QQ.Framework;
-using QQ.Framework.Utils;
 using System;
 using System.IO;
+using QQ.Framework;
+using QQ.Framework.Utils;
 
 namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
 {
@@ -9,20 +9,20 @@ namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
     {
         public TLV_000D()
         {
-            this.cmd = 0x000D;
-            this.Name = "TLV_000D";
+            cmd = 0x000D;
+            Name = "TLV_000D";
         }
 
         public void parser_tlv_0D(QQClient m_PCClient, BinaryReader buf)
         {
-            this.wSubVer = buf.BEReadUInt16(); //wSubVer
-            if (this.wSubVer == 0x0001)
+            wSubVer = buf.BEReadUInt16(); //wSubVer
+            if (wSubVer == 0x0001)
             {
                 buf.BEReadInt32(); //UNKNOW
             }
             else
             {
-                throw new Exception(string.Format("{0} 无法识别的版本号 {1}", this.Name, this.wSubVer));
+                throw new Exception(string.Format("{0} 无法识别的版本号 {1}", Name, wSubVer));
             }
         }
     }

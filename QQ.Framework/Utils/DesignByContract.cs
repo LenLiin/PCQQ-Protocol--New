@@ -1,7 +1,5 @@
-
-using System;
-using System.Diagnostics;
 using System.Collections;
+using System.Diagnostics;
 
 namespace System
 {
@@ -37,25 +35,27 @@ namespace System
         #region Pluginable Check Strategies
 
         /// <summary>
-        /// ICheckStrategy
+        ///     ICheckStrategy
         /// </summary>
         public interface ICheckStrategy
         {
             /// <summary>
-            /// Chech the obj with the strategy
+            ///     Chech the obj with the strategy
             /// </summary>
             /// <param name="obj">the obj</param>
             /// <returns>true for pass, or return false</returns>
             bool Pass(object obj);
+
             /// <summary>
-            /// Get the message when check failed
+            ///     Get the message when check failed
             /// </summary>
             /// <param name="objName"></param>
             /// <returns></returns>
             string GetFailingMessage(string objName);
         }
 
-        private static void CheckByStrategies(object obj, string objName, ICheckStrategy[] strategies, ref bool assertion, ref string message)
+        private static void CheckByStrategies(object obj, string objName, ICheckStrategy[] strategies,
+            ref bool assertion, ref string message)
         {
             if (strategies == null || strategies.Length == 0)
             {
@@ -67,7 +67,7 @@ namespace System
             }
             else
             {
-                for (int i = 0; i < strategies.Length; ++i)
+                for (var i = 0; i < strategies.Length; ++i)
                 {
                     if (!strategies[i].Pass(obj))
                     {
@@ -82,15 +82,17 @@ namespace System
         #region Predefined Check Strategies
 
         /// <summary>
-        /// NotNullCheckStrategy singleton
+        ///     NotNullCheckStrategy singleton
         /// </summary>
         public static readonly ICheckStrategy NotNull = new NotNullCheckStrategy();
+
         /// <summary>
-        /// NotNullOrEmptyStrategy singleton
+        ///     NotNullOrEmptyStrategy singleton
         /// </summary>
         public static readonly ICheckStrategy NotNullOrEmpty = new NotNullOrEmptyStrategy();
+
         /// <summary>
-        /// Create IsAssignableToStrategy inatance
+        ///     Create IsAssignableToStrategy inatance
         /// </summary>
         /// <typeparam name="TargetType">The type</typeparam>
         /// <returns></returns>
@@ -98,8 +100,9 @@ namespace System
         {
             return new IsAssignableToStrategy<TargetType>();
         }
+
         /// <summary>
-        /// &gt;
+        ///     &gt;
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="compareValue"></param>
@@ -108,8 +111,9 @@ namespace System
         {
             return new GreaterThanStrategy<T>(compareValue);
         }
+
         /// <summary>
-        /// &lt;
+        ///     &lt;
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="compareValue"></param>
@@ -118,8 +122,9 @@ namespace System
         {
             return new LessThanStrategy<T>(compareValue);
         }
+
         /// <summary>
-        /// &gt;=
+        ///     &gt;=
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="compareValue"></param>
@@ -128,8 +133,9 @@ namespace System
         {
             return new GreaterThanOrEqualStrategy<T>(compareValue);
         }
+
         /// <summary>
-        /// &lt;=
+        ///     &lt;=
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="compareValue"></param>
@@ -163,13 +169,24 @@ namespace System
             public bool Pass(object obj)
             {
                 if (obj == null)
+                {
                     return false;
-                else if (obj is string)
+                }
+
+                if (obj is string)
+                {
                     return !string.IsNullOrEmpty(obj as string);
-                else if (obj is Array)
+                }
+
+                if (obj is Array)
+                {
                     return (obj as Array).Length > 0;
-                else if (obj is ICollection)
+                }
+
+                if (obj is ICollection)
+                {
                     return (obj as ICollection).Count > 0;
+                }
 
                 return true;
             }
@@ -201,7 +218,7 @@ namespace System
 
         private sealed class GreaterThanStrategy<T> : ICheckStrategy
         {
-            private T compareValue;
+            private readonly T compareValue;
 
             public GreaterThanStrategy(T compareValue)
             {
@@ -212,8 +229,10 @@ namespace System
 
             public bool Pass(object obj)
             {
-                if (obj is T && ((IComparable)obj).CompareTo(compareValue) > 0)
+                if (obj is T && ((IComparable) obj).CompareTo(compareValue) > 0)
+                {
                     return true;
+                }
 
                 return false;
             }
@@ -228,7 +247,7 @@ namespace System
 
         private sealed class GreaterThanOrEqualStrategy<T> : ICheckStrategy
         {
-            private T compareValue;
+            private readonly T compareValue;
 
             public GreaterThanOrEqualStrategy(T compareValue)
             {
@@ -239,8 +258,10 @@ namespace System
 
             public bool Pass(object obj)
             {
-                if (obj is T && ((IComparable)obj).CompareTo(compareValue) >= 0)
+                if (obj is T && ((IComparable) obj).CompareTo(compareValue) >= 0)
+                {
                     return true;
+                }
 
                 return false;
             }
@@ -255,7 +276,7 @@ namespace System
 
         private sealed class LessThanStrategy<T> : ICheckStrategy
         {
-            private T compareValue;
+            private readonly T compareValue;
 
             public LessThanStrategy(T compareValue)
             {
@@ -266,8 +287,10 @@ namespace System
 
             public bool Pass(object obj)
             {
-                if (obj is T && ((IComparable)obj).CompareTo(compareValue) < 0)
+                if (obj is T && ((IComparable) obj).CompareTo(compareValue) < 0)
+                {
                     return true;
+                }
 
                 return false;
             }
@@ -282,7 +305,7 @@ namespace System
 
         private sealed class LessThanOrEqualStrategy<T> : ICheckStrategy
         {
-            private T compareValue;
+            private readonly T compareValue;
 
             public LessThanOrEqualStrategy(T compareValue)
             {
@@ -293,8 +316,10 @@ namespace System
 
             public bool Pass(object obj)
             {
-                if (obj is T && ((IComparable)obj).CompareTo(compareValue) <= 0)
+                if (obj is T && ((IComparable) obj).CompareTo(compareValue) <= 0)
+                {
                     return true;
+                }
 
                 return false;
             }
@@ -316,7 +341,7 @@ namespace System
         #region Precondition
 
         /// <summary>
-        /// Precondition check.
+        ///     Precondition check.
         /// </summary>
         [Conditional(DBC_CHECK_ALL)]
         [Conditional(DBC_CHECK_INVARIANT)]
@@ -326,7 +351,10 @@ namespace System
         {
             if (UseExceptions)
             {
-                if (!assertion) throw new PreconditionException(message);
+                if (!assertion)
+                {
+                    throw new PreconditionException(message);
+                }
             }
             else
             {
@@ -339,7 +367,7 @@ namespace System
         }
 
         /// <summary>
-        /// Precondition check.
+        ///     Precondition check.
         /// </summary>
         [Conditional(DBC_CHECK_ALL)]
         [Conditional(DBC_CHECK_INVARIANT)]
@@ -349,7 +377,10 @@ namespace System
         {
             if (UseExceptions)
             {
-                if (!assertion) throw new PreconditionException(message, inner);
+                if (!assertion)
+                {
+                    throw new PreconditionException(message, inner);
+                }
             }
             else
             {
@@ -362,7 +393,7 @@ namespace System
         }
 
         /// <summary>
-        /// Precondition check.
+        ///     Precondition check.
         /// </summary>
         [Conditional(DBC_CHECK_ALL)]
         [Conditional(DBC_CHECK_INVARIANT)]
@@ -372,7 +403,10 @@ namespace System
         {
             if (UseExceptions)
             {
-                if (!assertion) throw new PreconditionException(PRECONDITION_FALIED);
+                if (!assertion)
+                {
+                    throw new PreconditionException(PRECONDITION_FALIED);
+                }
             }
             else
             {
@@ -385,7 +419,7 @@ namespace System
         }
 
         /// <summary>
-        /// Precondition check.
+        ///     Precondition check.
         /// </summary>
         [Conditional(DBC_CHECK_ALL)]
         [Conditional(DBC_CHECK_INVARIANT)]
@@ -393,14 +427,17 @@ namespace System
         [Conditional(DBC_CHECK_PRECONDITION)]
         public static void Require(object obj, string objName, params ICheckStrategy[] strategies)
         {
-            bool assertion = true;
+            var assertion = true;
             string message = null;
 
             CheckByStrategies(obj, objName, strategies, ref assertion, ref message);
 
             if (UseExceptions)
             {
-                if (!assertion) throw new PreconditionException(message);
+                if (!assertion)
+                {
+                    throw new PreconditionException(message);
+                }
             }
             else
             {
@@ -417,7 +454,7 @@ namespace System
         #region Postcondition
 
         /// <summary>
-        /// Postcondition check.
+        ///     Postcondition check.
         /// </summary>
         [Conditional(DBC_CHECK_ALL)]
         [Conditional(DBC_CHECK_INVARIANT)]
@@ -426,7 +463,10 @@ namespace System
         {
             if (UseExceptions)
             {
-                if (!assertion) throw new PostconditionException(message);
+                if (!assertion)
+                {
+                    throw new PostconditionException(message);
+                }
             }
             else
             {
@@ -439,7 +479,7 @@ namespace System
         }
 
         /// <summary>
-        /// Postcondition check.
+        ///     Postcondition check.
         /// </summary>
         [Conditional(DBC_CHECK_ALL)]
         [Conditional(DBC_CHECK_INVARIANT)]
@@ -448,7 +488,10 @@ namespace System
         {
             if (UseExceptions)
             {
-                if (!assertion) throw new PostconditionException(message, inner);
+                if (!assertion)
+                {
+                    throw new PostconditionException(message, inner);
+                }
             }
             else
             {
@@ -461,7 +504,7 @@ namespace System
         }
 
         /// <summary>
-        /// Postcondition check.
+        ///     Postcondition check.
         /// </summary>
         [Conditional(DBC_CHECK_ALL)]
         [Conditional(DBC_CHECK_INVARIANT)]
@@ -470,7 +513,10 @@ namespace System
         {
             if (UseExceptions)
             {
-                if (!assertion) throw new PostconditionException(POSTCONDITION_FALIED);
+                if (!assertion)
+                {
+                    throw new PostconditionException(POSTCONDITION_FALIED);
+                }
             }
             else
             {
@@ -483,21 +529,24 @@ namespace System
         }
 
         /// <summary>
-        /// Postcondition check.
+        ///     Postcondition check.
         /// </summary>
         [Conditional(DBC_CHECK_ALL)]
         [Conditional(DBC_CHECK_INVARIANT)]
         [Conditional(DBC_CHECK_POSTCONDITION)]
         public static void Ensure(object obj, string objName, params ICheckStrategy[] strategies)
         {
-            bool assertion = true;
+            var assertion = true;
             string message = null;
 
             CheckByStrategies(obj, objName, strategies, ref assertion, ref message);
 
             if (UseExceptions)
             {
-                if (!assertion) throw new PostconditionException(message);
+                if (!assertion)
+                {
+                    throw new PostconditionException(message);
+                }
             }
             else
             {
@@ -514,7 +563,7 @@ namespace System
         #region Invariant
 
         /// <summary>
-        /// Invariant check.
+        ///     Invariant check.
         /// </summary>
         [Conditional(DBC_CHECK_ALL)]
         [Conditional(DBC_CHECK_INVARIANT)]
@@ -522,7 +571,10 @@ namespace System
         {
             if (UseExceptions)
             {
-                if (!assertion) throw new InvariantException(message);
+                if (!assertion)
+                {
+                    throw new InvariantException(message);
+                }
             }
             else
             {
@@ -535,7 +587,7 @@ namespace System
         }
 
         /// <summary>
-        /// Invariant check.
+        ///     Invariant check.
         /// </summary>
         [Conditional(DBC_CHECK_ALL)]
         [Conditional(DBC_CHECK_INVARIANT)]
@@ -543,7 +595,10 @@ namespace System
         {
             if (UseExceptions)
             {
-                if (!assertion) throw new InvariantException(message, inner);
+                if (!assertion)
+                {
+                    throw new InvariantException(message, inner);
+                }
             }
             else
             {
@@ -556,7 +611,7 @@ namespace System
         }
 
         /// <summary>
-        /// Invariant check.
+        ///     Invariant check.
         /// </summary>
         [Conditional(DBC_CHECK_ALL)]
         [Conditional(DBC_CHECK_INVARIANT)]
@@ -564,7 +619,10 @@ namespace System
         {
             if (UseExceptions)
             {
-                if (!assertion) throw new InvariantException(INVARIANT_FALIED);
+                if (!assertion)
+                {
+                    throw new InvariantException(INVARIANT_FALIED);
+                }
             }
             else
             {
@@ -577,20 +635,23 @@ namespace System
         }
 
         /// <summary>
-        /// Invariant check.
+        ///     Invariant check.
         /// </summary>
         [Conditional(DBC_CHECK_ALL)]
         [Conditional(DBC_CHECK_INVARIANT)]
         public static void Invariant(object obj, string objName, params ICheckStrategy[] strategies)
         {
-            bool assertion = true;
+            var assertion = true;
             string message = null;
 
             CheckByStrategies(obj, objName, strategies, ref assertion, ref message);
 
             if (UseExceptions)
             {
-                if (!assertion) throw new InvariantException(message);
+                if (!assertion)
+                {
+                    throw new InvariantException(message);
+                }
             }
             else
             {
@@ -607,14 +668,17 @@ namespace System
         #region Assertion
 
         /// <summary>
-        /// Assertion check.
+        ///     Assertion check.
         /// </summary>
         [Conditional(DBC_CHECK_ALL)]
         public static void Assert(bool assertion, string message)
         {
             if (UseExceptions)
             {
-                if (!assertion) throw new AssertionException(message);
+                if (!assertion)
+                {
+                    throw new AssertionException(message);
+                }
             }
             else
             {
@@ -627,14 +691,17 @@ namespace System
         }
 
         /// <summary>
-        /// Assertion check.
+        ///     Assertion check.
         /// </summary>
         [Conditional(DBC_CHECK_ALL)]
         public static void Assert(bool assertion, string message, Exception inner)
         {
             if (UseExceptions)
             {
-                if (!assertion) throw new AssertionException(message, inner);
+                if (!assertion)
+                {
+                    throw new AssertionException(message, inner);
+                }
             }
             else
             {
@@ -647,14 +714,17 @@ namespace System
         }
 
         /// <summary>
-        /// Assertion check.
+        ///     Assertion check.
         /// </summary>
         [Conditional(DBC_CHECK_ALL)]
         public static void Assert(bool assertion)
         {
             if (UseExceptions)
             {
-                if (!assertion) throw new AssertionException(ASSERTION_FAILED);
+                if (!assertion)
+                {
+                    throw new AssertionException(ASSERTION_FAILED);
+                }
             }
             else
             {
@@ -667,19 +737,22 @@ namespace System
         }
 
         /// <summary>
-        /// Assertion check.
+        ///     Assertion check.
         /// </summary>
         [Conditional(DBC_CHECK_ALL)]
         public static void Assert(object obj, string objName, params ICheckStrategy[] strategies)
         {
-            bool assertion = true;
+            var assertion = true;
             string message = null;
 
             CheckByStrategies(obj, objName, strategies, ref assertion, ref message);
 
             if (UseExceptions)
             {
-                if (!assertion) throw new AssertionException(message);
+                if (!assertion)
+                {
+                    throw new AssertionException(message);
+                }
             }
             else
             {
@@ -698,21 +771,17 @@ namespace System
         #region Use Exception Or Trace/Debug Assertion?
 
         // No creation
-        private Check() { }
+        private Check()
+        {
+        }
 
         /// <summary>
-        /// Is exception handling being used?
+        ///     Is exception handling being used?
         /// </summary>
         private static bool UseExceptions
         {
-            get
-            {
-                return !useAssertions;
-            }
-            set
-            {
-                useAssertions = !value;
-            }
+            get => !useAssertions;
+            set => useAssertions = !value;
         }
 
         // Are trace assertion statements being used? 
@@ -720,120 +789,158 @@ namespace System
 #if USE_TRACE_ASSERTION || USE_DEBUG_ASSERTION
         private static bool useAssertions = true;
 #else
-        private static bool useAssertions = false;
+        private static bool useAssertions;
 #endif
-        #endregion // End Use Exception Or Trace/Debug Assertion?
 
+        #endregion // End Use Exception Or Trace/Debug Assertion?
     } // End Check
 
     #region Exceptions
 
     /// <summary>
-    /// Exception raised when a contract is broken.
-    /// Catch this exception type if you wish to differentiate between 
-    /// any DesignByContract exception and other runtime exceptions.
-    ///  
+    ///     Exception raised when a contract is broken.
+    ///     Catch this exception type if you wish to differentiate between
+    ///     any DesignByContract exception and other runtime exceptions.
     /// </summary>
     [Serializable]
     public abstract class DesignByContractException : ApplicationException
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="DesignByContractException"/> class.
+        ///     Initializes a new instance of the <see cref="DesignByContractException" /> class.
         /// </summary>
-        protected DesignByContractException() { }
+        protected DesignByContractException()
+        {
+        }
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="DesignByContractException"/> class.
+        ///     Initializes a new instance of the <see cref="DesignByContractException" /> class.
         /// </summary>
         /// <param name="message">The message.</param>
-        protected DesignByContractException(string message) : base(message) { }
+        protected DesignByContractException(string message) : base(message)
+        {
+        }
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="DesignByContractException"/> class.
+        ///     Initializes a new instance of the <see cref="DesignByContractException" /> class.
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="inner">The inner.</param>
-        protected DesignByContractException(string message, Exception inner) : base(message, inner) { }
+        protected DesignByContractException(string message, Exception inner) : base(message, inner)
+        {
+        }
     }
 
     /// <summary>
-    /// Exception raised when a precondition fails.
+    ///     Exception raised when a precondition fails.
     /// </summary>
     [Serializable]
     public sealed class PreconditionException : DesignByContractException
     {
         /// <summary>
-        /// Precondition Exception.
+        ///     Precondition Exception.
         /// </summary>
-        public PreconditionException() { }
+        public PreconditionException()
+        {
+        }
+
         /// <summary>
-        /// Precondition Exception.
+        ///     Precondition Exception.
         /// </summary>
-        public PreconditionException(string message) : base(message) { }
+        public PreconditionException(string message) : base(message)
+        {
+        }
+
         /// <summary>
-        /// Precondition Exception.
+        ///     Precondition Exception.
         /// </summary>
-        public PreconditionException(string message, Exception inner) : base(message, inner) { }
+        public PreconditionException(string message, Exception inner) : base(message, inner)
+        {
+        }
     }
 
     /// <summary>
-    /// Exception raised when a postcondition fails.
+    ///     Exception raised when a postcondition fails.
     /// </summary>
     [Serializable]
     public sealed class PostconditionException : DesignByContractException
     {
         /// <summary>
-        /// Postcondition Exception.
+        ///     Postcondition Exception.
         /// </summary>
-        public PostconditionException() { }
+        public PostconditionException()
+        {
+        }
+
         /// <summary>
-        /// Postcondition Exception.
+        ///     Postcondition Exception.
         /// </summary>
-        public PostconditionException(string message) : base(message) { }
+        public PostconditionException(string message) : base(message)
+        {
+        }
+
         /// <summary>
-        /// Postcondition Exception.
+        ///     Postcondition Exception.
         /// </summary>
-        public PostconditionException(string message, Exception inner) : base(message, inner) { }
-}
+        public PostconditionException(string message, Exception inner) : base(message, inner)
+        {
+        }
+    }
 
     /// <summary>
-    /// Exception raised when an invariant fails.
+    ///     Exception raised when an invariant fails.
     /// </summary>
     [Serializable]
     public sealed class InvariantException : DesignByContractException
     {
         /// <summary>
-        /// Invariant Exception.
+        ///     Invariant Exception.
         /// </summary>
-        public InvariantException() { }
+        public InvariantException()
+        {
+        }
+
         /// <summary>
-        /// Invariant Exception.
+        ///     Invariant Exception.
         /// </summary>
-        public InvariantException(string message) : base(message) { }
+        public InvariantException(string message) : base(message)
+        {
+        }
+
         /// <summary>
-        /// Invariant Exception.
+        ///     Invariant Exception.
         /// </summary>
-        public InvariantException(string message, Exception inner) : base(message, inner) { }
+        public InvariantException(string message, Exception inner) : base(message, inner)
+        {
+        }
     }
 
     /// <summary>
-    /// Exception raised when an assertion fails.
+    ///     Exception raised when an assertion fails.
     /// </summary>
     [Serializable]
     public sealed class AssertionException : DesignByContractException
     {
         /// <summary>
-        /// Assertion Exception.
+        ///     Assertion Exception.
         /// </summary>
-        public AssertionException() { }
+        public AssertionException()
+        {
+        }
+
         /// <summary>
-        /// Assertion Exception.
+        ///     Assertion Exception.
         /// </summary>
-        public AssertionException(string message) : base(message) { }
+        public AssertionException(string message) : base(message)
+        {
+        }
+
         /// <summary>
-        /// Assertion Exception.
+        ///     Assertion Exception.
         /// </summary>
-        public AssertionException(string message, Exception inner) : base(message, inner) { }
+        public AssertionException(string message, Exception inner) : base(message, inner)
+        {
+        }
     }
 
     #endregion // Exception classes
-
 } // End Design By Contract

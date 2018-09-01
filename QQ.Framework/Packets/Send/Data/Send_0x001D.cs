@@ -1,9 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace QQ.Framework.Packets.Send.Data
 {
     public class Send_0x001D : SendPacket
@@ -23,7 +17,7 @@ namespace QQ.Framework.Packets.Send.Data
         }
 
         /// <summary>
-        /// 初始化包体
+        ///     初始化包体
         /// </summary>
         /// <param name="buf">The buf.</param>
         protected override void PutBody()

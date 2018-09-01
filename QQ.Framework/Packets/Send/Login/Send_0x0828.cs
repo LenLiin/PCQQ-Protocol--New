@@ -1,17 +1,12 @@
-﻿using QQ.Framework.Utils;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.Send.Login
 {
     public class Send_0x0828 : SendPacket
     {
         /// <summary>
-        /// 构造函数
+        ///     构造函数
         /// </summary>
         /// <param name="byteBuffer"></param>
         /// <param name="User"></param>
@@ -40,7 +35,7 @@ namespace QQ.Framework.Packets.Send.Login
         }
 
         /// <summary>
-        /// 初始化包体
+        ///     初始化包体
         /// </summary>
         /// <param name="buf">The buf.</param>
         protected override void PutBody()

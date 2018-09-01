@@ -1,21 +1,14 @@
-﻿using QQ.Framework.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.Send.Login
 {
     /// <summary>
-    /// 验证码
+    ///     验证码
     /// </summary>
     public class Send_0x00BA : SendPacket
     {
-        string VerifyCode { get; set; }
-
         /// <summary>
-        /// 验证码提交
+        ///     验证码提交
         /// </summary>
         public Send_0x00BA(QQUser User, string VerifyCode)
             : base(User)
@@ -26,6 +19,8 @@ namespace QQ.Framework.Packets.Send.Login
             this.VerifyCode = VerifyCode;
         }
 
+        private string VerifyCode { get; }
+
         protected override void PutHeader()
         {
             base.PutHeader();
@@ -34,7 +29,7 @@ namespace QQ.Framework.Packets.Send.Login
         }
 
         /// <summary>
-        /// 初始化包体
+        ///     初始化包体
         /// </summary>
         /// <param name="buf">The buf.</param>
         protected override void PutBody()

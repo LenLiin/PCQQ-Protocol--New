@@ -1,16 +1,12 @@
-﻿using QQ.Framework.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.Send.Message
 {
     public class Send_0x0319 : SendPacket
     {
+        private readonly byte[] _Data;
+
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="byteBuffer"></param>
         /// <param name="User"></param>
@@ -23,8 +19,6 @@ namespace QQ.Framework.Packets.Send.Message
             _Data = Data;
         }
 
-        byte[] _Data;
-
         protected override void PutHeader()
         {
             base.PutHeader();
@@ -32,7 +26,7 @@ namespace QQ.Framework.Packets.Send.Message
         }
 
         /// <summary>
-        /// 初始化包体
+        ///     初始化包体
         /// </summary>
         /// <param name="buf">The buf.</param>
         protected override void PutBody()

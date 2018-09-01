@@ -1,8 +1,7 @@
-﻿using QQ.Framework;
-using QQ.Framework.Utils;
 using System;
 using System.IO;
-using System.Text;
+using QQ.Framework;
+using QQ.Framework.Utils;
 
 namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
 {
@@ -10,9 +9,9 @@ namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
     {
         public TLV_0004()
         {
-            this.cmd = 0x0004;
-            this.Name = "SSO2::TLV_NonUinAccount_0x4";
-            this.wSubVer = 0x0000;
+            cmd = 0x0004;
+            Name = "SSO2::TLV_NonUinAccount_0x4";
+            wSubVer = 0x0000;
         }
 
         public byte[] get_tlv_0004(QQClient m_PCClient)
@@ -21,19 +20,21 @@ namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
             {
                 return null;
             }
+
             var data = new BinaryWriter(new MemoryStream());
-            if (this.wSubVer == 0x0000)
+            if (wSubVer == 0x0000)
             {
-                data.BEWrite(this.wSubVer); //wSubVer 
+                data.BEWrite(wSubVer); //wSubVer 
                 var bufAccount = Util.HexStringToByteArray(Util.QQToHexString(m_PCClient.QQUser.QQ));
-                data.BEWrite((ushort)bufAccount.Length);//账号长度
-                data.Write(bufAccount);//账号
+                data.BEWrite((ushort) bufAccount.Length); //账号长度
+                data.Write(bufAccount); //账号
             }
             else
             {
-                throw new Exception(string.Format("{0} 无法识别的版本号 {1}", this.Name, this.wSubVer));
+                throw new Exception(string.Format("{0} 无法识别的版本号 {1}", Name, wSubVer));
             }
-            fill_head(this.cmd);
+
+            fill_head(cmd);
             fill_body(data.BaseStream.ToBytesArray(), data.BaseStream.Length);
             set_length();
             return get_buf();

@@ -1,17 +1,13 @@
-﻿using QQ.Framework.Utils;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.Receive.Data
 {
     public class Receive_0x001D : ReceivePacket
     {
         /// <summary>
-        /// 改变在线状态
+        ///     改变在线状态
         /// </summary>
         public Receive_0x001D(byte[] byteBuffer, QQUser User)
             : base(byteBuffer, User, User.QQ_SessionKey)

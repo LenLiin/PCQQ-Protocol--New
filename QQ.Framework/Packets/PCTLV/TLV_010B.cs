@@ -1,16 +1,15 @@
-﻿using QQ.Framework;
-using QQ.Framework.Utils;
 using System;
-using System.IO;
+using QQ.Framework;
+
 namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
 {
     internal class TLV_010B : BaseTLV
     {
         public TLV_010B()
         {
-            this.cmd = 0x010B;
-            this.Name = "TLV_QDLoginFlag";
-            this.wSubVer = 0x0002;
+            cmd = 0x010B;
+            Name = "TLV_QDLoginFlag";
+            wSubVer = 0x0002;
         }
 
         public byte[] get_tlv_010B(QQClient m_PCClient)
@@ -50,22 +49,25 @@ namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
             //return get_buf();
         }
 
-        private byte EncodeLoginFlag(byte[] bufTGT/*bufTGT*/, byte[] QQEXE_MD5/*QQEXE_MD5*/, byte flag = 0x01/*固定 0x01*/)
+        private byte EncodeLoginFlag(byte[] bufTGT /*bufTGT*/, byte[] QQEXE_MD5 /*QQEXE_MD5*/,
+            byte flag = 0x01 /*固定 0x01*/)
         {
-            byte RC = flag;
+            var RC = flag;
             for (var i = 0; i < bufTGT.Length; i++)
             {
                 RC ^= bufTGT[i];
             }
+
             byte RCC = 0x00;
             for (var i = 0; i < 4; i++)
             {
                 RCC = QQEXE_MD5[i * 4];
-                RCC ^= QQEXE_MD5[(i * 4) + 1];
-                RCC ^= QQEXE_MD5[(i * 4) + 3];
-                RCC ^= QQEXE_MD5[(i * 4) + 2];
+                RCC ^= QQEXE_MD5[i * 4 + 1];
+                RCC ^= QQEXE_MD5[i * 4 + 3];
+                RCC ^= QQEXE_MD5[i * 4 + 2];
                 RC ^= RCC;
             }
+
             return RC;
         }
     }

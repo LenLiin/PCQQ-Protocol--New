@@ -1,7 +1,7 @@
-﻿using QQ.Framework;
-using QQ.Framework.Utils;
 using System;
 using System.IO;
+using QQ.Framework;
+using QQ.Framework.Utils;
 
 namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
 {
@@ -9,17 +9,17 @@ namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
     {
         public TLV_000C()
         {
-            this.cmd = 0x000C;
-            this.Name = "SSO2::TLV_PingRedirect_0xC";
-            this.wSubVer = 0x0002;
+            cmd = 0x000C;
+            Name = "SSO2::TLV_PingRedirect_0xC";
+            wSubVer = 0x0002;
         }
 
         public byte[] get_tlv_000C(QQClient m_PCClient)
         {
-              var data = new BinaryWriter(new MemoryStream());
-            if (this.wSubVer == 0x0002)
+            var data = new BinaryWriter(new MemoryStream());
+            if (wSubVer == 0x0002)
             {
-                data.BEWrite(this.wSubVer); //wSubVer
+                data.BEWrite(wSubVer); //wSubVer
                 data.BEWrite(0);
                 data.BEWrite(QQGlobal.dwIDC);
                 data.BEWrite(QQGlobal.dwISP);
@@ -29,9 +29,10 @@ namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
             }
             else
             {
-                throw new Exception(string.Format("{0} 无法识别的版本号 {1}", this.Name, this.wSubVer));
+                throw new Exception(string.Format("{0} 无法识别的版本号 {1}", Name, wSubVer));
             }
-            fill_head(this.cmd);
+
+            fill_head(cmd);
             fill_body(data.BaseStream.ToBytesArray(), data.BaseStream.Length);
             set_length();
             return get_buf();
@@ -39,8 +40,8 @@ namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
 
         public void parser_tlv_0C(QQClient m_PCClient, BinaryReader buf)
         {
-            this.wSubVer = buf.BEReadUInt16(); //wSubVer
-            if (this.wSubVer == 0x0002)
+            wSubVer = buf.BEReadUInt16(); //wSubVer
+            if (wSubVer == 0x0002)
             {
                 buf.BEReadUInt16();
                 buf.BEReadInt32(); /*dwIDC =*/
@@ -50,7 +51,7 @@ namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
             }
             else
             {
-                throw new Exception(string.Format("{0} 无法识别的版本号 {1}", this.Name, this.wSubVer));
+                throw new Exception(string.Format("{0} 无法识别的版本号 {1}", Name, wSubVer));
             }
         }
     }

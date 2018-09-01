@@ -1,7 +1,7 @@
-﻿using System.IO;
+using System;
+using System.IO;
 using QQ.Framework;
 using QQ.Framework.Utils;
-using System;
 
 namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
 {
@@ -9,17 +9,17 @@ namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
     {
         public TLV_010C()
         {
-            this.cmd = 0x010C;
-            this.Name = "TLV_010C";
+            cmd = 0x010C;
+            Name = "TLV_010C";
         }
 
         public void parser_tlv_010C(QQClient m_PCClient, BinaryReader buf)
         {
             int len;
-            this.wSubVer = buf.BEReadUInt16(); //wSubVer
-            if (this.wSubVer == 0x0001)
+            wSubVer = buf.BEReadUInt16(); //wSubVer
+            if (wSubVer == 0x0001)
             {
-                 m_PCClient.QQUser.TXProtocol.SessionKey= buf.ReadBytes(16);
+                m_PCClient.QQUser.TXProtocol.SessionKey = buf.ReadBytes(16);
                 var dwUin = buf.BEReadInt32();
 //#if SHOWLOG
 //                QQLog.Log("SessionKey:" + Util.ToHex(client.TXProtocol.SessionKey));
@@ -40,14 +40,14 @@ namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
                 var UNKNOW2 = buf.ReadBytes(len);
 
                 len = buf.BEReadUInt16();
-                var UNKNOW3 = buf.ReadBytes(len); 
+                var UNKNOW3 = buf.ReadBytes(len);
                 var a = new BinaryReader(new MemoryStream(UNKNOW3));
                 a.ReadByte();
                 var dwConnIP2 = a.ReadBytes(4);
             }
             else
             {
-                throw new Exception(string.Format("{0} 无法识别的版本号 {1}", this.Name, this.wSubVer));
+                throw new Exception(string.Format("{0} 无法识别的版本号 {1}", Name, wSubVer));
             }
         }
     }

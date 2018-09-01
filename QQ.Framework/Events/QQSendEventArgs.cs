@@ -1,27 +1,24 @@
-﻿using QQ.Framework.Packets;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QQ.Framework
 {
-    public class QQSendEventArgs: EventArgs
+    public class QQSendEventArgs : EventArgs
     {
         public QQSendEventArgs(QQClient client, byte[] byteBuffer)
         {
-            this.QQClient = client;
+            QQClient = client;
             this.byteBuffer = new MemoryStream(byteBuffer);
         }
+
         /// <summary>
-        /// 数据包
+        ///     数据包
         /// </summary>
-        public MemoryStream byteBuffer { get; private set; }
+        public MemoryStream byteBuffer { get; }
+
         /// <summary>
-        /// 客户端实例
+        ///     客户端实例
         /// </summary>
-        public QQClient QQClient { get; private set; }
+        public QQClient QQClient { get; }
     }
 }

@@ -1,14 +1,9 @@
-﻿using QQ.Framework.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.Send.Message
 {
     /// <summary>
-    /// 心跳
+    ///     心跳
     /// </summary>
     public class Send_0x0058 : SendPacket
     {
@@ -27,7 +22,7 @@ namespace QQ.Framework.Packets.Send.Message
         }
 
         /// <summary>
-        /// 初始化包体
+        ///     初始化包体
         /// </summary>
         protected override void PutBody()
         {

@@ -1,25 +1,17 @@
-﻿using QQ.Framework.Utils;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.Send.Login
 {
     public class Send_0x0836 : SendPacket
     {
         /// <summary>
-        /// 数据包类型默认为第一种
+        ///     数据包类型默认为第一种
         /// </summary>
-        Login0x0836Type _type = Login0x0836Type.Login0x0836_622;
-
-        bool isVerify { get; set; } = false;
+        private readonly Login0x0836Type _type = Login0x0836Type.Login0x0836_622;
 
         /// <summary>
-        /// 构造函数
+        ///     构造函数
         /// </summary>
         /// <param name="byteBuffer"></param>
         /// <param name="User"></param>
@@ -35,6 +27,8 @@ namespace QQ.Framework.Packets.Send.Login
             this.isVerify = isVerify;
         }
 
+        private bool isVerify { get; }
+
         protected override void PutHeader()
         {
             base.PutHeader();
@@ -45,7 +39,7 @@ namespace QQ.Framework.Packets.Send.Login
         }
 
         /// <summary>
-        /// 初始化包体
+        ///     初始化包体
         /// </summary>
         /// <param name="buf">The buf.</param>
         protected override void PutBody()

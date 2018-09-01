@@ -1,27 +1,28 @@
-﻿using QQ.Framework;
-using QQ.Framework.Utils;
 using System;
 using System.IO;
+using QQ.Framework;
+using QQ.Framework.Utils;
+
 namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
 {
     internal class TLV_010D : BaseTLV
     {
         public TLV_010D()
         {
-            this.cmd = 0x010D;
-            this.Name = "TLV_SigLastLoginInfo";
+            cmd = 0x010D;
+            Name = "TLV_SigLastLoginInfo";
         }
 
         public void parser_tlv_010D(QQClient m_PCClient, BinaryReader buf)
         {
-            this.wSubVer = buf.BEReadUInt16(); //wSubVer
-            if (this.wSubVer == 0x0001)
+            wSubVer = buf.BEReadUInt16(); //wSubVer
+            if (wSubVer == 0x0001)
             {
-                var bufSigLastLoginInfo = buf.ReadBytes((int)(buf.BaseStream.Length- buf.BaseStream.Position));
+                var bufSigLastLoginInfo = buf.ReadBytes((int) (buf.BaseStream.Length - buf.BaseStream.Position));
             }
             else
             {
-                throw new Exception(string.Format("{0} 无法识别的版本号 {1}", this.Name, this.wSubVer));
+                throw new Exception(string.Format("{0} 无法识别的版本号 {1}", Name, wSubVer));
             }
         }
     }

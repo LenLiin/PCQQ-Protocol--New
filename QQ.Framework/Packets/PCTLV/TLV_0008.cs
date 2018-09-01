@@ -1,7 +1,7 @@
-﻿using QQ.Framework;
-using QQ.Framework.Utils;
 using System;
 using System.IO;
+using QQ.Framework;
+using QQ.Framework.Utils;
 
 namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
 {
@@ -9,9 +9,9 @@ namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
     {
         public TLV_0008()
         {
-            this.cmd = 0x0008;
-            this.Name = "SSO2::TLV_TimeZone_0x8";
-            this.wSubVer = 0x0001;
+            cmd = 0x0008;
+            Name = "SSO2::TLV_TimeZone_0x8";
+            wSubVer = 0x0001;
         }
 
         public byte[] get_tlv_8(QQClient m_PCClient)
@@ -21,17 +21,18 @@ namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
             //    return null;
             //}
             var data = new BinaryWriter(new MemoryStream());
-            if (this.wSubVer == 0x0001)
+            if (wSubVer == 0x0001)
             {
-                data.BEWrite(this.wSubVer); //wSubVer 
-                data.BEWrite(0x00000804);//此乃LCID
-                data.BEWrite(0x01E0);//此乃时区信息
+                data.BEWrite(wSubVer); //wSubVer 
+                data.BEWrite(0x00000804); //此乃LCID
+                data.BEWrite(0x01E0); //此乃时区信息
             }
             else
             {
-                throw new Exception(string.Format("{0} 无法识别的版本号 {1}", this.Name, this.wSubVer));
+                throw new Exception(string.Format("{0} 无法识别的版本号 {1}", Name, wSubVer));
             }
-            fill_head(this.cmd);
+
+            fill_head(cmd);
             fill_body(data.BaseStream.ToBytesArray(), data.BaseStream.Length);
             set_length();
             return get_buf();

@@ -1,30 +1,24 @@
-﻿using QQ.Framework.Utils;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.Receive.Login
 {
     /// <summary>
-    /// 验证码
+    ///     验证码
     /// </summary>
     public class Receive_0x00BA : ReceivePacket
     {
-        public byte[] VerifyCode { get; set; }
-        public byte VerifyCommand { get; set; } = 0x01;
-        public byte Status { get; set; }
-        public byte VerifyType { get; set; }
-
         /// <summary>
-        /// 验证码
+        ///     验证码
         /// </summary>
         public Receive_0x00BA(byte[] byteBuffer, QQUser User)
             : base(byteBuffer, User, User.QQ_PACKET_00BA_Key)
         {
         }
+
+        public byte[] VerifyCode { get; set; }
+        public byte VerifyCommand { get; set; } = 0x01;
+        public byte Status { get; set; }
+        public byte VerifyType { get; set; }
 
         protected override void ParseBody()
         {
@@ -37,7 +31,10 @@ namespace QQ.Framework.Packets.Receive.Login
             VerifyCode = reader.ReadBytes(reader.BEReadChar());
             VerifyCommand = reader.ReadByte();
             if (VerifyCommand == 0x00)
+            {
                 VerifyCommand = reader.ReadByte();
+            }
+
             reader.ReadByte();
             if (user.QQ_PACKET_00BAVerifyCode?.Length == 0 || user.QQ_PACKET_00BAVerifyCode == null)
             {
@@ -45,7 +42,7 @@ namespace QQ.Framework.Packets.Receive.Login
             }
             else
             {
-                byte[] resultArr = new byte[user.QQ_PACKET_00BAVerifyCode.Length + VerifyCode.Length];
+                var resultArr = new byte[user.QQ_PACKET_00BAVerifyCode.Length + VerifyCode.Length];
                 user.QQ_PACKET_00BAVerifyCode.CopyTo(resultArr, 0);
                 VerifyCode.CopyTo(resultArr, user.QQ_PACKET_00BAVerifyCode.Length);
                 user.QQ_PACKET_00BAVerifyCode = resultArr;

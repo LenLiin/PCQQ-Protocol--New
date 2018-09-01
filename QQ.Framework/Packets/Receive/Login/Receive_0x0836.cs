@@ -1,27 +1,24 @@
-﻿using QQ.Framework.Utils;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.Receive.Login
 {
     public class Receive_0x0836 : ReceivePacket
     {
-        public byte[] VerifyCode { get; set; }
-        public byte VerifyCommand { get; set; } = 0x01;
-        public byte DataHead { get; set; }
-
         public Receive_0x0836(byte[] byteBuffer, QQUser User)
             : base(byteBuffer, User, User.QQ_PACKET_TgtgtKey)
         {
         }
 
+        public byte[] VerifyCode { get; set; }
+        public byte VerifyCommand { get; set; } = 0x01;
+        public byte DataHead { get; set; }
+
         protected override void ParseBody()
         {
-            byte[] CipherText2 = QQTea.Decrypt(buffer, (int) reader.BaseStream.Position,
+            var CipherText2 = QQTea.Decrypt(buffer, (int) reader.BaseStream.Position,
                 (int) (buffer.Length - reader.BaseStream.Position - 1), user.QQ_SHARE_KEY);
             if (CipherText2 == null)
             {
@@ -37,7 +34,10 @@ namespace QQ.Framework.Packets.Receive.Login
                 VerifyCode = reader.ReadBytes(reader.BEReadChar());
                 VerifyCommand = reader.ReadByte();
                 if (VerifyCommand == 0x00)
+                {
                     VerifyCommand = reader.ReadByte();
+                }
+
                 user.QQ_PACKET_00BAVerifyCode = VerifyCode;
                 user.QQ_PACKET_00BAToken = reader.ReadBytes(reader.BEReadChar());
                 reader.ReadBytes(reader.BEReadChar());

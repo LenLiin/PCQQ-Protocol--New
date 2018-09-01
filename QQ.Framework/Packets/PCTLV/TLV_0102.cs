@@ -1,16 +1,15 @@
-﻿using QQ.Framework;
-using QQ.Framework.Utils;
 using System;
-using System.IO;
+using QQ.Framework;
+
 namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
 {
     internal class TLV_0102 : BaseTLV
     {
         public TLV_0102()
         {
-            this.cmd = 0x0102;
-            this.Name = "SSO2::TLV_Official_0x102";
-            this.wSubVer = 0x0001;
+            cmd = 0x0102;
+            Name = "SSO2::TLV_Official_0x102";
+            wSubVer = 0x0001;
         }
 
         public byte[] get_tlv_0102(QQClient m_PCClient)

@@ -1,21 +1,11 @@
-﻿using QQ.Framework.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.Send.Login
 {
     public class Send_0x0825 : SendPacket
     {
         /// <summary>
-        /// 重定向标识
-        /// </summary>
-        bool redirect { get; set; } = false;
-
-        /// <summary>
-        /// 构造函数
+        ///     构造函数
         /// </summary>
         /// <param name="byteBuffer"></param>
         /// <param name="User"></param>
@@ -46,6 +36,11 @@ namespace QQ.Framework.Packets.Send.Login
             Command = QQCommand.Login0x0825;
         }
 
+        /// <summary>
+        ///     重定向标识
+        /// </summary>
+        private bool redirect { get; }
+
         public override string GetPacketName()
         {
             return "登录包0x0825（Ping）";
@@ -59,7 +54,7 @@ namespace QQ.Framework.Packets.Send.Login
         }
 
         /// <summary>
-        /// 初始化包体
+        ///     初始化包体
         /// </summary>
         /// <param name="buf">The buf.</param>
         protected override void PutBody()

@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace QQ.Framework.Packets.Send.Login
 {
     /// <summary>
-    /// 改变在线状态
+    ///     改变在线状态
     /// </summary>
     public class Send_0x00EC : SendPacket
     {
-        byte _loginStatus = LoginStatus.我在线上;
+        private readonly byte _loginStatus = LoginStatus.我在线上;
 
         /// <summary>
-        /// 改变在线状态
+        ///     改变在线状态
         /// </summary>
         public Send_0x00EC(QQUser User, byte loginStatus)
             : base(User)
@@ -32,7 +26,7 @@ namespace QQ.Framework.Packets.Send.Login
         }
 
         /// <summary>
-        /// 初始化包体
+        ///     初始化包体
         /// </summary>
         /// <param name="buf">The buf.</param>
         protected override void PutBody()
