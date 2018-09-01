@@ -10,9 +10,9 @@ MyUser.cs为本人扩展用户名和密码这里不做上传
 
 源码仅供参考，欢迎吐槽
 ------------------------------------------
-<b>2018-9-1 @sgkoishi</b><br/>
-添加XML消息发送<br/>
-移除ByteBuffer，使用BinaryReader和BinaryWriter进行读写。<br/>
+#### 2018-9-1
+添加XML消息发送  
+移除ByteBuffer，使用BinaryReader和BinaryWriter进行读写。  
 发送数据包的方式变更
 ```C#
 //原方式
@@ -34,22 +34,16 @@ BinaryReader.BEReadInt32()
 BinaryWriter.BEWrite(ushort)
 //这些扩展方法定义于Utils.Util.cs内。
 ```
-<b>2018-8-31</b>
-<br/>
-合并Core和Framework到同一个文件夹@sgkoishi（如果编译出错删除bin、obj和.vs重新编译）
-<br/>
-添加发送系统表情(格式为“[face{num}.gif]”)，num为系统表情对应索引
+#### 2018-8-31
+合并Core和Framework到同一个文件夹（如果编译出错删除bin、obj和.vs重新编译）  
+添加发送系统表情(格式为“[face\{num}.gif]”)，num为系统表情对应索引
 
-<b>2018-8-30</b>
-<br/>
-新增长文本分段发送@sgkoishi
-<br/>
-修改为项目为.Net Core
-<br/>
+#### 2018-8-30
+新增长文本分段发送  
+修改为项目为.Net Core  
 以一种我也不知道会不会出问题的方式兼容了Core和Framework了
 
-<b>2018-8-29</b>
-<br/>
+#### 2018-8-29
 新增验证码处理
 
 联系方式
