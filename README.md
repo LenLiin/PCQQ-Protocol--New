@@ -8,36 +8,36 @@ PCQQ协议
 
 源码仅供参考，欢迎吐槽
 ------------------------------------------
-2018-9-1 @sgkoishi<br/>
-移除ByteBuffer，使用BinaryReader和BinaryWriter进行读写。
-
+<b>*2018-9-1 @sgkoishi</b><br/>
+移除ByteBuffer，使用BinaryReader和BinaryWriter进行读写。<br/>
 发送数据包的方式变更<br/>
 原方式<br/>
+```C#
 var buf = new ByteBuffer();<br/>
 new Send_0x0000().Fill(buf);<br/>
 Send(buf);<br/>
-新方式<br/>
-Send(new Send_0x0000().WriteData());<br/>
-使用以下方法替换原有的ByteBuffer.Put和Get<br/>
-若类型为byte或byte[]<br/>
+//新方式
+Send(new Send_0x0000().WriteData());
+//使用以下方法替换原有的ByteBuffer.Put和Get<br/>
+//若类型为byte或byte[]<br/>
 BinaryReader.ReadByte()<br/>
 BinaryReader.ReadBytes(int count)<br/>
-BinaryWriter.Write(byte) 注意：需要进行类型转换，如Write((byte)1);<br/>
+BinaryWriter.Write(byte) //注意：需要进行类型转换，如Write((byte)1);<br/>
 BinaryWriter.Write(byte[])<br/>
-对于其他类型(char, ushort, int, long)<br/>
+//对于其他类型(char, ushort, int, long)<br/>
 BinaryReader.BEReadChar()<br/>
 BinaryReader.BEReadUInt16()<br/>
 BinaryReader.BEReadInt32()<br/>
 BinaryWriter.BEWrite(ushort)<br/>
-这些扩展方法定义于Utils.Util.cs内。
-
-2018-8-31
+//这些扩展方法定义于Utils.Util.cs内。
+```
+<b>*2018-8-31</b>
 <br/>
 合并Core和Framework到同一个文件夹@sgkoishi（如果编译出错删除bin、obj和.vs重新编译）
 <br/>
 添加发送系统表情(格式为“[face{num}.gif]”)，num为系统表情对应索引
 
-2018-8-30
+<b>*2018-8-30</b>
 <br/>
 新增长文本分段发送@sgkoishi
 <br/>
@@ -45,7 +45,7 @@ BinaryWriter.BEWrite(ushort)<br/>
 <br/>
 以一种我也不知道会不会出问题的方式兼容了Core和Framework了
 
-2018-8-29
+<b>*2018-8-29</b>
 <br/>
 新增验证码处理
 
