@@ -40,7 +40,7 @@ namespace QQ.Framework.Packets.Send.Message
         /// <param name="buf">The buf.</param>
         protected override void PutBody()
         {
-            bodyWriter.Write(0x01);
+            bodyWriter.Write((byte)0x01);
             bodyWriter.Write(_toQQ);
         }
     }

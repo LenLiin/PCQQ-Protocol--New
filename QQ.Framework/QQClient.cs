@@ -39,7 +39,7 @@ namespace QQ.Framework
         /// 服务器地址
         /// </summary>
         /// <value></value>
-        public string LoginServerHost { get; set; } = Util.GetHostAddresses("sz6.tencent.com");////sz.tencent.com,sz{2-9}.tencent.com
+        public string LoginServerHost { get; set; } = Util.GetHostAddresses("sz.tencent.com");////sz.tencent.com,sz{2-9}.tencent.com
         /// <summary>
         /// 登录端口
         /// </summary>

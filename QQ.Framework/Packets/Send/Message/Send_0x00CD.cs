@@ -56,7 +56,7 @@ namespace QQ.Framework.Packets.Send.Message
             var _Md5 = user.QQ_SessionKey;
             if (_messageType == FriendMessageType.Xml)
             {
-                var compressMsg = GZipByteArray.CompressBytes(_message);
+                var compressMsg = GZipByteArray.CompressBytes(Encoding.UTF8.GetString(_message));
                 bodyWriter.BEWrite(user.QQ);
                 bodyWriter.BEWrite(_toQQ);
                 bodyWriter.Write(new byte[] { 0x00, 0x00, 0x00, 0x08, 0x00, 0x01, 0x00, 0x04 });

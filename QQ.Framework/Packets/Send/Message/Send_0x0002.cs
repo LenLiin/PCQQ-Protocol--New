@@ -49,12 +49,12 @@ namespace QQ.Framework.Packets.Send.Message
         {
             var _DateTime = Util.GetTimeSeconds(DateTime.Now);
             var group = GroupToGid(_group);
-            bodyWriter.Write(0x2A);
-            bodyWriter.BEWrite(group);
             if (_messageType == FriendMessageType.Xml)
             {
-                var compressMsg = GZipByteArray.CompressBytes(_message);
-                bodyWriter.BEWrite(compressMsg.Length + 64);
+                bodyWriter.Write((byte)0x2A);
+                bodyWriter.BEWrite(group);
+                var compressMsg = GZipByteArray.CompressBytes(Encoding.UTF8.GetString(_message));
+                bodyWriter.BEWrite((ushort)(compressMsg.Length + 64));
                 bodyWriter.Write(new byte[]
                 {
                     0x00, 0x01, _packetCount, _packetIndex, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4D, 0x53, 0x47, 0x00,
@@ -64,6 +64,8 @@ namespace QQ.Framework.Packets.Send.Message
             }
             else if (_messageType == FriendMessageType.GroupMessage)
             {
+                bodyWriter.Write((byte)0x2A);
+                bodyWriter.BEWrite(group);
                 bodyWriter.BEWrite((ushort)(_message.Length + 56));
                 bodyWriter.Write(new byte[]
                 {
@@ -94,6 +96,8 @@ namespace QQ.Framework.Packets.Send.Message
             }
             else if (_messageType == FriendMessageType.Picture)
             {
+                bodyWriter.Write((byte)0x2A);
+                bodyWriter.BEWrite(group);
                 var Guid = Encoding.UTF8.GetBytes(Util.GetMD5ToGuidHashFromFile(Encoding.UTF8.GetString(_message)));
                 bodyWriter.Write(new byte[]
                 {
@@ -121,7 +125,6 @@ namespace QQ.Framework.Packets.Send.Message
             }
             else if (_messageType == FriendMessageType.ExitGroup)
             {
-                bodyWriter.Flush();
                 bodyWriter.Write(new byte[] { 0x09 });
                 bodyWriter.BEWrite(group);
             }
