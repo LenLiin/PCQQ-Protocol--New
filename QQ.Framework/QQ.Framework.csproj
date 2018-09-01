@@ -98,7 +98,6 @@
     <Compile Include="..\QQ.Framework\QQGlobal.cs" />
     <Compile Include="..\QQ.Framework\QQUser.cs" />
     <Compile Include="..\QQ.Framework\Sockets\MessageManage.cs" />
-    <Compile Include="..\QQ.Framework\Utils\ByteBuffer.cs" />
     <Compile Include="..\QQ.Framework\Utils\CRC32cs.cs" />
     <Compile Include="..\QQ.Framework\Utils\DesignByContract.cs" />
     <Compile Include="..\QQ.Framework\Utils\ECDHCrypter.cs" />

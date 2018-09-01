@@ -32,8 +32,11 @@
 using System;
 using System.Text;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Net;
+using System.Net.Http;
 using System.Text.RegularExpressions;
 
 namespace QQ.Framework.Utils
@@ -42,8 +45,7 @@ namespace QQ.Framework.Utils
     {
         static Encoding DefaultEncoding = Encoding.GetEncoding(QQGlobal.QQ_CHARSET_DEFAULT);
         static DateTime baseDateTime = DateTime.Parse("1970-1-01 00:00:00.000");
-
-
+        
         public static Random Random = new Random();
         /// <summary>
         /// 把字节数组从offset开始的len个字节转换成一个unsigned int，
@@ -170,70 +172,7 @@ namespace QQ.Framework.Utils
         {
             return GetString(b, QQGlobal.QQ_CHARSET_DEFAULT);
         }
-        /// <summary>
-        /// * 从buf的当前位置解析出一个字符串，直到碰到了buf的结尾
-        /// * <p>
-        /// * 此方法不负责调整buf位置，调用之前务必使buf当前位置处于字符串开头。在读取完成
-        /// * 后，buf当前位置将位于buf最后之后
-        /// * </p>
-        /// * <p>
-        /// * 返回的字符串将使用QQ缺省编码，一般来说就是GBK编码
-        /// 	<remark>2008-02-22 </remark>
-        /// </summary>
-        /// <param name="buf">The buf.</param>
-        /// <returns></returns>
-        public static string GetString(ByteBuffer buf)
-        {
-            ByteBuffer temp = new ByteBuffer();
-            while (buf.HasRemaining())
-            {
-                temp.Put(buf.Get());
-            }
-            return GetString(temp.ToByteArray());
-        }
-        /// <summary>从buf的当前位置解析出一个字符串，直到碰到了buf的结尾或者读取了len个byte之后停止
-        /// 此方法不负责调整buf位置，调用之前务必使buf当前位置处于字符串开头。在读取完成
-        /// * 后，buf当前位置将位于len字节之后或者最后之后
-        /// 	<remark>2008-02-25 </remark>
-        /// </summary>
-        /// <param name="b">The b.</param>
-        /// <returns></returns>
-        public static string GetString(ByteBuffer buf, int len)
-        {
-            ByteBuffer temp = new ByteBuffer();
-            while (buf.HasRemaining() && len-- > 0)
-            {
-                temp.Put(buf.Get());
-            }
-            return GetString(temp.ToByteArray());
-        }
 
-        /// <summary>
-        /// * 从buf的当前位置解析出一个字符串，直到碰到了delimit或者读取了maxLen个byte或者
-        /// * 碰到结尾之后停止
-        /// *此方法不负责调整buf位置，调用之前务必使buf当前位置处于字符串开头。在读取完成
-        /// *后，buf当前位置将位于maxLen之后
-        /// 	<remark>2008-02-22 </remark>
-        /// </summary>
-        /// <param name="buf">The buf.</param>
-        /// <param name="delimit">The delimit.</param>
-        /// <param name="maxLen">The max len.</param>
-        /// <returns></returns>
-        public static String GetString(ByteBuffer buf, byte delimit, int maxLen)
-        {
-            ByteBuffer temp = new ByteBuffer();
-            while (buf.HasRemaining() && maxLen-- > 0)
-            {
-                byte b = buf.Get();
-                if (b == delimit)
-                    break;
-                else
-                    temp.Put(b);
-            }
-            while (buf.HasRemaining() && maxLen-- > 0)
-                buf.Get();
-            return GetString(temp.ToByteArray());
-        }
         /// <summary>根据某种编码方式将字节数组转换成字符串
         /// 	<remark>2008-02-22 </remark>
         /// </summary>
@@ -250,29 +189,6 @@ namespace QQ.Framework.Utils
         }
 
         /// <summary>
-        /// 从buf的当前位置解析出一个字符串，直到碰到一个分隔符为止，或者到了buf的结尾
-        /// 此方法不负责调整buf位置，调用之前务必使buf当前位置处于字符串开头。在读取完成
-        /// * 后，buf当前位置将位于分隔符之后
-        /// 	<remark>2008-02-23 </remark>
-        /// </summary>
-        /// <param name="buf">The buf.</param>
-        /// <param name="delimit">The delimit.</param>
-        /// <returns></returns>
-        public static string GetString(ByteBuffer buf, byte delimit)
-        {
-            ByteBuffer temp = new ByteBuffer();
-            while (buf.HasRemaining())
-            {
-                byte b = buf.Get();
-                if (b == delimit)
-                    return GetString(temp.ToByteArray());
-                else
-                    buf.Put(b);
-            }
-            return GetString(temp.ToByteArray());
-        }
-
-        /// <summary>
         /// 把字符串转换成int
         /// 
         /// </summary>
@@ -281,15 +197,7 @@ namespace QQ.Framework.Utils
         /// <returns></returns>
         public static int GetInt(string s, int defaultValue)
         {
-            int value;
-            if (int.TryParse(s, out value))
-            {
-                return value;
-            }
-            else
-            {
-                return defaultValue;
-            }
+            return int.TryParse(s, out var value) ? value : defaultValue;
         }
 
         /// <summary>
@@ -320,7 +228,7 @@ namespace QQ.Framework.Utils
         public static byte[] RandomKey(int length)
         {
             byte[] key = new byte[length];
-            (new Random()).NextBytes(key);
+            new Random().NextBytes(key);
             return key;
         }
 
@@ -371,15 +279,7 @@ namespace QQ.Framework.Utils
         /// <returns></returns>
         public static String GetIpStringFromBytes(byte[] ip)
         {
-            StringBuilder sb = new StringBuilder();
-            sb.Append(ip[0] & 0xFF);
-            sb.Append('.');
-            sb.Append(ip[1] & 0xFF);
-            sb.Append('.');
-            sb.Append(ip[2] & 0xFF);
-            sb.Append('.');
-            sb.Append(ip[3] & 0xFF);
-            return sb.ToString();
+            return $"{ip[0]}.{ip[1]}.{ip[2]}.{ip[3]}";
         }
         public static string ToHex(byte[] bs, string NewLine = "", string Format = "{0} ")
         {
@@ -414,26 +314,20 @@ namespace QQ.Framework.Utils
         }
 
         /// <summary>
-        /// 获取本地外网 IP
+        ///     获取本地外网 IP
         /// </summary>
         /// <returns></returns>
         public static string GetExternalIp()
         {
-            WebClient client = new WebClient();
-            client.Encoding = System.Text.Encoding.UTF8;
-            string response = client.DownloadString("http://www.baidu.com/s?wd=ip&rsv_spt=1&rsv_iqid=0xa699f31100003c46&issp=1&f=3&rsv_bp=0&rsv_idx=2&ie=utf-8&tn=baiduhome_pg&rsv_enter=0&rsv_sug3=2&rsv_sug1=1&rsv_sug7=100&prefixsug=ip&rsp=1&inputT=1711&rsv_sug4=1711");//百度
-            string myReg = @"<span class=""c-gap-right"">([\s\S]+?)<\/span>";
-            Match mc = Regex.Match(response, myReg, RegexOptions.Singleline);
+            var mc = Regex.Match(
+                new HttpClient().GetStringAsync("http://www.net.cn/static/customercare/yourip.asp").Result,
+                @"您的本地上网IP是：<h2>(\d+\.\d+\.\d+\.\d+)</h2>");
             if (mc.Success && mc.Groups.Count > 1)
             {
-                response = mc.Groups[1].Value.Replace("本机IP:&nbsp;", "");
-                return response;
-            }
-            else
-            {
-                throw new Exception("获取IP失败");
+                return mc.Groups[1].Value;
             }
 
+            throw new Exception("获取IP失败");
         }
         /// <summary>
         /// 根据域名获取IP
@@ -442,9 +336,7 @@ namespace QQ.Framework.Utils
         /// <returns></returns>
         public static string GetHostAddresses(string hostname)
         {
-            IPAddress[] ips;
-
-            ips = Dns.GetHostAddresses(hostname);
+            var ips = Dns.GetHostAddresses(hostname);
 
             return ips[0].ToString();
         }
@@ -456,7 +348,7 @@ namespace QQ.Framework.Utils
             for (int i = 0, len = str.Length; i < len; ++i)
             {
                 hash += (hash << 5) + (int)str[i];
-                hashstr = "((" + hashstr + "<<5)+" + ((int)str[i]).ToString() + ")";
+                hashstr = $"(({hashstr}<<5)+{(int) str[i]})";
             }
             return (hash & 0x7fffffff).ToString();
         }
@@ -484,10 +376,10 @@ namespace QQ.Framework.Utils
         #region TLV专属操作方法
         public static void int16_to_buf(byte[] TEMP_BYTE_ARRAY, int index, int Num)
         {
-            TEMP_BYTE_ARRAY[index] = (byte)(((Num & 0xff000000) >> 24) & 0xff);
-            TEMP_BYTE_ARRAY[index + 1] = (byte)(((Num & 0x00ff0000) >> 16) & 0xff);
-            TEMP_BYTE_ARRAY[index + 2] = (byte)(((Num & 0x0000ff00) >> 8) & 0xff);
-            TEMP_BYTE_ARRAY[index + 3] = (byte)((Num & 0x000000ff) & 0xff);
+            TEMP_BYTE_ARRAY[index] = (byte)((Num & 0xff000000) >> 24);
+            TEMP_BYTE_ARRAY[index + 1] = (byte)((Num & 0x00ff0000) >> 16);
+            TEMP_BYTE_ARRAY[index + 2] = (byte)((Num & 0x0000ff00) >> 8);
+            TEMP_BYTE_ARRAY[index + 3] = (byte)(Num & 0x000000ff);
         }
         public static int buf_to_int16(byte[] TEMP_BYTE_ARRAY, int index)
         {
@@ -503,6 +395,66 @@ namespace QQ.Framework.Utils
         {
             return AppDomain.CurrentDomain.BaseDirectory + "//" + directory;
         }
+        #endregion
+
+        public static byte[] ToBytesArray(this Stream stream)
+        {
+            return ((MemoryStream) stream).ToArray();
+        }
+
+        #region BinaryWriter和BinaryReader扩展方法
+
+        /*
+           协议使用的是大端序(Big-Endian)，而BinaryWriter和BinaryReader使用的是小端序。
+           因此超过一个字节结构(char, ushort, int, long等)的读取和写入需要自定义。
+           byte[]的读取/写入方式不需要更改。
+        */
+        public static void BEWrite(this BinaryWriter bw, ushort v)
+        {
+            bw.Write(BitConverter.GetBytes(v).Reverse().ToArray());
+        }
+
+        public static void BEWrite(this BinaryWriter bw, char v)
+        {
+            bw.Write(BitConverter.GetBytes((ushort) v).Reverse().ToArray());
+        }
+
+        public static void BEWrite(this BinaryWriter bw, int v)
+        {
+            bw.Write(BitConverter.GetBytes(v).Reverse().ToArray());
+        }
+        // 注意: 此处的long和ulong均为四个字节，而不是八个。
+        public static void BEWrite(this BinaryWriter bw, long v)
+        {
+            bw.Write(BitConverter.GetBytes((uint) v).Reverse().ToArray());
+        }
+
+        public static void BEWrite(this BinaryWriter bw, ulong v)
+        {
+            bw.Write(BitConverter.GetBytes((uint) v).Reverse().ToArray());
+        }
+
+        public static char BEReadChar(this BinaryReader br)
+        {
+            br.ReadByte();
+            return (char) br.ReadByte();
+        }
+
+        public static ushort BEReadUInt16(this BinaryReader br)
+        {
+            return (ushort) ((br.ReadByte() << 8) + br.ReadByte());
+        }
+
+        public static int BEReadInt32(this BinaryReader br)
+        {
+            return br.ReadByte() << 24 | br.ReadByte() << 16 | br.ReadByte() << 8 | br.ReadByte();
+        }
+
+        public static uint BEReadUInt32(this BinaryReader br)
+        {
+            return (uint) (br.ReadByte() << 24 | br.ReadByte() << 16 | br.ReadByte() << 8 | br.ReadByte());
+        }
+
         #endregion
     }
 }

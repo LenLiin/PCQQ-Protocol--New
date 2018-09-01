@@ -1,6 +1,7 @@
 ﻿using QQ.Framework.Utils;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -169,13 +170,11 @@ namespace QQ.Framework
         /// <returns></returns>
         public byte[] Md52()
         {
-            ByteBuffer byteBuffer = new ByteBuffer();
-            byteBuffer.Put(Util.HexStringToByteArray(Util.ToHex(MD51)));
-            byteBuffer.PutInt(0);
-            byteBuffer.PutLong(QQ);
-            byte[] data = byteBuffer.ToByteArray();
-            byte[] arg = System.Security.Cryptography.MD5.Create().ComputeHash(data);
-            return arg;
+            var byteBuffer = new BinaryWriter(new MemoryStream());
+            byteBuffer.Write(MD51);
+            byteBuffer.BEWrite(0);
+            byteBuffer.BEWrite(QQ);
+            return System.Security.Cryptography.MD5.Create().ComputeHash(((MemoryStream)byteBuffer.BaseStream).ToArray());
         }
         /// <summary>
         /// 本地IP
