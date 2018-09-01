@@ -49,23 +49,22 @@ namespace QQ.Framework.Packets.Send.Message
         {
             var _DateTime = Util.GetTimeSeconds(DateTime.Now);
             var group = GroupToGid(_group);
+            bodyWriter.Write(0x2A);
+            bodyWriter.BEWrite(group);
             if (_messageType == FriendMessageType.Xml)
             {
                 var compressMsg = GZipByteArray.CompressBytes(_message);
-                bodyWriter.Write(new byte[] { 0x2A });
-                bodyWriter.BEWrite(group);
                 bodyWriter.BEWrite(compressMsg.Length + 64);
-                bodyWriter.Write(new byte[] { 0x00, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4D, 0x53, 0x47, 0x00, 0x00, 0x00, 0x00, 0x00 });
+                bodyWriter.Write(new byte[]
+                {
+                    0x00, 0x01, _packetCount, _packetIndex, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4D, 0x53, 0x47, 0x00,
+                    0x00, 0x00, 0x00, 0x00
+                });
                 bodyWriter.Write(SendXML(_DateTime, compressMsg));
             }
             else if (_messageType == FriendMessageType.GroupMessage)
             {
-                var Length = _message.Length + 56;
-
-                bodyWriter.Write(0x2A);
-                bodyWriter.BEWrite(group);
-                bodyWriter.BEWrite((ushort) Length);
-
+                bodyWriter.BEWrite((ushort)(_message.Length + 56));
                 bodyWriter.Write(new byte[]
                 {
                     0x00, 0x01, _packetCount, _packetIndex, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4D, 0x53, 0x47, 0x00,
@@ -73,10 +72,10 @@ namespace QQ.Framework.Packets.Send.Message
                 });
                 bodyWriter.BEWrite(_DateTime);
                 bodyWriter.Write(Util.RandomKey(4));
-                bodyWriter.Write(new byte[] {0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00});
-                bodyWriter.Write(new byte[] {0x00, 0x0C});
-                bodyWriter.Write(new byte[] {0xE5, 0xBE, 0xAE, 0xE8, 0xBD, 0xAF, 0xE9, 0x9B, 0x85, 0xE9, 0xBB, 0x91});
-                bodyWriter.Write(new byte[] {0x00, 0x00});
+                bodyWriter.Write(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00 });
+                bodyWriter.Write(new byte[] { 0x00, 0x0C });
+                bodyWriter.Write(new byte[] { 0xE5, 0xBE, 0xAE, 0xE8, 0xBD, 0xAF, 0xE9, 0x9B, 0x85, 0xE9, 0xBB, 0x91 });
+                bodyWriter.Write(new byte[] { 0x00, 0x00 });
 
                 if (Encoding.UTF8.GetString(_message).Contains("[face") &&
                     Encoding.UTF8.GetString(_message).Contains(".gif]"))
@@ -93,11 +92,51 @@ namespace QQ.Framework.Packets.Send.Message
                     ConstructMessage(bodyWriter, _message);
                 }
             }
+            else if (_messageType == FriendMessageType.Picture)
+            {
+                var Guid = Encoding.UTF8.GetBytes(Util.GetMD5ToGuidHashFromFile(Encoding.UTF8.GetString(_message)));
+                bodyWriter.Write(new byte[]
+                {
+                    0x00, 0x01, _packetCount, _packetIndex, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4D, 0x53, 0x47, 0x00,
+                    0x00, 0x00, 0x00, 0x00
+                });
+                bodyWriter.BEWrite(_DateTime);
+                bodyWriter.Write(Util.RandomKey(4));
+                bodyWriter.Write(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00 });
+                bodyWriter.Write(new byte[] { 0xE5, 0xBE, 0xAE, 0xE8, 0xBD, 0xAF, 0xE9, 0x9B, 0x85, 0xE9, 0xBB, 0x91 });
+                bodyWriter.Write(new byte[] { 0x00, 0x00, 0x03, 0x00, 0xCB, 0x02 });
+                bodyWriter.Write(new byte[] { 0x00, 0x2A });
+                bodyWriter.Write(Guid);
+                bodyWriter.Write(new byte[] { 0x04, 0x00, 0x04 });
+                bodyWriter.Write(new byte[] { 0x9B, 0x53, 0xB0, 0x08, 0x05, 0x00, 0x04, 0xD9, 0x8A, 0x5A, 0x70, 0x06, 0x00,
+                    0x04, 0x00, 0x00, 0x00, 0x50, 0x07, 0x00, 0x01, 0x43, 0x08, 0x00, 0x00, 0x09, 0x00, 0x01, 0x01, 0x0B,
+                    0x00, 0x00, 0x14, 0x00, 0x04, 0x11, 0x00, 0x00, 0x00, 0x15, 0x00, 0x04, 0x00, 0x00, 0x02, 0xBC, 0x16,
+                    0x00, 0x04, 0x00, 0x00, 0x02, 0xBC, 0x18, 0x00, 0x04, 0x00, 0x00, 0x7D, 0x5E, 0xFF, 0x00, 0x5C, 0x15,
+                    0x36, 0x20, 0x39, 0x32, 0x6B, 0x41, 0x31, 0x43, 0x39, 0x62, 0x35, 0x33, 0x62, 0x30, 0x30, 0x38, 0x64,
+                    0x39, 0x38, 0x61, 0x35, 0x61, 0x37, 0x30 });
+                bodyWriter.Write(new byte[] { 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x35, 0x30, 0x20, 0x20, 0x20, 0x20, 0x20,
+                    0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 });
+                bodyWriter.Write(Guid);
+                bodyWriter.Write(0x41);
+            }
             else if (_messageType == FriendMessageType.ExitGroup)
             {
-                bodyWriter.Write(new byte[] {0x09});
+                bodyWriter.Flush();
+                bodyWriter.Write(new byte[] { 0x09 });
                 bodyWriter.BEWrite(group);
             }
+        }
+        /// <summary>
+        /// 上传图片
+        /// </summary>
+        /// <param name="GroupNum"></param>
+        /// <param name="Ukey"></param>
+        /// <param name="Img"></param>
+        public void HttpUpLoadGroupImg(long GroupNum, string Ukey, byte[] Img)
+        {
+            //User-Agent: QQClient
+            string Api = "http://htdata2.qq.com/cgi-bin/httpconn?htcmd=0x6ff0071&ver=5515&term=pc&ukey={0}&filesize={1}&range=0&uin{2}&&groupcode={3}";
+
         }
         public long GroupToGid(long groupid)
         {
