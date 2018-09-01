@@ -316,14 +316,14 @@ namespace QQ.Framework
                 if (!QQGlobal.DebugLog && e.ReceivePacket.Message.Count(c => c == '\0') > 5)
                 {
                     QQUser.MessageLog($"收到群{e.ReceivePacket.Group}的{e.ReceivePacket.FromQQ}的乱码消息。");
-                    return;
+                    //return;
                 }
                 QQUser.MessageLog($"收到群{e.ReceivePacket.Group}的{e.ReceivePacket.FromQQ}的消息:{e.ReceivePacket.Message}");
             }
             else
             {
                 QQUser.MessageLog($"收到群{e.ReceivePacket.Group}的{e.ReceivePacket.FromQQ}的空消息。");
-                return;
+                //return;
             }
             //提取数据
             var dataReader = new BinaryReader(new MemoryStream(e.ReceivePacket.bodyDecrypted));
@@ -368,14 +368,14 @@ namespace QQ.Framework
                 if (!QQGlobal.DebugLog && e.ReceivePacket.Message.Count(c => c == '\0') > 5)
                 {
                     QQUser.MessageLog($"收到好友{e.ReceivePacket.FromQQ}的乱码消息。");
-                    return;
+                    //return;
                 }
                 QQUser.MessageLog($"收到好友{e.ReceivePacket.FromQQ}的消息:{e.ReceivePacket.Message}");
             }
             else
             {
                 QQUser.MessageLog($"收到好友{e.ReceivePacket.FromQQ}的空消息。");
-                return;
+                //return;
             }
             //提取数据
             var dataReader = new BinaryReader(new MemoryStream(e.ReceivePacket.bodyDecrypted));

@@ -57,10 +57,10 @@ namespace QQLoginTest
         /// </summary>
         private static void Client_EventReceive_0x0017(object sender, QQEventArgs<QQ.Framework.Packets.Receive.Message.Receive_0x0017> e)
         {
-            if (e.ReceivePacket.FromQQ == Someone)
-            {
-                e.QQClient.SendLongGroupMessage(e.ReceivePacket.Message, e.ReceivePacket.Group);
-            }
+            //if (e.ReceivePacket.FromQQ == Someone)
+            //{
+            //    e.QQClient.SendLongGroupMessage(e.ReceivePacket.Message, e.ReceivePacket.Group,FriendMessageType.Message);
+            //}
         }
 
     }

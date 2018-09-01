@@ -57,19 +57,19 @@ namespace QQ.Framework.Packets.Send.Message
             if (_messageType == FriendMessageType.Xml)
             {
                 var compressMsg = GZipByteArray.CompressBytes(_message);
-                buf.PutLong(user.QQ);
-                buf.PutLong(_toQQ);
-                buf.Put(new byte[] { 0x00, 0x00, 0x00, 0x08, 0x00, 0x01, 0x00, 0x04 });
-                buf.Put(new byte[] { 0x00, 0x00, 0x00,  0x00 });
-                buf.Put(new byte[] { 0x37, 0x0F });
-                buf.PutLong(user.QQ);
-                buf.PutLong(_toQQ);
-                buf.Put(_Md5);
-                buf.Put(new byte[] { 0x00, 0x0B });
-                buf.Put(Util.RandomKey(2));
-                buf.PutLong(_DateTime);
-                buf.Put(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, _packetCount, _packetIndex, 0x00, 0x00, 0x01, 0x4D, 0x53, 0x47, 0x00, 0x00, 0x00, 0x00, 0x00 });
-                SendXML(buf, _DateTime, compressMsg);
+                bodyWriter.BEWrite(user.QQ);
+                bodyWriter.BEWrite(_toQQ);
+                bodyWriter.Write(new byte[] { 0x00, 0x00, 0x00, 0x08, 0x00, 0x01, 0x00, 0x04 });
+                bodyWriter.Write(new byte[] { 0x00, 0x00, 0x00,  0x00 });
+                bodyWriter.Write(new byte[] { 0x37, 0x0F });
+                bodyWriter.BEWrite(user.QQ);
+                bodyWriter.BEWrite(_toQQ);
+                bodyWriter.Write(_Md5);
+                bodyWriter.Write(new byte[] { 0x00, 0x0B });
+                bodyWriter.Write(Util.RandomKey(2));
+                bodyWriter.BEWrite(_DateTime);
+                bodyWriter.Write(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, _packetCount, _packetIndex, 0x00, 0x00, 0x01, 0x4D, 0x53, 0x47, 0x00, 0x00, 0x00, 0x00, 0x00 });
+                bodyWriter.Write(SendXML( _DateTime, compressMsg));
 
             }
             else if (_messageType == FriendMessageType.Shake)
@@ -90,24 +90,23 @@ namespace QQ.Framework.Packets.Send.Message
             }
             else if (_messageType == FriendMessageType.Message)
             {
-                var _Md5 = user.QQ_SessionKey;
-                buf.PutLong(user.QQ);
-                buf.PutLong(_toQQ);
-                buf.Put(new byte[] { 0x00, 0x00, 0x00, 0x0D, 0x00, 0x01, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x01,0x01 });
-                buf.Put(new byte[] { 0x36, 0x43 });
-                buf.PutLong(user.QQ);
-                buf.PutLong(_toQQ);
-                buf.Put(_Md5);
-                buf.Put(new byte[] { 0x00, 0x0B });
-                buf.Put(Util.RandomKey(2));
-                buf.PutLong(_DateTime);
-                buf.Put(new byte[] { 0x02, 0x34, 0x00, 0x00, 0x00, 0x00, _packetCount, _packetIndex, 0x00, 0x00, 0x01, 0x4D, 0x53, 0x47, 0x00, 0x00, 0x00, 0x00, 0x00 });
-                buf.PutLong(_DateTime);
-                buf.Put(Util.RandomKey(4));
-                buf.Put(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00 });
-                buf.Put(new byte[] { 0x00, 0x06 });
-                buf.Put(new byte[] { 0xE5, 0xAE, 0x8B, 0xE4, 0xBD, 0x93 });
-                buf.Put(new byte[] { 0x00, 0x00 });
+                bodyWriter.BEWrite(user.QQ);
+                bodyWriter.BEWrite(_toQQ);
+                bodyWriter.Write(new byte[] { 0x00, 0x00, 0x00, 0x0D, 0x00, 0x01, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x01,0x01 });
+                bodyWriter.Write(new byte[] { 0x36, 0x43 });
+                bodyWriter.BEWrite(user.QQ);
+                bodyWriter.BEWrite(_toQQ);
+                bodyWriter.Write(_Md5);
+                bodyWriter.Write(new byte[] { 0x00, 0x0B });
+                bodyWriter.Write(Util.RandomKey(2));
+                bodyWriter.BEWrite(_DateTime);
+                bodyWriter.Write(new byte[] { 0x02, 0x34, 0x00, 0x00, 0x00, 0x00, _packetCount, _packetIndex, 0x00, 0x00, 0x01, 0x4D, 0x53, 0x47, 0x00, 0x00, 0x00, 0x00, 0x00 });
+                bodyWriter.BEWrite(_DateTime);
+                bodyWriter.Write(Util.RandomKey(4));
+                bodyWriter.Write(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00 });
+                bodyWriter.Write(new byte[] { 0x00, 0x06 });
+                bodyWriter.Write(new byte[] { 0xE5, 0xAE, 0x8B, 0xE4, 0xBD, 0x93 });
+                bodyWriter.Write(new byte[] { 0x00, 0x00 });
 
                 if (Encoding.UTF8.GetString(_message).Contains("[face") &&
                     Encoding.UTF8.GetString(_message).Contains(".gif]"))

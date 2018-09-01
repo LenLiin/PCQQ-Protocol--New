@@ -225,39 +225,14 @@ namespace QQ.Framework.Packets
         /// <param name="buf">报文</param>
         /// <param name="_DateTime">时间</param>
         /// <param name="compressMsg">压缩消息数组</param>
-        public static void SendXML(ByteBuffer buf, long _DateTime, byte[] compressMsg)
+        public static byte[] SendXML( long _DateTime, byte[] compressMsg)
         {
-            List<byte[]> list = new List<byte[]>();
-            byte[] buffer = Encoding.UTF8.GetBytes(Message.Trim());
-            ByteBuffer byteBuffer = new ByteBuffer();
-            byteBuffer.Put(1);
-            byteBuffer.Put(buffer);
-            byte[] token = byteBuffer.ToByteArray();
-            byteBuffer = new ByteBuffer();
-            byteBuffer.Put(1);
-            byteBuffer.Put(token);
-            byteBuffer.Put(new byte[7] { 2, 0, 4, 0, 0, 0, 1 });
-            token = byteBuffer.ToByteArray();
-            byteBuffer = new ByteBuffer();
-            byteBuffer.Put(20);
-            byteBuffer.Put(token);
-            list.Add(byteBuffer.ToByteArray());
-            return list;
+            throw new Exception();
         }
 
-        public static List<byte[]> SendJson(string Message)
+        public static byte[] SendJson(string Message)
         {
-            var byteBuffer = new BinaryWriter(new MemoryStream());
-            var data = Encoding.UTF8.GetBytes(Message);
-            byteBuffer.Write((byte) 25);
-            byteBuffer.BEWrite((ushort) (data.Length + 4));
-            byteBuffer.Write((byte) 1);
-            byteBuffer.Write((byte) 1);
-            byteBuffer.Write(data);
-            return new List<byte[]>
-            {
-                byteBuffer.BaseStream.ToBytesArray()
-            };
+            throw new Exception();
         }
     }
 }
