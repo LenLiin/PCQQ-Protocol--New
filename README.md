@@ -9,6 +9,7 @@ PCQQ协议
 源码仅供参考，欢迎吐槽
 ------------------------------------------
 <b>2018-9-1 @sgkoishi</b><br/>
+添加XML消息发送<br/>
 移除ByteBuffer，使用BinaryReader和BinaryWriter进行读写。<br/>
 发送数据包的方式变更
 ```C#
