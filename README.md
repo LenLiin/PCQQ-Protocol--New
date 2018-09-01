@@ -10,9 +10,9 @@ PCQQ协议
 ------------------------------------------
 <b>2018-9-1 @sgkoishi</b><br/>
 移除ByteBuffer，使用BinaryReader和BinaryWriter进行读写。<br/>
-发送数据包的方式变更<br/>
-原方式<br/>
+发送数据包的方式变更
 ```C#
+//原方式
 var buf = new ByteBuffer();
 new Send_0x0000().Fill(buf);
 Send(buf);
