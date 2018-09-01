@@ -491,7 +491,7 @@ namespace QQ.Framework.Utils
                 Md5.Substring(16, 4) + "-" +
                 Md5.Substring(20) + "-" +
                 "}";
-        ｝
+        }
 
     }
 }
