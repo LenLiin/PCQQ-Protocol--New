@@ -105,6 +105,7 @@
     <Compile Include="..\QQ.Framework\Utils\ImageHelper.cs" />
     <Compile Include="..\QQ.Framework\Utils\QQTea.cs" />
     <Compile Include="..\QQ.Framework\Utils\Util.cs" />
+    <Compile Include="Utils\GZipByteArray.cs" />
     <Compile Include="Utils\StringHandlingPackets.cs" />
   </ItemGroup>
   <ItemGroup>

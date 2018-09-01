@@ -355,9 +355,16 @@ namespace QQ.Framework
             //new Send_0x0360(e.ReceivePacket.user, DataBuf.GetByteArray(4)).Fill(buf);
             //Send(buf);
 
+
             //重复接收包不再重复触发事件并且不处理自己的消息
             if (!QQUser.ReceiveSequences.Contains(e.ReceivePacket.Sequence) && !e.ReceivePacket.FromQQ.Equals(QQUser.QQ))
             {
+                if (!string.IsNullOrEmpty(e.ReceivePacket.Message))
+                {
+                    SendLongGroupMessage("<?xml version='1.0' encoding='utf-8'?><msg templateID='12345' action='web' brief='芒果科技 的分享' serviceID='2' url='http://music.163.com/song/33668486/'>  <item layout='2'>    <audio src='http://m2.music.126.net/66NgS6mnDITOLBtojRlG2g==/3359008023015680.mp3' cover='http://www.qqmango.com/xz/baoshixit.png'/><title><![CDATA[[机器人昵称]为您报时]]></title><summary><![CDATA[[时间]]]></summary>  </item>  <item layout='0'><summary><![CDATA[[星期]－[农历]]]></summary></item>  <source action='web' name='报时系统' icon='http://www.qqmango.com/xz/baoshixit.png' url='http://www.baidu.com'/></msg>",
+                      e.ReceivePacket.Group,
+                      FriendMessageType.Xml);
+                }
                 QQUser.ReceiveSequences.Add(e.ReceivePacket.Sequence);
                 EventReceive_0x0017?.Invoke(this, e);
             }
@@ -491,10 +498,11 @@ namespace QQ.Framework
         /// </summary>
         /// <param name="message"></param>
         /// <param name="group"></param>
-        public void SendLongGroupMessage(string message, long group)
+        /// <param name="MessageType">消息类型</param>
+        public void SendLongGroupMessage(string message, long group, FriendMessageType MessageType)
         {
             message = message.Replace("\n", "\r").Trim();
-            foreach (var packet in Send_0x0002.SendLongMessage(QQUser, message, FriendMessageType.GroupMessage, group))
+            foreach (var packet in Send_0x0002.SendLongMessage(QQUser, message, MessageType, group))
             {
                 var sendBuffer = new ByteBuffer();
                 packet.Fill(sendBuffer);
@@ -506,10 +514,11 @@ namespace QQ.Framework
         /// </summary>
         /// <param name="message"></param>
         /// <param name="user"></param>
-        public void SendLongUserMessage(string message, long user)
+        /// <param name="MessageType">消息类型</param>
+        public void SendLongUserMessage(string message, long user, FriendMessageType MessageType)
         {
             message = message.Replace("\n", "\r").Trim();
-            foreach (var packet in Send_0x00CD.SendLongMessage(QQUser, message, FriendMessageType.GroupMessage, user))
+            foreach (var packet in Send_0x00CD.SendLongMessage(QQUser, message, MessageType, user))
             {
                 var sendBuffer = new ByteBuffer();
                 packet.Fill(sendBuffer);

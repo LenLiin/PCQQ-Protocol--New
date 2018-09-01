@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace QQ.Framework.Packets
@@ -199,26 +200,29 @@ namespace QQ.Framework.Packets
         {
 
         }
-
-        public static List<byte[]> SendXML(string Message)
+        /// <summary>
+        /// XML消息组装
+        /// </summary>
+        /// <param name="buf">报文</param>
+        /// <param name="_DateTime">时间</param>
+        /// <param name="compressMsg">压缩消息数组</param>
+        public static void SendXML(ByteBuffer buf, long _DateTime, byte[] compressMsg)
         {
-            List<byte[]> list = new List<byte[]>();
-            byte[] buffer = Encoding.UTF8.GetBytes(Message.Trim());
-            ByteBuffer byteBuffer = new ByteBuffer();
-            byteBuffer.Put(1);
-            byteBuffer.Put(buffer);
-            byte[] token = byteBuffer.ToByteArray();
-            byteBuffer = new ByteBuffer();
-            byteBuffer.Put(1);
-            byteBuffer.Put(token);
-            byteBuffer.Put(new byte[7] { 2, 0, 4, 0, 0, 0, 1 });
-            token = byteBuffer.ToByteArray();
-            byteBuffer = new ByteBuffer();
-            byteBuffer.Put(20);
-            byteBuffer.Put(token);
-            list.Add(byteBuffer.ToByteArray());
-            return list;
+            buf.PutLong(_DateTime);
+            buf.Put(Util.RandomKey(4));
+            buf.Put(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00 });
+            buf.Put(new byte[] { 0x00, 0x0C });
+            buf.Put(new byte[] { 0xE5, 0xBE, 0xAE, 0xE8, 0xBD, 0xAF, 0xE9, 0x9B, 0x85, 0xE9, 0xBB, 0x91 });
+            buf.Put(new byte[] { 0x00, 0x00, 0x14 });
+            buf.Put(0x01);
+            buf.PutUShort((ushort)(compressMsg.Length + 11));
+            buf.Put(0x01);
+            buf.PutUShort((ushort)(compressMsg.Length + 1));
+            buf.Put(0x01);
+            buf.Put(compressMsg);
+            buf.Put(new byte[] { 0x02, 0x00, 0x04, 0x00, 0x00, 0x00, 0x4D });
         }
+
         public static List<byte[]> SendJson(string Message)
         {
             List<byte[]> list = new List<byte[]>();

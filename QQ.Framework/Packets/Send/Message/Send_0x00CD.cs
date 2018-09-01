@@ -46,7 +46,26 @@ namespace QQ.Framework.Packets.Send.Message
         protected override void PutBody(ByteBuffer buf)
         {
             var _DateTime = Util.GetTimeSeconds(DateTime.Now);
-            if (_messageType == FriendMessageType.Shake)
+            var _Md5 = user.QQ_SessionKey;
+            if (_messageType == FriendMessageType.Xml)
+            {
+                var compressMsg = GZipByteArray.CompressBytes(_message);
+                buf.PutLong(user.QQ);
+                buf.PutLong(_toQQ);
+                buf.Put(new byte[] { 0x00, 0x00, 0x00, 0x08, 0x00, 0x01, 0x00, 0x04 });
+                buf.Put(new byte[] { 0x00, 0x00, 0x00,  0x00 });
+                buf.Put(new byte[] { 0x37, 0x0F });
+                buf.PutLong(user.QQ);
+                buf.PutLong(_toQQ);
+                buf.Put(_Md5);
+                buf.Put(new byte[] { 0x00, 0x0B });
+                buf.Put(Util.RandomKey(2));
+                buf.PutLong(_DateTime);
+                buf.Put(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, _packetCount, _packetIndex, 0x00, 0x00, 0x01, 0x4D, 0x53, 0x47, 0x00, 0x00, 0x00, 0x00, 0x00 });
+                SendXML(buf, _DateTime, compressMsg);
+
+            }
+            else if (_messageType == FriendMessageType.Shake)
             {
                 buf.PutLong(user.QQ);
                 buf.PutLong(_toQQ);
@@ -62,9 +81,8 @@ namespace QQ.Framework.Packets.Send.Message
                 buf.Put(Util.RandomKey(4));
                 buf.Put(new byte[] { 0x00, 0x00, 0x00, 0x00 });
             }
-            else
+            else if (_messageType == FriendMessageType.Message)
             {
-                var _Md5 = user.QQ_SessionKey;
                 buf.PutLong(user.QQ);
                 buf.PutLong(_toQQ);
                 buf.Put(new byte[] { 0x00, 0x00, 0x00, 0x0D, 0x00, 0x01, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x01,0x01 });

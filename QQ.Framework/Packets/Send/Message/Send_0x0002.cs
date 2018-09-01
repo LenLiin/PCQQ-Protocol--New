@@ -46,6 +46,12 @@ namespace QQ.Framework.Packets.Send.Message
             var group = GroupToGid(_group);
             if (_messageType == FriendMessageType.Xml)
             {
+                var compressMsg = GZipByteArray.CompressBytes(_message);
+                buf.Put(0x2A);
+                buf.PutLong(group);
+                buf.PutUShort((ushort)compressMsg.Length);
+                buf.Put(new byte[] { 0x00, 0x01, _packetCount, _packetIndex, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4D, 0x53, 0x47, 0x00, 0x00, 0x00, 0x00, 0x00 });
+                SendXML(buf, _DateTime, compressMsg);
 
             }
             else if (_messageType == FriendMessageType.GroupMessage)
@@ -84,6 +90,8 @@ namespace QQ.Framework.Packets.Send.Message
                 buf.PutLong(group);
             }
         }
+        
+
         public long GroupToGid(long groupid)
         {
             var group = groupid.ToString();
