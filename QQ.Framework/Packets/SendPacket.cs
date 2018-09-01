@@ -227,7 +227,20 @@ namespace QQ.Framework.Packets
         /// <param name="compressMsg">压缩消息数组</param>
         public static byte[] SendXML( long _DateTime, byte[] compressMsg)
         {
-            throw new Exception();
+            BinaryWriter bw = new BinaryWriter(new MemoryStream());
+            bw.BEWrite(_DateTime);
+            bw.Write(Util.RandomKey(4));
+            bw.Write(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00 });
+            bw.Write(new byte[] { 0x00, 0x0C });
+            bw.Write(new byte[] { 0xE5, 0xBE, 0xAE, 0xE8, 0xBD, 0xAF, 0xE9, 0x9B, 0x85, 0xE9, 0xBB, 0x91 });
+            bw.Write(new byte[] { 0x00, 0x00, 0x14 });
+            bw.BEWrite(compressMsg.Length+11);
+            bw.Write(0x01);
+            bw.BEWrite(compressMsg.Length + 1);
+            bw.Write(0x01);
+            bw.Write(compressMsg);
+            bw.Write(new byte[] { 0x02, 0x00, 0x04, 0x00, 0x00, 0x00, 0x4D });
+            return bw.BaseStream.ToBytesArray();
         }
 
         public static byte[] SendJson(string Message)

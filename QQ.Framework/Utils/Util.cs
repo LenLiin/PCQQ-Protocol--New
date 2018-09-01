@@ -436,8 +436,7 @@ namespace QQ.Framework.Utils
 
         public static char BEReadChar(this BinaryReader br)
         {
-            br.ReadByte();
-            return (char) br.ReadByte();
+            return (char)br.BEReadUInt16();
         }
 
         public static ushort BEReadUInt16(this BinaryReader br)

@@ -51,13 +51,18 @@ namespace QQ.Framework.Packets.Send.Message
             var group = GroupToGid(_group);
             if (_messageType == FriendMessageType.Xml)
             {
-
+                var compressMsg = GZipByteArray.CompressBytes(_message);
+                bodyWriter.Write(new byte[] { 0x2A });
+                bodyWriter.BEWrite(group);
+                bodyWriter.BEWrite(compressMsg.Length + 64);
+                bodyWriter.Write(new byte[] { 0x00, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4D, 0x53, 0x47, 0x00, 0x00, 0x00, 0x00, 0x00 });
+                bodyWriter.Write(SendXML(_DateTime, compressMsg));
             }
             else if (_messageType == FriendMessageType.GroupMessage)
             {
                 var Length = _message.Length + 56;
 
-                bodyWriter.Write(new byte[] {0x2A});
+                bodyWriter.Write(0x2A);
                 bodyWriter.BEWrite(group);
                 bodyWriter.BEWrite((ushort) Length);
 
