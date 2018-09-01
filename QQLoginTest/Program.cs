@@ -35,7 +35,7 @@ namespace QQLoginTest
         {
             if (e.ReceivePacket.VerifyCommand == 0x02)
             {
-                string path = AppDomain.CurrentDomain.BaseDirectory + "//yanzhengma";
+                string path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "yanzhengma");
                 var img = ImageHelper.CreateImageFromBytes(path, e.QQClient.QQUser.QQ_PACKET_00BAVerifyCode);
                 string VerifyCode = Console.ReadLine();
                 if (!string.IsNullOrEmpty(VerifyCode))

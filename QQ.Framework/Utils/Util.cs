@@ -492,6 +492,21 @@ namespace QQ.Framework.Utils
                 Md5.Substring(20) + "-" +
                 "}";
         }
+        /// <summary>
+        /// 实体转化为字节数组
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="t"></param>
+        /// <returns></returns>
+        public static byte[] ModelToByte<T>(T t)
+        {
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                BinaryReader binaryReader = new BinaryReader(memoryStream);
+                memoryStream.Position = 0L;
+                return binaryReader.ReadBytes((int)memoryStream.Length);
+            }
+        }
 
     }
 }
