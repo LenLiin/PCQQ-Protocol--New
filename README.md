@@ -8,7 +8,7 @@ PCQQ协议
 
 源码仅供参考，欢迎吐槽
 ------------------------------------------
-2018-9-1 @sgkoishi
+2018-9-1 @sgkoishi<br/>
 移除ByteBuffer，使用BinaryReader和BinaryWriter进行读写。
 
 发送数据包的方式变更<br/>
