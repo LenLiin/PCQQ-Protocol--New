@@ -374,14 +374,14 @@ namespace QQ.Framework.Utils
             return Util.LongToHexString(Convert.ToInt64(temp, 2));
         }
         #region TLV专属操作方法
-        public static void int16_to_buf(byte[] TEMP_BYTE_ARRAY, int index, int Num)
+        public static void int16_to_buf(byte[] TEMP_BYTE_ARRAY, long index, long Num)
         {
             TEMP_BYTE_ARRAY[index] = (byte)((Num & 0xff000000) >> 24);
             TEMP_BYTE_ARRAY[index + 1] = (byte)((Num & 0x00ff0000) >> 16);
             TEMP_BYTE_ARRAY[index + 2] = (byte)((Num & 0x0000ff00) >> 8);
             TEMP_BYTE_ARRAY[index + 3] = (byte)(Num & 0x000000ff);
         }
-        public static int buf_to_int16(byte[] TEMP_BYTE_ARRAY, int index)
+        public static int buf_to_int16(byte[] TEMP_BYTE_ARRAY, long index)
         {
             return TEMP_BYTE_ARRAY[index] << 24 | TEMP_BYTE_ARRAY[index + 1] << 16 | TEMP_BYTE_ARRAY[index + 2] << 8 | TEMP_BYTE_ARRAY[index + 3];
         }

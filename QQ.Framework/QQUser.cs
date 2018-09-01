@@ -254,5 +254,14 @@ namespace QQ.Framework
         /// 已接收数据包序号集合
         /// </summary>
         public List<char> ReceiveSequences { get; set; } = new List<char>();
+        /// <summary>
+        /// 登录协议相关
+        /// </summary>
+        public TXProtocol TXProtocol { get; set; }
+
+        public byte bRememberPwdLogin { get; set; }
+        public byte cPingType { get; set; }
+        public List<byte[]> RedirectIP { get; set; }
+        public string bufComputerName { get; set; }
     }
 }

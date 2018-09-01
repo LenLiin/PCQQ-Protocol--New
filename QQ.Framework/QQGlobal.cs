@@ -139,7 +139,19 @@ namespace QQ.Framework
         /// </summary>
         public const char QQ_SERVER_VERSION_0100 = (char)0x0100;
 
-        
+
+
+
+        public static uint dwSSOVersion { get; set; }
+        public static uint dwServiceId { get; set; }
+        public static uint dwClientVer { get; set; }
+        public static uint dwISP { get; set; }
+        public static uint dwIDC { get; set; }
+        public static long time_difference { get; set; }
+        public static byte[] bufSID { get; set; }
+        public static byte[] QQEXE_MD5 { get; set; }
+
+
     }
     /// <summary>
     /// 性别

@@ -1,0 +1,36 @@
+﻿using QQ.Framework;
+using QQ.Framework.Utils;
+using System;
+using System.IO;
+namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
+{
+    internal class TLV_0114 : BaseTLV
+    {
+        public TLV_0114()
+        {
+            this.cmd = 0x0114;
+            this.Name = "SSO2::TLV_DHParams_0x114";
+            this.wSubVer = 0x0102;
+        }
+
+        public byte[] get_tlv_0114(QQClient m_PCClient)
+        {
+              var data = new BinaryWriter(new MemoryStream());
+            if (this.wSubVer == 0x0102)
+            {
+                data.BEWrite(this.wSubVer); //wDHVer
+                data.BEWrite((ushort) m_PCClient.QQUser.TXProtocol.bufDHPublicKey.Length); //bufDHPublicKey长度
+                data.Write( m_PCClient.QQUser.TXProtocol.bufDHPublicKey);
+                //client.TXProtocol.Key["DHDecodeKey"] = client.TXProtocol.bufDHDecodeKey;
+            }
+            else
+            {
+                throw new Exception(string.Format("{0} 无法识别的版本号 {1}", this.Name, this.wSubVer));
+            }
+            fill_head(this.cmd);
+            fill_body(data.BaseStream.ToBytesArray(), data.BaseStream.Length);
+            set_length();
+            return get_buf();
+        }
+    }
+}
