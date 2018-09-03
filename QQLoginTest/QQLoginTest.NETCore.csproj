@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\QQ.Framework\QQ.Framework.NETCore.csproj" />
+    <ProjectReference Include="..\QQ.Framework\QQ.Framework.csproj" />
   </ItemGroup>
 
 </Project>
