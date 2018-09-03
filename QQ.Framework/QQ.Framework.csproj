@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -37,6 +37,9 @@
   <ItemGroup>
     <Reference Include="Ionic.Zlib, Version=1.9.1.5, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
       <HintPath>..\packages\Ionic.Zlib.1.9.1.5\lib\Ionic.Zlib.dll</HintPath>
+    </Reference>
+    <Reference Include="Ionic.Zlib.Core">
+      <HintPath>C:\Users\63207\.nuget\packages\ionic.zlib.core\1.0.0\lib\netstandard2.0\Ionic.Zlib.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -107,6 +110,11 @@
     <Compile Include="..\QQ.Framework\Utils\ImageHelper.cs" />
     <Compile Include="..\QQ.Framework\Utils\QQTea.cs" />
     <Compile Include="..\QQ.Framework\Utils\Util.cs" />
+    <Compile Include="Domains\Commands\ReceiveCommands\DefaultReceiveCommand.cs" />
+    <Compile Include="Domains\Commands\ReceiveCommands\Login\LoginPingCommand.cs" />
+    <Compile Include="Domains\IPacket.cs" />
+    <Compile Include="Domains\ReceiveCommand.cs" />
+    <Compile Include="Domains\ReceivePackageCommand.cs" />
     <Compile Include="Packets\PCTLV\BaseTLV.cs" />
     <Compile Include="Packets\PCTLV\TLV_0004.cs" />
     <Compile Include="Packets\PCTLV\TLV_0005.cs" />
@@ -149,10 +157,14 @@
     <Compile Include="Packets\PCTLV\TLV_0312.cs" />
     <Compile Include="Packets\PCTLV\TLV_0313.cs" />
     <Compile Include="TXProtocol.cs" />
+    <Compile Include="Utils\DispatchPacketToCommand.cs" />
     <Compile Include="Utils\GZipByteArray.cs" />
     <Compile Include="Utils\StringHandlingPackets.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Domains\Commands\ReceiveCommands\Data\" />
+    <Folder Include="Domains\Commands\ReceiveCommands\Interactive\" />
+    <Folder Include="Domains\Commands\ReceiveCommands\Message\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>

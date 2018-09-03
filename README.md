@@ -10,6 +10,19 @@ MyUser.cs为本人扩展用户名和密码这里不做上传
 
 源码仅供参考，欢迎吐槽
 ------------------------------------------
+#### 2018-9-3 
+重构MessageManage,将对包的处理逻辑移至Command中, 对应项目里Domains/Commands文件夹下的内容。
+如何添加一个Command: 
+
+1. 首先在`Domains/Commands`下对应目录新建Command, 继承`ReceiveCommand`/`SendCommand`。
+2. 在新建的Commad上添加`[ReceivePackageCommand(QQCommand.具体你的包名)]`, 这个属性就是包分发的依据，你填写的是什么Command,那么当接收到这个包的时候就会分发给这个类来处理。
+3. 构造函数中实例化对应`Packet`和`QQQEventArgs`。
+4. 在`Receive`方法中写你的具体逻辑即可。
+
+通过以上四步, 就可以对一个包的解析啦，不用去修改MessageManage，避免在多人修改时容易产生冲突导致, 也更方便的查看处理包的具体逻辑。
+
+Tips: 可以参考`Domains/Commands/ReceiveCommands/LoginPingCommand`的写法, 这个是对于Login0x0825包的处理。
+
 #### 2018-9-1
 添加XML消息发送  
 移除ByteBuffer，使用BinaryReader和BinaryWriter进行读写。  
