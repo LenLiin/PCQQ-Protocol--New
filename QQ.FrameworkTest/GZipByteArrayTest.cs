@@ -14,5 +14,12 @@ namespace QQ.FrameworkTest
             var result = GZipByteArray.CompressBytes(input);
             var resultStr = Util.ToHex(result);
         }
+        [TestMethod]
+        public void TestDecompressString()
+        {
+            var stringHandlingPackets = new StringHandlingPackets();
+            stringHandlingPackets.Add("");
+            var result = GZipByteArray.DecompressString(stringHandlingPackets.GetBytes());
+        }
     }
 }

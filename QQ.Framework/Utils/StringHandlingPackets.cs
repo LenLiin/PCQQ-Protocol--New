@@ -4,7 +4,7 @@ using System.IO;
 namespace QQ.Framework.Utils
 {
     /// <summary>
-    ///     �ַ�����ʽ�������
+    ///     字符串方式处理报文
     /// </summary>
     public class StringHandlingPackets
     {

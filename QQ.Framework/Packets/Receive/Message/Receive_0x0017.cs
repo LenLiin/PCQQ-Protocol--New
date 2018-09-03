@@ -55,7 +55,7 @@ namespace QQ.Framework.Packets.Receive.Message
             reader.ReadBytes(4); //自己的QQ
             reader.ReadBytes(10);
             MessageType = reader.BEReadChar(); //消息类型
-            if (MessageType == (char) 0x0052)
+            if (MessageType == (char)0x0052)
             {
                 reader.ReadBytes(2);
                 reader.ReadBytes(reader.BEReadChar());
