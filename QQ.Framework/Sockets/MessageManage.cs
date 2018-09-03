@@ -35,6 +35,31 @@ namespace QQ.Framework.Sockets
             ThreadPool.QueueUserWorkItem(ReciveMsg, client.State);
         }
 
+        private void Receive(object state)
+        {
+            while (true)
+            {
+                EndPoint RecivePoint = new IPEndPoint(IPAddress.Any, 0); //用来保存发送方的ip和端口号
+                var buffer = new byte[QQGlobal.QQ_PACKET_MAX_SIZE];
+                var length = Server.ReceiveFrom(buffer, ref RecivePoint); //接收数据报
+
+                var hexStr = Util.ToHex(buffer);
+                hexStr = hexStr.Substring(0, hexStr.LastIndexOf("03 00") + 2);
+                //包装到ByteBuffer
+                var tempBuf = Util.HexStringToByteArray(hexStr);
+                //需要一个基础包 
+                var _ReceivePacket = new ReceivePacket(tempBuf, client.QQUser, null);
+                //接收消息后触发事件
+                var ReceiveEvent = new QQEventArgs<ReceivePacket>(client, _ReceivePacket);
+                client.OnReceive(ReceiveEvent);
+
+                // 通过Command, 利用反射+Attribute, 分发到管理具体某个包的Command中,最后直接调用Receive方法即可。
+                // 将对包的处理移到具体Command中，此处只负责分发。
+                var receive_command = DispatchPacketToCommand.of(tempBuf, client).dispatch_receive_packet(_ReceivePacket.Command);
+                receive_command.Receive();
+            }
+        }
+
         private void ReciveMsg(object state)
         {
             while (true)
