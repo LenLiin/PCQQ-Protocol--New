@@ -2,4 +2,5 @@
 mono: none
 solution: QQ-King.sln
 
-script: none
+script:
+  - npm run build
