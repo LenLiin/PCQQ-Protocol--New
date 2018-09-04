@@ -1,2 +1,5 @@
 ﻿language: csharp
+mono:
+  - latest
+  - 4.6
 solution: QQ-King.sln
