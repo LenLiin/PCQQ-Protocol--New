@@ -6,8 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Ionic.Zlib.Core" Version="1.0.0" />
     <PackageReference Include="System.Drawing.Common" Version="4.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Iconic.Zlib.Netstandard\src\Iconic.Zlib.Netstandard\Iconic.Zlib.Netstandard.csproj" />
   </ItemGroup>
 
 </Project>

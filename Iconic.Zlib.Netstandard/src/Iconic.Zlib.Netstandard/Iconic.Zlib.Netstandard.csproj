@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>https://github.com/HelloKitty</Authors>
+    <PackageProjectUrl>https://github.com/HelloKitty/Iconic.Zlib.Netstandard</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/HelloKitty/Iconic.Zlib.Netstandard</PackageLicenseUrl>
+    <Description>A .NETStandard port of Iconic.Zlib from DotNetZip project.</Description>
+    <RepositoryType>Git</RepositoryType>
+    <RepositoryUrl>https://github.com/HelloKitty/Iconic.Zlib.Netstandard</RepositoryUrl>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard1.3\Iconic.Zlib.Netstandard.xml</DocumentationFile>
+  </PropertyGroup>
+
+</Project>
