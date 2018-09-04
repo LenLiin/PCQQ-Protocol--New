@@ -2,14 +2,17 @@
 PCQQ协议
 简单实现某版本QQ登录与收发消息的功能
 
-
 如果对你有用，希望你能留下Star
 
 MyUser.cs为本人扩展用户名和密码这里不做上传
 
+[![Build Status](https://travis-ci.org/luojinfang/PCQQ-Protocol.svg?branch=master)](https://travis-ci.org/luojinfang/PCQQ-Protocol)
 
 源码仅供参考，欢迎吐槽
 ------------------------------------------
+#### 2018-9-4 
+将QQ.Framework目标框架改为netstandard
+
 #### 2018-9-3 
 重构MessageManage,将对包的处理逻辑移至Command中, 对应项目里Domains/Commands文件夹下的内容。
 如何添加一个Command: 
