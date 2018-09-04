@@ -1,8 +1,6 @@
 ﻿language: csharp
 mono: none
 solution: QQ-King.sln
-sudo: required
-dist: trusty
-dotnet: 2.0.0
+
 script:
-  - ./Build.sh
+- dotnet restore
