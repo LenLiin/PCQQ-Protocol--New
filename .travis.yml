@@ -2,5 +2,4 @@
 mono: none
 solution: QQ-King.sln
 
-script:
-- dotnet restore
+script: none
