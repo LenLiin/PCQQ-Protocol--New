@@ -17,3 +17,4 @@
 /QQ.Framework/Utils/Private
 /QQ.FrameworkTest/bin/Debug
 /QQ.FrameworkTest/obj/Debug
+*.user
