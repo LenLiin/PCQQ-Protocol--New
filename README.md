@@ -11,6 +11,9 @@ MyUser.cs为本人扩展用户名和密码这里不做上传
 源码仅供参考，欢迎吐槽
 ------------------------------------------
 #### 2018-9-3 
+将QQ.Framework目标框架改为netstandard
+
+#### 2018-9-3 
 重构MessageManage,将对包的处理逻辑移至Command中, 对应项目里Domains/Commands文件夹下的内容。
 如何添加一个Command: 
 
