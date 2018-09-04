@@ -6,7 +6,7 @@ PCQQ协议
 
 MyUser.cs为本人扩展用户名和密码这里不做上传
 
-[![Build Status](https://travis-ci.org/yangsenlin/snsdemo.svg?branch=master)](https://travis-ci.org/yangsenlin/snsdemo)
+[![Build Status](https://travis-ci.org/luojinfang/PCQQ-Protocol.svg?branch=master)](https://travis-ci.org/luojinfang/PCQQ-Protocol)
 
 源码仅供参考，欢迎吐槽
 ------------------------------------------
