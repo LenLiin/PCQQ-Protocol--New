@@ -10,8 +10,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QQLoginTest", "QQLoginTest\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QQ.FrameworkTest", "QQ.FrameworkTest\QQ.FrameworkTest.csproj", "{504A6DF0-EBF5-404C-8C2E-9C9A448160D9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Iconic.Zlib.Netstandard", "Iconic.Zlib.Netstandard\src\Iconic.Zlib.Netstandard\Iconic.Zlib.Netstandard.csproj", "{6DAEBE12-BC19-4FC8-A1CB-3520EB1822E7}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,10 +32,6 @@ Global
 		{504A6DF0-EBF5-404C-8C2E-9C9A448160D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{504A6DF0-EBF5-404C-8C2E-9C9A448160D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{504A6DF0-EBF5-404C-8C2E-9C9A448160D9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6DAEBE12-BC19-4FC8-A1CB-3520EB1822E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6DAEBE12-BC19-4FC8-A1CB-3520EB1822E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6DAEBE12-BC19-4FC8-A1CB-3520EB1822E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6DAEBE12-BC19-4FC8-A1CB-3520EB1822E7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,3 +1,10 @@
 ﻿language: csharp
-mono: none
+mono: latest
 solution: QQ-King.sln
+sudo: required
+dist: trusty
+dotnet: 2.0.0
+script:
+  - dotnet restore
+  - dotnet build QQ.Framework/QQ.Framework.csproj
+  - msbuild QQ-King.sln
