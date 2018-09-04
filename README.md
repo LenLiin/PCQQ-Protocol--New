@@ -2,11 +2,11 @@
 PCQQ协议
 简单实现某版本QQ登录与收发消息的功能
 
-
 如果对你有用，希望你能留下Star
 
 MyUser.cs为本人扩展用户名和密码这里不做上传
 
+[![Build Status](https://travis-ci.org/yangsenlin/snsdemo.svg?branch=master)](https://travis-ci.org/yangsenlin/snsdemo)
 
 源码仅供参考，欢迎吐槽
 ------------------------------------------
