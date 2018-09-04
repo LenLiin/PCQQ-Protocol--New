@@ -1,6 +1,3 @@
-﻿language: csharp
-mono: none
-solution: QQ-King.sln
-
-script:
-  - npm run build
+﻿language:csharp
+mono:none
+solution:QQ-King.sln
