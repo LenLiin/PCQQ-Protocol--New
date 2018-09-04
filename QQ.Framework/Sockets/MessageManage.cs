@@ -32,7 +32,7 @@ namespace QQ.Framework.Sockets
         public void Init()
         {
             ThreadPool.SetMaxThreads(100, 100);
-            ThreadPool.QueueUserWorkItem(ReciveMsg, client.State);
+            ThreadPool.QueueUserWorkItem(Receive, client.State);
         }
 
         private void Receive(object state)

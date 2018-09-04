@@ -13,4 +13,8 @@
     <ProjectReference Include="..\Iconic.Zlib.Netstandard\src\Iconic.Zlib.Netstandard\Iconic.Zlib.Netstandard.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Domains\Commands\ReceiveCommands\Interactive\" />
+  </ItemGroup>
+
 </Project>

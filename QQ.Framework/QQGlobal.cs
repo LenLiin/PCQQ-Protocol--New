@@ -296,6 +296,10 @@ namespace QQ.Framework
         Login0x00EC = 0x00EC,
 
         /// <summary>
+        ///     Token请求
+        /// </summary>
+        Interactive0x00AE = 0x00AE,
+        /// <summary>
         ///     验证码提交
         /// </summary>
         Login0x00BA = 0x00BA,
