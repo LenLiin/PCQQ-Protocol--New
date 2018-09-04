@@ -1,11 +1,8 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2018
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QQLoginTest.NETCore", "QQLoginTest\QQLoginTest.NETCore.csproj", "{6CA0BE6D-956A-4BF7-B071-A37645A0B51C}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QQ.Framework.NETCore", "QQ.Framework\QQ.Framework.NETCore.csproj", "{7C001AB3-6E14-4734-B42B-857C48B4DE22}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QQ.Framework", "QQ.Framework\QQ.Framework.csproj", "{155BC652-D6ED-4DBF-82D2-A9188CB57C52}"
 EndProject
@@ -23,10 +20,6 @@ Global
 		{6CA0BE6D-956A-4BF7-B071-A37645A0B51C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CA0BE6D-956A-4BF7-B071-A37645A0B51C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6CA0BE6D-956A-4BF7-B071-A37645A0B51C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7C001AB3-6E14-4734-B42B-857C48B4DE22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7C001AB3-6E14-4734-B42B-857C48B4DE22}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7C001AB3-6E14-4734-B42B-857C48B4DE22}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7C001AB3-6E14-4734-B42B-857C48B4DE22}.Release|Any CPU.Build.0 = Release|Any CPU
 		{155BC652-D6ED-4DBF-82D2-A9188CB57C52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{155BC652-D6ED-4DBF-82D2-A9188CB57C52}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{155BC652-D6ED-4DBF-82D2-A9188CB57C52}.Release|Any CPU.ActiveCfg = Release|Any CPU
