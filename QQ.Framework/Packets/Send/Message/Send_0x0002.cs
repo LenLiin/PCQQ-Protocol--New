@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Text;
 using QQ.Framework.Utils;
 
@@ -63,6 +64,7 @@ namespace QQ.Framework.Packets.Send.Message
             }
             else if (_messageType.HasFlag(MessageType.Picture))
             {
+                HttpUpLoadGroupImg(_group, user.Ukey, Encoding.UTF8.GetString(_message));
                 bodyWriter.Write((byte) 0x2A);
                 bodyWriter.BEWrite(group);
                 var Guid = Encoding.UTF8.GetBytes(Util.GetMD5ToGuidHashFromFile(Encoding.UTF8.GetString(_message)));
@@ -145,11 +147,19 @@ namespace QQ.Framework.Packets.Send.Message
         /// <param name="GroupNum"></param>
         /// <param name="Ukey"></param>
         /// <param name="Img"></param>
-        public void HttpUpLoadGroupImg(long GroupNum, string Ukey, byte[] Img)
+        public void HttpUpLoadGroupImg(long GroupNum, string Ukey, string FileName)
         {
-            //User-Agent: QQClient
-            var Api =
-                "http://htdata2.qq.com/cgi-bin/httpconn?htcmd=0x6ff0071&ver=5515&term=pc&ukey={0}&filesize={1}&range=0&uin{2}&&groupcode={3}";
+            using (WebClient webclient = new WebClient())
+            {
+                var file = new FileStream(FileName, FileMode.Open);
+                var ApiUrl = $"http://htdata2.qq.com/cgi-bin/httpconn?htcmd=0x6ff0071&ver=5515&term=pc&ukey={Ukey}&filesize={file.Length}&range=0&uin{user.QQ}&&groupcode={GroupNum}";
+                webclient.Headers["User-Agent"] = "QQClient";
+                webclient.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+                var result = webclient.UploadData(ApiUrl,
+                   file.ToBytesArray());
+
+                Console.Write(System.Text.Encoding.UTF8.GetString(result));
+            }
         }
 
         public long GroupToGid(long groupid)
