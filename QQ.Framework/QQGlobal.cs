@@ -342,7 +342,7 @@ namespace QQ.Framework
         /// <summary>
         /// 获取Ukey
         /// </summary>
-        Message0x0038 = 0x0038,
+        Message0x0388 = 0x0388,
 
         /// <summary>
         ///     心跳包

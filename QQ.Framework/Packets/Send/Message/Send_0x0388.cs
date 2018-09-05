@@ -14,7 +14,7 @@ namespace QQ.Framework.Packets.Send.Message
         {
             Sequence = GetNextSeq();
             _secretKey = user.QQ_SessionKey;
-            Command = QQCommand.Message0x0038;
+            Command = QQCommand.Message0x0388;
             fileName = FileName;
         }
 
@@ -36,8 +36,9 @@ namespace QQ.Framework.Packets.Send.Message
             Bitmap pic = new Bitmap(fileName);
             int Width = pic.Size.Width; // 图片的宽度
             int Height = pic.Size.Height; // 图片的高度
-            var Md5 = Util.GetMD5ToGuidHashFromFile(fileName);
+            //var Md5 = Util.GetMD5ToGuidHashFromFile(fileName);
             var picBytes = ImageHelper.ImageToBytes(pic);
+            var Md5 = QQTea.MD5(picBytes);
             bodyWriter.Write(new byte[]{
                 0x00, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00, 0x5E, 0x08,
                 0x01, 0x12, 0x03, 0x98, 0x01, 0x01, 0x10, 0x01, 0x1A
