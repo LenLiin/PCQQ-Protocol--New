@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using QQ.Framework.Packets;
+﻿using QQ.Framework.Packets;
+using QQ.Framework.Utils;
 
 namespace QQ.Framework.Domains
 {
@@ -22,6 +18,15 @@ namespace QQ.Framework.Domains
         /// <summary>
         /// 接收包的处理逻辑在此处完成
         /// </summary>
-        public abstract void Receive();
+        public abstract void Process();
+
+        /// <summary>
+        /// 发送响应包
+        /// </summary>
+        protected void Response()
+        {
+            var response_command = ResponsePacketProcessor<PacketType>.of(_event_args, GetType());
+            response_command.Process();
+        }
     }
 }

@@ -11,7 +11,7 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
     /// <summary>
     /// 发送QQ消息
     /// </summary>
-    [ReceivePackageCommand(QQCommand.Message0x00CD)]
+    [ReceivePacketCommand(QQCommand.Message0x00CD)]
     public class SendingQQMessagesCommand : ReceiveCommand<Receive_0x00CD>
     {
         /// <summary>
@@ -23,7 +23,7 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
             _event_args = new QQEventArgs<Receive_0x00CD>(client, _packet);
         }
 
-        public override void Receive()
+        public override void Process()
         {
             _client.OnReceive_0x00CD(_event_args);
             

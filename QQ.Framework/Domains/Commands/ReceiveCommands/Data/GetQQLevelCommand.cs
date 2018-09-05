@@ -11,7 +11,7 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
     /// <summary>
     /// 获取QQ等级
     /// </summary>
-    [ReceivePackageCommand(QQCommand.Data0x005C)]
+    [ReceivePacketCommand(QQCommand.Data0x005C)]
     public class GetQQLevelCommand : ReceiveCommand<Receive_0x005C>
     {
         /// <summary>
@@ -23,7 +23,7 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
             _event_args = new QQEventArgs<Receive_0x005C>(client, _packet);
         }
 
-        public override void Receive()
+        public override void Process()
         {
             _client.OnReceive_0x005C(_event_args);
             

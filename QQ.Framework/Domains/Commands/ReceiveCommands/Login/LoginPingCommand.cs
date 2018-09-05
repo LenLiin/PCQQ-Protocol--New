@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
 {
-    [ReceivePackageCommand(QQCommand.Login0x0825)]
+    [ReceivePacketCommand(QQCommand.Login0x0825)]
     public class LoginPingCommand : ReceiveCommand<Receive_0x0825>
     {
         public LoginPingCommand(byte[] data, QQClient client) : base(data, client)
@@ -16,7 +16,7 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
             _event_args = new QQEventArgs<Receive_0x0825>(client, _packet);
         }
 
-        public override void Receive()
+        public override void Process()
         {
             if (_packet.DataHead == 0xFE)
             {

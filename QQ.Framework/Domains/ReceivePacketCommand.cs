@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace QQ.Framework.Domains
 {
-    public class ReceivePackageCommand : Attribute
+    public class ReceivePacketCommand : Attribute
     {
         public QQCommand Command { get; }
 
-        public ReceivePackageCommand(QQCommand command)
+        public ReceivePacketCommand(QQCommand command)
         {
             Command = command;
         }
