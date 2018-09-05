@@ -339,6 +339,10 @@ namespace QQ.Framework
         ///     发送好友消息
         /// </summary>
         Message0x00CD = 0x00CD,
+        /// <summary>
+        /// 获取Ukey
+        /// </summary>
+        Message0x0038 = 0x0038,
 
         /// <summary>
         ///     心跳包

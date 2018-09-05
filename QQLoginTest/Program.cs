@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Text;
 using QQ.Framework;
 using QQ.Framework.Packets.Receive.Login;
 using QQ.Framework.Packets.Receive.Message;
@@ -14,6 +15,9 @@ namespace QQLoginTest
 
         private static void Main(string[] args)
         {
+            #if NETCOREAPP2_0||NETCOREAPP2_1
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            #endif
             var user = new QQUser(MyQQ, MyPassWord);
             client = new QQClient
             {
