@@ -8,11 +8,8 @@ using System.Threading.Tasks;
 namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
 {
     [ReceivePackageCommand(QQCommand.Login0x0836)]
-    public class GetTGTGTCommand : ReceiveCommand
+    public class GetTGTGTCommand : ReceiveCommand<Receive_0x0836>
     {
-        private Receive_0x0836 _packet;
-        private QQEventArgs<Receive_0x0836> _event_args;
-
         public GetTGTGTCommand(byte[] data, QQClient client) : base(data, client)
         {
             _packet = new Receive_0x0836(data, client.QQUser);

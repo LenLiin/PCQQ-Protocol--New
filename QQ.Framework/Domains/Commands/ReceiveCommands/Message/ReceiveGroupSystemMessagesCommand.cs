@@ -12,10 +12,8 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
     /// 收到群/系统消息
     /// </summary>
     [ReceivePackageCommand(QQCommand.Message0x0017)]
-    public class ReceiveGroupSystemMessagesCommand : ReceiveCommand
+    public class ReceiveGroupSystemMessagesCommand : ReceiveCommand<Receive_0x0017>
     {
-        private Receive_0x0017 _packet;
-        private QQEventArgs<Receive_0x0017> _event_args;
         /// <summary>
         /// 收到群/系统消息
         /// </summary>

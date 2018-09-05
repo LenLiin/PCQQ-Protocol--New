@@ -9,11 +9,8 @@ using QQ.Framework.Sockets;
 namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
 {
     [ReceivePackageCommand(QQCommand.Login0x00BA)]
-    public class VerifyCodeCommand : ReceiveCommand
+    public class VerifyCodeCommand : ReceiveCommand<Receive_0x00BA>
     {
-        private Receive_0x00BA _packet;
-        private QQEventArgs<Receive_0x00BA> _event_args;
-
         public VerifyCodeCommand(byte[] data, QQClient client) : base(data, client)
         {
             _packet = new Receive_0x00BA(data, client.QQUser);
