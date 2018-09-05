@@ -11,7 +11,7 @@ namespace QQ.Framework.Utils
             _event_args = new QQEventArgs<Receive_Currency>(client, _packet);
         }
 
-        public override void Receive()
+        public override void Process()
         {
             _client.OnReceive_Currency(_event_args);
         }

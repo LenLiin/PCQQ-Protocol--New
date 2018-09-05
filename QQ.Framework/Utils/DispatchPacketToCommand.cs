@@ -27,9 +27,9 @@ namespace QQ.Framework.Utils
             foreach (var type in types)
             {
                 var attributes = type.GetCustomAttributes();
-                if (!attributes.Any(attr => attr is ReceivePackageCommand)) continue;
+                if (!attributes.Any(attr => attr is ReceivePacketCommand)) continue;
 
-                var attribute = attributes.First(attr => attr is ReceivePackageCommand) as ReceivePackageCommand;
+                var attribute = attributes.First(attr => attr is ReceivePacketCommand) as ReceivePacketCommand;
                 if (attribute.Command == command)
                 {
                     var receive_packet = Activator.CreateInstance(type, new object[] { _data, _client }) as PacketCommand;
