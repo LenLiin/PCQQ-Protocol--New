@@ -1,6 +1,8 @@
 using System;
 using System.IO;
+#if NETCOREAPP2_0||NETCOREAPP2_1
 using System.Text;
+#endif
 using QQ.Framework;
 using QQ.Framework.Packets.Receive.Login;
 using QQ.Framework.Packets.Receive.Message;

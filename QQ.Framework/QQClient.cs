@@ -43,7 +43,7 @@ namespace QQ.Framework
         /// </summary>
         /// <value></value>
         public string LoginServerHost { get; set; } =
-            Util.GetHostAddresses("sz.tencent.com"); ////sz.tencent.com,sz{2-9}.tencent.com
+            Util.GetHostAddresses("sz2.tencent.com"); ////sz.tencent.com,sz{2-9}.tencent.com
 
         /// <summary>
         ///     登录端口
@@ -403,7 +403,7 @@ namespace QQ.Framework
             //      e.ReceivePacket.Group,
             //      FriendMessageType.Xml);
             //}
-
+            //Send(new Send_0x0388(QQUser, @"D:\User\Desktop\qietu\abu_logo.png").WriteData());
             //重复接收包不再重复触发事件并且不处理自己的消息
             if (!QQUser.ReceiveSequences.Contains(e.ReceivePacket.Sequence) &&
                 !e.ReceivePacket.FromQQ.Equals(QQUser.QQ))
