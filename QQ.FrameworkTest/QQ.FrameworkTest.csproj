@@ -58,7 +58,6 @@
     <Reference Include="System.Xml.Serialization" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Domains\Commands\ReceiveCommands\Login\LoginPingPacketCommandSpecs.cs" />
     <Compile Include="GZipByteArrayTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -74,6 +73,7 @@
   <ItemGroup>
     <Folder Include="Domains\Commands\ReceiveCommands\Data\" />
     <Folder Include="Domains\Commands\ReceiveCommands\Interactive\" />
+    <Folder Include="Domains\Commands\ReceiveCommands\Login\" />
     <Folder Include="Domains\Commands\ReceiveCommands\Message\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
