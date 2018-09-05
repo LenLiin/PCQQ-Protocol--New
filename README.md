@@ -11,13 +11,13 @@ MyUser.cs为本人扩展用户名和密码这里不做上传
 源码仅供参考，欢迎吐槽
 ------------------------------------------
 #### 2018-9-5
-1.`Command`提炼为接口, 移除具体`Command`中的重复定义。
-2.`Command`处理方法更名为`Process`。
+1.`Command`提炼为接口, 移除具体`Command`中的重复定义。<br>
+2.`Command`处理方法更名为`Process`。<br>
 3.新增回复包的`Command`，及对应的`Prossor`。
 
 #### 2018-9-4 
-1.将QQ.Framework目标框架改为netstandard
-2.完善现有有效解析的反射重构
+1.将QQ.Framework目标框架改为netstandard<br>
+2.完善现有有效解析的反射重构<br>
 3.添加travis-ci持续集成
 
 #### 2018-9-3 
