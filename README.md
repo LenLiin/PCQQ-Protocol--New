@@ -12,6 +12,8 @@ MyUser.cs为本人扩展用户名和密码这里不做上传
 ------------------------------------------
 #### 2018-9-5
 `Command`提炼为接口, 移除具体`Command`中的重复定义。
+`Command`处理方法更名为`Process`。
+新增回复包的`Command`，及对应的`Prossor`。
 
 #### 2018-9-4 
 将QQ.Framework目标框架改为netstandard<br>

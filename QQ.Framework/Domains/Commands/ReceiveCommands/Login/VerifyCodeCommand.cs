@@ -8,7 +8,7 @@ using QQ.Framework.Sockets;
 
 namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
 {
-    [ReceivePackageCommand(QQCommand.Login0x00BA)]
+    [ReceivePacketCommand(QQCommand.Login0x00BA)]
     public class VerifyCodeCommand : ReceiveCommand<Receive_0x00BA>
     {
         public VerifyCodeCommand(byte[] data, QQClient client) : base(data, client)
@@ -17,7 +17,7 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
             _event_args = new QQEventArgs<Receive_0x00BA>(client, _packet);
         }
 
-        public override void Receive()
+        public override void Process()
         {
             _client.OnReceive_0x00BA(_event_args);
             

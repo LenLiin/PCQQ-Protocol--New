@@ -11,7 +11,7 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
     /// <summary>
     /// KeepAlive（心跳）
     /// </summary>
-    [ReceivePackageCommand(QQCommand.Message0x0058)]
+    [ReceivePacketCommand(QQCommand.Message0x0058)]
     public class KeepAliveCommand : ReceiveCommand<Receive_0x0058>
     {
         /// <summary>
@@ -23,7 +23,7 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
             _event_args = new QQEventArgs<Receive_0x0058>(client, _packet);
         }
 
-        public override void Receive()
+        public override void Process()
         {
             _client.OnReceive_0x0058(_event_args);
             

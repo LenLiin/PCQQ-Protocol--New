@@ -8,7 +8,7 @@ using QQ.Framework.Sockets;
 
 namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
 {
-    [ReceivePackageCommand(QQCommand.Login0x0828)]
+    [ReceivePacketCommand(QQCommand.Login0x0828)]
     public class PreLoginCommand : ReceiveCommand<Receive_0x0828>
     {
         public PreLoginCommand(byte[] data, QQClient client) : base(data, client)
@@ -17,7 +17,7 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
             _event_args = new QQEventArgs<Receive_0x0828>(client, _packet);
         }
 
-        public override void Receive()
+        public override void Process()
         {
             _client.OnReceive_0x0828(_event_args);
 

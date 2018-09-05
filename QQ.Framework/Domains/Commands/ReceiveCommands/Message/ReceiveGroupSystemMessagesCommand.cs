@@ -11,7 +11,7 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
     /// <summary>
     /// 收到群/系统消息
     /// </summary>
-    [ReceivePackageCommand(QQCommand.Message0x0017)]
+    [ReceivePacketCommand(QQCommand.Message0x0017)]
     public class ReceiveGroupSystemMessagesCommand : ReceiveCommand<Receive_0x0017>
     {
         /// <summary>
@@ -23,7 +23,7 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
             _event_args = new QQEventArgs<Receive_0x0017>(client, _packet);
         }
 
-        public override void Receive()
+        public override void Process()
         {
             _client.OnReceive_0x0017(_event_args);
         }

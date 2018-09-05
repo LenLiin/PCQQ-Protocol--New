@@ -11,7 +11,7 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
     /// <summary>
     /// Key查询
     /// </summary>
-    [ReceivePackageCommand(QQCommand.Data0x001D)]
+    [ReceivePacketCommand(QQCommand.Data0x001D)]
     public class KeyQueryCommand : ReceiveCommand<Receive_0x001D>
     {
         /// <summary>
@@ -23,7 +23,7 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
             _event_args = new QQEventArgs<Receive_0x001D>(client, _packet);
         }
 
-        public override void Receive()
+        public override void Process()
         {
             _client.OnReceive_0x001D(_event_args);
             

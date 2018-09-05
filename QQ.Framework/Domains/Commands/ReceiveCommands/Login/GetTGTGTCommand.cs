@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
 {
-    [ReceivePackageCommand(QQCommand.Login0x0836)]
+    [ReceivePacketCommand(QQCommand.Login0x0836)]
     public class GetTGTGTCommand : ReceiveCommand<Receive_0x0836>
     {
         public GetTGTGTCommand(byte[] data, QQClient client) : base(data, client)
@@ -16,7 +16,7 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
             _event_args = new QQEventArgs<Receive_0x0836>(client, _packet);
         }
 
-        public override void Receive()
+        public override void Process()
         {
             if (_packet.GetPacketLength() == 319 || _packet.GetPacketLength() == 351)
             {
