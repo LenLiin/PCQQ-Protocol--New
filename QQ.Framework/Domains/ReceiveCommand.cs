@@ -7,9 +7,12 @@ using QQ.Framework.Packets;
 
 namespace QQ.Framework.Domains
 {
-    public abstract class ReceiveCommand
+    public abstract class ReceiveCommand<PacketType> : PacketCommand
+        where PacketType : ReceivePacket
     {
         protected readonly QQClient _client;
+        protected PacketType _packet;
+        protected QQEventArgs<PacketType> _event_args;
 
         public ReceiveCommand(byte[] data, QQClient client)
         {

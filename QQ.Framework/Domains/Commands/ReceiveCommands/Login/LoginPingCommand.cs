@@ -8,11 +8,8 @@ using System.Threading.Tasks;
 namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
 {
     [ReceivePackageCommand(QQCommand.Login0x0825)]
-    public class LoginPingCommand : ReceiveCommand
+    public class LoginPingCommand : ReceiveCommand<Receive_0x0825>
     {
-        private Receive_0x0825 _packet;
-        private QQEventArgs<Receive_0x0825> _event_args;
-
         public LoginPingCommand(byte[] data, QQClient client) : base(data, client)
         {
             _packet = new Receive_0x0825(data, client.QQUser);

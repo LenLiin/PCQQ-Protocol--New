@@ -12,10 +12,8 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
     /// 获取QQ等级
     /// </summary>
     [ReceivePackageCommand(QQCommand.Data0x005C)]
-    public class GetQQLevelCommand : ReceiveCommand
+    public class GetQQLevelCommand : ReceiveCommand<Receive_0x005C>
     {
-        private Receive_0x005C _packet;
-        private QQEventArgs<Receive_0x005C> _event_args;
         /// <summary>
         /// 获取QQ等级
         /// </summary>

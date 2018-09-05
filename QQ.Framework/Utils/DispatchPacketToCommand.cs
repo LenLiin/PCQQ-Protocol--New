@@ -21,7 +21,7 @@ namespace QQ.Framework.Utils
             return new DispatchPacketToCommand(data, client);
         }
 
-        public ReceiveCommand dispatch_receive_packet(QQCommand command)
+        public PacketCommand dispatch_receive_packet(QQCommand command)
         {
             var types = Assembly.GetExecutingAssembly().GetTypes();
             foreach (var type in types)
@@ -32,7 +32,7 @@ namespace QQ.Framework.Utils
                 var attribute = attributes.First(attr => attr is ReceivePackageCommand) as ReceivePackageCommand;
                 if (attribute.Command == command)
                 {
-                    var receive_packet = Activator.CreateInstance(type, new object[] { _data, _client }) as ReceiveCommand;
+                    var receive_packet = Activator.CreateInstance(type, new object[] { _data, _client }) as PacketCommand;
                     return receive_packet;
                 }
             }

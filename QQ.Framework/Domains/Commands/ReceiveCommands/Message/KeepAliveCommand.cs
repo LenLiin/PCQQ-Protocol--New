@@ -12,10 +12,8 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
     /// KeepAlive（心跳）
     /// </summary>
     [ReceivePackageCommand(QQCommand.Message0x0058)]
-    public class KeepAliveCommand : ReceiveCommand
+    public class KeepAliveCommand : ReceiveCommand<Receive_0x0058>
     {
-        private Receive_0x0058 _packet;
-        private QQEventArgs<Receive_0x0058> _event_args;
         /// <summary>
         /// KeepAlive（心跳）
         /// </summary>
