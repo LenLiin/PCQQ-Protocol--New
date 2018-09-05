@@ -12,10 +12,8 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
     /// Key查询
     /// </summary>
     [ReceivePackageCommand(QQCommand.Data0x001D)]
-    public class KeyQueryCommand : ReceiveCommand
+    public class KeyQueryCommand : ReceiveCommand<Receive_0x001D>
     {
-        private Receive_0x001D _packet;
-        private QQEventArgs<Receive_0x001D> _event_args;
         /// <summary>
         /// Key查询
         /// </summary>

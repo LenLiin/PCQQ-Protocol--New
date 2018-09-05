@@ -12,10 +12,8 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
     /// 收到QQ好友消息
     /// </summary>
     [ReceivePackageCommand(QQCommand.Message0x00CE)]
-    public class ReceiveQQFriendMessagesCommand : ReceiveCommand
+    public class ReceiveQQFriendMessagesCommand : ReceiveCommand<Receive_0x00CE>
     {
-        private Receive_0x00CE _packet;
-        private QQEventArgs<Receive_0x00CE> _event_args;
         /// <summary>
         /// 收到QQ好友消息
         /// </summary>

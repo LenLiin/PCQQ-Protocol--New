@@ -9,11 +9,8 @@ using QQ.Framework.Sockets;
 namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
 {
     [ReceivePackageCommand(QQCommand.Login0x00EC)]
-    public class OnLineStateCommand : ReceiveCommand
+    public class OnLineStateCommand : ReceiveCommand<Receive_0x00EC>
     {
-        private Receive_0x00EC _packet;
-        private QQEventArgs<Receive_0x00EC> _event_args;
-
         public OnLineStateCommand(byte[] data, QQClient client) : base(data, client)
         {
             _packet = new Receive_0x00EC(data, client.QQUser);
