@@ -481,7 +481,21 @@ namespace QQ.Framework
         {
             EventReceive_0x00CD?.Invoke(this, e);
         }
+        #endregion
 
+        #region 发送群消息的回复包
+        /// <summary>
+        ///     发送群消息的回复包
+        /// </summary>
+        public event EventHandler<QQEventArgs<Receive_0x0002>> EventReceive_0x0002;
+
+        /// <summary>
+        ///     发送群消息的回复包
+        /// </summary>
+        internal void OnReceive_0x0002(QQEventArgs<Receive_0x0002> e)
+        {
+            EventReceive_0x0002?.Invoke(this, e);
+        }
         #endregion
 
         #region 收到消息时
