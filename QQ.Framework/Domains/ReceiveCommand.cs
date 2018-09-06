@@ -25,7 +25,7 @@ namespace QQ.Framework.Domains
         /// </summary>
         protected void Response()
         {
-            var response_command = ResponsePacketProcessor<PacketType>.of(_event_args, GetType());
+            var response_command = ResponsePacketProcessor<PacketType>.of(_event_args, GetType()).Process();
             response_command.Process();
         }
     }
