@@ -8,7 +8,7 @@ namespace QQLoginTest
 {
     public partial class Program
     {
-        public static long MyQQ { get; set; } = 3116005189;
-        public static string MyPassWord { get; set; } = ")352314693xiong";
+        public static long MyQQ { get; set; } = 0;
+        public static string MyPassWord { get; set; } = "";
     }
 }
