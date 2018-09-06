@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <Folder Include="Domains\Commands\ReceiveCommands\Interactive\" />
+    <Folder Include="Packets\Models\" />
   </ItemGroup>
 
 </Project>

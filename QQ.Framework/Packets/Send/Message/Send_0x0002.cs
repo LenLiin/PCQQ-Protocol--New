@@ -51,10 +51,10 @@ namespace QQ.Framework.Packets.Send.Message
             var group = GroupToGid(_group);
             if (_messageType.HasFlag(MessageType.Xml))
             {
-                bodyWriter.Write((byte) 0x2A);
+                bodyWriter.Write((byte)0x2A);
                 bodyWriter.BEWrite(group);
                 var compressMsg = GZipByteArray.CompressBytes(Encoding.UTF8.GetString(_message));
-                bodyWriter.BEWrite((ushort) (compressMsg.Length + 64));
+                bodyWriter.BEWrite((ushort)(compressMsg.Length + 64));
                 bodyWriter.Write(new byte[]
                 {
                     0x00, 0x01, _packetCount, _packetIndex, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4D, 0x53, 0x47, 0x00,
@@ -65,7 +65,7 @@ namespace QQ.Framework.Packets.Send.Message
             else if (_messageType.HasFlag(MessageType.Picture))
             {
                 HttpUpLoadGroupImg(_group, user.Ukey, Encoding.UTF8.GetString(_message));
-                bodyWriter.Write((byte) 0x2A);
+                bodyWriter.Write((byte)0x2A);
                 bodyWriter.BEWrite(group);
                 var Guid = Encoding.UTF8.GetBytes(Util.GetMD5ToGuidHashFromFile(Encoding.UTF8.GetString(_message)));
                 bodyWriter.Write(new byte[]
@@ -75,12 +75,12 @@ namespace QQ.Framework.Packets.Send.Message
                 });
                 bodyWriter.BEWrite(_DateTime);
                 bodyWriter.Write(Util.RandomKey(4));
-                bodyWriter.Write(new byte[] {0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00});
-                bodyWriter.Write(new byte[] {0xE5, 0xBE, 0xAE, 0xE8, 0xBD, 0xAF, 0xE9, 0x9B, 0x85, 0xE9, 0xBB, 0x91});
-                bodyWriter.Write(new byte[] {0x00, 0x00, 0x03, 0x00, 0xCB, 0x02});
-                bodyWriter.Write(new byte[] {0x00, 0x2A});
+                bodyWriter.Write(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00 });
+                bodyWriter.Write(new byte[] { 0xE5, 0xBE, 0xAE, 0xE8, 0xBD, 0xAF, 0xE9, 0x9B, 0x85, 0xE9, 0xBB, 0x91 });
+                bodyWriter.Write(new byte[] { 0x00, 0x00, 0x03, 0x00, 0xCB, 0x02 });
+                bodyWriter.Write(new byte[] { 0x00, 0x2A });
                 bodyWriter.Write(Guid);
-                bodyWriter.Write(new byte[] {0x04, 0x00, 0x04});
+                bodyWriter.Write(new byte[] { 0x04, 0x00, 0x04 });
                 bodyWriter.Write(new byte[]
                 {
                     0x9B, 0x53, 0xB0, 0x08, 0x05, 0x00, 0x04, 0xD9, 0x8A, 0x5A, 0x70, 0x06, 0x00,
@@ -102,16 +102,35 @@ namespace QQ.Framework.Packets.Send.Message
                 bodyWriter.Write(Guid);
                 bodyWriter.Write(0x41);
             }
+            else if (_messageType.HasFlag(MessageType.AddGroup))
+            {
+                bodyWriter.Write(new byte[] { 0x08 });
+                bodyWriter.BEWrite(group);
+                bodyWriter.Write(new byte[] { 0x01});
+                bodyWriter.BEWrite((ushort)user.AddFriend_0020Value.Length);
+                bodyWriter.Write(user.AddFriend_0020Value);
+                bodyWriter.Write(new byte[] { 0x00, 0x00, 0x00 });
+                //备注信息
+                writer.BEWrite((ushort)_message.Length);
+                writer.Write(_message);
+
+                bodyWriter.Write(new byte[] { 0x01, 0x00, 0x01, 0x00, 0x04, 0x00, 0x01, 0x00, 0x09 });
+            }
+            else if (_messageType.HasFlag(MessageType.GetGroupImformation))//获取群组信息
+            {
+                bodyWriter.Write(new byte[] { 0x72 });
+                bodyWriter.BEWrite(group);
+            }
             else if (_messageType.HasFlag(MessageType.ExitGroup))
             {
-                bodyWriter.Write(new byte[] {0x09});
+                bodyWriter.Write(new byte[] { 0x09 });
                 bodyWriter.BEWrite(group);
             }
             else // Send_0x0002是群消息，不需要进行判断
             {
-                bodyWriter.Write((byte) 0x2A);
+                bodyWriter.Write((byte)0x2A);
                 bodyWriter.BEWrite(group);
-                bodyWriter.BEWrite((ushort) (_message.Length + 56));
+                bodyWriter.BEWrite((ushort)(_message.Length + 56));
                 bodyWriter.Write(new byte[]
                 {
                     0x00, 0x01, _packetCount, _packetIndex, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4D, 0x53, 0x47, 0x00,
@@ -119,10 +138,10 @@ namespace QQ.Framework.Packets.Send.Message
                 });
                 bodyWriter.BEWrite(_DateTime);
                 bodyWriter.Write(Util.RandomKey(4));
-                bodyWriter.Write(new byte[] {0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00});
-                bodyWriter.Write(new byte[] {0x00, 0x0C});
-                bodyWriter.Write(new byte[] {0xE5, 0xBE, 0xAE, 0xE8, 0xBD, 0xAF, 0xE9, 0x9B, 0x85, 0xE9, 0xBB, 0x91});
-                bodyWriter.Write(new byte[] {0x00, 0x00});
+                bodyWriter.Write(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00 });
+                bodyWriter.Write(new byte[] { 0x00, 0x0C });
+                bodyWriter.Write(new byte[] { 0xE5, 0xBE, 0xAE, 0xE8, 0xBD, 0xAF, 0xE9, 0x9B, 0x85, 0xE9, 0xBB, 0x91 });
+                bodyWriter.Write(new byte[] { 0x00, 0x00 });
 
                 if (Encoding.UTF8.GetString(_message).Contains("[face") &&
                     Encoding.UTF8.GetString(_message).Contains(".gif]"))

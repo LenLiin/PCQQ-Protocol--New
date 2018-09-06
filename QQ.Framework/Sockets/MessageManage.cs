@@ -59,7 +59,7 @@ namespace QQ.Framework.Sockets
                 receive_command.Process();
             }
         }
-
+        #region 历史收包函数
         private void ReciveMsg(object state)
         {
             while (true)
@@ -192,5 +192,6 @@ namespace QQ.Framework.Sockets
                 }
             }
         }
+        #endregion
     }
 }

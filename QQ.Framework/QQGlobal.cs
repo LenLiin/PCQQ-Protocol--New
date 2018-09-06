@@ -391,7 +391,17 @@ namespace QQ.Framework
         /// <summary>
         ///     退群
         /// </summary>
-        ExitGroup = 32
+        ExitGroup = 32,
+
+        /// <summary>
+        ///     获取群信息
+        /// </summary>
+        GetGroupImformation = 64,
+
+        /// <summary>
+        ///     加群
+        /// </summary>
+        AddGroup = 128
     }
 
     public static class LoginStatus
@@ -402,5 +412,14 @@ namespace QQ.Framework
         public const byte 忙碌 = 0x32;
         public const byte 请勿打扰 = 0x46;
         public const byte 隐身 = 0x28;
+    }
+
+    /// <summary>
+    /// 加好友类型
+    /// </summary>
+    public enum AddFriendType
+    {
+        AddFriend = 0x01,
+        AddGroup = 0x02
     }
 }

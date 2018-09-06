@@ -1,3 +1,4 @@
+using QQ.Framework.Utils;
 using System;
 
 namespace QQ.Framework.Packets.Send.Interactive
@@ -5,12 +6,32 @@ namespace QQ.Framework.Packets.Send.Interactive
     public class Send_0x00A7 : SendPacket
     {
         /// <summary>
+        /// 添加好友（判断对方设置状态）
+        /// </summary>
+        /// <param name="User"></param>
+        /// <param name="AddQQ"></param>
+        public Send_0x00A7(QQUser User, long AddQQ)
+            : base(User)
+        {
+            Sequence = GetNextSeq();
+            _secretKey = user.QQ_SessionKey;
+            Command = QQCommand.Interactive0x00AE;
+            _AddQQ = AddQQ;
+        }
+        public long _AddQQ { get; set; }
+        protected override void PutHeader()
+        {
+            base.PutHeader();
+            writer.Write(user.QQ_PACKET_FIXVER);
+        }
+
+        /// <summary>
         ///     初始化包体
         /// </summary>
         /// <param name="buf">The buf.</param>
         protected override void PutBody()
         {
-            throw new NotImplementedException();
+            bodyWriter.BEWrite(_AddQQ);
         }
     }
 }

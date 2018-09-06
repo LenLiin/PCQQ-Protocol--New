@@ -174,6 +174,14 @@ namespace QQ.Framework
         public byte[] QQ_0836Token { get; set; }
         public byte[] QQ_0836_038Token { get; set; }
         public byte[] QQ_0836_088Token { get; set; }
+        /// <summary>
+        /// 加 好友/群 所需Token
+        /// </summary>
+        public byte[] AddFriend_0018Value { get; set; }
+        /// <summary>
+        /// 加 好友/群 所需Token
+        /// </summary>
+        public byte[] AddFriend_0020Value { get; set; }
 
         /// <summary>
         ///     MD5_32
