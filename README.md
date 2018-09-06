@@ -10,6 +10,11 @@ MyUser.cs为本人扩展用户名和密码这里不做上传
 
 源码仅供参考，欢迎吐槽
 ------------------------------------------
+#### 2018-9-6
+1. 添加文档
+2. 如何添加`Command`。[查看](./QQ.Framework/Docs/MessageManage.md)
+3. 如何自定义自己的机器人。[查看](./QQ.Framework/Docs/add_your_custom_robot.md)
+
 #### 2018-9-5
 1.`Command`提炼为接口, 移除具体`Command`中的重复定义。<br>
 2.`Command`处理方法更名为`Process`。<br>

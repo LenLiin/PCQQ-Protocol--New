@@ -11,8 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Docs\UMLs\" />
     <Folder Include="Domains\Commands\ReceiveCommands\Interactive\" />
     <Folder Include="Packets\Models\" />
+    <Folder Include="Docs\" />
   </ItemGroup>
 
 </Project>
