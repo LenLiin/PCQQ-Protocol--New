@@ -13,15 +13,13 @@ namespace QQLoginTest
 {
     public partial class Program
     {
-        private static QQClient client;
-
         private static void Main(string[] args)
         {
             #if NETCOREAPP2_0||NETCOREAPP2_1
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             #endif
             var user = new QQUser(MyQQ, MyPassWord);
-            client = new QQClient
+            QQClient client = new QQClient
             {
                 QQUser = user
             };

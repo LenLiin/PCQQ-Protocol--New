@@ -40,7 +40,7 @@ namespace QQ.Framework.Domains.Commands.ResponseCommands.Message
 
             client.Send(new Send_0x00CE(user, dataReader.ReadBytes(0x10), packet.Sequence).WriteData());
 
-            // 回复接收成功
+            //查看消息确认
             client.Send(new Send_0x0319(user,packet.FromQQ, packet.MessageDateTime).WriteData());
         }
     }

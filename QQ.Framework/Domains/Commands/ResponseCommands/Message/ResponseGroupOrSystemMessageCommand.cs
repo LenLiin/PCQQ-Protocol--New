@@ -36,6 +36,14 @@ namespace QQ.Framework.Domains.Commands.ResponseCommands.Message
             var dataReader = new BinaryReader(new MemoryStream(packet.bodyDecrypted));
 
             client.Send(new Send_0x0017(user, dataReader.ReadBytes(0x10), packet.Sequence).WriteData());
+
+
+            //查看群消息确认
+            if (packet.ReceiveTime != null)
+            {
+                //TODO:未实现
+                //client.Send(new Send_0x0360(user, packet.Group, packet.ReceiveTime).WriteData());
+            }
         }
     }
 }
