@@ -8,14 +8,14 @@ namespace QQ.Framework.Packets.Send.Login
         /// <summary>
         ///     数据包类型默认为第一种
         /// </summary>
-        private readonly Login0x0836Type _type = Login0x0836Type.Login0x0836_622;
+        private readonly Login0x0836Type _type;
 
         /// <summary>
         ///     构造函数
         /// </summary>
         /// <param name="User"></param>
         /// <param name="type">包类型</param>
-        public Send_0x0836(QQUser User, Login0x0836Type type, bool isVerify = false)
+        public Send_0x0836(QQUser User, Login0x0836Type type = Login0x0836Type.Login0x0836_622, bool isVerify = false)
             : base(User)
         {
             Sequence = GetNextSeq();

@@ -21,13 +21,15 @@ namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
             if (wSubVer == 0x01)
             {
                 data.Write(1); // wSubVer
-                var GuidName = new Dictionary<string, byte[]>(6);
-                GuidName.Add("UNKNOW1", null);
-                GuidName.Add("MacGuid", m_PCClient.QQUser.TXProtocol.bufMacGuid);
-                GuidName.Add("UNKNOW2", null);
-                GuidName.Add("ComputerIDEx", m_PCClient.QQUser.TXProtocol.bufComputerIDEx);
-                GuidName.Add("UNKNOW3", null);
-                GuidName.Add("MachineInfoGuid", m_PCClient.QQUser.TXProtocol.bufMachineInfoGuid);
+                var GuidName = new Dictionary<string, byte[]>(6)
+                {
+                    {"UNKNOW1", null},
+                    {"MacGuid", m_PCClient.QQUser.TXProtocol.bufMacGuid},
+                    {"UNKNOW2", null},
+                    {"ComputerIDEx", m_PCClient.QQUser.TXProtocol.bufComputerIDEx},
+                    {"UNKNOW3", null},
+                    {"MachineInfoGuid", m_PCClient.QQUser.TXProtocol.bufMachineInfoGuid}
+                };
                 byte k = 0;
                 byte c = 0;
                 var guid = new BinaryWriter(new MemoryStream());
@@ -48,7 +50,7 @@ namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
             }
             else
             {
-                throw new Exception(string.Format("{0} 无法识别的版本号 {1}", Name, wSubVer));
+                throw new Exception($"{Name} 无法识别的版本号 {wSubVer}");
             }
 
             fill_head(cmd);

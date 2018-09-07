@@ -58,10 +58,9 @@ namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
                 RC ^= t;
             }
 
-            byte RCC;
             for (var i = 0; i < 4; i++)
             {
-                RCC = QQEXE_MD5[i * 4];
+                var RCC = QQEXE_MD5[i * 4];
                 RCC ^= QQEXE_MD5[i * 4 + 1];
                 RCC ^= QQEXE_MD5[i * 4 + 3];
                 RCC ^= QQEXE_MD5[i * 4 + 2];

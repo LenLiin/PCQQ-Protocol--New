@@ -168,7 +168,7 @@ namespace QQ.Framework
         /// <param name="e"></param>
         internal void OnReceive_0x0836_622(QQEventArgs<Receive_0x0836> e)
         {
-            MessageLog($"登陆成功获取个人基本信息");
+            MessageLog("登陆成功获取个人基本信息");
             MessageLog(
                 $"账号：{e.QQClient.QQUser.QQ}，昵称：{e.QQClient.QQUser.NickName}，年龄：{e.QQClient.QQUser.Age}，性别：{e.QQClient.QQUser.Gender}");
             Send(new Send_0x0828(e.ReceivePacket.user).WriteData());
@@ -191,7 +191,7 @@ namespace QQ.Framework
         /// <param name="e"></param>
         internal void OnReceive_0x0836_686(QQEventArgs<Receive_0x0836> e)
         {
-            MessageLog($"二次登陆");
+            MessageLog("二次登陆");
             //二次发送0836登录包
             Send(new Send_0x0836(e.ReceivePacket.user, Login0x0836Type.Login0x0836_686).WriteData());
 
@@ -255,7 +255,7 @@ namespace QQ.Framework
         /// <param name="e"></param>
         internal void OnReceive_0x0828(QQEventArgs<Receive_0x0828> e)
         {
-            MessageLog($"获取SessionKey");
+            MessageLog("获取SessionKey");
             //二次发送0836登录包
             Send(new Send_0x00EC(e.ReceivePacket.user, LoginStatus.我在线上).WriteData());
 
@@ -331,7 +331,7 @@ namespace QQ.Framework
         /// <param name="e"></param>
         internal void OnReceive_0x001D(QQEventArgs<Receive_0x001D> e)
         {
-            MessageLog($"获取SKey");
+            MessageLog("获取SKey");
             Send(new Send_0x005C(e.ReceivePacket.user).WriteData());
 
             EventReceive_0x001D?.Invoke(this, e);

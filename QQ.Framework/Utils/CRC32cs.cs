@@ -112,12 +112,12 @@ namespace QQ.Framework.Utils
         //生成CRC32码表
         public static void GetCRC32Table()
         {
-            ulong Crc;
             Crc32Table = new ulong[256];
-            int i, j;
+            int i;
             for (i = 0; i < 256; i++)
             {
-                Crc = (ulong) i;
+                var Crc = (ulong) i;
+                int j;
                 for (j = 8; j > 0; j--)
                 {
                     if ((Crc & 1) == 1)

@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace System
 {
-    public static class Check
+    public sealed class Check
     {
         #region Const Literals
 
@@ -145,7 +145,7 @@ namespace System
             return new LessThanOrEqualStrategy<T>(compareValue);
         }
 
-        private sealed static class NotNullCheckStrategy : ICheckStrategy
+        private sealed class NotNullCheckStrategy : ICheckStrategy
         {
             #region ICheckStrategy Members
 
@@ -162,7 +162,7 @@ namespace System
             #endregion
         }
 
-        private sealed static class NotNullOrEmptyStrategy : ICheckStrategy
+        private sealed class NotNullOrEmptyStrategy : ICheckStrategy
         {
             #region ICheckStrategy Members
 
@@ -173,19 +173,19 @@ namespace System
                     return false;
                 }
 
-                if (obj is string)
+                if (obj is string s)
                 {
-                    return !string.IsNullOrEmpty(obj as string);
+                    return !string.IsNullOrEmpty(s);
                 }
 
-                if (obj is Array)
+                if (obj is Array array)
                 {
-                    return (obj as Array).Length > 0;
+                    return array.Length > 0;
                 }
 
-                if (obj is ICollection)
+                if (obj is ICollection collection)
                 {
-                    return (obj as ICollection).Count > 0;
+                    return collection.Count > 0;
                 }
 
                 return true;
@@ -199,7 +199,7 @@ namespace System
             #endregion
         }
 
-        private sealed static class IsAssignableToStrategy<TargetType> : ICheckStrategy
+        private sealed class IsAssignableToStrategy<TargetType> : ICheckStrategy
         {
             #region ICheckStrategy Members
 
@@ -216,7 +216,7 @@ namespace System
             #endregion
         }
 
-        private sealed static class GreaterThanStrategy<T> : ICheckStrategy
+        private sealed class GreaterThanStrategy<T> : ICheckStrategy
         {
             private readonly T compareValue;
 
@@ -245,7 +245,7 @@ namespace System
             #endregion
         }
 
-        private sealed static class GreaterThanOrEqualStrategy<T> : ICheckStrategy
+        private sealed class GreaterThanOrEqualStrategy<T> : ICheckStrategy
         {
             private readonly T compareValue;
 
@@ -274,7 +274,7 @@ namespace System
             #endregion
         }
 
-        private sealed static class LessThanStrategy<T> : ICheckStrategy
+        private sealed class LessThanStrategy<T> : ICheckStrategy
         {
             private readonly T compareValue;
 
@@ -303,7 +303,7 @@ namespace System
             #endregion
         }
 
-        private sealed static class LessThanOrEqualStrategy<T> : ICheckStrategy
+        private sealed class LessThanOrEqualStrategy<T> : ICheckStrategy
         {
             private readonly T compareValue;
 

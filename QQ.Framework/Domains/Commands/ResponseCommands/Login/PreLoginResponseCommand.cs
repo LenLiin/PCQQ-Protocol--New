@@ -16,7 +16,7 @@ namespace QQ.Framework.Domains.Commands.ResponseCommands.Login
             var client = _args.QQClient;
             var user = client.QQUser;
 
-            client.MessageLog($"获取SessionKey");
+            client.MessageLog("获取SessionKey");
             //二次发送0836登录包
             client.Send(new Send_0x00EC(user, LoginStatus.我在线上).WriteData());
 

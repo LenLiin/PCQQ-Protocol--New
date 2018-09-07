@@ -5,12 +5,12 @@ namespace QQ.Framework.Packets.Send.Login
     /// </summary>
     public class Send_0x00EC : SendPacket
     {
-        private readonly byte _loginStatus = LoginStatus.我在线上;
+        private readonly byte _loginStatus;
 
         /// <summary>
         ///     改变在线状态
         /// </summary>
-        public Send_0x00EC(QQUser User, byte loginStatus)
+        public Send_0x00EC(QQUser User, byte loginStatus = LoginStatus.我在线上)
             : base(User)
         {
             Sequence = GetNextSeq();
