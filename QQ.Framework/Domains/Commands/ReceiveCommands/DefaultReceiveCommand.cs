@@ -1,7 +1,6 @@
-﻿using QQ.Framework.Domains;
-using QQ.Framework.Packets.Receive.Message;
+﻿using QQ.Framework.Packets.Receive.Message;
 
-namespace QQ.Framework.Utils
+namespace QQ.Framework.Domains.Commands.ReceiveCommands
 {
     public class DefaultReceiveCommand : ReceiveCommand<Receive_Currency>
     {

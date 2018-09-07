@@ -19,8 +19,7 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Data
 
         public override void Process()
         {
-            _client.OnReceive_0x001D(_event_args);
-            
+            Response();
         }
     }
 }
