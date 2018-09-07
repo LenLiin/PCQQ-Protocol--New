@@ -9,7 +9,9 @@ namespace QQ.Framework.Packets.Receive.Interactive
             : base(byteBuffer, User, User.QQ_SessionKey)
         {
         }
+
         public AddFriendType addFriendType { get; set; }
+
         protected override void ParseBody()
         {
             Decrypt(user.QQ_SessionKey);

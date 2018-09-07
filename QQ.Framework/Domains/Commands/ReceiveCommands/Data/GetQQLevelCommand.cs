@@ -3,13 +3,13 @@
 namespace QQ.Framework.Domains.Commands.ReceiveCommands.Data
 {
     /// <summary>
-    /// 获取QQ等级
+    ///     获取QQ等级
     /// </summary>
     [ReceivePacketCommand(QQCommand.Data0x005C)]
     public class GetQQLevelCommand : ReceiveCommand<Receive_0x005C>
     {
         /// <summary>
-        /// 获取QQ等级
+        ///     获取QQ等级
         /// </summary>
         public GetQQLevelCommand(byte[] data, QQClient client) : base(data, client)
         {

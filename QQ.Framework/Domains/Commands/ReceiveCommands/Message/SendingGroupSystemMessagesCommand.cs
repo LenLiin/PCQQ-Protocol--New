@@ -3,7 +3,7 @@
 namespace QQ.Framework.Domains.Commands.ReceiveCommands.Message
 {
     /// <summary>
-    /// 发送群消息后收到的回复包
+    ///     发送群消息后收到的回复包
     /// </summary>
     [ReceivePacketCommand(QQCommand.Message0x0002)]
     public class SendingGroupSystemMessagesCommand : ReceiveCommand<Receive_0x0002>

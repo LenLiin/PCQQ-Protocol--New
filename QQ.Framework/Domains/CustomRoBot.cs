@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using QQ.Framework.Domains.Observers;
+﻿using QQ.Framework.Domains.Observers;
 
 namespace QQ.Framework.Domains
 {
     /// <summary>
-    /// 自定义机器人基类
+    ///     自定义机器人基类
     /// </summary>
     public abstract class CustomRoBot : ServerMessageObserver
     {

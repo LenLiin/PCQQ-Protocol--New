@@ -104,7 +104,8 @@ namespace QQ.Framework.Packets
 
         public void GetImage(string FileName)
         {
-            string Api = $"https://gchat.qpic.cn/gchatpic_new/807977219/485750189-2603962136-64ECA8CA06FC5B0CE6F047FEB66768B0/0?vuin=417085811&term=2addtime=1515123740";
+            var Api =
+                $"https://gchat.qpic.cn/gchatpic_new/807977219/485750189-2603962136-64ECA8CA06FC5B0CE6F047FEB66768B0/0?vuin=417085811&term=2addtime=1515123740";
         }
     }
 }

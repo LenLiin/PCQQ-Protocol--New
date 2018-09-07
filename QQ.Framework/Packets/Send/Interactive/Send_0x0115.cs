@@ -1,12 +1,10 @@
 using QQ.Framework.Utils;
-using System;
 
 namespace QQ.Framework.Packets.Send.Interactive
 {
     public class Send_0x0115 : SendPacket
     {
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="User"></param>
         /// <param name="AddQQ"></param>
@@ -18,7 +16,9 @@ namespace QQ.Framework.Packets.Send.Interactive
             Command = QQCommand.Interactive0x00AE;
             _AddQQ = AddQQ;
         }
+
         public long _AddQQ { get; set; }
+
         protected override void PutHeader()
         {
             base.PutHeader();

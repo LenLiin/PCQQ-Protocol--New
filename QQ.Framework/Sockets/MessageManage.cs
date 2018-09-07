@@ -55,11 +55,14 @@ namespace QQ.Framework.Sockets
 
                 // 通过Command, 利用反射+Attribute, 分发到管理具体某个包的Command中,最后直接调用Receive方法即可。
                 // 将对包的处理移到具体Command中，此处只负责分发。
-                var receive_command = DispatchPacketToCommand.of(tempBuf, client).dispatch_receive_packet(_ReceivePacket.Command);
+                var receive_command = DispatchPacketToCommand.of(tempBuf, client)
+                    .dispatch_receive_packet(_ReceivePacket.Command);
                 receive_command.Process();
             }
         }
+
         #region 历史收包函数
+
         private void ReciveMsg(object state)
         {
             while (true)
@@ -192,6 +195,7 @@ namespace QQ.Framework.Sockets
                 }
             }
         }
+
         #endregion
     }
 }
