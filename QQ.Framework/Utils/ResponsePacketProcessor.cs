@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using QQ.Framework.Domains;
+using QQ.Framework.Domains.Commands;
 using QQ.Framework.Domains.Commands.ResponseCommands;
 using QQ.Framework.Packets;
 

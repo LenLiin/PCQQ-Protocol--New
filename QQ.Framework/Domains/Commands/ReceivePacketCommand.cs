@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace QQ.Framework.Domains
+namespace QQ.Framework.Domains.Commands
 {
     public class ReceivePacketCommand : Attribute
     {
