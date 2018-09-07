@@ -1,11 +1,11 @@
 ﻿using QQ.Framework.Packets;
 
-namespace QQ.Framework.Domains
+namespace QQ.Framework.Domains.Commands
 {
     public abstract class ResponseCommand<PacketType> : PacketCommand
         where PacketType : ReceivePacket
     {
-        private readonly QQEventArgs<PacketType> _args;
+        protected readonly QQEventArgs<PacketType> _args;
 
         public ResponseCommand(QQEventArgs<PacketType> args)
         {

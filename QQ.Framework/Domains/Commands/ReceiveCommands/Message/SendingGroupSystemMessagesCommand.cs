@@ -1,22 +1,13 @@
-﻿    using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using QQ.Framework.Packets.Receive.Message;
-using QQ.Framework.Sockets;
+﻿using QQ.Framework.Packets.Receive.Message;
 
-namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
+namespace QQ.Framework.Domains.Commands.ReceiveCommands.Message
 {
     /// <summary>
-    /// 收到群/系统消息
+    /// 发送群消息后收到的回复包
     /// </summary>
     [ReceivePacketCommand(QQCommand.Message0x0002)]
     public class SendingGroupSystemMessagesCommand : ReceiveCommand<Receive_0x0002>
     {
-        /// <summary>
-        /// 收到群/系统消息
-        /// </summary>
         public SendingGroupSystemMessagesCommand(byte[] data, QQClient client) : base(data, client)
         {
             _packet = new Receive_0x0002(data, client.QQUser);
@@ -25,7 +16,6 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
 
         public override void Process()
         {
-            _client.OnReceive_0x0002(_event_args);
         }
     }
 }

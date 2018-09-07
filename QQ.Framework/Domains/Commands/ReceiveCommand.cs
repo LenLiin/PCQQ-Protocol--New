@@ -1,7 +1,7 @@
 ﻿using QQ.Framework.Packets;
 using QQ.Framework.Utils;
 
-namespace QQ.Framework.Domains
+namespace QQ.Framework.Domains.Commands
 {
     public abstract class ReceiveCommand<PacketType> : PacketCommand
         where PacketType : ReceivePacket
@@ -25,7 +25,7 @@ namespace QQ.Framework.Domains
         /// </summary>
         protected void Response()
         {
-            var response_command = ResponsePacketProcessor<PacketType>.of(_event_args, GetType());
+            var response_command = ResponsePacketProcessor<PacketType>.of(_event_args, GetType()).Process();
             response_command.Process();
         }
     }

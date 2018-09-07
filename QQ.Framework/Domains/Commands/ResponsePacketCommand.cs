@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace QQ.Framework.Domains
+namespace QQ.Framework.Domains.Commands
 {
     public class ResponsePacketCommand : Attribute
     {

@@ -1,12 +1,6 @@
-﻿    using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using QQ.Framework.Packets.Receive.Data;
-using QQ.Framework.Sockets;
+﻿using QQ.Framework.Packets.Receive.Data;
 
-namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
+namespace QQ.Framework.Domains.Commands.ReceiveCommands.Data
 {
     /// <summary>
     /// Key查询
@@ -25,8 +19,7 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
 
         public override void Process()
         {
-            _client.OnReceive_0x001D(_event_args);
-            
+            Response();
         }
     }
 }

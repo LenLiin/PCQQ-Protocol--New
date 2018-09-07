@@ -1,9 +1,4 @@
-﻿    using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-    using QQ.Framework.Packets.Receive.Login;
+﻿using QQ.Framework.Packets.Receive.Login;
 
 namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
 {
@@ -18,14 +13,7 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
 
         public override void Process()
         {
-            if (_packet.DataHead == 0xFE)
-            {
-                _client.OnReceive_0x0825Redirect(_event_args);
-            }
-            else
-            {
-                _client.OnReceive_0x0825(_event_args);
-            }
+            Response();
         }
     }
 }

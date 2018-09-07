@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using QQ.Framework.Domains.Observers;
+﻿using QQ.Framework.Domains.Observers;
 
 namespace QQ.Framework.Domains
 {
     /// <summary>
     /// 服务端主题, 用来转发可处理的消息
     /// </summary>
-    public interface ServerMessageSubject
+    public interface ServerMessageSubject : ResponsiveMessages
     {
         /// <summary>
         /// 将自定义机器人加入观察者列表。
@@ -22,15 +19,5 @@ namespace QQ.Framework.Domains
         /// </summary>
         /// <param name="robot"></param>
         void RemoveCustomRoBot(ServerMessageObserver robot);
-
-        /// <summary>
-        /// 收到好友消息
-        /// </summary>
-        void ReceiveFriendMessage();
-
-        /// <summary>
-        /// 收到群组消息
-        /// </summary>
-        void ReceiveGroupMessage();
     }
 }

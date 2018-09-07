@@ -49,12 +49,9 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
             else if (_packet.GetPacketLength() == 871)
             {
                 _client.MessageLog("需要验证码登录");
-                _client.OnReceive_0x0836_871(_event_args);
             }
-            else if (_packet.GetPacketLength() > 700)
-            {
-                _client.OnReceive_0x0836_622(_event_args);
-            }
+
+            Response();
         }
     }
 }

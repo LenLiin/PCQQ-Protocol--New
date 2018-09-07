@@ -1,10 +1,4 @@
-﻿    using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-    using QQ.Framework.Packets.Receive.Login;
-using QQ.Framework.Sockets;
+﻿using QQ.Framework.Packets.Receive.Login;
 
 namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
 {
@@ -19,7 +13,7 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
 
         public override void Process()
         {
-            _client.OnReceive_0x00EC(_event_args);
+            Response();
         }
     }
 }
