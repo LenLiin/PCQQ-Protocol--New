@@ -20,13 +20,8 @@ namespace QQ.Framework.Utils
             _receivePacketType = receivePacketType;
         }
 
-        public static ResponsePacketProcessor<PacketType> of(QQEventArgs<PacketType> args, Type receivePacketType)
-        {
-            return new ResponsePacketProcessor<PacketType>(args, receivePacketType);
-        }
-
         /// <summary>
-        /// 根据接收包的Command,自动寻找对应的回复包。
+        ///     根据接收包的Command,自动寻找对应的回复包。
         /// </summary>
         /// <returns></returns>
         public PacketCommand Process()
@@ -39,16 +34,25 @@ namespace QQ.Framework.Utils
                 foreach (var type in types)
                 {
                     var attributes = type.GetCustomAttributes<ResponsePacketCommand>();
-                    if (!attributes.Any()) continue;
+                    if (!attributes.Any())
+                    {
+                        continue;
+                    }
+
                     var responseCommand = attributes.First().Command;
                     if (responseCommand == packetCommand)
                     {
-                        return Activator.CreateInstance(type, new object[] { _args }) as PacketCommand;
+                        return Activator.CreateInstance(type, _args) as PacketCommand;
                     }
                 }
             }
 
             return new DefaultResponseCommand(new QQEventArgs<ReceivePacket>(_args.QQClient, _args.ReceivePacket));
+        }
+
+        public static ResponsePacketProcessor<PacketType> of(QQEventArgs<PacketType> args, Type receivePacketType)
+        {
+            return new ResponsePacketProcessor<PacketType>(args, receivePacketType);
         }
     }
 }

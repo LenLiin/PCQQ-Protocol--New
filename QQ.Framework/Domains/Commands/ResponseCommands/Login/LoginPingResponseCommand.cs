@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using QQ.Framework.Packets;
-using QQ.Framework.Packets.Receive.Login;
+﻿using QQ.Framework.Packets.Receive.Login;
 using QQ.Framework.Packets.Send.Login;
 using QQ.Framework.Utils;
 

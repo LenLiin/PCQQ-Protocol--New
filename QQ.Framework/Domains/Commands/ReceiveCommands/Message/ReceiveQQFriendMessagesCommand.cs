@@ -3,7 +3,7 @@
 namespace QQ.Framework.Domains.Commands.ReceiveCommands.Message
 {
     /// <summary>
-    /// 收到QQ好友消息
+    ///     收到QQ好友消息
     /// </summary>
     [ReceivePacketCommand(QQCommand.Message0x00CE)]
     public class ReceiveQQFriendMessagesCommand : ReceiveCommand<Receive_0x00CE>

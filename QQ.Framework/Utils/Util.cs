@@ -61,7 +61,7 @@ namespace QQ.Framework.Utils
         public static uint GetUInt(byte[] inData, int offset, int len)
         {
             uint ret = 0;
-            var end = 0;
+            int end;
             if (len > 8)
             {
                 end = offset + 8;
@@ -82,7 +82,7 @@ namespace QQ.Framework.Utils
 
         public static string LongToHexString(long num)
         {
-            return string.Format("{0:X8}", num);
+            return $"{num:X8}";
         }
 
         /// <summary>
@@ -169,7 +169,7 @@ namespace QQ.Framework.Utils
         /// <param name="b">字节数组</param>
         /// <param name="encoding">encoding 编码方式</param>
         /// <returns> 如果encoding不支持，返回一个缺省编码的字符串</returns>
-        public static string GetString(byte[] b, string encoding)
+        public static string GetString(byte[] b, string encoding = QQGlobal.QQ_CHARSET_DEFAULT)
         {
             try
             {
@@ -182,16 +182,6 @@ namespace QQ.Framework.Utils
         }
 
         /// <summary>
-        ///     根据缺省编码将字节数组转换成字符串
-        /// </summary>
-        /// <param name="b">字节数组</param>
-        /// <returns>字符串</returns>
-        public static string GetString(byte[] b)
-        {
-            return GetString(b, QQGlobal.QQ_CHARSET_DEFAULT);
-        }
-
-        /// <summary>
         ///     根据某种编码方式将字节数组转换成字符串
         ///     <remark>2008-02-22 </remark>
         /// </summary>
@@ -200,11 +190,11 @@ namespace QQ.Framework.Utils
         /// <param name="len">The len.</param>
         /// <param name="encoding">The encoding.</param>
         /// <returns></returns>
-        public static string GetString(byte[] b, int offset, int len)
+        public static string GetString(byte[] b, int offset, int len, string encoding = QQGlobal.QQ_CHARSET_DEFAULT)
         {
             var temp = new byte[len];
             Array.Copy(b, offset, temp, 0, len);
-            return GetString(temp);
+            return GetString(temp, encoding);
         }
 
         /// <summary>
@@ -286,15 +276,7 @@ namespace QQ.Framework.Utils
         /// <returns></returns>
         public static bool IsIPZero(byte[] ip)
         {
-            for (var i = 0; i < ip.Length; i++)
-            {
-                if (ip[i] != 0)
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            return ip.All(t => t == 0);
         }
 
         /// <summary>
@@ -311,9 +293,8 @@ namespace QQ.Framework.Utils
         {
             var num = 0;
             var stringBuilder = new StringBuilder();
-            for (var i = 0; i < bs.Length; i++)
+            foreach (var b in bs)
             {
-                var b = bs[i];
                 if (num++ % 16 == 0)
                 {
                     stringBuilder.Append(NewLine);
@@ -429,9 +410,9 @@ namespace QQ.Framework.Utils
                 file.Close();
 
                 var sb = new StringBuilder();
-                for (var i = 0; i < retVal.Length; i++)
+                foreach (var t in retVal)
                 {
-                    sb.Append(retVal[i].ToString("x2"));
+                    sb.Append(t.ToString("x2"));
                 }
 
                 return sb.ToString();

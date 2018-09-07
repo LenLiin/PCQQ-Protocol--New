@@ -114,9 +114,8 @@ namespace QQ.Framework.Packets
         /// <exception cref="T:System.NullReferenceException">The <paramref name="obj" /> parameter is null.</exception>
         public override bool Equals(object obj)
         {
-            if (obj is Packet)
+            if (obj is Packet packet)
             {
-                var packet = (Packet) obj;
                 return Header == packet.Header && Command == packet.Command && Sequence == packet.Sequence;
             }
 

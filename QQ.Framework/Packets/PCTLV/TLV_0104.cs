@@ -22,8 +22,6 @@ namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
 
         public void parser_tlv_0006(QQClient m_PCClient, BinaryReader buf)
         {
-            int len;
-            byte[] buffer;
             wSubVer = buf.BEReadUInt16(); //wSubVer
             if (wSubVer == 0x0001)
             {
@@ -33,6 +31,7 @@ namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
                 buf.ReadByte(); //0x00
                 buf.ReadByte(); //0x05
                 PngData = buf.ReadByte(); //是否需要验证码：0不需要，1需要
+                int len;
                 if (PngData == 0x00)
                 {
                     len = buf.ReadByte();
@@ -47,7 +46,7 @@ namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
                     len = buf.BEReadInt32();
                 }
 
-                buffer = buf.ReadBytes(len);
+                var buffer = buf.ReadBytes(len);
                 m_PCClient.QQUser.TXProtocol.bufSigPic = buffer;
                 if (PngData == 0x01) //有验证码数据
                 {
@@ -57,25 +56,16 @@ namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
                     buf.ReadByte();
                     var directory = Util.MapPath("Verify");
                     var filename = Path.Combine(directory, m_PCClient.QQUser.QQ + ".png");
-                    FileStream fs = null;
                     if (!Directory.Exists(directory))
                     {
                         Directory.CreateDirectory(directory);
                     }
 
-                    if (Next == 0x00)
-                    {
-                        fs = new FileStream(filename, FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
-                    }
-                    else
-                    {
-                        fs = new FileStream(filename, FileMode.Append, FileAccess.Write, FileShare.Read);
-                    }
+                    var fs = Next == 0x00 ? new FileStream(filename, FileMode.Create, FileAccess.ReadWrite, FileShare.Read) : new FileStream(filename, FileMode.Append, FileAccess.Write, FileShare.Read);
 
                     //fs.Seek(0, SeekOrigin.End);
                     fs.Write(buffer, 0, buffer.Length);
                     fs.Close();
-                    fs = null;
 
                     len = buf.BEReadInt32();
                     buffer = buf.ReadBytes(len);
@@ -90,7 +80,7 @@ namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
             }
             else
             {
-                throw new Exception(string.Format("{0} 无法识别的版本号 {1}", Name, wSubVer));
+                throw new Exception($"{Name} 无法识别的版本号 {wSubVer}");
             }
         }
     }

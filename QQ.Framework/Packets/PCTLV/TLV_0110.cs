@@ -29,7 +29,7 @@ namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
             }
             else
             {
-                throw new Exception(string.Format("{0} 无法识别的版本号 {1}", Name, wSubVer));
+                throw new Exception($"{Name} 无法识别的版本号 {wSubVer}");
             }
 
             fill_head(cmd);
@@ -47,7 +47,7 @@ namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
             }
             else
             {
-                throw new Exception(string.Format("{0} 无法识别的版本号 {1}", Name, wSubVer));
+                throw new Exception($"{Name} 无法识别的版本号 {wSubVer}");
             }
         }
     }

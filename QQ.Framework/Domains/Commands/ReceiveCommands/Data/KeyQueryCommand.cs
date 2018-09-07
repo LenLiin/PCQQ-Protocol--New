@@ -3,13 +3,13 @@
 namespace QQ.Framework.Domains.Commands.ReceiveCommands.Data
 {
     /// <summary>
-    /// Key查询
+    ///     Key查询
     /// </summary>
     [ReceivePacketCommand(QQCommand.Data0x001D)]
     public class KeyQueryCommand : ReceiveCommand<Receive_0x001D>
     {
         /// <summary>
-        /// Key查询
+        ///     Key查询
         /// </summary>
         public KeyQueryCommand(byte[] data, QQClient client) : base(data, client)
         {

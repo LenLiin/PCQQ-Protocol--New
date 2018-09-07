@@ -3,7 +3,7 @@
 namespace QQ.Framework.Domains.Commands.ReceiveCommands.Message
 {
     /// <summary>
-    /// 发送QQ消息收到的返回包
+    ///     发送QQ消息收到的返回包
     /// </summary>
     [ReceivePacketCommand(QQCommand.Message0x00CD)]
     public class SendingQQMessagesCommand : ReceiveCommand<Receive_0x00CD>
