@@ -1,12 +1,6 @@
-﻿    using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using QQ.Framework.Packets.Receive.Message;
-using QQ.Framework.Sockets;
+﻿using QQ.Framework.Packets.Receive.Message;
 
-namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
+namespace QQ.Framework.Domains.Commands.ReceiveCommands.Message
 {
     /// <summary>
     /// 收到QQ好友消息
@@ -14,9 +8,6 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
     [ReceivePacketCommand(QQCommand.Message0x00CE)]
     public class ReceiveQQFriendMessagesCommand : ReceiveCommand<Receive_0x00CE>
     {
-        /// <summary>
-        /// 收到QQ好友消息
-        /// </summary>
         public ReceiveQQFriendMessagesCommand(byte[] data, QQClient client) : base(data, client)
         {
             _packet = new Receive_0x00CE(data, client.QQUser);
@@ -25,8 +16,7 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
 
         public override void Process()
         {
-            _client.OnReceive_0x00CE(_event_args);
-            
+            Response();
         }
     }
 }
