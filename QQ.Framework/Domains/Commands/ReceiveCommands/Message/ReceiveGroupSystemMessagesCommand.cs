@@ -1,12 +1,6 @@
-﻿    using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using QQ.Framework.Packets.Receive.Message;
-using QQ.Framework.Sockets;
+﻿using QQ.Framework.Packets.Receive.Message;
 
-namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
+namespace QQ.Framework.Domains.Commands.ReceiveCommands.Message
 {
     /// <summary>
     /// 收到群/系统消息
@@ -25,7 +19,7 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
 
         public override void Process()
         {
-            _client.OnReceive_0x0017(_event_args);
+            Response();
         }
     }
 }
