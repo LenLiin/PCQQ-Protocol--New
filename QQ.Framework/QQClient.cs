@@ -457,7 +457,6 @@ namespace QQ.Framework
                 !e.ReceivePacket.FromQQ.Equals(QQUser.QQ))
             {
                 //回复已接收成功
-                dataReader = new BinaryReader(new MemoryStream());
                 Send(new Send_0x0319(e.ReceivePacket.user, e.ReceivePacket.FromQQ, e.ReceivePacket.MessageDateTime)
                     .WriteData());
 

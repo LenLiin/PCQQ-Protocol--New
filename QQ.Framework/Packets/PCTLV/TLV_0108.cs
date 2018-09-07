@@ -16,13 +16,11 @@ namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
 
         public void parser_tlv_0108(QQClient m_PCClient, BinaryReader buf)
         {
-            byte[] buffer;
-            ushort len;
             wSubVer = buf.BEReadUInt16(); //wSubVer
             if (wSubVer == 0x0001)
             {
-                len = buf.BEReadUInt16();
-                buffer = buf.ReadBytes(len);
+                var len = buf.BEReadUInt16();
+                var buffer = buf.ReadBytes(len);
                 var bufAccountBasicInfo = new BinaryReader(new MemoryStream(buffer));
 
                 len = bufAccountBasicInfo.BEReadUInt16();

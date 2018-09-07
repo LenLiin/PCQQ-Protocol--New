@@ -10,7 +10,6 @@ namespace QQ.Framework.Packets.Send.Message
 
         /// <summary>
         /// </summary>
-        /// <param name="byteBuffer"></param>
         /// <param name="User"></param>
         public Send_0x0319(QQUser User, long RecvQQ, byte[] MessageTime)
             : base(User)
@@ -37,7 +36,6 @@ namespace QQ.Framework.Packets.Send.Message
         /// <summary>
         ///     初始化包体
         /// </summary>
-        /// <param name="buf">The buf.</param>
         protected override void PutBody()
         {
             bodyWriter.Write(new byte[] {0x00, 0x00, 0x00, 0x07});

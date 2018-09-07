@@ -68,7 +68,6 @@ namespace QQ.Framework.Packets
         /// <summary>
         ///     从buf的当前位置解析包尾
         /// </summary>
-        /// <param name="buf">The buf.</param>
         protected void ParseTail()
         {
             try
@@ -83,7 +82,6 @@ namespace QQ.Framework.Packets
         /// <summary>
         ///     解析包体，从buf的开头位置解析起
         /// </summary>
-        /// <param name="reader">The buf.</param>
         protected virtual void ParseBody()
         {
         }
@@ -91,7 +89,6 @@ namespace QQ.Framework.Packets
         /// <summary>
         ///     从buf的当前位置解析包头
         /// </summary>
-        /// <param name="reader">The buf.</param>
         protected virtual void ParseHeader()
         {
             Header = reader.ReadByte();

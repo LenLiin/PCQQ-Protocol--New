@@ -79,9 +79,8 @@ namespace QQ.Framework.Utils
         {
             MakeCRC16Table();
             ushort num = 65535;
-            for (var i = 0; i < ABytes.Length; i++)
+            foreach (var aByte in ABytes)
             {
-                var aByte = ABytes[i];
                 num = UpdateCRC16(aByte, num);
             }
 
@@ -102,9 +101,8 @@ namespace QQ.Framework.Utils
         {
             MakeCRC32Table();
             var num = 4294967295u;
-            for (var i = 0; i < ABytes.Length; i++)
+            foreach (var aByte in ABytes)
             {
-                var aByte = ABytes[i];
                 num = UpdateCRC32(aByte, num);
             }
 

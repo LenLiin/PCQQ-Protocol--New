@@ -57,25 +57,16 @@ namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
                     buf.ReadByte();
                     var directory = Util.MapPath("Verify");
                     var filename = Path.Combine(directory, m_PCClient.QQUser.QQ + ".png");
-                    FileStream fs = null;
                     if (!Directory.Exists(directory))
                     {
                         Directory.CreateDirectory(directory);
                     }
 
-                    if (Next == 0x00)
-                    {
-                        fs = new FileStream(filename, FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
-                    }
-                    else
-                    {
-                        fs = new FileStream(filename, FileMode.Append, FileAccess.Write, FileShare.Read);
-                    }
+                    var fs = Next == 0x00 ? new FileStream(filename, FileMode.Create, FileAccess.ReadWrite, FileShare.Read) : new FileStream(filename, FileMode.Append, FileAccess.Write, FileShare.Read);
 
                     //fs.Seek(0, SeekOrigin.End);
                     fs.Write(buffer, 0, buffer.Length);
                     fs.Close();
-                    fs = null;
 
                     len = buf.BEReadInt32();
                     buffer = buf.ReadBytes(len);

@@ -46,7 +46,6 @@ namespace QQ.Framework.Packets.Send.Message
         /// <summary>
         ///     初始化包体
         /// </summary>
-        /// <param name="buf">The buf.</param>
         protected override void PutBody()
         {
             var _DateTime = Util.GetTimeSeconds(DateTime.Now);

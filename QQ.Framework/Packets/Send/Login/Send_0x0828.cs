@@ -8,7 +8,6 @@ namespace QQ.Framework.Packets.Send.Login
         /// <summary>
         ///     构造函数
         /// </summary>
-        /// <param name="byteBuffer"></param>
         /// <param name="User"></param>
         public Send_0x0828(QQUser User)
             : base(User)
@@ -37,7 +36,6 @@ namespace QQ.Framework.Packets.Send.Login
         /// <summary>
         ///     初始化包体
         /// </summary>
-        /// <param name="buf">The buf.</param>
         protected override void PutBody()
         {
             user.QQ_PACKET_FIX1 = new byte[] {0x1F, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x15, 0x00, 0x30, 0x00, 0x01};

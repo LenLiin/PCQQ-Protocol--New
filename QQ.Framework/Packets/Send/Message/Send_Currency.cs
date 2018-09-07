@@ -5,7 +5,6 @@ namespace QQ.Framework.Packets.Send.Message
         /// <summary>
         ///     通用响应包
         /// </summary>
-        /// <param name="byteBuffer"></param>
         /// <param name="User"></param>
         /// <param name="Data">要发送的数据内容</param>
         /// <param name="_sequence">序号</param>
@@ -29,7 +28,6 @@ namespace QQ.Framework.Packets.Send.Message
         /// <summary>
         ///     初始化包体
         /// </summary>
-        /// <param name="buf">The buf.</param>
         protected override void PutBody()
         {
             bodyWriter.Write(_data);

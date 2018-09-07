@@ -44,7 +44,6 @@ namespace QQ.Framework.Packets.Send.Message
         /// <summary>
         ///     初始化包体
         /// </summary>
-        /// <param name="buf">The buf.</param>
         protected override void PutBody()
         {
             var _DateTime = Util.GetTimeSeconds(DateTime.Now);
@@ -165,7 +164,7 @@ namespace QQ.Framework.Packets.Send.Message
         /// </summary>
         /// <param name="GroupNum"></param>
         /// <param name="Ukey"></param>
-        /// <param name="Img"></param>
+        /// <param name="FileName"></param>
         public void HttpUpLoadGroupImg(long GroupNum, string Ukey, string FileName)
         {
             using (var webclient = new WebClient())
@@ -186,7 +185,7 @@ namespace QQ.Framework.Packets.Send.Message
         {
             var group = groupid.ToString();
             var left = Convert.ToInt64(group.Substring(0, group.Length - 6));
-            string right = "", gid = "";
+            string right, gid;
             if (left >= 1 && left <= 10)
             {
                 right = group.Substring(group.Length - 6, 6);

@@ -1,5 +1,5 @@
-using Ionic.Zlib;
 using System.Text;
+using Ionic.Zlib;
 
 namespace QQ.Framework.Utils
 {
@@ -7,13 +7,12 @@ namespace QQ.Framework.Utils
     {
         public static byte[] CompressBytes(string input)
         {
-            var output = ZlibStream.CompressString(input);
-            return output;
+            return ZlibStream.CompressString(input);
         }
+
         public static string DecompressString(byte[] input)
         {
-            var output = Encoding.UTF8.GetString(ZlibStream.UncompressBuffer(input));
-            return output;
+            return Encoding.UTF8.GetString(ZlibStream.UncompressBuffer(input));
         }
     }
 }

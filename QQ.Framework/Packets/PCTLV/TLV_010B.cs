@@ -53,12 +53,12 @@ namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
             byte flag = 0x01 /*固定 0x01*/)
         {
             var RC = flag;
-            for (var i = 0; i < bufTGT.Length; i++)
+            foreach (var t in bufTGT)
             {
-                RC ^= bufTGT[i];
+                RC ^= t;
             }
 
-            byte RCC = 0x00;
+            byte RCC;
             for (var i = 0; i < 4; i++)
             {
                 RCC = QQEXE_MD5[i * 4];

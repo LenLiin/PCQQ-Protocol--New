@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace System
 {
-    public sealed class Check
+    public static class Check
     {
         #region Const Literals
 
@@ -67,12 +67,12 @@ namespace System
             }
             else
             {
-                for (var i = 0; i < strategies.Length; ++i)
+                foreach (var t in strategies)
                 {
-                    if (!strategies[i].Pass(obj))
+                    if (!t.Pass(obj))
                     {
                         assertion = false;
-                        message = strategies[i].GetFailingMessage(objName);
+                        message = t.GetFailingMessage(objName);
                         break;
                     }
                 }
@@ -145,7 +145,7 @@ namespace System
             return new LessThanOrEqualStrategy<T>(compareValue);
         }
 
-        private sealed class NotNullCheckStrategy : ICheckStrategy
+        private sealed static class NotNullCheckStrategy : ICheckStrategy
         {
             #region ICheckStrategy Members
 
@@ -162,7 +162,7 @@ namespace System
             #endregion
         }
 
-        private sealed class NotNullOrEmptyStrategy : ICheckStrategy
+        private sealed static class NotNullOrEmptyStrategy : ICheckStrategy
         {
             #region ICheckStrategy Members
 
@@ -199,7 +199,7 @@ namespace System
             #endregion
         }
 
-        private sealed class IsAssignableToStrategy<TargetType> : ICheckStrategy
+        private sealed static class IsAssignableToStrategy<TargetType> : ICheckStrategy
         {
             #region ICheckStrategy Members
 
@@ -216,7 +216,7 @@ namespace System
             #endregion
         }
 
-        private sealed class GreaterThanStrategy<T> : ICheckStrategy
+        private sealed static class GreaterThanStrategy<T> : ICheckStrategy
         {
             private readonly T compareValue;
 
@@ -245,7 +245,7 @@ namespace System
             #endregion
         }
 
-        private sealed class GreaterThanOrEqualStrategy<T> : ICheckStrategy
+        private sealed static class GreaterThanOrEqualStrategy<T> : ICheckStrategy
         {
             private readonly T compareValue;
 
@@ -274,7 +274,7 @@ namespace System
             #endregion
         }
 
-        private sealed class LessThanStrategy<T> : ICheckStrategy
+        private sealed static class LessThanStrategy<T> : ICheckStrategy
         {
             private readonly T compareValue;
 
@@ -303,7 +303,7 @@ namespace System
             #endregion
         }
 
-        private sealed class LessThanOrEqualStrategy<T> : ICheckStrategy
+        private sealed static class LessThanOrEqualStrategy<T> : ICheckStrategy
         {
             private readonly T compareValue;
 
@@ -771,9 +771,6 @@ namespace System
         #region Use Exception Or Trace/Debug Assertion?
 
         // No creation
-        private Check()
-        {
-        }
 
         /// <summary>
         ///     Is exception handling being used?

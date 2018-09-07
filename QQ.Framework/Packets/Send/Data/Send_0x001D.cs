@@ -19,7 +19,6 @@ namespace QQ.Framework.Packets.Send.Data
         /// <summary>
         ///     初始化包体
         /// </summary>
-        /// <param name="buf">The buf.</param>
         protected override void PutBody()
         {
             bodyWriter.Write(new byte[]
