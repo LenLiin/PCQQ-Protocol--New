@@ -403,7 +403,7 @@ namespace QQ.Framework
             //      e.ReceivePacket.Group,
             //      FriendMessageType.Xml);
             //}
-            Send(new Send_0x0388(QQUser, @"D:\User\Desktop\qietu\abu_logo.png", 328601319).WriteData());
+            //Send(new Send_0x0388(QQUser, @"D:\User\Desktop\qietu\abu_logo.png", 328601319).WriteData());
             //重复接收包不再重复触发事件并且不处理自己的消息
             if (!QQUser.ReceiveSequences.Contains(e.ReceivePacket.Sequence) &&
                 !e.ReceivePacket.FromQQ.Equals(QQUser.QQ))
@@ -450,16 +450,16 @@ namespace QQ.Framework
             Send(new Send_0x00CE(e.ReceivePacket.user, dataReader.ReadBytes(0x10), e.ReceivePacket.Sequence)
                 .WriteData());
 
-            //回复已接收成功
-            //buf = new ByteBuffer();
-            //new Send_0x0319(e.ReceivePacket.user, DataBuf.ReadBytes(4)).Fill(buf);
-            //Send(buf);
             //SendLongUserMessage("嘿嘿嘿[face1.gif]嘿嘿嘿[face2.gif]哈哈哈嘿嘿嘿[face1.gif]嘿嘿嘿[face2.gif]哈哈哈嘿嘿嘿[face1.gif]嘿嘿嘿[face2.gif]哈哈哈嘿嘿嘿[face1.gif]嘿嘿嘿[face2.gif]哈哈哈嘿嘿嘿[face1.gif]嘿嘿嘿[face2.gif]哈哈哈", e.ReceivePacket.FromQQ);
 
             //重复接收包不再重复触发事件并且不处理自己的消息
             if (!QQUser.ReceiveSequences.Contains(e.ReceivePacket.Sequence) &&
                 !e.ReceivePacket.FromQQ.Equals(QQUser.QQ))
             {
+                //回复已接收成功
+                dataReader = new BinaryReader(new MemoryStream());
+                Send(new Send_0x0319(e.ReceivePacket.user, e.ReceivePacket.FromQQ, e.ReceivePacket.MessageDateTime).WriteData());
+
                 QQUser.ReceiveSequences.Add(e.ReceivePacket.Sequence);
                 EventReceive_0x00CE?.Invoke(this, e);
             }

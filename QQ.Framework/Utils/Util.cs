@@ -399,6 +399,7 @@ namespace QQ.Framework.Utils
                 }
                 else
                 {
+                    //temp = temp + "0" + binary;
                     break;
                 }
             }

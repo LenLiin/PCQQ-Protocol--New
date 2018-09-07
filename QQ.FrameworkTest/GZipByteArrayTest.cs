@@ -1,5 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using QQ.Framework.Utils;
+using System;
 
 namespace QQ.FrameworkTest
 {
@@ -20,6 +21,14 @@ namespace QQ.FrameworkTest
             var stringHandlingPackets = new StringHandlingPackets();
             stringHandlingPackets.Add("");
             var result = GZipByteArray.DecompressString(stringHandlingPackets.GetBytes());
+        }
+        [TestMethod]
+        public void TestPB_toLength()
+        {
+            //var hex = Util.PB_toLength(Util.GetTimeSeconds(DateTime.UtcNow.AddMinutes(3)));
+            //var hex3 = Util.PB_toLength(Util.GetTimeSeconds(Convert.ToDateTime("2018/9/8 0:42:22")));
+
+            var aaa = Convert.ToInt64(("5B 91 5D 02").Replace(" ", ""),16);
         }
     }
 }
