@@ -1,7 +1,7 @@
 ﻿using QQ.Framework.Packets;
 using QQ.Framework.Utils;
 
-namespace QQ.Framework.Domains
+namespace QQ.Framework.Domains.Commands
 {
     public abstract class ReceiveCommand<PacketType> : PacketCommand
         where PacketType : ReceivePacket
