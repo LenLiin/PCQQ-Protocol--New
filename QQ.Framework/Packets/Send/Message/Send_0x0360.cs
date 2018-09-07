@@ -1,4 +1,6 @@
 using QQ.Framework.Utils;
+using System;
+using System.IO;
 
 namespace QQ.Framework.Packets.Send.Message
 {
@@ -8,21 +10,21 @@ namespace QQ.Framework.Packets.Send.Message
         /// </summary>
         /// <param name="byteBuffer"></param>
         /// <param name="User"></param>
-        public Send_0x0360(QQUser User, byte[] Data)
+        public Send_0x0360(QQUser User, byte[] messageTime)
             : base(User)
         {
             Sequence = GetNextSeq();
             _secretKey = user.QQ_SessionKey;
             Command = QQCommand.Message0x0360;
-            _Data = Data;
+            _messageTime = messageTime;
         }
 
-        private byte[] _Data { get; }
+        private byte[] _messageTime { get; set; }
 
         protected override void PutHeader()
         {
             base.PutHeader();
-            writer.Write(user.QQ_PACKET_FIXVER);
+            writer.Write(new byte[] { 0x04, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x00, 0x00, 0x68, 0x1C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
         }
 
         /// <summary>
@@ -31,13 +33,18 @@ namespace QQ.Framework.Packets.Send.Message
         /// <param name="buf">The buf.</param>
         protected override void PutBody()
         {
-            bodyWriter.Write(new byte[] {0x00, 0x00, 0x00, 0x07, 0x00, 0x00});
-            //数据长度
-            bodyWriter.BEWrite((ushort) _Data.Length);
-            bodyWriter.Write(new byte[] {0x08, 0x01, 0x12, 0x03, 0x98, 0x01, 0x00, 0x0A, 0x0E, 0x08});
-            //数据
-            bodyWriter.Write(_Data);
-            bodyWriter.Write(new byte[] {0xA7, 0xFF, 0xDB, 0x05, 0x20, 0x00});
+            //bodyWriter.Write(new byte[] { 0x00, 0x00, 0x00, 0x07 });
+            //BinaryWriter _Data = new BinaryWriter(new MemoryStream());
+            //_Data.Write(new byte[] { 0x0A, 0x0C, 0x08 });
+            //_Data.Write(Util.HexStringToByteArray(Util.PB_toLength(recvQQ)));
+            //_Data.Write((byte)0x10);
+            //_Data.Write(Util.HexStringToByteArray(Util.PB_toLength(Convert.ToInt64(Util.ToHex(_messageTime).Replace(" ", ""), 16))));
+            //_Data.Write(new byte[] { 0x20, 0x00 });
+            ////数据长度
+            //bodyWriter.BEWrite(_Data.BaseStream.Length);
+            //bodyWriter.Write(new byte[] { 0x08, 0x01, 0x12, 0x03, 0x98, 0x01, 0x00 });
+            ////数据
+            //bodyWriter.Write(_Data.BaseStream.ToBytesArray());
         }
     }
 }
