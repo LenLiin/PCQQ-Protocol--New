@@ -9,6 +9,9 @@ namespace QQ.Framework.Domains
     /// </summary>
     public class Transponder : ServerMessageSubject
     {
+        /// <summary>
+        ///     机器人列表
+        /// </summary>
         private readonly IList<ServerMessageObserver> observers;
 
         public Transponder()
