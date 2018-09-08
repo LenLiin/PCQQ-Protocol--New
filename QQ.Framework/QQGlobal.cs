@@ -342,6 +342,10 @@ namespace QQ.Framework
         /// <summary>
         /// 获取Ukey
         /// </summary>
+        Message0x0352 = 0x0352,
+        /// <summary>
+        /// 获取Ukey
+        /// </summary>
         Message0x0388 = 0x0388,
 
         /// <summary>

@@ -82,7 +82,7 @@ namespace QQ.Framework.Utils
 
         public static string LongToHexString(long num)
         {
-            return string.Format("{0:X8}", num);
+            return num.ToString("X");
         }
 
         /// <summary>

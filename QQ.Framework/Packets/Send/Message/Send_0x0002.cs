@@ -171,7 +171,7 @@ namespace QQ.Framework.Packets.Send.Message
             using (WebClient webclient = new WebClient())
             {
                 var file = new FileStream(FileName, FileMode.Open);
-                var ApiUrl = $"http://htdata2.qq.com/cgi-bin/httpconn?htcmd=0x6ff0071&ver=5515&term=pc&ukey={Ukey}&filesize={file.Length}&range=0&uin{user.QQ}&&groupcode={GroupNum}";
+                var ApiUrl = $"http://htdata2.qq.com/cgi-bin/httpconn?htcmd=0x6ff0070&ver=5509&term=pc&ukey={Ukey}&filesize={file.Length}&range=0&uin{user.QQ}&&groupcode={GroupNum}";
                 webclient.Headers["User-Agent"] = "QQClient";
                 webclient.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
                 var result = webclient.UploadData(ApiUrl,

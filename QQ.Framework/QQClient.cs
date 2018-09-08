@@ -398,7 +398,7 @@ namespace QQ.Framework
             //      e.ReceivePacket.Group,
             //      FriendMessageType.Xml);
             //}
-            //Send(new Send_0x0388(QQUser, @"D:\User\Desktop\qietu\abu_logo.png", 328601319).WriteData());
+            //Send(new Send_0x0352(QQUser, @"D:\User\Desktop\qietu\abu_logo.png", 328601319).WriteData());
             //重复接收包不再重复触发事件并且不处理自己的消息
             if (!QQUser.ReceiveSequences.Contains(e.ReceivePacket.Sequence) &&
                 !e.ReceivePacket.FromQQ.Equals(QQUser.QQ))

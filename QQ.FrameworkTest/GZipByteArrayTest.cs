@@ -25,7 +25,7 @@ namespace QQ.FrameworkTest
         [TestMethod]
         public void TestPB_toLength()
         {
-            var hex = Util.PB_toLength(328601319);
+            var hex = Util.PB_toLength(1080);
             //var hex3 = Util.PB_toLength(Util.GetTimeSeconds(Convert.ToDateTime("2018/9/8 0:42:22")));
         }
     }
