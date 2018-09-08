@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using QQ.Framework.Domains.Observers;
 
 namespace QQ.Framework.Domains
@@ -12,21 +11,27 @@ namespace QQ.Framework.Domains
         /// <summary>
         ///     机器人列表
         /// </summary>
-        private readonly IList<ServerMessageObserver> observers;
+        private readonly IList<ServerMessageObserver> _robots;
 
         public Transponder()
         {
-            observers = new List<ServerMessageObserver>();
+            _robots = new List<ServerMessageObserver>();
         }
 
         public void ReceiveFriendMessage(long friendNumber, string content)
         {
-            throw new NotImplementedException();
+            foreach (var robot in _robots)
+            {
+                robot.ReceiveFriendMessage(friendNumber, content);
+            }
         }
 
         public void ReceiveGroupMessage(long groupNumber, long fromNumber, string content)
         {
-            throw new NotImplementedException();
+            foreach (var robot in _robots)
+            {
+                robot.ReceiveGroupMessage(groupNumber, fromNumber, content);
+            }
         }
 
         /// <summary>
@@ -35,9 +40,9 @@ namespace QQ.Framework.Domains
         /// <param name="robot"></param>
         public void AddCustomRoBot(ServerMessageObserver robot)
         {
-            if (!observers.Contains(robot))
+            if (!_robots.Contains(robot))
             {
-                observers.Add(robot);
+                _robots.Add(robot);
             }
         }
 
@@ -47,9 +52,9 @@ namespace QQ.Framework.Domains
         /// <param name="robot"></param>
         public void RemoveCustomRoBot(ServerMessageObserver robot)
         {
-            if (observers.Contains(robot))
+            if (_robots.Contains(robot))
             {
-                observers.Remove(robot);
+                _robots.Remove(robot);
             }
         }
     }
