@@ -7,7 +7,14 @@ namespace QQ.Framework.Domains
     /// </summary>
     public abstract class CustomRoBot : ServerMessageObserver
     {
+        /// <summary>
+        ///     消息发送服务
+        /// </summary>
         protected readonly SendMessageServer _server;
+
+        /// <summary>
+        ///     消息转发器
+        /// </summary>
         private readonly ServerMessageSubject _transponder;
 
         public CustomRoBot(SendMessageServer server, ServerMessageSubject transponder)
