@@ -3,7 +3,7 @@
     /// <summary>
     ///     发送消息服务
     /// </summary>
-    public interface SendMessageServer
+    public interface SendMessageService
     {
         /// <summary>
         ///     发送给好友
