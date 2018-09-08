@@ -3,13 +3,13 @@
 namespace QQ.Framework.Domains.Commands.ReceiveCommands.Message
 {
     /// <summary>
-    /// 收到群/系统消息
+    ///     收到群/系统消息
     /// </summary>
     [ReceivePacketCommand(QQCommand.Message0x0017)]
     public class ReceiveGroupSystemMessagesCommand : ReceiveCommand<Receive_0x0017>
     {
         /// <summary>
-        /// 收到群/系统消息
+        ///     收到群/系统消息
         /// </summary>
         public ReceiveGroupSystemMessagesCommand(byte[] data, QQClient client) : base(data, client)
         {

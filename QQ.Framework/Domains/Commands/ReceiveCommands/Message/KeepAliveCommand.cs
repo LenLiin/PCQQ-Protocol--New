@@ -3,13 +3,13 @@
 namespace QQ.Framework.Domains.Commands.ReceiveCommands.Message
 {
     /// <summary>
-    /// KeepAlive（心跳）
+    ///     KeepAlive（心跳）
     /// </summary>
     [ReceivePacketCommand(QQCommand.Message0x0058)]
     public class KeepAliveCommand : ReceiveCommand<Receive_0x0058>
     {
         /// <summary>
-        /// KeepAlive（心跳）
+        ///     KeepAlive（心跳）
         /// </summary>
         public KeepAliveCommand(byte[] data, QQClient client) : base(data, client)
         {

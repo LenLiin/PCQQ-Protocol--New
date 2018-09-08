@@ -9,7 +9,6 @@ namespace QQ.Framework.Packets.Send.Message
 
         /// <summary>
         /// </summary>
-        /// <param name="byteBuffer"></param>
         /// <param name="User"></param>
         /// <param name="ToQQ"></param>
         public Send_0x01C0(QQUser User, byte[] ToQQ)
@@ -30,7 +29,6 @@ namespace QQ.Framework.Packets.Send.Message
         /// <summary>
         ///     初始化包体
         /// </summary>
-        /// <param name="buf">The buf.</param>
         protected override void PutBody()
         {
             bodyWriter.Write((byte) 0x01);

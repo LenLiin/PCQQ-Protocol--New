@@ -13,7 +13,7 @@ namespace QQ.Framework.Domains.Commands
         }
 
         /// <summary>
-        /// 回复包的处理逻辑
+        ///     回复包的处理逻辑
         /// </summary>
         public abstract void Process();
     }

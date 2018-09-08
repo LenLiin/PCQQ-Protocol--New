@@ -6,7 +6,6 @@ namespace QQ.Framework.Packets.Receive.Message
     public class Receive_0x0002 : ReceivePacket
     {
         /// <summary>
-        ///     
         /// </summary>
         public Receive_0x0002(byte[] byteBuffer, QQUser User)
             : base(byteBuffer, User, User.QQ_SessionKey)

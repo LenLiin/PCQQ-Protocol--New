@@ -15,13 +15,11 @@ namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
 
         public void parser_tlv_0006(QQClient m_PCClient, BinaryReader buf)
         {
-            byte[] buffer;
-            ushort len;
             wSubVer = buf.BEReadUInt16(); //wSubVer
             if (wSubVer == 0x0001)
             {
-                len = buf.BEReadUInt16();
-                buffer = buf.ReadBytes(len);
+                var len = buf.BEReadUInt16();
+                var buffer = buf.ReadBytes(len);
                 var bufTickStatus = new BinaryReader(new MemoryStream(buffer));
                 var dwTGTServiceID = bufTickStatus.BEReadInt32();
                 var dwTGTPriority = bufTickStatus.BEReadInt32();
@@ -60,7 +58,7 @@ namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
             }
             else
             {
-                throw new Exception(string.Format("{0} 无法识别的版本号 {1}", Name, wSubVer));
+                throw new Exception($"{Name} 无法识别的版本号 {wSubVer}");
             }
         }
     }

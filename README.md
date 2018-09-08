@@ -8,10 +8,14 @@ MyUser.cs为本人扩展用户名和密码这里不做上传
 
 [![Build Status](https://travis-ci.org/luojinfang/PCQQ-Protocol.svg?branch=master)](https://travis-ci.org/luojinfang/PCQQ-Protocol)
 
+自定义机器人相关类图
+<img src="/QQ.Framework/Docs/UMLs/RoBot.png?raw=true" width="800px" alt="联系方式">
+
 源码仅供参考，欢迎吐槽
 ------------------------------------------
 #### 2018-9-8
 1. 消息接收后查看确认，发送确认包后不再重复接收消息
+2. 添加消息及自定义机器人相关类图。[查看](./QQ.Framework/Docs/UMLs/RoBot.png)
 
 #### 2018-9-7
 1. 重构完回复包。

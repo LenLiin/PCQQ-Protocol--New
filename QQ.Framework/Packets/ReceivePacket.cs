@@ -68,7 +68,6 @@ namespace QQ.Framework.Packets
         /// <summary>
         ///     从buf的当前位置解析包尾
         /// </summary>
-        /// <param name="buf">The buf.</param>
         protected void ParseTail()
         {
             try
@@ -83,7 +82,6 @@ namespace QQ.Framework.Packets
         /// <summary>
         ///     解析包体，从buf的开头位置解析起
         /// </summary>
-        /// <param name="reader">The buf.</param>
         protected virtual void ParseBody()
         {
         }
@@ -91,7 +89,6 @@ namespace QQ.Framework.Packets
         /// <summary>
         ///     从buf的当前位置解析包头
         /// </summary>
-        /// <param name="reader">The buf.</param>
         protected virtual void ParseHeader()
         {
             Header = reader.ReadByte();
@@ -104,7 +101,8 @@ namespace QQ.Framework.Packets
 
         public void GetImage(string FileName)
         {
-            string Api = $"https://gchat.qpic.cn/gchatpic_new/807977219/485750189-2603962136-64ECA8CA06FC5B0CE6F047FEB66768B0/0?vuin=417085811&term=2addtime=1515123740";
+            var Api =
+                "https://gchat.qpic.cn/gchatpic_new/807977219/485750189-2603962136-64ECA8CA06FC5B0CE6F047FEB66768B0/0?vuin=417085811&term=2addtime=1515123740";
         }
     }
 }

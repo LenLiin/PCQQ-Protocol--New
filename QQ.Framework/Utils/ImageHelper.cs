@@ -37,11 +37,12 @@ namespace QQ.Framework.Utils
                     image.Save(ms, ImageFormat.Icon);
                 }
 
-                var buffer = new byte[ms.Length];
-                //Image.Save()会改变MemoryStream的Position，需要重新Seek到Begin
-                ms.Seek(0, SeekOrigin.Begin);
-                ms.Read(buffer, 0, buffer.Length);
-                return buffer;
+                //var buffer = new byte[ms.Length];
+                ////Image.Save()会改变MemoryStream的Position，需要重新Seek到Begin
+                //ms.Seek(0, SeekOrigin.Begin);
+                //ms.Read(buffer, 0, buffer.Length);
+                //return buffer;
+                return ms.ToArray();
             }
         }
 
@@ -52,9 +53,7 @@ namespace QQ.Framework.Utils
         /// <returns></returns>
         public static Image BytesToImage(byte[] buffer)
         {
-            var ms = new MemoryStream(buffer);
-            var image = Image.FromStream(ms);
-            return image;
+            return Image.FromStream(new MemoryStream(buffer));
         }
 
         /// <summary>

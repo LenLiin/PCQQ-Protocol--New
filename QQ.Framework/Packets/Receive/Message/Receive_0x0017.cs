@@ -55,13 +55,13 @@ namespace QQ.Framework.Packets.Receive.Message
             reader.ReadBytes(4); //自己的QQ
             reader.ReadBytes(10);
             MessageType = reader.BEReadChar(); //消息类型
-            if (MessageType == (char)0x0052)
+            if (MessageType == (char) 0x0052)
             {
                 reader.ReadBytes(2);
                 reader.ReadBytes(reader.BEReadChar());
-                Group = (long)Util.GetQQNumRetUint(Util.ToHex(reader.ReadBytes(4))); //群号
+                Group = (long) Util.GetQQNumRetUint(Util.ToHex(reader.ReadBytes(4))); //群号
                 reader.ReadByte();
-                FromQQ = (long)Util.GetQQNumRetUint(Util.ToHex(reader.ReadBytes(4))); //发消息人的QQ
+                FromQQ = (long) Util.GetQQNumRetUint(Util.ToHex(reader.ReadBytes(4))); //发消息人的QQ
                 reader.ReadBytes(4);
                 ReceiveTime = reader.ReadBytes(4); //接收时间  
                 reader.ReadBytes(24);
@@ -74,9 +74,8 @@ namespace QQ.Framework.Packets.Receive.Message
                 reader.ReadBytes(reader.BEReadChar()); //消息
                 reader.ReadBytes(11);
             }
-            else if (MessageType == (char)0x0058)
+            else if (MessageType == (char) 0x0058)
             {
-
             }
         }
     }

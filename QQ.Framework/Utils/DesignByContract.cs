@@ -67,12 +67,12 @@ namespace System
             }
             else
             {
-                for (var i = 0; i < strategies.Length; ++i)
+                foreach (var t in strategies)
                 {
-                    if (!strategies[i].Pass(obj))
+                    if (!t.Pass(obj))
                     {
                         assertion = false;
-                        message = strategies[i].GetFailingMessage(objName);
+                        message = t.GetFailingMessage(objName);
                         break;
                     }
                 }
@@ -173,19 +173,19 @@ namespace System
                     return false;
                 }
 
-                if (obj is string)
+                if (obj is string s)
                 {
-                    return !string.IsNullOrEmpty(obj as string);
+                    return !string.IsNullOrEmpty(s);
                 }
 
-                if (obj is Array)
+                if (obj is Array array)
                 {
-                    return (obj as Array).Length > 0;
+                    return array.Length > 0;
                 }
 
-                if (obj is ICollection)
+                if (obj is ICollection collection)
                 {
-                    return (obj as ICollection).Count > 0;
+                    return collection.Count > 0;
                 }
 
                 return true;
@@ -771,9 +771,6 @@ namespace System
         #region Use Exception Or Trace/Debug Assertion?
 
         // No creation
-        private Check()
-        {
-        }
 
         /// <summary>
         ///     Is exception handling being used?

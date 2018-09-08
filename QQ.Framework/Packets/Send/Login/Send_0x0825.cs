@@ -7,9 +7,7 @@ namespace QQ.Framework.Packets.Send.Login
         /// <summary>
         ///     构造函数
         /// </summary>
-        /// <param name="byteBuffer"></param>
         /// <param name="User"></param>
-        /// <param name="Key">数据包密钥</param>
         /// <param name="Redirect">是否是重定向包</param>
         public Send_0x0825(QQUser User, bool Redirect)
             : base(User)
@@ -24,14 +22,7 @@ namespace QQ.Framework.Packets.Send.Login
             }
 
             redirect = Redirect;
-            if (!Redirect)
-            {
-                _secretKey = user.QQ_PACKET_0825KEY;
-            }
-            else
-            {
-                _secretKey = user.QQ_PACKET_REDIRECTIONKEY;
-            }
+            _secretKey = !Redirect ? user.QQ_PACKET_0825KEY : user.QQ_PACKET_REDIRECTIONKEY;
 
             Command = QQCommand.Login0x0825;
         }
@@ -56,7 +47,6 @@ namespace QQ.Framework.Packets.Send.Login
         /// <summary>
         ///     初始化包体
         /// </summary>
-        /// <param name="buf">The buf.</param>
         protected override void PutBody()
         {
             bodyWriter.Write(user.QQ_PACKET_0825DATA0);

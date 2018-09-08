@@ -299,6 +299,7 @@ namespace QQ.Framework
         ///     Token请求
         /// </summary>
         Interactive0x00AE = 0x00AE,
+
         /// <summary>
         ///     验证码提交
         /// </summary>
@@ -339,8 +340,9 @@ namespace QQ.Framework
         ///     发送好友消息
         /// </summary>
         Message0x00CD = 0x00CD,
+
         /// <summary>
-        /// 获取Ukey
+        ///     获取Ukey
         /// </summary>
         Message0x0352 = 0x0352,
         /// <summary>
@@ -419,7 +421,7 @@ namespace QQ.Framework
     }
 
     /// <summary>
-    /// 加好友类型
+    ///     加好友类型
     /// </summary>
     public enum AddFriendType
     {

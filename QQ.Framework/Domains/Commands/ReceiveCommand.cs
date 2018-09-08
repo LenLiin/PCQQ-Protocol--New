@@ -16,12 +16,12 @@ namespace QQ.Framework.Domains.Commands
         }
 
         /// <summary>
-        /// 接收包的处理逻辑在此处完成
+        ///     接收包的处理逻辑在此处完成
         /// </summary>
         public abstract void Process();
 
         /// <summary>
-        /// 发送响应包
+        ///     发送响应包
         /// </summary>
         protected void Response()
         {

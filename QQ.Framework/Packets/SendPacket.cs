@@ -46,7 +46,6 @@ namespace QQ.Framework.Packets
         /// <summary>
         ///     将包头部转化为字节流, 写入指定的ByteBuffer对象.
         /// </summary>
-        /// <param name="buf">The buf.</param>
         protected virtual void PutHeader()
         {
             writer.Write(QQGlobal.QQ_HEADER_BASIC_FAMILY);
@@ -73,13 +72,11 @@ namespace QQ.Framework.Packets
         /// <summary>
         ///     初始化包体
         /// </summary>
-        /// <param name="buf">The buf.</param>
         protected abstract void PutBody();
 
         /// <summary>
         ///     将包尾部转化为字节流, 写入指定的ByteBuffer对象.
         /// </summary>
-        /// <param name="buf">The buf.</param>
         protected virtual void PutTail()
         {
             writer.Write(QQGlobal.QQ_HEADER_03_FAMILY);
@@ -89,7 +86,6 @@ namespace QQ.Framework.Packets
         ///     将整个包转化为字节流, 并返回其值。
         ///     可直接使用QQClient.Send(new Send_0x__().WriteData())。
         /// </summary>
-        /// <param name="buf">The buf.</param>
         public byte[] WriteData()
         {
             //保存当前pos
@@ -116,7 +112,6 @@ namespace QQ.Framework.Packets
         ///     回填，有些字段必须填完整个包才能确定其内容，比如长度字段，那么这个方法将在
         ///     尾部填充之后调用
         /// </summary>
-        /// <param name="buf">The buf.</param>
         /// <param name="startPos">The start pos.</param>
         public void PostFill(int startPos)
         {
@@ -134,7 +129,6 @@ namespace QQ.Framework.Packets
         /// <summary>
         ///     得到包体的字节数组
         /// </summary>
-        /// <param name="buf">The buf.</param>
         /// <param name="length">包总长度</param>
         /// <returns>包体字节数组</returns>
         protected byte[] GetBodyBytes(int length)
@@ -228,7 +222,6 @@ namespace QQ.Framework.Packets
         /// <summary>
         ///     XML消息组装
         /// </summary>
-        /// <param name="buf">报文</param>
         /// <param name="_DateTime">时间</param>
         /// <param name="compressMsg">压缩消息数组</param>
         public static byte[] SendXML(long _DateTime, byte[] compressMsg)

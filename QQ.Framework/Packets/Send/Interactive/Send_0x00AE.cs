@@ -1,17 +1,16 @@
 using QQ.Framework.Utils;
-using System;
 
 namespace QQ.Framework.Packets.Send.Interactive
 {
     public class Send_0x00AE : SendPacket
     {
         /// <summary>
-        /// 获取添加群或好友的令牌
+        ///     获取添加群或好友的令牌
         /// </summary>
         /// <param name="User"></param>
         /// <param name="AddQQ"></param>
         /// <param name="addType"></param>
-        public Send_0x00AE(QQUser User,long AddQQ, AddFriendType addType)
+        public Send_0x00AE(QQUser User, long AddQQ, AddFriendType addType)
             : base(User)
         {
             Sequence = GetNextSeq();
@@ -20,8 +19,10 @@ namespace QQ.Framework.Packets.Send.Interactive
             _AddQQ = AddQQ;
             this.addType = addType;
         }
+
         public long _AddQQ { get; set; }
         public AddFriendType addType { get; set; }
+
         protected override void PutHeader()
         {
             base.PutHeader();
@@ -31,14 +32,13 @@ namespace QQ.Framework.Packets.Send.Interactive
         /// <summary>
         ///     初始化包体
         /// </summary>
-        /// <param name="buf">The buf.</param>
         protected override void PutBody()
         {
             bodyWriter.Write(new byte[]
             {
                 0x01, 0x00
             });
-            bodyWriter.Write((byte)addType);
+            bodyWriter.Write((byte) addType);
             bodyWriter.BEWrite(_AddQQ);
         }
     }
