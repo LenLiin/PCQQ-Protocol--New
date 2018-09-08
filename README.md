@@ -4,10 +4,10 @@ PCQQ协议
 
 如果对你有用，希望你能留下Star
 
-自定义机器人相关类图
-<img src="/QQ.Framework/Docs/UMLs/RoBot.png?raw=true" style="width:275px;" alt="联系方式">
-
 MyUser.cs为本人扩展用户名和密码这里不做上传
+
+自定义机器人相关类图
+<img src="/QQ.Framework/Docs/UMLs/RoBot.png?raw=true" width="800px" alt="联系方式">
 
 [![Build Status](https://travis-ci.org/luojinfang/PCQQ-Protocol.svg?branch=master)](https://travis-ci.org/luojinfang/PCQQ-Protocol)
 
