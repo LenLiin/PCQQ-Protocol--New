@@ -1,4 +1,6 @@
-﻿namespace QQ.Framework.Domains
+﻿using QQ.Framework.Utils;
+
+namespace QQ.Framework.Domains
 {
     /// <summary>
     ///     发送消息服务
@@ -10,21 +12,13 @@
         /// </summary>
         /// <param name="friendNumber">好友QQ</param>
         /// <param name="content">内容</param>
-        void SendToFriend(long friendNumber, string content);
+        void SendToFriend(long friendNumber, Richtext content);
 
         /// <summary>
         ///     发送群消息
         /// </summary>
         /// <param name="groupNumber">QQ群号</param>
         /// <param name="content">内容</param>
-        void SendToGroup(long groupNumber, string content);
-
-        /// <summary>
-        ///     发送群消息时@某些人
-        /// </summary>
-        /// <param name="groupNumber">QQ群号</param>
-        /// <param name="content">内容</param>
-        /// <param name="atList">@列表</param>
-        void SendToGroupWithAt(long groupNumber, string content, params long[] atList);
+        void SendToGroup(long groupNumber, Richtext content);
     }
 }
