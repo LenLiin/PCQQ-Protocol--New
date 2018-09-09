@@ -10,17 +10,23 @@ namespace QQ.Framework.Domains
         /// <summary>
         ///     消息发送服务
         /// </summary>
-        protected readonly SendMessageService Service;
+        protected readonly SendMessageService _service;
 
         /// <summary>
         ///     消息转发器
         /// </summary>
         private readonly ServerMessageSubject _transponder;
 
-        public CustomRoBot(SendMessageService service, ServerMessageSubject transponder)
+        /// <summary>
+        ///     账号信息
+        /// </summary>
+        protected readonly QQUser _user;
+
+        public CustomRoBot(SendMessageService service, ServerMessageSubject transponder, QQUser user)
         {
-            Service = service;
+            _service = service;
             _transponder = transponder;
+            _user = user;
 
             // 将机器人加入转发器的订阅列表中
             _transponder.AddCustomRoBot(this);

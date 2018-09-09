@@ -1,6 +1,9 @@
-﻿using System.Net;
+﻿using System;
+using System.IO;
+using System.Net;
 using System.Net.Sockets;
 using QQ.Framework.Packets;
+using QQ.Framework.Packets.Send.Login;
 using QQ.Framework.Utils;
 
 namespace QQ.Framework.Domains
@@ -57,6 +60,30 @@ namespace QQ.Framework.Domains
         {
             _host = host;
             _point = new IPEndPoint(IPAddress.Parse(_host), _port);
+        }
+
+        public void MessageLog(string content)
+        {
+            Console.WriteLine($"{DateTime.Now.ToString()}--{content}");
+        }
+
+        public void Login()
+        {
+            Send(new Send_0x0825(_user, false));
+            MessageLog($"登录服务器{_host}");
+        }
+
+        public void ReceiveVerifyCode(byte[] data)
+        {
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "yanzhengma");
+            var img = ImageHelper.CreateImageFromBytes(path, data);
+
+            Console.Write($"请输入验证码:");
+            var code = Console.ReadLine();
+            if (!string.IsNullOrEmpty(code))
+            {
+                Send(new Send_0x00BA(_user, code));
+            }
         }
     }
 }

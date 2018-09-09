@@ -12,18 +12,22 @@ namespace QQ.Framework.Domains.Commands.ResponseCommands.Login
 
         public override void Process()
         {
-            var packet_length = _args.ReceivePacket.GetPacketLength();
-            var user = _args.QQClient.QQUser;
+            var packet_length = _packet.GetPacketLength();
 
-            if (packet_length == 871 && _args.ReceivePacket.VerifyCommand == 0x01)
+            if (packet_length == 271 || packet_length == 207)
             {
-                _args.QQClient.Send(new Send_0x00BA(user, "").WriteData());
+                _service.MessageLog("二次登录");
+                _service.Send(new Send_0x0836(_user, Login0x0836Type.Login0x0836_686));
+            }
+            else if (packet_length == 871 && _packet.VerifyCommand == 0x01)
+            {
+                _service.Send(new Send_0x00BA(_user, ""));
             }
             else if (packet_length > 700)
             {
-                _args.QQClient.MessageLog("登陆成功获取个人基本信息");
-                _args.QQClient.MessageLog($"账号：{user.QQ}，昵称：{user.NickName}，年龄：{user.Age}，性别：{user.Gender}");
-                _args.QQClient.Send(new Send_0x0828(user).WriteData());
+                _service.MessageLog("登陆成功获取个人基本信息");
+                _service.MessageLog($"账号：{_user.QQ}，昵称：{_user.NickName}，年龄：{_user.Age}，性别：{_user.Gender}");
+                _service.Send(new Send_0x0828(_user));
             }
         }
     }

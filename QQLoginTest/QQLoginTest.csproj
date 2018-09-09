@@ -72,6 +72,10 @@
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\QQ.FrameworkTest\QQ.FrameworkTest.csproj">
+      <Project>{504A6DF0-EBF5-404C-8C2E-9C9A448160D9}</Project>
+      <Name>QQ.FrameworkTest</Name>
+    </ProjectReference>
     <ProjectReference Include="..\QQ.Framework\QQ.Framework.csproj">
       <Project>{155bc652-d6ed-4dbf-82d2-a9188cb57c52}</Project>
       <Name>QQ.Framework</Name>

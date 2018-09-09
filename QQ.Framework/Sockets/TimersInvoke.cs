@@ -1,4 +1,5 @@
 using System.Timers;
+using QQ.Framework.Domains;
 using QQ.Framework.Packets.Send.Message;
 
 namespace QQ.Framework.Sockets
@@ -8,16 +9,19 @@ namespace QQ.Framework.Sockets
     /// </summary>
     public class TimersInvoke
     {
-        private readonly QQClient _client;
+        private readonly SocketService _service;
+        private readonly QQUser _user;
         private readonly Timer timer = new Timer();
 
         /// <summary>
         ///     定时发送心跳包
         /// </summary>
-        /// <param name="client"></param>
-        public TimersInvoke(QQClient client)
+        /// <param name="service"></param>
+        /// <param name="user"></param>
+        public TimersInvoke(SocketService service, QQUser user)
         {
-            _client = client;
+            _service = service;
+            _user = user;
         }
 
         /// <summary>
@@ -36,7 +40,7 @@ namespace QQ.Framework.Sockets
         /// </summary>
         public void InvokeFailMsg(object sender, ElapsedEventArgs e)
         {
-            _client.Send(new Send_0x0058(_client.QQUser).WriteData());
+            _service.Send(new Send_0x0058(_user));
         }
     }
 }

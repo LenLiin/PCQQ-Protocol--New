@@ -12,10 +12,7 @@ namespace QQ.Framework.Domains.Commands.ResponseCommands.Data
 
         public override void Process()
         {
-            var client = _args.QQClient;
-            var user = client.QQUser;
-
-            client.Send(new Send_0x005C(user).WriteData());
+            _service.Send(new Send_0x005C(_user));
         }
     }
 }

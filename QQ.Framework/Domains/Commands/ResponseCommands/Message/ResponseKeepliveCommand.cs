@@ -11,9 +11,6 @@ namespace QQ.Framework.Domains.Commands.ResponseCommands.Message
 
         public override void Process()
         {
-            var client = _args.QQClient;
-            var user = client.QQUser;
-            var packet = _args.ReceivePacket;
         }
     }
 }

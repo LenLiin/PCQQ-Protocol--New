@@ -6,13 +6,17 @@ namespace QQ.Framework.Domains.Commands
     public abstract class ReceiveCommand<PacketType> : PacketCommand
         where PacketType : ReceivePacket
     {
-        protected readonly QQClient _client;
+        protected readonly SocketService _service;
+        protected readonly ServerMessageSubject _transponder;
+        protected readonly QQUser _user;
         protected PacketType _packet;
         protected QQEventArgs<PacketType> _event_args;
 
-        public ReceiveCommand(byte[] data, QQClient client)
+        public ReceiveCommand(byte[] data, SocketService service, ServerMessageSubject transponder, QQUser user)
         {
-            _client = client;
+            _service = service;
+            _transponder = transponder;
+            _user = user;
         }
 
         /// <summary>
