@@ -12,7 +12,7 @@ namespace QQ.Framework.Utils
             {
                 Snippets = new List<TextSnippet>
                 {
-                    new TextSnippet {Content = message}
+                    new TextSnippet {Content = message ?? ""}
                 }
             };
         }

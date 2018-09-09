@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using QQ.Framework.Domains.Observers;
+using QQ.Framework.Utils;
 
 namespace QQ.Framework.Domains
 {
@@ -18,7 +19,7 @@ namespace QQ.Framework.Domains
             _robots = new List<ServerMessageObserver>();
         }
 
-        public void ReceiveFriendMessage(long friendNumber, string content)
+        public void ReceiveFriendMessage(long friendNumber, Richtext content)
         {
             foreach (var robot in _robots)
             {
@@ -26,7 +27,7 @@ namespace QQ.Framework.Domains
             }
         }
 
-        public void ReceiveGroupMessage(long groupNumber, long fromNumber, string content)
+        public void ReceiveGroupMessage(long groupNumber, long fromNumber, Richtext content)
         {
             foreach (var robot in _robots)
             {

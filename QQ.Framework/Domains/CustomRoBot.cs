@@ -1,4 +1,5 @@
 ﻿using QQ.Framework.Domains.Observers;
+using QQ.Framework.Utils;
 
 namespace QQ.Framework.Domains
 {
@@ -32,7 +33,7 @@ namespace QQ.Framework.Domains
             _transponder.AddCustomRoBot(this);
         }
 
-        public abstract void ReceiveFriendMessage(long friendNumber, string content);
-        public abstract void ReceiveGroupMessage(long groupNumber, long fromNumber, string content);
+        public abstract void ReceiveFriendMessage(long friendNumber, Richtext content);
+        public abstract void ReceiveGroupMessage(long groupNumber, long fromNumber, Richtext content);
     }
 }

@@ -44,7 +44,7 @@ namespace QQ.Framework.Packets.Receive.Message
         /// <summary>
         ///     消息内容
         /// </summary>
-        public string Message { get; set; }
+        public Richtext Message { get; set; }
 
         protected override void ParseBody()
         {
@@ -71,7 +71,8 @@ namespace QQ.Framework.Packets.Receive.Message
             FontStyle = reader.ReadBytes(reader.BEReadChar());
             reader.ReadBytes(6);
             MessageLength = reader.BEReadChar();
-            Message = Encoding.UTF8.GetString(reader.ReadBytes(MessageLength));
+            // TODO: 解析富文本
+            Message = Richtext.FromLiteral(Encoding.UTF8.GetString(reader.ReadBytes(MessageLength)));
             reader.ReadBytes(22);
         }
     }
