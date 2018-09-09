@@ -14,32 +14,28 @@ namespace QQ.Framework.Domains.Commands.ResponseCommands.Message
 
         public override void Process()
         {
-            var client = _args.QQClient;
-            var user = client.QQUser;
-            var packet = _args.ReceivePacket;
-
-            if (!string.IsNullOrEmpty(packet.Message))
+            if (!string.IsNullOrEmpty(_packet.Message))
             {
-                if (!QQGlobal.DebugLog && packet.Message.Count(c => c == '\0') > 5)
+                if (!QQGlobal.DebugLog && _packet.Message.Count(c => c == '\0') > 5)
                 {
-                    user.MessageLog($"收到群{packet.Group}的{packet.FromQQ}的乱码消息。");
+                    _service.MessageLog($"收到群{_packet.Group}的{_packet.FromQQ}的乱码消息。");
                 }
 
-                user.MessageLog($"收到群{packet.Group}的{packet.FromQQ}的消息:{packet.Message}");
+                _service.MessageLog($"收到群{_packet.Group}的{_packet.FromQQ}的消息:{_packet.Message}");
             }
             else
             {
-                user.MessageLog($"收到群{packet.Group}的{packet.FromQQ}的空消息。");
+                _service.MessageLog($"收到群{_packet.Group}的{_packet.FromQQ}的空消息。");
             }
 
             //提取数据
-            var dataReader = new BinaryReader(new MemoryStream(packet.bodyDecrypted));
+            var dataReader = new BinaryReader(new MemoryStream(_packet.bodyDecrypted));
 
-            client.Send(new Send_0x0017(user, dataReader.ReadBytes(0x10), packet.Sequence).WriteData());
+            _service.Send(new Send_0x0017(_user, dataReader.ReadBytes(0x10), _packet.Sequence));
 
 
             //查看群消息确认
-            if (packet.ReceiveTime != null)
+            if (_packet.ReceiveTime != null)
             {
                 //TODO:未实现
                 //client.Send(new Send_0x0360(user, packet.Group, packet.ReceiveTime).WriteData());

@@ -5,11 +5,15 @@ namespace QQ.Framework.Domains.Commands
     public abstract class ResponseCommand<PacketType> : PacketCommand
         where PacketType : ReceivePacket
     {
-        protected readonly QQEventArgs<PacketType> _args;
+        protected readonly PacketType _packet;
+        protected readonly SocketService _service;
+        protected QQUser _user;
 
         public ResponseCommand(QQEventArgs<PacketType> args)
         {
-            _args = args;
+            _packet = args.ReceivePacket;
+            _service = args.Service;
+            _user = args.User;
         }
 
         /// <summary>

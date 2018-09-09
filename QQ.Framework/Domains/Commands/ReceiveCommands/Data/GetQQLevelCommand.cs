@@ -11,10 +11,10 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Data
         /// <summary>
         ///     获取QQ等级
         /// </summary>
-        public GetQQLevelCommand(byte[] data, QQClient client) : base(data, client)
+        public GetQQLevelCommand(byte[] data, SocketService service, ServerMessageSubject transponder, QQUser user) : base(data, service, transponder, user)
         {
-            _packet = new Receive_0x005C(data, client.QQUser);
-            _event_args = new QQEventArgs<Receive_0x005C>(client, _packet);
+            _packet = new Receive_0x005C(data, _user);
+            _event_args = new QQEventArgs<Receive_0x005C>(_service, _user, _packet);
         }
 
         public override void Process()

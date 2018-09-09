@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="GZipByteArrayTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Robots\TestRoBot.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

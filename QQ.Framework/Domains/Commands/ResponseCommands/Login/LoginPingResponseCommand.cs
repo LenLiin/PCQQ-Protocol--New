@@ -13,26 +13,21 @@ namespace QQ.Framework.Domains.Commands.ResponseCommands.Login
 
         public override void Process()
         {
-            var packet = _args.ReceivePacket;
-            var client = _args.QQClient;
-            var user = _args.QQClient.QQUser;
-
-            if (packet.DataHead == 0xFE)
+            if (_packet.DataHead == 0xFE)
             {
-                client.MessageLog($"服务器{Util.GetIpStringFromBytes(user.ServerIp)}重定向");
+                _service.MessageLog($"服务器{Util.GetIpStringFromBytes(_user.ServerIp)}重定向");
                 //如果是登陆重定向，继续登陆
-                user.IsLoginRedirect = true;
-                client.LoginServerHost = Util.GetIpStringFromBytes(user.ServerIp);
+                _user.IsLoginRedirect = true;
                 //刷新重定向后服务器IP
-                client.RefPoint();
+                _service.RefreshHost(Util.GetIpStringFromBytes(_user.ServerIp));
                 //重新发送登录Ping包
-                client.Send(new Send_0x0825(user, true).WriteData());
+                _service.Send(new Send_0x0825(_user, true));
             }
             else
             {
-                client.MessageLog($"连接服务器{Util.GetIpStringFromBytes(user.ServerIp)}成功");
+                _service.MessageLog($"连接服务器{Util.GetIpStringFromBytes(_user.ServerIp)}成功");
                 //Ping请求成功后发送0836登录包
-                client.Send(new Send_0x0836(user, Login0x0836Type.Login0x0836_622).WriteData());
+                _service.Send(new Send_0x0836(_user, Login0x0836Type.Login0x0836_622));
             }
         }
     }

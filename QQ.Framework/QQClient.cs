@@ -28,7 +28,7 @@ namespace QQ.Framework
         public QQClient()
         {
             Server = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-            messageManage = new MessageManage(this);
+            //messageManage = new MessageManage(this, TODO);
         }
 
         /// <summary>
@@ -105,78 +105,6 @@ namespace QQ.Framework
         {
             Point = new IPEndPoint(IPAddress.Parse(LoginServerHost), LoginPort);
         }
-
-        #region 登录事件
-
-        /// <summary>
-        ///     登录事件
-        /// </summary>
-        public event EventHandler<QQEventArgs<Receive_0x0825>> EventReceive_0x0825;
-
-        /// <summary>
-        ///     登录事件
-        /// </summary>
-        /// <param name="e"></param>
-        internal void OnReceive_0x0825(QQEventArgs<Receive_0x0825> e)
-        {
-            MessageLog($"连接服务器{Util.GetIpStringFromBytes(e.QQClient.QQUser.ServerIp)}成功");
-            //Ping请求成功后发送0836登录包
-            Send(new Send_0x0836(e.ReceivePacket.user, Login0x0836Type.Login0x0836_622).WriteData());
-
-            EventReceive_0x0825?.Invoke(this, e);
-        }
-
-        #endregion
-
-        #region 登录重定向事件
-
-        /// <summary>
-        ///     登录重定向事件
-        /// </summary>
-        public event EventHandler<QQEventArgs<Receive_0x0825>> EventReceive_0x0825Redirect;
-
-        /// <summary>
-        ///     登录重定向事件
-        /// </summary>
-        /// <param name="e"></param>
-        internal void OnReceive_0x0825Redirect(QQEventArgs<Receive_0x0825> e)
-        {
-            MessageLog($"服务器{Util.GetIpStringFromBytes(e.QQClient.QQUser.ServerIp)}重定向");
-            //如果是登陆重定向，继续登陆
-            QQUser.IsLoginRedirect = true;
-            LoginServerHost = Util.GetIpStringFromBytes(QQUser.ServerIp);
-            //刷新重定向后服务器IP
-            RefPoint();
-            //重新发送登录Ping包
-            Send(new Send_0x0825(e.ReceivePacket.user, true).WriteData());
-            //执行事件
-            EventReceive_0x0825Redirect?.Invoke(this, e);
-        }
-
-        #endregion
-
-        #region 0836_622
-
-        /// <summary>
-        ///     0836_622
-        /// </summary>
-        public event EventHandler<QQEventArgs<Receive_0x0836>> EventReceive_0x0836_622;
-
-        /// <summary>
-        ///     0836_622
-        /// </summary>
-        /// <param name="e"></param>
-        internal void OnReceive_0x0836_622(QQEventArgs<Receive_0x0836> e)
-        {
-            MessageLog("登陆成功获取个人基本信息");
-            MessageLog(
-                $"账号：{e.QQClient.QQUser.QQ}，昵称：{e.QQClient.QQUser.NickName}，年龄：{e.QQClient.QQUser.Age}，性别：{e.QQClient.QQUser.Gender}");
-            Send(new Send_0x0828(e.ReceivePacket.user).WriteData());
-
-            EventReceive_0x0836_622?.Invoke(this, e);
-        }
-
-        #endregion
 
         #region 0836_686
 
@@ -306,9 +234,9 @@ namespace QQ.Framework
             }
             else
             {
-                e.QQClient.QQUser.QQ_0836Token = e.QQClient.QQUser.QQ_PACKET_00BAVerifyToken;
-                e.QQClient.QQUser.QQ_PACKET_00BASequence = 0x00;
-                e.QQClient.QQUser.QQ_PACKET_TgtgtKey = Util.RandomKey();
+//                e.QQClient.QQUser.QQ_0836Token = e.QQClient.QQUser.QQ_PACKET_00BAVerifyToken;
+//                e.QQClient.QQUser.QQ_PACKET_00BASequence = 0x00;
+//                e.QQClient.QQUser.QQ_PACKET_TgtgtKey = Util.RandomKey();
                 //验证码验证成功后发送0836登录包
                 Send(new Send_0x0836(e.ReceivePacket.user, Login0x0836Type.Login0x0836_686, true).WriteData());
             }

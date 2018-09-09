@@ -23,5 +23,22 @@ namespace QQ.Framework.Domains
         /// </summary>
         /// <param name="host"></param>
         void RefreshHost(string host);
+
+        /// <summary>
+        ///     记录日志
+        /// </summary>
+        /// <param name="content">内容</param>
+        void MessageLog(string content);
+
+        /// <summary>
+        ///     登录
+        /// </summary>
+        void Login();
+
+        /// <summary>
+        ///     接收验证码
+        /// </summary>
+        /// <param name="data"></param>
+        void ReceiveVerifyCode(byte[] data);
     }
 }

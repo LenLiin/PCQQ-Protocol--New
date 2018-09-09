@@ -1,4 +1,5 @@
 using System;
+using QQ.Framework.Domains;
 using QQ.Framework.Packets;
 
 namespace QQ.Framework
@@ -6,9 +7,13 @@ namespace QQ.Framework
     public class QQEventArgs<R> : EventArgs
         where R : ReceivePacket
     {
-        public QQEventArgs(QQClient client, R receivePacket)
+        private readonly SocketService _service;
+        private readonly QQUser _user;
+
+        public QQEventArgs(SocketService service, QQUser user, R receivePacket)
         {
-            QQClient = client;
+            _service = service;
+            _user = user;
             ReceivePacket = receivePacket;
         }
 
@@ -18,8 +23,13 @@ namespace QQ.Framework
         public R ReceivePacket { get; }
 
         /// <summary>
-        ///     客户端实例
+        ///     Socket服务
         /// </summary>
-        public QQClient QQClient { get; }
+        public SocketService Service { get { return _service; } }
+
+        /// <summary>
+        ///     账号信息
+        /// </summary>
+        public QQUser User { get { return _user; } }
     }
 }
