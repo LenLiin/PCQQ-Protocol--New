@@ -1,6 +1,4 @@
-﻿using QQ.Framework.Packets.Send.Login;
-using System;
-using QQ.Framework.Packets.Send.Message;
+﻿using QQ.Framework.Packets.Send.Message;
 using QQ.Framework.Utils;
 
 namespace QQ.Framework.Domains

@@ -15,7 +15,7 @@ namespace QQ.Framework.Domains
         /// <summary>
         ///     Socket连接
         /// </summary>
-        private Socket _server;
+        private readonly Socket _server;
 
         /// <summary>
         ///     服务器地址
@@ -25,7 +25,8 @@ namespace QQ.Framework.Domains
         /// <summary>
         ///     登录端口
         /// </summary>
-        private int _port = 8000;
+        private readonly int _port = 8000;
+
         private EndPoint _point;
 
 
@@ -43,11 +44,11 @@ namespace QQ.Framework.Domains
             var buffer = new byte[QQGlobal.QQ_PACKET_MAX_SIZE];
             var len = _server.ReceiveFrom(buffer, ref end_point);
 
-            return new ReceiveData()
+            return new ReceiveData
             {
                 Data = buffer,
                 DataLength = len,
-                From = end_point,
+                From = end_point
             };
         }
 

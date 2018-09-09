@@ -1,5 +1,3 @@
-using System;
-
 namespace QQ.Framework
 {
     /// <summary>
@@ -345,8 +343,9 @@ namespace QQ.Framework
         ///     获取Ukey
         /// </summary>
         Message0x0352 = 0x0352,
+
         /// <summary>
-        /// 获取Ukey
+        ///     获取Ukey
         /// </summary>
         Message0x0388 = 0x0388,
 
@@ -365,7 +364,7 @@ namespace QQ.Framework
         /// </summary>
         Unknown = 0xFFFF
     }
-    
+
     public enum MessageType
     {
         /// <summary>

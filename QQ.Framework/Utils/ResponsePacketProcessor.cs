@@ -47,7 +47,8 @@ namespace QQ.Framework.Utils
                 }
             }
 
-            return new DefaultResponseCommand(new QQEventArgs<ReceivePacket>(_args.Service, _args.User, _args.ReceivePacket));
+            return new DefaultResponseCommand(new QQEventArgs<ReceivePacket>(_args.Service, _args.User,
+                _args.ReceivePacket));
         }
 
         public static ResponsePacketProcessor<PacketType> of(QQEventArgs<PacketType> args, Type receivePacketType)

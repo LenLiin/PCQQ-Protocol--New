@@ -8,7 +8,8 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Message
     [ReceivePacketCommand(QQCommand.Message0x00CE)]
     public class ReceiveQQFriendMessagesCommand : ReceiveCommand<Receive_0x00CE>
     {
-        public ReceiveQQFriendMessagesCommand(byte[] data, SocketService service, ServerMessageSubject transponder, QQUser user) : base(data, service, transponder, user)
+        public ReceiveQQFriendMessagesCommand(byte[] data, SocketService service, ServerMessageSubject transponder,
+            QQUser user) : base(data, service, transponder, user)
         {
             _packet = new Receive_0x00CE(data, _user);
             _event_args = new QQEventArgs<Receive_0x00CE>(_service, _user, _packet);

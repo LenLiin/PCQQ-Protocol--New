@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Text;
 using QQ.Framework.Utils;
 
@@ -16,7 +15,7 @@ namespace QQ.Framework.Packets.Send.Message
         /// </summary>
         private readonly long _toQQ;
 
-        private byte _packetCount = 1;
+        private readonly byte _packetCount = 1;
         private byte _packetIndex;
 
         public Send_0x00CD(QQUser User, Richtext Message, MessageType messageType, long ToQQ)
@@ -35,7 +34,7 @@ namespace QQ.Framework.Packets.Send.Message
         /// </summary>
         public MessageType _messageType { get; set; }
 
-        private Richtext _message { get; set; }
+        private Richtext _message { get; }
 
         protected override void PutHeader()
         {
