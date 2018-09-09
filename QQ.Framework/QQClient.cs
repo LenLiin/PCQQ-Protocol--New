@@ -356,9 +356,9 @@ namespace QQ.Framework
         /// <param name="e"></param>
         internal void OnReceive_0x00CE(QQEventArgs<Receive_0x00CE> e)
         {
-            if (!string.IsNullOrEmpty(e.ReceivePacket.Message))
+            if (!string.IsNullOrEmpty(e.ReceivePacket.Message.ToString()))
             {
-                if (!QQGlobal.DebugLog && e.ReceivePacket.Message.Count(c => c == '\0') > 5)
+                if (!QQGlobal.DebugLog && e.ReceivePacket.Message.ToString().Count(c => c == '\0') > 5)
                 {
                     QQUser.MessageLog($"收到好友{e.ReceivePacket.FromQQ}的乱码消息。");
                     //return;
@@ -521,10 +521,9 @@ namespace QQ.Framework
         /// <param name="message"></param>
         /// <param name="group"></param>
         /// <param name="MessageType">消息类型</param>
-        public void SendLongGroupMessage(string message, long group, MessageType MessageType)
+        public void SendLongGroupMessage(Richtext message, long group)
         {
-            message = message.Replace("\n", "\r").Trim();
-            foreach (var packet in Send_0x0002.SendLongMessage(QQUser, message, MessageType, group))
+            foreach (var packet in Send_0x0002.SendLongMessage(QQUser, message, group))
             {
                 Send(packet.WriteData());
             }
@@ -536,10 +535,9 @@ namespace QQ.Framework
         /// <param name="message"></param>
         /// <param name="user"></param>
         /// <param name="MessageType">消息类型</param>
-        public void SendLongUserMessage(string message, long user, MessageType MessageType)
+        public void SendLongUserMessage(Richtext message, long user)
         {
-            message = message.Replace("\n", "\r").Trim();
-            foreach (var packet in Send_0x00CD.SendLongMessage(QQUser, message, MessageType, user))
+            foreach (var packet in Send_0x00CD.SendLongMessage(QQUser, message, user))
             {
                 Send(packet.WriteData());
             }

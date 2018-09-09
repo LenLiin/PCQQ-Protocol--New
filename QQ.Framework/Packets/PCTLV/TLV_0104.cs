@@ -61,7 +61,9 @@ namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
                         Directory.CreateDirectory(directory);
                     }
 
-                    var fs = Next == 0x00 ? new FileStream(filename, FileMode.Create, FileAccess.ReadWrite, FileShare.Read) : new FileStream(filename, FileMode.Append, FileAccess.Write, FileShare.Read);
+                    var fs = Next == 0x00
+                        ? new FileStream(filename, FileMode.Create, FileAccess.ReadWrite, FileShare.Read)
+                        : new FileStream(filename, FileMode.Append, FileAccess.Write, FileShare.Read);
 
                     //fs.Seek(0, SeekOrigin.End);
                     fs.Write(buffer, 0, buffer.Length);

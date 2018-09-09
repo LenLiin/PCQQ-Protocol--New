@@ -1,5 +1,3 @@
-using System;
-
 namespace QQ.Framework
 {
     /// <summary>
@@ -345,8 +343,9 @@ namespace QQ.Framework
         ///     获取Ukey
         /// </summary>
         Message0x0352 = 0x0352,
+
         /// <summary>
-        /// 获取Ukey
+        ///     获取Ukey
         /// </summary>
         Message0x0388 = 0x0388,
 
@@ -366,48 +365,57 @@ namespace QQ.Framework
         Unknown = 0xFFFF
     }
 
-    [Flags]
     public enum MessageType
     {
         /// <summary>
         ///     普通文本
         /// </summary>
-        Normal = 1,
+        Normal,
 
         /// <summary>
         ///     抖动
         /// </summary>
-        Shake = 2,
+        Shake,
+
+        /// <summary>
+        ///     系统表情
+        /// </summary>
+        Emoji,
 
         /// <summary>
         ///     图片消息
         /// </summary>
-        Picture = 4,
+        Picture,
 
         /// <summary>
         ///     Xml消息
         /// </summary>
-        Xml = 8,
+        Xml,
 
         /// <summary>
         ///     Json消息
         /// </summary>
-        Json = 16,
+        Json,
 
         /// <summary>
         ///     退群
         /// </summary>
-        ExitGroup = 32,
+        ExitGroup,
 
         /// <summary>
         ///     获取群信息
         /// </summary>
-        GetGroupImformation = 64,
+        GetGroupImformation,
 
         /// <summary>
         ///     加群
         /// </summary>
-        AddGroup = 128
+        AddGroup,
+
+        /// <summary>
+        ///     @他人
+        /// </summary>
+        At
     }
 
     public static class LoginStatus

@@ -14,7 +14,8 @@ namespace QQ.Framework.Utils
         private readonly ServerMessageSubject _transponder;
         private readonly QQUser _user;
 
-        protected DispatchPacketToCommand(byte[] data, SocketService service, ServerMessageSubject transponder, QQUser user)
+        protected DispatchPacketToCommand(byte[] data, SocketService service, ServerMessageSubject transponder,
+            QQUser user)
         {
             _data = data;
             _service = service;
@@ -22,7 +23,8 @@ namespace QQ.Framework.Utils
             _user = user;
         }
 
-        public static DispatchPacketToCommand Of(byte[] data, SocketService service, ServerMessageSubject transponder, QQUser user)
+        public static DispatchPacketToCommand Of(byte[] data, SocketService service, ServerMessageSubject transponder,
+            QQUser user)
         {
             return new DispatchPacketToCommand(data, service, transponder, user);
         }
@@ -41,7 +43,8 @@ namespace QQ.Framework.Utils
                 var attribute = attributes.First(attr => attr is ReceivePacketCommand) as ReceivePacketCommand;
                 if (attribute.Command == command)
                 {
-                    var receive_packet = Activator.CreateInstance(type, _data, _service, _transponder, _user) as PacketCommand;
+                    var receive_packet =
+                        Activator.CreateInstance(type, _data, _service, _transponder, _user) as PacketCommand;
                     return receive_packet;
                 }
             }

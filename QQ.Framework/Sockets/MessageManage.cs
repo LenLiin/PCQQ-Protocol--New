@@ -1,11 +1,6 @@
-using System.Net;
-using System.Net.Sockets;
 using System.Threading;
 using QQ.Framework.Domains;
 using QQ.Framework.Packets;
-using QQ.Framework.Packets.Receive.Data;
-using QQ.Framework.Packets.Receive.Login;
-using QQ.Framework.Packets.Receive.Message;
 using QQ.Framework.Utils;
 
 namespace QQ.Framework.Sockets
@@ -28,7 +23,7 @@ namespace QQ.Framework.Sockets
         /// <summary>
         ///     消息转发器
         /// </summary>
-        private ServerMessageSubject _transponder;
+        private readonly ServerMessageSubject _transponder;
 
         public MessageManage(SocketService service, QQUser user, ServerMessageSubject transponder)
         {

@@ -27,7 +27,7 @@ namespace QQLoginTest
             var user = new QQUser(MyQQ, MyPassWord);
             var socketServer = new SocketServiceImpl(user);
             var transponder = new Transponder();
-            var sendService = new SendMessageServiceImpl(socketServer);
+            var sendService = new SendMessageServiceImpl(socketServer, user);
 
             var manage = new MessageManage(socketServer, user, transponder);
 
