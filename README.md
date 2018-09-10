@@ -9,7 +9,7 @@ MyUser.cs为本人扩展用户名和密码这里不做上传
 [![Build Status](https://travis-ci.org/luojinfang/PCQQ-Protocol.svg?branch=master)](https://travis-ci.org/luojinfang/PCQQ-Protocol)
 
 自定义机器人相关类图
-<img src="/QQ.Framework/Docs/UMLs/RoBot.png?raw=true" width="800px" alt="联系方式">
+<img src="/QQ.Framework/Docs/UMLs/RoBot.png?raw=true" width="800px" alt="自定义机器人相关类图">
 
 源码仅供参考，欢迎吐槽
 ------------------------------------------
