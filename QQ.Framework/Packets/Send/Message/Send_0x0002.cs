@@ -123,6 +123,27 @@ namespace QQ.Framework.Packets.Send.Message
             var writer = new BinaryWriter(new MemoryStream());
             // FIXME: 使用正确的_packetCount和_packetIndex进行分段
             byte _packetCount = 1, _packetIndex = 0;
+
+            void Init(int length)
+            {
+                writer.Write((byte) 0x2A);
+                writer.BEWrite(group);
+                writer.BEWrite((ushort) (length + 56));
+                writer.Write(new byte[]
+                {
+                    0x00, 0x01, _packetCount, _packetIndex, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4D, 0x53,
+                    0x47, 0x00,
+                    0x00, 0x00, 0x00, 0x00
+                });
+                writer.BEWrite(dateTime);
+                writer.Write(Util.RandomKey(4));
+                writer.Write(new byte[] {0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00});
+                writer.Write(new byte[] {0x00, 0x0C});
+                writer.Write(new byte[]
+                    {0xE5, 0xBE, 0xAE, 0xE8, 0xBD, 0xAF, 0xE9, 0x9B, 0x85, 0xE9, 0xBB, 0x91});
+                writer.Write(new byte[] {0x00, 0x00});
+            }
+
             foreach (var snippet in message.Snippets)
             {
                 switch (snippet.Type)
@@ -152,7 +173,38 @@ namespace QQ.Framework.Packets.Send.Message
                         writer.Write((byte) 0x01);
                         writer.Write(compressMsg);
                         writer.Write(new byte[] {0x02, 0x00, 0x04, 0x00, 0x00, 0x00, 0x4D});
-                        break;
+                        ret.Add(writer.BaseStream.ToBytesArray());
+                        return ret;
+                    }
+                    case MessageType.AddGroup:
+                    {
+                        writer.Write(new byte[] {0x08});
+                        writer.BEWrite(group);
+                        writer.Write(new byte[] {0x01});
+                        writer.BEWrite((ushort) user.AddFriend_0020Value.Length);
+                        writer.Write(user.AddFriend_0020Value);
+                        writer.Write(new byte[] {0x00, 0x00, 0x00});
+                        //备注信息
+                        var messageData = Encoding.UTF8.GetBytes(snippet.Content);
+                        writer.BEWrite((ushort) messageData.Length);
+                        writer.Write(messageData);
+                        writer.Write(new byte[] {0x01, 0x00, 0x01, 0x00, 0x04, 0x00, 0x01, 0x00, 0x09});
+                        ret.Add(writer.BaseStream.ToBytesArray());
+                        return ret;
+                    }
+                    case MessageType.GetGroupImformation:
+                    {
+                        writer.Write(new byte[] {0x72});
+                        writer.BEWrite(group);
+                        ret.Add(writer.BaseStream.ToBytesArray());
+                        return ret;
+                    }
+                    case MessageType.ExitGroup:
+                    {
+                        writer.Write(new byte[] {0x09});
+                        writer.BEWrite(group);
+                        ret.Add(writer.BaseStream.ToBytesArray());
+                        return ret;
                     }
                     case MessageType.Picture:
                     {
@@ -201,52 +253,20 @@ namespace QQ.Framework.Packets.Send.Message
                         writer.Write(0x41);
                         break;
                     }
-                    case MessageType.AddGroup:
-                    {
-                        writer.Write(new byte[] {0x08});
-                        writer.BEWrite(group);
-                        writer.Write(new byte[] {0x01});
-                        writer.BEWrite((ushort) user.AddFriend_0020Value.Length);
-                        writer.Write(user.AddFriend_0020Value);
-                        writer.Write(new byte[] {0x00, 0x00, 0x00});
-                        //备注信息
-                        var messageData = Encoding.UTF8.GetBytes(snippet.Content);
-                        writer.BEWrite((ushort) messageData.Length);
-                        writer.Write(messageData);
-                        writer.Write(new byte[] {0x01, 0x00, 0x01, 0x00, 0x04, 0x00, 0x01, 0x00, 0x09});
-                        break;
-                    }
-                    case MessageType.GetGroupImformation:
-                    {
-                        writer.Write(new byte[] {0x72});
-                        writer.BEWrite(group);
-                        break;
-                    }
-                    case MessageType.ExitGroup:
-                    {
-                        writer.Write(new byte[] {0x09});
-                        writer.BEWrite(group);
-                        break;
-                    }
                     case MessageType.Normal:
                     {
-                        writer.Write((byte) 0x2A);
-                        writer.BEWrite(group);
-                        var messageData = Encoding.UTF8.GetBytes(snippet.Content);
-                        writer.BEWrite((ushort) (messageData.Length + 56));
-                        writer.Write(new byte[]
+                        if (writer.BaseStream.Position + snippet.Length > 699)
                         {
-                            0x00, 0x01, _packetCount, _packetIndex, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4D, 0x53,
-                            0x47, 0x00,
-                            0x00, 0x00, 0x00, 0x00
-                        });
-                        writer.BEWrite(dateTime);
-                        writer.Write(Util.RandomKey(4));
-                        writer.Write(new byte[] {0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00});
-                        writer.Write(new byte[] {0x00, 0x0C});
-                        writer.Write(new byte[]
-                            {0xE5, 0xBE, 0xAE, 0xE8, 0xBD, 0xAF, 0xE9, 0x9B, 0x85, 0xE9, 0xBB, 0x91});
-                        writer.Write(new byte[] {0x00, 0x00});
+                            ret.Add(writer.BaseStream.ToBytesArray());
+                            writer = new BinaryWriter(new MemoryStream());
+                        }
+
+                        if (writer.BaseStream.Position == 0)
+                        {
+                            Init(snippet.Length);
+                        }
+
+                        var messageData = Encoding.UTF8.GetBytes(snippet.Content);
                         writer.Write(new byte[] {0x01});
                         writer.BEWrite((ushort) (messageData.Length + 3));
                         writer.Write(new byte[] {0x01});
@@ -256,23 +276,17 @@ namespace QQ.Framework.Packets.Send.Message
                     }
                     case MessageType.Emoji:
                     {
-                        writer.Write((byte) 0x2A);
-                        writer.BEWrite(group);
-                        var messageData = Encoding.UTF8.GetByteCount(snippet.Content);
-                        writer.BEWrite((ushort) (messageData + 56));
-                        writer.Write(new byte[]
+                        if (writer.BaseStream.Position + snippet.Length > 699)
                         {
-                            0x00, 0x01, _packetCount, _packetIndex, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4D, 0x53,
-                            0x47, 0x00,
-                            0x00, 0x00, 0x00, 0x00
-                        });
-                        writer.BEWrite(dateTime);
-                        writer.Write(Util.RandomKey(4));
-                        writer.Write(new byte[] {0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00});
-                        writer.Write(new byte[] {0x00, 0x0C});
-                        writer.Write(new byte[]
-                            {0xE5, 0xBE, 0xAE, 0xE8, 0xBD, 0xAF, 0xE9, 0x9B, 0x85, 0xE9, 0xBB, 0x91});
-                        writer.Write(new byte[] {0x00, 0x00});
+                            ret.Add(writer.BaseStream.ToBytesArray());
+                            writer = new BinaryWriter(new MemoryStream());
+                        }
+
+                        if (writer.BaseStream.Position == 0)
+                        {
+                            Init(snippet.Length);
+                        }
+
                         var faceIndex = byte.Parse(snippet.Content);
                         writer.Write(new byte[] {0x02, 0x00, 0x14, 0x01, 0x00, 0x01});
                         writer.Write(faceIndex);
