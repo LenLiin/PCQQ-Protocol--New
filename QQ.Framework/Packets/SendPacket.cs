@@ -147,69 +147,6 @@ namespace QQ.Framework.Packets
             return null;
         }
 
-
-        /// <summary>
-        ///     带表情消息
-        /// </summary>
-        /// <param name="Message"></param>
-        /// <returns></returns>
-        public static byte[] ConstructMessage(string Message)
-        {
-            var bw = new BinaryWriter(new MemoryStream());
-            var r = new Regex(@"([^\[]+)*(\[face\d+\.gif\])([^\[]+)*");
-            if (r.IsMatch(Message))
-            {
-                var Faces = r.Matches(Message);
-                for (var i = 0; i < Faces.Count; i++)
-                {
-                    var face = Faces[i];
-                    for (var j = 1; j < face.Groups.Count; j++)
-                    {
-                        var group = face.Groups[j].Value;
-                        if (group.Contains("[face") && group.Contains(".gif]"))
-                        {
-                            var faceIndex =
-                                Convert.ToByte(group.Substring(5, group.Length - group.LastIndexOf(".") - 4));
-                            if (faceIndex > 199)
-                            {
-                                faceIndex = 0;
-                            }
-
-                            //表情
-                            bw.Write(new byte[] {0x02, 0x00, 0x14, 0x01, 0x00, 0x01});
-                            bw.Write(faceIndex);
-                            bw.Write(new byte[] {0xFF, 0x00, 0x02, 0x14});
-                            bw.Write((byte) (faceIndex + 65));
-                            bw.Write(new byte[] {0x0B, 0x00, 0x08, 0x00, 0x01, 0x00, 0x04, 0x52, 0xCC, 0x85, 0x50});
-                        }
-                        else if (!string.IsNullOrEmpty(group))
-                        {
-                            var GroupMsg = Encoding.UTF8.GetBytes(group);
-                            //普通消息
-                            ConstructMessage(bw, GroupMsg);
-                        }
-                    }
-                }
-            }
-
-            return bw.BaseStream.ToBytesArray();
-        }
-
-        /// <summary>
-        ///     普通消息
-        /// </summary>
-        /// <param name="writer"></param>
-        /// <param name="GroupMsg"></param>
-        public static void ConstructMessage(BinaryWriter writer, byte[] GroupMsg)
-        {
-            writer.Write(new byte[] {0x01});
-            writer.BEWrite((ushort) (GroupMsg.Length + 3));
-            writer.Write(new byte[] {0x01});
-            writer.BEWrite((ushort) GroupMsg.Length);
-            writer.Write(GroupMsg);
-        }
-
-
         public static void SendAudio(uint QQ, string file)
         {
         }
@@ -217,29 +154,6 @@ namespace QQ.Framework.Packets
 
         public static void SendOfflineFile(uint QQ, string file)
         {
-        }
-
-        /// <summary>
-        ///     XML消息组装
-        /// </summary>
-        /// <param name="_DateTime">时间</param>
-        /// <param name="compressMsg">压缩消息数组</param>
-        public static byte[] SendXML(long _DateTime, byte[] compressMsg)
-        {
-            var bw = new BinaryWriter(new MemoryStream());
-            bw.BEWrite(_DateTime);
-            bw.Write(Util.RandomKey(4));
-            bw.Write(new byte[] {0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00});
-            bw.Write(new byte[] {0x00, 0x0C});
-            bw.Write(new byte[] {0xE5, 0xBE, 0xAE, 0xE8, 0xBD, 0xAF, 0xE9, 0x9B, 0x85, 0xE9, 0xBB, 0x91});
-            bw.Write(new byte[] {0x00, 0x00, 0x14});
-            bw.BEWrite((ushort) (compressMsg.Length + 11));
-            bw.Write((byte) 0x01);
-            bw.BEWrite((ushort) (compressMsg.Length + 1));
-            bw.Write((byte) 0x01);
-            bw.Write(compressMsg);
-            bw.Write(new byte[] {0x02, 0x00, 0x04, 0x00, 0x00, 0x00, 0x4D});
-            return bw.BaseStream.ToBytesArray();
         }
 
         public static byte[] SendJson(string Message)
