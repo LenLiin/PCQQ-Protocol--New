@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace QQ.Framework.Utils
 {
@@ -27,6 +29,31 @@ namespace QQ.Framework.Utils
     {
         public string Content;
         public MessageType Type;
+
+        public int Length
+        {
+            get
+            {
+                switch (Type)
+                {
+                    case MessageType.Normal:
+                        return Encoding.UTF8.GetByteCount(Content);
+                    case MessageType.Emoji:
+                        return 12;
+                    case MessageType.Picture:
+                    case MessageType.Xml:
+                    case MessageType.Json:
+                    case MessageType.At:
+                    case MessageType.Shake:
+                    case MessageType.ExitGroup:
+                    case MessageType.GetGroupImformation:
+                    case MessageType.AddGroup:
+                        return 0;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+        }
 
         public override string ToString()
         {
