@@ -521,6 +521,7 @@ namespace QQ.Framework
         /// <param name="message"></param>
         /// <param name="group"></param>
         /// <param name="MessageType">消息类型</param>
+        [Obsolete("使用QQ.Framework.Domains.SendMessageServiceImpl内的实现。")]
         public void SendLongGroupMessage(Richtext message, long group)
         {
             foreach (var packet in Send_0x0002.SendLongMessage(QQUser, message, group))
@@ -535,6 +536,7 @@ namespace QQ.Framework
         /// <param name="message"></param>
         /// <param name="user"></param>
         /// <param name="MessageType">消息类型</param>
+        [Obsolete("使用QQ.Framework.Domains.SendMessageServiceImpl内的实现。")]
         public void SendLongUserMessage(Richtext message, long user)
         {
             foreach (var packet in Send_0x00CD.SendLongMessage(QQUser, message, user))
