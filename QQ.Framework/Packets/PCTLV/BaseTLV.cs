@@ -1,7 +1,7 @@
 using System;
 using QQ.Framework.Utils;
 
-namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
+namespace QQ.Framework.Packets.PCTLV
 {
     internal class BaseTLV
     {

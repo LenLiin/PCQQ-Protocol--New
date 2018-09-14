@@ -3,7 +3,7 @@ using System.Text;
 using QQ.Framework;
 using QQ.Framework.Utils;
 
-namespace Struggle.Framework.PCQQ.PCLogin.PCPacket.PCTLV
+namespace QQ.Framework.Packets.PCTLV
 {
     internal class TLV_030F : BaseTLV
     {
