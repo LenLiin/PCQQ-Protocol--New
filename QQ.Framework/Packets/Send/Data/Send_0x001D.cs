@@ -6,7 +6,7 @@ namespace QQ.Framework.Packets.Send.Data
             : base(User)
         {
             Sequence = GetNextSeq();
-            _secretKey = user.QQ_SessionKey;
+            _secretKey = User.TXProtocol.SessionKey;
             Command = QQCommand.Data0x001D;
         }
 

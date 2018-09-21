@@ -204,17 +204,7 @@ namespace QQ.Framework
         ///     密码一次MD5
         /// </summary>
         public byte[] MD51 { get; set; }
-
-        /// <summary>
-        ///     本地IP
-        /// </summary>
-        public byte[] IP { get; set; }
-
-        /// <summary>
-        ///     上一次登陆IP
-        /// </summary>
-        public byte[] LastLoginIp { get; set; }
-
+        
         /// <summary>
         ///     QQ号
         /// </summary>
@@ -224,16 +214,7 @@ namespace QQ.Framework
         ///     本地端口，在QQ中其实只有两字节
         /// </summary>
         public int Port { get; set; }
-
-        /// <summary>
-        ///     服务器IP
-        /// </summary>
-        public byte[] ServerIp { get; set; }
-
-        /// <summary>
-        ///     服务器端口，在QQ中其实只有两字节
-        /// </summary>
-        public int ServerPort { get; set; }
+        
 
         /// <summary>
         ///     上一次登陆时间，在QQ中其实只有4字节
@@ -241,7 +222,7 @@ namespace QQ.Framework
         public byte[] LastLoginTime { get; set; }
 
         /// <summary>
-        ///     本次登陆时间
+        ///     本次登陆服务器时间
         /// </summary>
         public byte[] LoginTime { get; set; }
 
@@ -289,22 +270,18 @@ namespace QQ.Framework
         /// </summary>
         public List<char> ReceiveSequences { get; set; } = new List<char>();
 
-        /// <summary>
-        ///     登录协议相关
-        /// </summary>
-        public TXProtocol TXProtocol { get; set; }
+        public string Ukey { get; set; }
 
-        public byte bRememberPwdLogin { get; set; }
-        public byte cPingType { get; set; }
-        public List<byte[]> RedirectIP { get; set; }
-        public string bufComputerName { get; set; }
-        public string Ukey { get; internal set; }
+        #region TXSSO  TLV参数
+
+
+        public TXProtocol TXProtocol { get; set; } = new TXProtocol();
+
+       
+        #endregion
 
         private void Initialize()
         {
-            IP = new byte[4];
-            ServerIp = new byte[4];
-            LastLoginIp = new byte[4];
             IsLoggedIn = false;
             LoginMode = LoginMode.Normal;
             IsUdp = true;

@@ -36,23 +36,21 @@ namespace QQ.Framework.Packets.Send.Login
             bodyWriter.Write(new byte[] {0x00, 0x02, 0x00, 0x00, 0x08, 0x04, 0x01, 0xE0});
             bodyWriter.Write(user.QQ_PACKET_0825DATA2);
             bodyWriter.Write((byte) 0x00);
-            bodyWriter.BEWrite((ushort) user.QQ_0825Token.Length);
-            bodyWriter.Write(user.QQ_0825Token);
+            bodyWriter.WriteKey(user.TXProtocol.bufSigClientAddr);
             bodyWriter.Write(new byte[] {0x01, 0x02});
-            bodyWriter.BEWrite((ushort) user.QQ_PUBLIC_KEY.Length);
-            bodyWriter.Write(user.QQ_PUBLIC_KEY);
+            bodyWriter.WriteKey(user.TXProtocol.bufDHPublicKey);
             if (string.IsNullOrEmpty(VerifyCode))
             {
                 bodyWriter.Write(new byte[] {0x13, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00});
                 bodyWriter.Write(user.QQ_PACKET_00BASequence);
-                bodyWriter.BEWrite((ushort) user.QQ_PACKET_00BAToken.Length);
-                if (user.QQ_PACKET_00BAToken.Length == 0)
+                bodyWriter.BEWrite((ushort)user.TXProtocol.bufSigPic.Length);
+                if (user.TXProtocol.bufSigPic.Length == 0)
                 {
-                    bodyWriter.Write((byte) 0x00);
+                    bodyWriter.Write((byte)0x00);
                 }
                 else
                 {
-                    bodyWriter.Write(user.QQ_PACKET_00BAToken);
+                    bodyWriter.Write(user.TXProtocol.bufSigPic);
                 }
             }
             else

@@ -9,13 +9,13 @@ namespace QQ.Framework.Packets.Receive.Message
         ///     通用响应
         /// </summary>
         public Receive_Currency(byte[] byteBuffer, QQUser User)
-            : base(byteBuffer, User, User.QQ_SessionKey)
+            : base(byteBuffer, User, User.TXProtocol.SessionKey)
         {
         }
 
         protected override void ParseBody()
         {
-            Decrypt(user.QQ_SessionKey);
+            Decrypt(user.TXProtocol.SessionKey);
         }
     }
 }

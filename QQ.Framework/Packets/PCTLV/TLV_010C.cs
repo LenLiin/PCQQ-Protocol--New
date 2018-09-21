@@ -5,6 +5,7 @@ using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.PCTLV
 {
+    [TlvTag(TlvTags._0x010C)]
     internal class TLV_010C : BaseTLV
     {
         public TLV_010C()
@@ -13,22 +14,21 @@ namespace QQ.Framework.Packets.PCTLV
             Name = "TLV_010C";
         }
 
-        public void parser_tlv_010C(QQClient m_PCClient, BinaryReader buf)
+        public void Parser_Tlv(QQUser User, BinaryReader buf)
         {
+            var _type = buf.BEReadUInt16();//type
+            var _length = buf.BEReadUInt16();//length
             int len;
             wSubVer = buf.BEReadUInt16(); //wSubVer
             if (wSubVer == 0x0001)
             {
-                m_PCClient.QQUser.TXProtocol.SessionKey = buf.ReadBytes(16);
+                User.TXProtocol.SessionKey = buf.ReadBytes(16);
                 var dwUin = buf.BEReadInt32();
-//#if SHOWLOG
-//                QQLog.Log("SessionKey:" + Util.ToHex(client.TXProtocol.SessionKey));
-//#endif
                 var dwClientIP = Util.GetIpStringFromBytes(buf.ReadBytes(4)); //IP地址
-                m_PCClient.wClientPort = buf.BEReadUInt16();
+                User.TXProtocol.wClientPort = buf.BEReadUInt16();
                 var dwServerTime = Util.GetDateTimeFromMillis(buf.BEReadInt32());
                 var UNKNOW = buf.BEReadInt32();
-                var cPassSeqID = buf.BEReadChar();
+                var cPassSeqID = buf.ReadByte();
                 var dwConnIP = buf.ReadBytes(4);
                 var dwReLoginConnIP = buf.ReadBytes(4);
                 var dwReLoginCtrlFlag = buf.BEReadInt32();

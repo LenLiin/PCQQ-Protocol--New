@@ -5,6 +5,7 @@ using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.PCTLV
 {
+    [TlvTag(TlvTags.SigPic)]
     internal class TLV_0110 : BaseTLV
     {
         public TLV_0110()
@@ -14,18 +15,18 @@ namespace QQ.Framework.Packets.PCTLV
             wSubVer = 0x0001;
         }
 
-        public byte[] get_tlv_0110(QQClient m_PCClient)
+        public byte[] Get_Tlv(QQUser User)
         {
-            if (m_PCClient.QQUser.TXProtocol.bufSigPic == null)
+            if (User.TXProtocol.bufSigPic == null)
             {
-                return null;
+                return new byte[] { };
             }
 
             var data = new BinaryWriter(new MemoryStream());
             if (wSubVer == 0x0001)
             {
                 data.BEWrite(wSubVer); //wSubVer
-                data.Write(m_PCClient.QQUser.TXProtocol.bufSigPic);
+                data.WriteKey(User.TXProtocol.bufSigPic);
             }
             else
             {
@@ -38,12 +39,14 @@ namespace QQ.Framework.Packets.PCTLV
             return get_buf();
         }
 
-        public void parser_tlv_0110(QQClient m_PCClient, BinaryReader buf)
+        public void Parser_Tlv(QQUser User, BinaryReader buf)
         {
+            var _type = buf.BEReadUInt16();//type
+            var _length = buf.BEReadUInt16();//length
             wSubVer = buf.BEReadUInt16(); //wSubVer
             if (wSubVer == 0x0001)
             {
-                m_PCClient.QQUser.TXProtocol.bufSigPic = buf.ReadBytes(0x38);
+                User.TXProtocol.bufSigPic = buf.ReadBytes(buf.BEReadUInt16());
             }
             else
             {

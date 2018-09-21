@@ -1,3 +1,5 @@
+using QQ.Framework.Packets.PCTLV;
+using QQ.Framework.TlvLib;
 using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.Receive.Login
@@ -8,39 +10,18 @@ namespace QQ.Framework.Packets.Receive.Login
             : base(byteBuffer, User, User.QQ_PACKET_0825KEY)
         {
         }
-
-        public byte DataHead { get; set; }
+        /// <summary>
+        /// ״̬��
+        /// </summary>
+        public byte Result { get; set; }
 
         protected override void ParseBody()
         {
             Decrypt(!user.IsLoginRedirect ? user.QQ_PACKET_0825KEY : user.QQ_PACKET_REDIRECTIONKEY);
-
-            DataHead = reader.ReadByte();
-            reader.BEReadChar(); //0112
-            reader.BEReadChar(); //0038
-            user.QQ_0825Token = reader.ReadBytes(0x38);
-            if (DataHead == 0xFE)
-            {
-                reader.ReadBytes(6);
-                user.LoginTime = reader.ReadBytes(4);
-                reader.ReadBytes(2);
-                reader.ReadBytes(4);
-                reader.ReadBytes(18);
-                user.ServerIp = reader.ReadBytes(4);
-                reader.ReadBytes(6);
-            }
-            else
-            {
-                reader.ReadBytes(6);
-                user.LoginTime = reader.ReadBytes(4);
-                reader.ReadBytes(2);
-                reader.ReadBytes(4);
-                reader.ReadBytes(6);
-                user.ServerIp = reader.ReadBytes(4);
-            }
-
-            //从原始数据包提取加密包
-            reader.ReadBytes(buffer.Length - 1);
+            Result = reader.ReadByte();
+            var tlvs = TlvLib.Tlv.ParseTlv(reader.ReadBytes((int)(reader.BaseStream.Length - 1)));
+            reader.BaseStream.Position = 1;
+            TlvExecutionProcessing(tlvs);
         }
     }
 }

@@ -1,3 +1,4 @@
+using QQ.Framework.Utils;
 using System;
 
 namespace QQ.Framework.Packets.Receive.Login
@@ -5,29 +6,22 @@ namespace QQ.Framework.Packets.Receive.Login
     public class Receive_0x0828 : ReceivePacket
     {
         public Receive_0x0828(byte[] byteBuffer, QQUser User)
-            : base(byteBuffer, User, User.QQ_0828_rec_decr_key)
+            : base(byteBuffer, User, User.TXProtocol.bufTGT_GTKey)
         {
         }
 
-        public byte DataHead { get; set; }
-
+        /// <summary>
+        /// 状态码
+        /// </summary>
+        public byte Result { get; set; }
         protected override void ParseBody()
         {
-            Decrypt(user.QQ_0828_rec_decr_key);
-            if (GetPacketLength() == 407)
-            {
-                reader.ReadBytes(15);
-                user.QQ_SessionKey = reader.ReadBytes(0x10);
-            }
-            else if (GetPacketLength() == 439 || GetPacketLength() == 527)
-            {
-                reader.ReadBytes(63);
-                user.QQ_SessionKey = reader.ReadBytes(0x10);
-            }
-            else
-            {
-                throw new Exception("登录失败");
-            }
+            Decrypt(_secretKey);
+            Result = reader.ReadByte();
+            var tlvs = TlvLib.Tlv.ParseTlv(reader.ReadBytes((int)(reader.BaseStream.Length - 1)));
+            //重置指针（因为tlv解包后指针已经移动到末尾）
+            reader.BaseStream.Position = 1;
+            TlvExecutionProcessing(tlvs);
         }
     }
 }

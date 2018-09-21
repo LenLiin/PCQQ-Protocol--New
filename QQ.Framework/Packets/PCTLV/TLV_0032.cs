@@ -1,8 +1,11 @@
 using System;
+using System.IO;
 using QQ.Framework;
+using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.PCTLV
 {
+    [TlvTag(TlvTags.QdData)]
     internal class TLV_0032 : BaseTLV
     {
         public TLV_0032()
@@ -12,23 +15,13 @@ namespace QQ.Framework.Packets.PCTLV
             wSubVer = 0x0002;
         }
 
-        public byte[] get_tlv_0032(QQClient m_PCClient)
+        public byte[] Get_Tlv(QQUser User)
         {
-            //TODO:QdData
-            throw new Exception("QdData 获取失败！");
-
-            //byte[] qddata = null;
-            //if (m_PCClient.m_LisHelper.GetQdData((uint)m_PCClient.QQUser.QQ, m_PCClient.dwServerIP, m_PCClient.QQUser.TXProtocol.bufComputerIDEx, out qddata))
-            //{
-            //    fill_head(this.cmd);
-            //    fill_body(qddata, qddata.Length);
-            //    set_length();
-            //    return get_buf();
-            //}
-            //else
-            //{
-            //    throw new Exception("QdData 获取失败！");
-            //}
+            byte[] qddata = QdData.GetQdData(User);
+            fill_head(cmd);
+            fill_body(qddata, qddata.Length);
+            set_length();
+            return get_buf();
         }
     }
 }

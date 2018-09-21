@@ -5,6 +5,7 @@ using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.PCTLV
 {
+    [TlvTag(TlvTags.TicketInfo)]
     internal class TLV_0107 : BaseTLV
     {
         public TLV_0107()
@@ -13,8 +14,10 @@ namespace QQ.Framework.Packets.PCTLV
             Name = "SSO2::TLV_TicketInfo_0x107";
         }
 
-        public void parser_tlv_0006(QQClient m_PCClient, BinaryReader buf)
+        public void Parser_Tlv(QQUser User, BinaryReader buf)
         {
+            var _type = buf.BEReadUInt16();//type
+            var _length = buf.BEReadUInt16();//length
             wSubVer = buf.BEReadUInt16(); //wSubVer
             if (wSubVer == 0x0001)
             {
@@ -29,32 +32,32 @@ namespace QQ.Framework.Packets.PCTLV
                 var wTGTTryCount = bufTickStatus.BEReadUInt16();
 
                 buffer = buf.ReadBytes(16);
-                m_PCClient.QQUser.TXProtocol.bufTGT_GTKey = buffer;
+                User.TXProtocol.bufTGT_GTKey = buffer;
 
                 len = buf.BEReadUInt16();
                 buffer = buf.ReadBytes(len);
-                m_PCClient.QQUser.TXProtocol.bufTGT = buffer;
+                User.TXProtocol.bufTGT = buffer;
 
                 buffer = buf.ReadBytes(16);
-                m_PCClient.QQUser.TXProtocol.buf16bytesGTKey_ST = buffer;
+                User.TXProtocol.buf16bytesGTKey_ST = buffer;
 
                 len = buf.BEReadUInt16();
                 buffer = buf.ReadBytes(len);
-                m_PCClient.QQUser.TXProtocol.bufServiceTicket = buffer;
+                User.TXProtocol.bufServiceTicket = buffer;
 
                 len = buf.BEReadUInt16();
                 buffer = buf.ReadBytes(len);
                 var bufSTHttp = new BinaryReader(new MemoryStream(buffer));
                 var bAllowPtlogin = bufSTHttp.ReadByte();
                 buffer = bufSTHttp.ReadBytes(16);
-                m_PCClient.QQUser.TXProtocol.buf16bytesGTKey_STHttp = buffer;
+                User.TXProtocol.buf16bytesGTKey_STHttp = buffer;
 
                 len = bufSTHttp.BEReadUInt16();
                 buffer = bufSTHttp.ReadBytes(len);
-                m_PCClient.QQUser.TXProtocol.bufServiceTicketHttp = buffer;
+                User.TXProtocol.bufServiceTicketHttp = buffer;
 
                 buffer = buf.ReadBytes(16);
-                m_PCClient.QQUser.TXProtocol.bufGTKey_TGTPwd = buffer;
+                User.TXProtocol.bufGTKey_TGTPwd = buffer;
             }
             else
             {

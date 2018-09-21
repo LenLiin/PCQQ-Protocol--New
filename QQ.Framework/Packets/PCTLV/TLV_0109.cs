@@ -5,6 +5,7 @@ using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.PCTLV
 {
+    [TlvTag(TlvTags._ddReply)]
     internal class TLV_0109 : BaseTLV
     {
         public TLV_0109()
@@ -13,23 +14,23 @@ namespace QQ.Framework.Packets.PCTLV
             Name = "SSO2::TLV_0xddReply_0x109";
         }
 
-        public void parser_tlv_0006(QQClient m_PCClient, BinaryReader buf)
+        public void Parser_Tlv(QQUser User, BinaryReader buf)
         {
+            var _type = buf.BEReadUInt16();//type
+            var _length = buf.BEReadUInt16();//length
             wSubVer = buf.BEReadUInt16(); //wSubVer
             if (wSubVer == 0x0001)
             {
                 var buffer = buf.ReadBytes(16);
-                m_PCClient.QQUser.TXProtocol.bufSessionKey = buffer;
+                User.TXProtocol.bufSessionKey = buffer;
 
                 var len = buf.BEReadUInt16();
                 buffer = buf.ReadBytes(len);
-                m_PCClient.QQUser.TXProtocol.bufSigSession = buffer;
+                User.TXProtocol.bufSigSession = buffer;
 
                 len = buf.BEReadUInt16();
                 buffer = buf.ReadBytes(len);
-                m_PCClient.QQUser.TXProtocol.bufPwdForConn = buffer;
-
-
+                User.TXProtocol.bufPwdForConn = buffer;
                 buf.BEReadUInt16(); //bufBill
             }
             else

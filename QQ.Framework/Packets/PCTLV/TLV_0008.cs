@@ -5,6 +5,7 @@ using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.PCTLV
 {
+    [TlvTag(TlvTags.TimeZone)]
     internal class TLV_0008 : BaseTLV
     {
         public TLV_0008()
@@ -14,7 +15,7 @@ namespace QQ.Framework.Packets.PCTLV
             wSubVer = 0x0001;
         }
 
-        public byte[] get_tlv_8(QQClient m_PCClient)
+        public byte[] Get_Tlv(QQUser User)
         {
             //if (PCQQGlobal.dwLocaleID == 0x00000804 && PCQQGlobal.wTimeZoneoffsetMin == 0x01E0)
             //{

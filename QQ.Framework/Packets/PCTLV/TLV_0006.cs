@@ -1,10 +1,10 @@
 using System;
 using System.IO;
-using QQ.Framework;
 using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.PCTLV
 {
+    [TlvTag(TlvTags.TGTGT)]
     internal class TLV_0006 : BaseTLV
     {
         public TLV_0006()
@@ -14,32 +14,32 @@ namespace QQ.Framework.Packets.PCTLV
             wSubVer = 0x0002;
         }
 
-        public byte[] get_tlv_0006(QQClient m_PCClient)
+        public byte[] Get_Tlv(QQUser User)
         {
             if (wSubVer == 0x0002)
             {
-                if (m_PCClient.QQUser.TXProtocol.bufTGTGT == null)
+                if (User.TXProtocol.bufTGTGT == null)
                 {
                     var data = new BinaryWriter(new MemoryStream());
                     data.BEWrite(new Random(Guid.NewGuid().GetHashCode()).Next()); //随机4字节??
                     data.BEWrite(wSubVer); //wSubVer
-                    data.BEWrite((uint) m_PCClient.QQUser.QQ); //QQ号码
-                    data.BEWrite(QQGlobal.dwSSOVersion);
-                    data.BEWrite(QQGlobal.dwServiceId);
-                    data.BEWrite(QQGlobal.dwClientVer);
-                    data.BEWrite(0);
-                    data.Write(m_PCClient.QQUser.bRememberPwdLogin);
-                    data.Write(m_PCClient.QQUser.MD51); //密码的一次MD5值，服务器用该MD5值验证用户密码是否正确
-                    data.Write(m_PCClient.QQUser.LoginTime); //登录时间
+                    data.BEWrite(User.QQ); //QQ号码
+                    data.BEWrite(User.TXProtocol.dwSSOVersion);
+                    data.BEWrite(User.TXProtocol.dwServiceId);
+                    data.BEWrite(User.TXProtocol.dwClientVer);
+                    data.BEWrite((ushort)0);
+                    data.Write(User.TXProtocol.bRememberPwdLogin);
+                    data.Write(User.MD51); //密码的一次MD5值，服务器用该MD5值验证用户密码是否正确
+                    data.BEWrite(User.TXProtocol.dwServerTime); //登录时间
                     data.Write(new byte[13]); //固定13字节
-                    data.Write(m_PCClient.QQUser.IP); //IP地址
-                    data.BEWrite(QQGlobal.dwISP); //dwISP
-                    data.BEWrite(QQGlobal.dwIDC); //dwIDC
-                    data.Write(m_PCClient.QQUser.TXProtocol.bufComputerIDEx); //机器码
-                    data.Write(m_PCClient.QQUser.QQ_PACKET_TgtgtKey); //00DD临时密钥(通过验证时客户端用该密钥解密服务端发送回来的数据)
+                    data.Write(Util.IPStringToByteArray(User.TXProtocol.dwClientIP)); //IP地址
+                    data.BEWrite(User.TXProtocol.dwISP); //dwISP
+                    data.BEWrite(User.TXProtocol.dwIDC); //dwIDC
+                    data.WriteKey(User.TXProtocol.bufComputerIDEx); //机器码
+                    data.Write(User.TXProtocol.bufTGTGTKey); //00DD临时密钥(通过验证时客户端用该密钥解密服务端发送回来的数据)
 
-                    m_PCClient.QQUser.TXProtocol.bufTGTGT =
-                        QQTea.Encrypt(data.BaseStream.ToBytesArray(), m_PCClient.QQUser.Md52());
+                    User.TXProtocol.bufTGTGT =
+                        QQTea.Encrypt(data.BaseStream.ToBytesArray(), User.Md52());
                 }
             }
             else
@@ -48,17 +48,19 @@ namespace QQ.Framework.Packets.PCTLV
             }
 
             var tlv = new BinaryWriter(new MemoryStream());
-            tlv.Write(m_PCClient.QQUser.TXProtocol.bufTGTGT);
+            tlv.Write(User.TXProtocol.bufTGTGT);
             fill_head(cmd);
             fill_body(tlv.BaseStream.ToBytesArray(), tlv.BaseStream.Length);
             set_length();
             return get_buf();
         }
 
-        public void parser_tlv_0006(QQClient m_PCClient, BinaryReader buf)
+        public void Parser_Tlv(QQUser User, BinaryReader buf)
         {
-            m_PCClient.QQUser.TXProtocol.bufTGTGT =
-                buf.ReadBytes((int) (buf.BaseStream.Length - buf.BaseStream.Position));
+            var _type = buf.BEReadUInt16();//type
+            var _length = buf.BEReadUInt16();//length
+            User.TXProtocol.bufTGTGT =
+                buf.ReadBytes(_length);
         }
     }
 }

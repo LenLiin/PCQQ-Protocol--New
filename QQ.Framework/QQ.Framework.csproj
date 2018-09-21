@@ -6,6 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Domains\IPacket.cs" />
+    <Compile Remove="Domains\ReceiveCommand.cs" />
+    <Compile Remove="Domains\ReceivePackageCommand.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Iconic.Zlib.Netstandard" Version="1.0.0" />
     <PackageReference Include="protobuf-net" Version="3.0.0-alpha.3" />
     <PackageReference Include="System.Drawing.Common" Version="4.5.0" />
@@ -14,7 +20,6 @@
   <ItemGroup>
     <Folder Include="Docs\UMLs\" />
     <Folder Include="Domains\Commands\ReceiveCommands\Interactive\" />
-    <Folder Include="Packets\Models\" />
     <Folder Include="Docs\" />
   </ItemGroup>
 

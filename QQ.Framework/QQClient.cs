@@ -60,13 +60,6 @@ namespace QQ.Framework
         public bool IsLogon { get; set; }
 
 
-        public ushort wClientPort { get; set; }
-        public string dwClientIP { get; set; }
-        public DateTime dwServerTime { get; set; }
-        public ushort wRedirectCount { get; set; }
-        public string dwServerIP { get; set; }
-        public ushort wServerPort { get; set; }
-
         public void Send(byte[] byteBuffer)
         {
             new Task(() =>
@@ -160,7 +153,7 @@ namespace QQ.Framework
         internal void OnReceive_0x0836_871(QQEventArgs<Receive_0x0836> e)
         {
             //请求验证码
-            if (e.ReceivePacket.VerifyCommand == 0x01)
+            if (e.ReceivePacket.Result == (byte)ResultCode.需要验证码)
             {
                 Send(new Send_0x00BA(e.ReceivePacket.user, "").WriteData());
             }
@@ -521,7 +514,6 @@ namespace QQ.Framework
         /// <param name="message"></param>
         /// <param name="group"></param>
         /// <param name="MessageType">消息类型</param>
-        [Obsolete("使用QQ.Framework.Domains.SendMessageServiceImpl内的实现。")]
         public void SendLongGroupMessage(Richtext message, long group)
         {
             foreach (var packet in Send_0x0002.SendLongMessage(QQUser, message, group))
@@ -536,7 +528,6 @@ namespace QQ.Framework
         /// <param name="message"></param>
         /// <param name="user"></param>
         /// <param name="MessageType">消息类型</param>
-        [Obsolete("使用QQ.Framework.Domains.SendMessageServiceImpl内的实现。")]
         public void SendLongUserMessage(Richtext message, long user)
         {
             foreach (var packet in Send_0x00CD.SendLongMessage(QQUser, message, user))

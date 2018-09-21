@@ -6,7 +6,7 @@ namespace QQ.Framework.Packets.Receive.Interactive
         ///     发送添加好友消息回执
         /// </summary>
         public Receive_0x0115(byte[] byteBuffer, QQUser User)
-            : base(byteBuffer, User, User.QQ_SessionKey)
+            : base(byteBuffer, User, User.TXProtocol.SessionKey)
         {
         }
 
@@ -14,7 +14,7 @@ namespace QQ.Framework.Packets.Receive.Interactive
 
         protected override void ParseBody()
         {
-            Decrypt(user.QQ_SessionKey);
+            Decrypt(user.TXProtocol.SessionKey);
             reader.ReadBytes(28);
             user.AddFriend_0018Value = reader.ReadBytes(24);
         }

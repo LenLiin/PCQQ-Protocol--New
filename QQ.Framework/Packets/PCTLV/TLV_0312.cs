@@ -4,6 +4,7 @@ using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.PCTLV
 {
+    [TlvTag(TlvTags.Misc_Flag)]
     internal class TLV_0312 : BaseTLV
     {
         public TLV_0312()
@@ -12,11 +13,11 @@ namespace QQ.Framework.Packets.PCTLV
             Name = "SSO2::TLV_Misc_Flag_0x312";
         }
 
-        public byte[] get_tlv_0312(QQClient m_PCClient)
+        public byte[] Get_Tlv(QQUser User)
         {
             var data = new BinaryWriter(new MemoryStream());
-            data.Write(1);
-            data.BEWrite(0);
+            data.Write((byte)1);
+            data.BEWrite(1);
             fill_head(cmd);
             fill_body(data.BaseStream.ToBytesArray(), data.BaseStream.Length);
             set_length();

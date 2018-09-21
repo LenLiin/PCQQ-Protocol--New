@@ -6,13 +6,13 @@ namespace QQ.Framework.Packets.Receive.Message
         ///     发好友消息回复包
         /// </summary>
         public Receive_0x00CD(byte[] byteBuffer, QQUser User)
-            : base(byteBuffer, User, User.QQ_SessionKey)
+            : base(byteBuffer, User, User.TXProtocol.SessionKey)
         {
         }
 
         protected override void ParseBody()
         {
-            Decrypt(user.QQ_SessionKey);
+            Decrypt(user.TXProtocol.SessionKey);
         }
     }
 }

@@ -5,6 +5,7 @@ using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.PCTLV
 {
+    [TlvTag(TlvTags._0x002F)]
     internal class TLV_002F : BaseTLV
     {
         public TLV_002F()
@@ -13,12 +14,14 @@ namespace QQ.Framework.Packets.PCTLV
             Name = "TLV_Control";
         }
 
-        public void parser_tlv_002F(QQClient m_PCClient, BinaryReader buf)
+        public void Parser_Tlv(QQUser User, BinaryReader buf)
         {
+            var _type = buf.BEReadUInt16();//type
+            var _length = buf.BEReadUInt16();//length
             wSubVer = buf.BEReadUInt16(); //wSubVer
             if (wSubVer == 0x0001)
             {
-                var bufControl = buf.ReadBytes((int) (buf.BaseStream.Length - buf.BaseStream.Position));
+                var bufControl = buf.ReadBytes(_length-2);
             }
             else
             {

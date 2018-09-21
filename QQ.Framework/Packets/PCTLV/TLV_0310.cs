@@ -4,6 +4,7 @@ using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.PCTLV
 {
+    [TlvTag(TlvTags.ServerAddress)]
     internal class TLV_0310 : BaseTLV
     {
         public TLV_0310()
@@ -12,9 +13,11 @@ namespace QQ.Framework.Packets.PCTLV
             Name = "SSO2::TLV_ServerAddress_0x310";
         }
 
-        public void parser_tlv_0310(QQClient m_PCClient, BinaryReader buf)
+        public void Parser_Tlv(QQUser User, BinaryReader buf)
         {
-            m_PCClient.dwServerIP = Util.GetIpStringFromBytes(buf.ReadBytes(4));
+            var _type = buf.BEReadUInt16();//type
+            var _length = buf.BEReadUInt16();//length
+            User.TXProtocol.dwServerIP = Util.GetIpStringFromBytes(buf.ReadBytes(4));
         }
     }
 }

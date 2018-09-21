@@ -6,6 +6,7 @@ using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.PCTLV
 {
+    [TlvTag(TlvTags.LocalIP)]
     internal class TLV_002D : BaseTLV
     {
         public TLV_002D()
@@ -15,7 +16,7 @@ namespace QQ.Framework.Packets.PCTLV
             wSubVer = 0x0001;
         }
 
-        public byte[] get_tlv_002D(QQClient m_PCClient)
+        public byte[] Get_Tlv(QQUser User)
         {
             var data = new BinaryWriter(new MemoryStream());
             if (wSubVer == 0x0001)

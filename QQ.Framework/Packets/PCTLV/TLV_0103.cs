@@ -5,6 +5,7 @@ using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.PCTLV
 {
+    [TlvTag(TlvTags.SID)]
     internal class TLV_0103 : BaseTLV
     {
         public TLV_0103()
@@ -14,29 +15,31 @@ namespace QQ.Framework.Packets.PCTLV
             wSubVer = 0x0001;
         }
 
-        public byte[] get_tlv_0103(QQClient m_PCClient)
+        public byte[] Get_Tlv(QQUser User)
         {
-            if (QQGlobal.bufSID == null || QQGlobal.bufSID.Length == 0)
+            if (User.TXProtocol.bufSID == null || User.TXProtocol.bufSID.Length == 0)
             {
                 return null;
             }
 
             var data = new BinaryWriter(new MemoryStream());
-            data.BEWrite(0x0001);
-            data.Write(QQGlobal.bufSID);
+            data.BEWrite(wSubVer);
+            data.WriteKey(User.TXProtocol.bufSID);
             fill_head(cmd);
             fill_body(data.BaseStream.ToBytesArray(), data.BaseStream.Length);
             set_length();
             return get_buf();
         }
 
-        public void parser_tlv_0103(QQClient m_PCClient, BinaryReader buf)
+        public void Parser_Tlv(QQUser User, BinaryReader buf)
         {
+            var _type = buf.BEReadUInt16();//type
+            var _length = buf.BEReadUInt16();//length
             wSubVer = buf.BEReadUInt16(); //wSubVer
             if (wSubVer == 0x0001)
             {
                 var len = buf.BEReadUInt16();
-                QQGlobal.bufSID = buf.ReadBytes(len);
+                User.TXProtocol.bufSID = buf.ReadBytes(len);
             }
             else
             {

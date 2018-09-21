@@ -6,6 +6,7 @@ using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.PCTLV
 {
+    [TlvTag(TlvTags.ErrorCode)]
     internal class TLV_0100 : BaseTLV
     {
         public TLV_0100()
@@ -15,15 +16,22 @@ namespace QQ.Framework.Packets.PCTLV
         }
 
         public string ErrorMsg { get; private set; }
+        public char PacketCommand { get; private set; }
 
-        public void parser_tlv_0006(QQClient m_PCClient, BinaryReader buf)
+        public void Parser_Tlv(QQUser User, BinaryReader buf)
+        {
+            var _type = buf.BEReadUInt16();//type
+            var _length = buf.BEReadUInt16();//length
+            Parser_Tlv2(User, buf, _length);
+        }
+        public void Parser_Tlv2(QQUser User, BinaryReader buf,int Length)
         {
             wSubVer = buf.BEReadUInt16(); //wSubVer
             if (wSubVer == 0x0001)
             {
-                var wCsCmd = buf.BEReadUInt16();
+                PacketCommand = (char)buf.BEReadUInt16();
                 var ErrorCode = buf.BEReadUInt32();
-                ErrorMsg = Encoding.UTF8.GetString(buf.ReadBytes(0x38));
+                ErrorMsg = Encoding.UTF8.GetString(buf.ReadBytes(buf.BEReadUInt16()));
             }
             else
             {

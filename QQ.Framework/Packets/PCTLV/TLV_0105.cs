@@ -7,6 +7,7 @@ namespace QQ.Framework.Packets.PCTLV
 {
     internal class TLV_0105 : BaseTLV
     {
+        [TlvTag(TlvTags.m_vec0x12c)]
         public TLV_0105()
         {
             cmd = 0x0105;
@@ -14,18 +15,18 @@ namespace QQ.Framework.Packets.PCTLV
             wSubVer = 0x0001;
         }
 
-        public byte[] get_tlv_0105(QQClient m_PCClient)
+        public byte[] Get_Tlv(QQUser User)
         {
             var data = new BinaryWriter(new MemoryStream());
             if (wSubVer == 0x0001)
             {
                 data.BEWrite(wSubVer); //wSubVer
-                data.Write(1);
-                data.Write(2);
-                data.BEWrite(0x0014);
+                data.Write(User.TXProtocol.xxoo_b);
+                data.Write((byte)2);
+                data.BEUshortWrite(0x0014);
                 data.BEWrite(0x01010010);
                 data.Write(Util.RandomKey());
-                data.BEWrite(0x0014);
+                data.BEUshortWrite(0x0014);
                 data.BEWrite(0x01020010);
                 data.Write(Util.RandomKey());
             }
@@ -40,8 +41,10 @@ namespace QQ.Framework.Packets.PCTLV
             return get_buf();
         }
 
-        public void parser_tlv_0105(QQClient m_PCClient, BinaryReader buf)
+        public void Parser_Tlv(QQUser User, BinaryReader buf)
         {
+            var _type = buf.BEReadUInt16();//type
+            var _length = buf.BEReadUInt16();//length
             wSubVer = buf.BEReadUInt16(); //wSubVer
             if (wSubVer == 0x0001)
             {

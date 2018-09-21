@@ -1,24 +1,24 @@
+using System;
 using System.IO;
 using QQ.Framework;
 using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.PCTLV
 {
-    [TlvTag(TlvTags.GTKey_TGTGT)]
-    internal class TLV_001E : BaseTLV
+    [TlvTag(TlvTags._0x0033)]
+    internal class TLV_0033 : BaseTLV
     {
-        public TLV_001E()
+        public TLV_0033()
         {
-            cmd = 0x001E;
-            Name = "SSO2::TLV_GTKey_TGTGT_0x1e";
+            cmd = 0x0033;
+            Name = "SSO2::TLV_LoginReason_0x33";
+            wSubVer = 0x0002;
         }
-
         public void Parser_Tlv(QQUser User, BinaryReader buf)
         {
             var _type = buf.BEReadUInt16();//type
             var _length = buf.BEReadUInt16();//length
-            User.TXProtocol.bufTGTGTKey =
-                buf.ReadBytes(_length);
+            buf.ReadBytes(_length);
         }
     }
 }

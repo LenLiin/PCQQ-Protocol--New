@@ -5,6 +5,7 @@ using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.PCTLV
 {
+    [TlvTag(TlvTags.Ping_Strategy)]
     internal class TLV_0309 : BaseTLV
     {
         public TLV_0309()
@@ -13,21 +14,25 @@ namespace QQ.Framework.Packets.PCTLV
             Name = "SSO2::TLV_Ping_Strategy_0x309";
             wSubVer = 0x0001;
         }
-
-        public byte[] get_tlv_0309(QQClient m_PCClient)
+        /// <summary>
+        /// Ping_Strategy
+        /// </summary>
+        /// <param name="m_PCClient"></param>
+        /// <returns></returns>
+        public byte[] Get_Tlv(QQUser User)
         {
             var data = new BinaryWriter(new MemoryStream());
             if (wSubVer == 0x0001)
             {
                 data.BEWrite(wSubVer); //wSubVer
-                data.Write(Util.IPStringToByteArray(m_PCClient.dwServerIP)); //LastServerIP - 服务器最后的登录IP，可以为0
-                data.Write((byte) m_PCClient.QQUser.RedirectIP.Count); //cRedirectCount - 重定向的次数（IP的数量）
-                foreach (var ip in m_PCClient.QQUser.RedirectIP)
+                data.Write(Util.IPStringToByteArray(User.TXProtocol.dwServerIP)); //LastServerIP - 服务器最后的登录IP，可以为0
+                data.Write((byte)User.TXProtocol.RedirectIP.Count); //cRedirectCount - 重定向的次数（IP的数量）
+                foreach (var ip in User.TXProtocol.RedirectIP)
                 {
                     data.Write(ip);
                 }
 
-                data.Write(m_PCClient.QQUser.cPingType); //cPingType 
+                data.Write(User.TXProtocol.cPingType); //cPingType 
             }
             else
             {

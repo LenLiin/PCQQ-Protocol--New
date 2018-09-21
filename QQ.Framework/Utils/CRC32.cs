@@ -3,7 +3,7 @@ using System.Text;
 
 namespace QQ.Framework.Utils
 {
-    public class CRC32cs
+    public class CRC32
     {
         private static ushort[] CRC16Table;
 
@@ -97,7 +97,7 @@ namespace QQ.Framework.Utils
             return CRC16(AString, Encoding.UTF8);
         }
 
-        public static uint CRC32(byte[] ABytes)
+        public static uint CRC32Imp(byte[] ABytes)
         {
             MakeCRC32Table();
             var num = 4294967295u;
@@ -107,6 +107,17 @@ namespace QQ.Framework.Utils
             }
 
             return CRC32ToUint(~num);
+        }
+        public static uint CRC32Reverse(byte[] ABytes)
+        {
+            MakeCRC32Table();
+            var num = 4294967295u;
+            foreach (var aByte in ABytes)
+            {
+                num = UpdateCRC32(aByte, num);
+            }
+
+            return CRC32ToUintReverse(~num);
         }
 
         //生成CRC32码表
@@ -164,19 +175,21 @@ namespace QQ.Framework.Utils
             return value ^ 0xffffffff;
         }
 
-        private static uint CRC32(string AString, Encoding AEncoding)
+        private static uint CRC32Imp(string AString, Encoding AEncoding)
         {
-            return CRC32(AEncoding.GetBytes(AString));
+            return CRC32Imp(AEncoding.GetBytes(AString));
         }
 
-        private static uint CRC32(string AString)
+        private static uint CRC32Imp(string AString)
         {
-            return CRC32(AString, Encoding.UTF8);
+            return CRC32Imp(AString, Encoding.UTF8);
         }
 
         private static uint CRC32ToUint(uint crc32)
         {
             var text = crc32.ToString("X2");
+            if (text.Length == 7)
+                text = "0" + text;
             var text2 = "";
             for (var i = 6; i >= 0; i -= 2)
             {
@@ -186,7 +199,28 @@ namespace QQ.Framework.Utils
             uint result;
             try
             {
-                result = Convert.ToUInt32(text2.Trim(), 16);
+                result = Convert.ToUInt32(text2.Replace(" ",""), 16);
+            }
+            catch
+            {
+                result = 0u;
+            }
+
+            return result;
+        }
+        private static uint CRC32ToUintReverse(uint crc32)
+        {
+            var text = crc32.ToString("X2");
+            var text2 = "";
+            for (var i = 6; i >= 0; i -= 2)
+            {
+                text2 = text.Substring(i, 2) + " "+ text2;
+            }
+
+            uint result;
+            try
+            {
+                result = Convert.ToUInt32(text2.Replace(" ", ""), 16);
             }
             catch
             {

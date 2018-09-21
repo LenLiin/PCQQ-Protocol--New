@@ -1,6 +1,10 @@
 using System;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Text;
+using QQ.Framework.Packets.PCTLV;
+using QQ.Framework.TlvLib;
 using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.Receive.Login
@@ -8,104 +12,48 @@ namespace QQ.Framework.Packets.Receive.Login
     public class Receive_0x0836 : ReceivePacket
     {
         public Receive_0x0836(byte[] byteBuffer, QQUser User)
-            : base(byteBuffer, User, User.QQ_PACKET_TgtgtKey)
+            : base(byteBuffer, User, User.TXProtocol.bufTGTGTKey)
         {
         }
-
-        public byte[] VerifyCode { get; set; }
-        public byte VerifyCommand { get; set; } = 0x01;
-        public byte DataHead { get; set; }
+        
+        public string ErrorMsg { get; set; }
+        /// <summary>
+        /// 状态码
+        /// </summary>
+        public byte Result { get; set; }
 
         protected override void ParseBody()
         {
-            var CipherText2 = QQTea.Decrypt(buffer, (int) reader.BaseStream.Position,
-                (int) (buffer.Length - reader.BaseStream.Position - 1), user.QQ_SHARE_KEY);
-            if (CipherText2 == null)
+            Decrypt(user.TXProtocol.bufDHShareKey);
+            Result = reader.ReadByte();
+            //返回错误
+            if (Result == (byte)ResultCode.DoMain || Result == (byte)ResultCode.其它错误 
+                || Result == (byte)ResultCode.密码错误 || Result == (byte)ResultCode.帐号被回收
+                || Result == (byte)ResultCode.要求切换TCP || Result == (byte)ResultCode.过载保护
+                || Result == (byte)ResultCode.需要验证密保 || Result == (byte)ResultCode.需要验证码)
             {
-                throw new Exception($"包内容解析出错，抛弃该包: {ToString()}");
-            }
-
-            if (GetPacketLength() == 871)
-            {
-                bodyDecrypted = CipherText2;
-                reader = new BinaryReader(new MemoryStream(bodyDecrypted));
-                reader.ReadBytes(20);
-                user.QQ_PACKET_00BAVerifyToken = reader.ReadBytes(reader.BEReadChar());
-                VerifyCode = reader.ReadBytes(reader.BEReadChar());
-                VerifyCommand = reader.ReadByte();
-                if (VerifyCommand == 0x00)
+                var tlvs = TlvLib.Tlv.ParseTlv(reader.ReadBytes((int)(reader.BaseStream.Length - 1)));
+                //重置指针（因为tlv解包后指针已经移动到末尾）
+                reader.BaseStream.Position = 1;
+                TlvExecutionProcessing(tlvs);
+                if (tlvs.Where(c => c.Tag == 0x0100).Any())
                 {
-                    VerifyCommand = reader.ReadByte();
+                    var errorData = tlvs.Where(c => c.Tag == 0x0100).FirstOrDefault();
+                    var ErrReader = new BinaryReader(new MemoryStream(errorData.Value));
+                    var tlv = new TLV_0100();
+                    tlv.Parser_Tlv2(user, ErrReader,errorData.Length);
+                    ErrorMsg = tlv.ErrorMsg;
                 }
-
-                user.QQ_PACKET_00BAVerifyCode = VerifyCode;
-                user.QQ_PACKET_00BAToken = reader.ReadBytes(reader.BEReadChar());
-                reader.ReadBytes(reader.BEReadChar());
             }
             else
             {
-                bodyDecrypted = QQTea.Decrypt(CipherText2, _secretKey);
-                if (bodyDecrypted == null)
-                {
-                    throw new Exception($"包内容解析出错，抛弃该包: {ToString()}");
-                }
-
-                //提取数据
+                bodyDecrypted = QQTea.Decrypt(bodyDecrypted, user.TXProtocol.bufTGTGTKey);
                 reader = new BinaryReader(new MemoryStream(bodyDecrypted));
-                DataHead = reader.ReadByte();
-                if (GetPacketLength() == 271 || GetPacketLength() == 207)
-                {
-                    reader.BEReadChar();
-                    user.QQ_PACKET_TgtgtKey = reader.ReadBytes(reader.BEReadChar());
-                    reader.BEReadChar();
-                    user.QQ_tlv_0006_encr = reader.ReadBytes(reader.BEReadChar());
-                    reader.ReadBytes(6);
-                    if (GetPacketLength() == 271)
-                    {
-                        user.QQ_0836Token = reader.ReadBytes(reader.BEReadChar());
-                    }
-
-                    reader.BEReadChar();
-                    reader.ReadBytes(reader.BEReadChar());
-                }
-                else if (GetPacketLength() > 700)
-                {
-                    reader.ReadBytes(6);
-                    user.QQ_0828_rec_ecr_key = reader.ReadBytes(0x10);
-                    reader.BEReadChar();
-                    user.QQ_0836_038Token = reader.ReadBytes(0x38);
-                    reader.ReadBytes(60);
-                    var Judge = reader.ReadBytes(2);
-                    var MsgLength = 0;
-                    if (Util.ToHex(Judge) == "01 07")
-                    {
-                        MsgLength = 0;
-                    }
-                    else if (Util.ToHex(Judge) == "00 33")
-                    {
-                        MsgLength = 28;
-                    }
-                    else if (Util.ToHex(Judge) == "01 10")
-                    {
-                        MsgLength = 64;
-                    }
-
-                    reader.ReadBytes(28);
-                    reader.ReadBytes(MsgLength);
-                    user.QQ_0828_rec_decr_key = reader.ReadBytes(0x10);
-                    reader.BEReadChar();
-                    user.QQ_0836_088Token = reader.ReadBytes(0x88);
-                    reader.ReadBytes(159);
-                    user.QQ_ClientKey = reader.ReadBytes(112);
-                    reader.ReadBytes(28);
-                    var nick_length = reader.ReadByte();
-                    user.NickName = Encoding.UTF8.GetString(reader.ReadBytes(nick_length));
-                    user.Gender = reader.ReadByte();
-                    reader.ReadBytes(4);
-                    user.Age = reader.ReadByte();
-                    reader.ReadBytes(10);
-                    reader.ReadBytes(0x10);
-                }
+                Result = reader.ReadByte();
+                var tlvs = TlvLib.Tlv.ParseTlv(reader.ReadBytes((int)(reader.BaseStream.Length - 1)));
+                //重置指针（因为tlv解包后指针已经移动到末尾）
+                reader.BaseStream.Position = 1;
+                TlvExecutionProcessing(tlvs);
             }
         }
     }

@@ -1,10 +1,10 @@
 using System;
 using System.IO;
-using QQ.Framework;
 using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.PCTLV
 {
+    [TlvTag(TlvTags.Uin)]
     internal class TLV_0005 : BaseTLV
     {
         public TLV_0005()
@@ -14,9 +14,9 @@ namespace QQ.Framework.Packets.PCTLV
             wSubVer = 0x0002;
         }
 
-        public byte[] get_tlv_0005(QQClient m_PCClient)
+        public byte[] Get_Tlv(QQUser User)
         {
-            if (m_PCClient.QQUser.QQ == 0)
+            if (User.QQ == 0)
             {
                 return null;
             }
@@ -25,7 +25,7 @@ namespace QQ.Framework.Packets.PCTLV
             if (wSubVer == 0x0002)
             {
                 buf.BEWrite(wSubVer);
-                buf.BEWrite((uint) m_PCClient.QQUser.QQ);
+                buf.BEWrite((uint) User.QQ);
             }
             else
             {

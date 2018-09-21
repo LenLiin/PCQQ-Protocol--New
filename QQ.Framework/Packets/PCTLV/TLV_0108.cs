@@ -6,6 +6,7 @@ using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.PCTLV
 {
+    [TlvTag(TlvTags.AccountBasicInfo)]
     internal class TLV_0108 : BaseTLV
     {
         public TLV_0108()
@@ -14,8 +15,10 @@ namespace QQ.Framework.Packets.PCTLV
             Name = "SSO2::TLV_AccountBasicInfo_0x108";
         }
 
-        public void parser_tlv_0108(QQClient m_PCClient, BinaryReader buf)
+        public void Parser_Tlv(QQUser User, BinaryReader buf)
         {
+            var _type = buf.BEReadUInt16();//type
+            var _length = buf.BEReadUInt16();//length
             wSubVer = buf.BEReadUInt16(); //wSubVer
             if (wSubVer == 0x0001)
             {
@@ -30,12 +33,12 @@ namespace QQ.Framework.Packets.PCTLV
                 len = info.ReadByte();
                 if (len > 0)
                 {
-                    m_PCClient.QQUser.NickName = Encoding.UTF8.GetString(info.ReadBytes(len));
+                    User.NickName = Encoding.UTF8.GetString(info.ReadBytes(len));
                 }
 
                 var cSSO_Account_cGender = info.ReadByte();
                 var dwSSO_Account_dwUinFlag = info.BEReadUInt32();
-                m_PCClient.QQUser.Age = info.ReadByte();
+                User.Age = info.ReadByte();
 
                 var bufSTOther =
                     bufAccountBasicInfo.ReadBytes(

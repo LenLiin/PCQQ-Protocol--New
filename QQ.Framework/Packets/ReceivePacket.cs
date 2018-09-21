@@ -1,5 +1,9 @@
 using System;
 using System.IO;
+using System.Linq;
+using System.Reflection;
+using QQ.Framework.Packets.PCTLV;
+using QQ.Framework.TlvLib;
 using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets
@@ -103,6 +107,36 @@ namespace QQ.Framework.Packets
         {
             var Api =
                 "https://gchat.qpic.cn/gchatpic_new/807977219/485750189-2603962136-64ECA8CA06FC5B0CE6F047FEB66768B0/0?vuin=417085811&term=2addtime=1515123740";
+        }
+
+
+        /// <summary>
+        /// 通过反射执行TLV返回包解析
+        /// </summary>
+        /// <param name="tlvs"></param>
+        internal void TlvExecutionProcessing(System.Collections.Generic.ICollection<Tlv> tlvs)
+        {
+            var types = Assembly.GetExecutingAssembly().GetTypes();
+            foreach (var tlv in tlvs)
+            {
+                foreach (var type in types)
+                {
+                    var attributes = type.GetCustomAttributes();
+                    if (!attributes.Any(attr => attr is TlvTagAttribute))
+                    {
+                        continue;
+                    }
+
+                    var attribute = attributes.First(attr => attr is TlvTagAttribute) as TlvTagAttribute;
+                    if ((int)attribute.Tag == tlv.Tag)
+                    {
+                        var tlvClass = Assembly.GetExecutingAssembly().CreateInstance(type.FullName, true);
+
+                        MethodInfo methodinfo = type.GetMethod("Parser_Tlv");
+                        methodinfo.Invoke(tlvClass, new object[] { user, reader });
+                    }
+                }
+            }
         }
     }
 }

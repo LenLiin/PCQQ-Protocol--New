@@ -5,6 +5,7 @@ using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.PCTLV
 {
+    [TlvTag(TlvTags.DHParams)]
     internal class TLV_0114 : BaseTLV
     {
         public TLV_0114()
@@ -13,16 +14,19 @@ namespace QQ.Framework.Packets.PCTLV
             Name = "SSO2::TLV_DHParams_0x114";
             wSubVer = 0x0102;
         }
-
-        public byte[] get_tlv_0114(QQClient m_PCClient)
+        /// <summary>
+        /// DHParams
+        /// </summary>
+        /// <param name="m_PCClient"></param>
+        /// <returns></returns>
+        public byte[] Get_Tlv(QQUser User)
         {
             var data = new BinaryWriter(new MemoryStream());
             if (wSubVer == 0x0102)
             {
                 data.BEWrite(wSubVer); //wDHVer
-                data.BEWrite((ushort) m_PCClient.QQUser.TXProtocol.bufDHPublicKey.Length); //bufDHPublicKey长度
-                data.Write(m_PCClient.QQUser.TXProtocol.bufDHPublicKey);
-                //client.TXProtocol.Key["DHDecodeKey"] = client.TXProtocol.bufDHDecodeKey;
+                data.BEWrite((ushort) User.TXProtocol.bufDHPublicKey.Length); //bufDHPublicKey长度
+                data.Write(User.TXProtocol.bufDHPublicKey);
             }
             else
             {

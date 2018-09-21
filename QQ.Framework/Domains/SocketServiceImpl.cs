@@ -20,7 +20,7 @@ namespace QQ.Framework.Domains
         /// <summary>
         ///     服务器地址
         /// </summary>
-        private string _host; ////sz.tencent.com,sz{2-9}.tencent.com
+        private string _host;
 
         /// <summary>
         ///     登录端口
@@ -34,7 +34,9 @@ namespace QQ.Framework.Domains
         {
             _user = user;
             _server = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-            _host = Util.GetHostAddresses("sz2.tencent.com");
+            _host = Util.GetHostAddresses("sz2.tencent.com"); ////sz.tencent.com,sz{2-9}.tencent.com
+            _user.TXProtocol.dwServerIP = _host;
+            _port = _user.TXProtocol.wServerPort;
             _point = new IPEndPoint(IPAddress.Parse(_host), _port);
         }
 

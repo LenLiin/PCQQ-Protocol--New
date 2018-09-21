@@ -12,7 +12,7 @@ namespace QQ.Framework.Packets.Send.Message
             : base(User)
         {
             Sequence = _sequence;
-            _secretKey = user.QQ_SessionKey;
+            _secretKey = User.TXProtocol.SessionKey;
             Command = (QQCommand) _Command;
             _data = Data;
         }

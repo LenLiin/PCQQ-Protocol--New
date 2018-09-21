@@ -147,15 +147,7 @@ namespace QQ.Framework
         /// </summary>
         public static bool DebugLog = true;
 
-
-        public static uint dwSSOVersion { get; set; }
-        public static uint dwServiceId { get; set; }
-        public static uint dwClientVer { get; set; }
-        public static uint dwISP { get; set; }
-        public static uint dwIDC { get; set; }
-        public static long time_difference { get; set; }
-        public static byte[] bufSID { get; set; }
-        public static byte[] QQEXE_MD5 { get; set; }
+        public static byte[] QQEXE_MD5 { get; set; } = { 0xfa, 0xcf, 0x7c, 0xc5, 0xae, 0x02, 0xe6, 0x65, 0x0c, 0x01, 0x07, 0xcd, 0xfe, 0x0e, 0x1b, 0x2c };
     }
 
     /// <summary>
@@ -435,5 +427,70 @@ namespace QQ.Framework
     {
         AddFriend = 0x01,
         AddGroup = 0x02
+    }
+
+    /// <summary>
+    /// Tlv类型枚举
+    /// </summary>
+    public enum TlvTags
+    {
+        NonUinAccount = 0x0004,
+        Uin = 0x0005,
+        TGTGT = 0x0006,
+        TGT = 0x0007,
+        TimeZone = 0x0008,
+        ErrorInfo = 0x000A,
+        PingRedirect = 0x000C,
+        _0x000D = 0x000D,
+        _0x0014 = 0x0014,
+        ComputerGuid = 0x0015,
+        ClientInfo = 0x0017,
+        Ping = 0x0018,
+        GTKeyTGTGTCryptedData = 0x001A,
+        GTKey_TGTGT = 0x001E,
+        DeviceID = 0x001F,
+        LocalIP = 0x002D,
+        _0x002F = 0x002F,
+        QdData = 0x0032,
+        _0x0033 = 0x0033,
+        LoginReason = 0x0036,
+        ErrorCode = 0x0100,
+        Official = 0x0102,
+        SID = 0x0103,
+        _0x0104 = 0x0104,
+        m_vec0x12c = 0x0105,
+        TicketInfo = 0x0107,
+        AccountBasicInfo = 0x0108,
+        _ddReply = 0x0109,
+        QDLoginFlag = 0x010B,
+        _0x010C = 0x010C,
+        SigLastLoginInfo = 0x010D,
+        _0x010E = 0x010E,
+        SigPic = 0x0110,
+        SigIP2 = 0x0112,
+        DHParams = 0x0114,
+        PacketMd5 = 0x0115,
+        Ping_Strategy = 0x0309,
+        ComputerName = 0x030F,
+        ServerAddress = 0x0310,
+        Misc_Flag = 0x0312,
+        GUID_Ex = 0x0313,
+        _0x0508 = 0x0508
+    }
+
+    public enum ResultCode
+    {
+        成功=0x00,
+        需要更新TGTGT=0x01,
+        帐号被回收=0x33,
+        密码错误=0x34,
+        需要验证密保=0x3F,
+        DoMain=0xF8,
+        要求切换TCP = 0xF9,
+        需要重新CheckTGTGT = 0xFA,
+        需要验证码 = 0xFB,
+        需要重定向 = 0xFE,
+        过载保护=0xFD,
+        其它错误 = 0xFF
     }
 }

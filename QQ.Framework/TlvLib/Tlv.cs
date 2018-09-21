@@ -37,7 +37,11 @@ namespace QQ.Framework.TlvLib
         /// <summary>
         /// The TLV tag.
         /// </summary>
-        public string HexTag { get { return Tag.ToString("X"); } }
+        public string HexTag {
+            get {
+                return Utils.Util.NumToHexString(Tag, 4);
+            }
+        }
         /// <summary>
         /// The length of the TLV value.
         /// </summary>
@@ -45,7 +49,13 @@ namespace QQ.Framework.TlvLib
         /// <summary>
         /// The length of the TLV value.
         /// </summary>
-        public string HexLength { get { return Length.ToString("X"); } }
+        public string HexLength
+        {
+            get
+            {
+                return Utils.Util.NumToHexString(Length, 4);
+            }
+        }
         /// <summary>
         /// The TLV value.
         /// </summary>
@@ -108,15 +118,18 @@ namespace QQ.Framework.TlvLib
                 bool constructedTlv = (rawTlv[i] & 0x20) != 0;
                 bool moreBytes = (rawTlv[i] & 0x1F) == 0x1F;
                 while(moreBytes && (rawTlv[++i] & 0x80) != 0) ;
-                i++;
+                //i++
+                i+=2;
 
                 int tag = GetInt(rawTlv, start, i - start);
 
-                // parse Length
-                bool multiByteLength = (rawTlv[i] & 0x80) != 0;
-
-                int length = multiByteLength ? GetInt(rawTlv, i + 1, rawTlv[i] & 0x1F) : rawTlv[i];
-                i = multiByteLength ? i + (rawTlv[i] & 0x1F) + 1 : i + 1;
+                //// parse Length
+                //bool multiByteLength = (rawTlv[i] & 0x80) != 0;
+                //int length = multiByteLength ? GetInt(rawTlv, i + 1, rawTlv[i] & 0x1F) : rawTlv[i];
+                //i = multiByteLength ? i + (rawTlv[i] & 0x1F) + 1 : i + 1;
+                i += 2;
+                start += 2;
+                int length = GetInt(rawTlv, start, i - start);
 
                 i += length;
 

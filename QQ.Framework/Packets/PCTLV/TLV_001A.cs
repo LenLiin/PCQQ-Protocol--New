@@ -3,6 +3,7 @@ using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.PCTLV
 {
+    [TlvTag(TlvTags.GTKeyTGTGTCryptedData)]
     internal class TLV_001A : BaseTLV
     {
         public TLV_001A()
@@ -11,11 +12,11 @@ namespace QQ.Framework.Packets.PCTLV
             Name = "SSO2::TLV_GTKeyTGTGTCryptedData_0x1a";
         }
 
-        public byte[] get_tlv_001A(QQClient m_PCClient)
+        public byte[] Get_Tlv(QQUser User)
         {
-            var data = new TLV_0015().get_tlv_0015(m_PCClient);
+            var data = new TLV_0015().Get_Tlv(User);
 
-            var encode = QQTea.Encrypt(data, m_PCClient.QQUser.TXProtocol.bufTGTGTKey);
+            var encode = QQTea.Encrypt(data, User.TXProtocol.bufTGTGTKey);
 
             fill_head(cmd);
             fill_body(encode, encode.Length);

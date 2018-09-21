@@ -14,7 +14,7 @@ namespace QQ.Framework.Packets.Send.Login
             : base(User)
         {
             Sequence = GetNextSeq();
-            _secretKey = user.QQ_SessionKey;
+            _secretKey = User.TXProtocol.SessionKey;
             Command = QQCommand.Login0x00EC;
             _loginStatus = loginStatus;
         }

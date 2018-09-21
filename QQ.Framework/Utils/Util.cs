@@ -75,6 +75,18 @@ namespace QQ.Framework.Utils
             return array;
         }
 
+        public static byte[] Int64_to_4byte(long paramLong)
+        {
+            byte[] array = new byte[]
+            {
+                0,0,0,(byte)((int)paramLong)
+            };
+            array[2] = (byte)((int)(paramLong >> 8));
+            array[1] = (byte)((int)(paramLong >> 16));
+            array[0] = (byte)((int)(paramLong >> 24));
+            return array;
+        }
+
         public static string ConvertStringToHex(string text, string separator = null)
         {
             var bytes = Encoding.UTF8.GetBytes(text);
@@ -90,21 +102,26 @@ namespace QQ.Framework.Utils
         {
             return Convert.ToUInt64(six.Replace(" ", ""), 16);
         }
-
-        public static string QQToHexString(long qq)
+        /// <summary>
+        /// 转换hex  长度不够前置补0
+        /// </summary>
+        /// <param name="qq"></param>
+        /// <param name="Length"></param>
+        /// <returns></returns>
+        public static string NumToHexString(long qq, int Length = 8)
         {
             var text = Convert.ToString(qq, 16);
-            if (text.Length == 8)
+            if (text.Length == Length)
             {
                 return text;
             }
 
-            if (text.Length > 8)
+            if (text.Length > Length)
             {
                 return null;
             }
 
-            var num = 8 - text.Length;
+            var num = Length - text.Length;
             var str = "";
             for (var i = 0; i < num; i++)
             {
@@ -234,7 +251,7 @@ namespace QQ.Framework.Utils
         /// <returns></returns>
         public static DateTime GetDateTimeFromMillis(long millis)
         {
-            return baseDateTime.AddTicks(millis * TimeSpan.TicksPerMillisecond).AddHours(8);
+            return baseDateTime.AddTicks(millis * TimeSpan.TicksPerSecond).AddHours(8);
         }
 
         /// <summary>
@@ -492,6 +509,10 @@ namespace QQ.Framework.Utils
         {
             bw.Write(BitConverter.GetBytes(v).Reverse().ToArray());
         }
+        public static void BEWrite(this BinaryWriter bw, DateTime v)
+        {
+            bw.BEWrite(Util.GetTimeSeconds(v));
+        }
 
         public static void BEWrite(this BinaryWriter bw, char v)
         {
@@ -501,6 +522,10 @@ namespace QQ.Framework.Utils
         public static void BEWrite(this BinaryWriter bw, int v)
         {
             bw.Write(BitConverter.GetBytes(v).Reverse().ToArray());
+        }
+        public static void BEUshortWrite(this BinaryWriter bw, ushort v)
+        {
+           bw.BEWrite(v);
         }
 
         // 注意: 此处的long和ulong均为四个字节，而不是八个。
@@ -532,6 +557,16 @@ namespace QQ.Framework.Utils
         public static uint BEReadUInt32(this BinaryReader br)
         {
             return (uint) ((br.ReadByte() << 24) | (br.ReadByte() << 16) | (br.ReadByte() << 8) | br.ReadByte());
+        }
+        /// <summary>
+        /// 写入一串秘钥（因为结构需要前置秘钥长度）
+        /// </summary>
+        /// <param name="bw"></param>
+        /// <param name="v"></param>
+        public static void WriteKey(this BinaryWriter bw, byte[] v)
+        {
+            bw.BEWrite((ushort)v.Length);
+            bw.Write(v);
         }
 
         #endregion

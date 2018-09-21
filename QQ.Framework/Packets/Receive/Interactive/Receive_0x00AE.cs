@@ -5,7 +5,7 @@ namespace QQ.Framework.Packets.Receive.Interactive
         /// <summary>
         /// </summary>
         public Receive_0x00AE(byte[] byteBuffer, QQUser User)
-            : base(byteBuffer, User, User.QQ_SessionKey)
+            : base(byteBuffer, User, User.TXProtocol.SessionKey)
         {
         }
 
@@ -13,7 +13,7 @@ namespace QQ.Framework.Packets.Receive.Interactive
 
         protected override void ParseBody()
         {
-            Decrypt(user.QQ_SessionKey);
+            Decrypt(user.TXProtocol.SessionKey);
             reader.ReadBytes(2);
             addFriendType = (AddFriendType) reader.Read();
             reader.ReadBytes(3);

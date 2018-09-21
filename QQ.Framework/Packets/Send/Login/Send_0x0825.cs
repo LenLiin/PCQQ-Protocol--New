@@ -1,3 +1,4 @@
+using QQ.Framework.Packets.PCTLV;
 using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.Send.Login
@@ -12,18 +13,9 @@ namespace QQ.Framework.Packets.Send.Login
         public Send_0x0825(QQUser User, bool Redirect)
             : base(User)
         {
-            if (Redirect)
-            {
-                Sequence = (char) 0x3102;
-            }
-            else
-            {
-                Sequence = (char) 0x3101;
-            }
-
+            Sequence = GetNextSeq();
             redirect = Redirect;
             _secretKey = !Redirect ? user.QQ_PACKET_0825KEY : user.QQ_PACKET_REDIRECTIONKEY;
-
             Command = QQCommand.Login0x0825;
         }
 
@@ -40,7 +32,7 @@ namespace QQ.Framework.Packets.Send.Login
         protected override void PutHeader()
         {
             base.PutHeader();
-            writer.Write(user.QQ_PACKET_FIXVER);
+            SendPACKET_FIX();
             writer.Write(_secretKey);
         }
 
@@ -49,32 +41,10 @@ namespace QQ.Framework.Packets.Send.Login
         /// </summary>
         protected override void PutBody()
         {
-            bodyWriter.Write(user.QQ_PACKET_0825DATA0);
-            bodyWriter.Write(user.QQ_PACKET_0825DATA2);
-            bodyWriter.BEWrite(user.QQ);
-            if (!redirect)
-            {
-                bodyWriter.Write(new byte[] {0x00, 0x00, 0x00, 0x00, 0x03, 0x09, 0x00, 0x08, 0x00, 0x01});
-                bodyWriter.Write(user.ServerIp);
-                bodyWriter.Write(new byte[]
-                {
-                    0x00, 0x02, 0x00, 0x36, 0x00, 0x12, 0x00, 0x02, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x14, 0x00, 0x1D, 0x01, 0x02, 0x00, 0x19
-                });
-            }
-            else
-            {
-                bodyWriter.Write(new byte[] {0x00, 0x01, 0x00, 0x00, 0x03, 0x09, 0x00, 0x0C, 0x00, 0x01});
-                bodyWriter.Write(user.ServerIp);
-                bodyWriter.Write(new byte[]
-                {
-                    0x01, 0x6F, 0xA1, 0x58, 0x22, 0x01, 0x00, 0x36, 0x00, 0x12, 0x00, 0x02, 0x00, 0x01, 0x00, 0x00,
-                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x14, 0x00, 0x1D,
-                    0x01, 0x03, 0x00, 0x19
-                });
-            }
-
-            bodyWriter.Write(user.QQ_PUBLIC_KEY);
+            bodyWriter.Write(new TLV_0018().Get_Tlv(user));
+            bodyWriter.Write(new TLV_0309().Get_Tlv(user));
+            bodyWriter.Write(new TLV_0036().Get_Tlv(user));
+            bodyWriter.Write(new TLV_0114().Get_Tlv(user));
         }
     }
 }

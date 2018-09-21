@@ -15,7 +15,7 @@ namespace QQ.Framework.Packets.Send.Message
             : base(User)
         {
             Sequence = GetNextSeq();
-            _secretKey = user.QQ_SessionKey;
+            _secretKey = User.TXProtocol.SessionKey;
             Command = QQCommand.Message0x0319;
             recvQQ = RecvQQ;
             _messageTime = MessageTime;

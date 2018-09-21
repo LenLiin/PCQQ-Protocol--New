@@ -48,7 +48,7 @@ namespace QQ.Framework.Packets.Receive.Login
                 user.QQ_PACKET_00BAVerifyCode = resultArr;
             }
 
-            user.QQ_PACKET_00BAToken = reader.ReadBytes(reader.BEReadChar());
+            user.TXProtocol.bufSigPic = reader.ReadBytes(reader.BEReadChar());
             reader.ReadBytes(reader.BEReadChar());
         }
     }

@@ -6,6 +6,7 @@ using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.PCTLV
 {
+    [TlvTag(TlvTags.GUID_Ex)]
     internal class TLV_0313 : BaseTLV
     {
         public TLV_0313()
@@ -15,38 +16,16 @@ namespace QQ.Framework.Packets.PCTLV
             wSubVer = 0x01;
         }
 
-        public byte[] get_tlv_0313(QQClient m_PCClient)
+        public byte[] Get_Tlv(QQUser User)
         {
             var data = new BinaryWriter(new MemoryStream());
             if (wSubVer == 0x01)
             {
-                data.Write(1); // wSubVer
-                var GuidName = new Dictionary<string, byte[]>(6)
-                {
-                    {"UNKNOW1", null},
-                    {"MacGuid", m_PCClient.QQUser.TXProtocol.bufMacGuid},
-                    {"UNKNOW2", null},
-                    {"ComputerIDEx", m_PCClient.QQUser.TXProtocol.bufComputerIDEx},
-                    {"UNKNOW3", null},
-                    {"MachineInfoGuid", m_PCClient.QQUser.TXProtocol.bufMachineInfoGuid}
-                };
-                byte k = 0;
-                byte c = 0;
-                var guid = new BinaryWriter(new MemoryStream());
-                foreach (var kv in GuidName)
-                {
-                    k++;
-                    if (kv.Value != null)
-                    {
-                        c++;
-                        guid.Write(k);
-                        guid.Write(kv.Value);
-                        guid.BEWrite(0);
-                    }
-                }
-
-                data.Write(c);
-                data.Write(guid.BaseStream.ToBytesArray());
+                data.Write((byte)1); 
+                data.Write((byte)1); 
+                data.Write((byte)2); 
+                data.WriteKey(User.TXProtocol.bufMacGuid);
+                data.BEWrite(2);
             }
             else
             {

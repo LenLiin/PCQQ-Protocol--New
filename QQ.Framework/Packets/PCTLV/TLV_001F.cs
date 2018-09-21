@@ -5,6 +5,7 @@ using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.PCTLV
 {
+    [TlvTag(TlvTags.DeviceID)]
     internal class TLV_001F : BaseTLV
     {
         public TLV_001F()
@@ -14,18 +15,18 @@ namespace QQ.Framework.Packets.PCTLV
             wSubVer = 0x0001;
         }
 
-        public byte[] get_tlv_001F(QQClient m_PCClient)
+        public byte[] Get_Tlv(QQUser User)
         {
-            if (m_PCClient.QQUser.TXProtocol.bufDeviceID == null)
+            if (User.TXProtocol.bufDeviceID == null)
             {
-                return null;
+                return new byte[] { };
             }
 
             var data = new BinaryWriter(new MemoryStream());
             if (wSubVer == 0x0001)
             {
                 data.BEWrite(wSubVer); //wSubVer
-                data.Write(m_PCClient.QQUser.TXProtocol.bufDeviceID);
+                data.Write(User.TXProtocol.bufDeviceID);
             }
             else
             {
@@ -38,13 +39,15 @@ namespace QQ.Framework.Packets.PCTLV
             return get_buf();
         }
 
-        public void parser_tlv_001f(QQClient m_PCClient, BinaryReader buf)
+        public void Parser_Tlv(QQUser User, BinaryReader buf)
         {
-            wSubVer = buf.BEReadUInt16(); //wSubVer
+            var _type = buf.BEReadUInt16();//type
+            var _length = buf.BEReadUInt16();//length
             if (wSubVer == 0x0001)
             {
-                m_PCClient.QQUser.TXProtocol.bufDeviceID =
-                    buf.ReadBytes((int) (buf.BaseStream.Length - buf.BaseStream.Position));
+                wSubVer = buf.BEReadUInt16(); //wSubVer
+                User.TXProtocol.bufDeviceID =
+                    buf.ReadBytes(_length - 2);
             }
             else
             {

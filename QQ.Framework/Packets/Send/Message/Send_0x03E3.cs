@@ -21,7 +21,7 @@ namespace QQ.Framework.Packets.Send.Message
             : base(User)
         {
             Sequence = GetNextSeq();
-            _secretKey = user.QQ_SessionKey;
+            _secretKey = User.TXProtocol.SessionKey;
             Command = QQCommand.Interactive0x03E3;
             _toQQ = ToQQ;
         }

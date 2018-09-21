@@ -5,6 +5,7 @@ using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.PCTLV
 {
+    [TlvTag(TlvTags.ComputerGuid)]
     internal class TLV_0015 : BaseTLV
     {
         public TLV_0015()
@@ -14,22 +15,22 @@ namespace QQ.Framework.Packets.PCTLV
             wSubVer = 0x0001;
         }
 
-        public byte[] get_tlv_0015(QQClient m_PCClient)
+        public byte[] Get_Tlv(QQUser User)
         {
             var data = new BinaryWriter(new MemoryStream());
             if (wSubVer == 0x0001)
             {
                 data.BEWrite(wSubVer); //wSubVer
 
-                data.Write(0x01);
-                var thisKey = m_PCClient.QQUser.TXProtocol.bufComputerID;
-                data.BEWrite(CRC32cs.CRC32(thisKey));
-                data.Write(thisKey);
+                data.Write((byte)0x01);
+                var thisKey = User.TXProtocol.bufComputerID;
+                data.BEWrite(CRC32.CRC32Reverse(thisKey));
+                data.WriteKey(thisKey);
 
-                data.Write(0x02);
-                thisKey = m_PCClient.QQUser.TXProtocol.bufComputerIDEx;
-                data.BEWrite(CRC32cs.CRC32(thisKey));
-                data.Write(thisKey);
+                data.Write((byte)0x02);
+                thisKey = User.TXProtocol.bufComputerIDEx;
+                data.BEWrite(CRC32.CRC32Reverse(thisKey));
+                data.WriteKey(thisKey);
             }
             else
             {

@@ -1,4 +1,5 @@
 using System.IO;
+using QQ.Framework.Packets.PCTLV;
 using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.Send.Login
@@ -13,24 +14,18 @@ namespace QQ.Framework.Packets.Send.Login
             : base(User)
         {
             Sequence = GetNextSeq();
-            _secretKey = user.QQ_0828_rec_ecr_key;
-            var _tlv_0105 = new BinaryWriter(new MemoryStream());
-            _tlv_0105.Write(new byte[] {0x01, 0x05, 0x00, 0x30});
-            _tlv_0105.Write(new byte[] {0x00, 0x01, 0x01, 0x02, 0x00, 0x14, 0x01, 0x01, 0x00, 0x10});
-            _tlv_0105.Write(Util.RandomKey());
-            _tlv_0105.Write(new byte[] {0x00, 0x14, 0x01, 0x02, 0x00, 0x10});
-            _tlv_0105.Write(Util.RandomKey());
-            user.QQ_tlv_0105 = _tlv_0105.BaseStream.ToBytesArray();
+            _secretKey = user.TXProtocol.bufSessionKey;
             Command = QQCommand.Login0x0828;
         }
 
         protected override void PutHeader()
         {
             base.PutHeader();
-            writer.Write(new byte[]
-                {0x02, 0x00, 0x00, 0x00, 0x01, 0x2E, 0x01, 0x00, 0x00, 0x68, 0x52, 0x00, 0x30, 0x00, 0x3A});
-            writer.Write(new byte[] {0x00, 0x38});
-            writer.Write(user.QQ_0836_038Token);
+            writer.Write(new byte[] { 0x02, 0x00, 0x00 });
+            writer.Write(user.TXProtocol.dwClientType);
+            writer.Write(user.TXProtocol.dwPubNo);
+            writer.Write(new byte[] { 0x00, 0x30, 0x00, 0x3a});
+            writer.WriteKey(user.TXProtocol.bufSigSession);
         }
 
         /// <summary>
@@ -38,48 +33,15 @@ namespace QQ.Framework.Packets.Send.Login
         /// </summary>
         protected override void PutBody()
         {
-            user.QQ_PACKET_FIX1 = new byte[] {0x1F, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x15, 0x00, 0x30, 0x00, 0x01};
-            user.QQ_PACKET_FIX2 = new byte[]
-                {0xB9, 0xED, 0xEF, 0xD7, 0xCD, 0xE5, 0x47, 0x96, 0x7A, 0xB5, 0x28, 0x34, 0xCA, 0x93, 0x6B, 0x5C};
-
-            bodyWriter.Write(new byte[] {0x00, 0x07, 0x00, 0x88});
-            bodyWriter.Write(user.QQ_0836_088Token);
-            bodyWriter.Write(new byte[]
-                {0x00, 0x0C, 0x00, 0x16, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00});
-            bodyWriter.Write(user.ServerIp);
-            bodyWriter.Write(user.QQ_PACKET_FIX1);
-            bodyWriter.Write(new byte[] {0x01, 0x92, 0xA5, 0xD2, 0x59});
-            bodyWriter.Write(new byte[]
-            {
-                0x00, 0x10, 0x54, 0x2D, 0xCF, 0x9B, 0x60, 0xBF, 0xBB, 0xEC, 0x0D, 0xD4, 0x81, 0xCE, 0x36, 0x87, 0xDE,
-                0x35, 0x02, 0xAE, 0x6D, 0xED, 0xDC, 0x00, 0x10
-            });
-            bodyWriter.Write(user.QQ_PACKET_0836FIX);
-            bodyWriter.Write(new byte[] {0x00, 0x36, 0x00, 0x12, 0x00, 0x02, 0x00, 0x01, 0x00, 0x00, 0x00});
-            bodyWriter.Write(new byte[] {0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00});
-            bodyWriter.Write(user.QQ_PACKET_0825DATA0);
-            bodyWriter.Write(user.QQ_PACKET_0825DATA2);
-            bodyWriter.BEWrite(user.QQ);
-            bodyWriter.Write(new byte[] {0x00, 0x00, 0x00, 0x00, 0x00, 0x1F, 0x00, 0x22, 0x00, 0x01});
-            bodyWriter.Write(user.QQ_DeviceID);
-            bodyWriter.Write(user.QQ_tlv_0105);
-            bodyWriter.Write(new byte[] {0x01, 0x0B, 0x00, 0x85, 0x00, 0x02});
-            bodyWriter.Write(user.QQ_PACKET_FIX2);
-            bodyWriter.Write(Util.RandomKey(1));
-            bodyWriter.Write(new byte[] {0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02});
-            bodyWriter.Write(new byte[] {0x00, 0x63, 0x3E, 0x00, 0x63, 0x02, 0x04, 0x03, 0x06, 0x02, 0x00, 0x04, 0x00});
-            bodyWriter.Write(new byte[]
-            {
-                0x52, 0xD9, 0x00, 0x00, 0x00, 0x00, 0xA9, 0x58, 0x3E, 0x6D, 0x6D, 0x49, 0xAA, 0xF6, 0xA6, 0xD9, 0x33,
-                0x0A,
-                0xE7, 0x7E, 0x36, 0x84, 0x03, 0x01, 0x00, 0x00, 0x68, 0x20, 0x15, 0x8B, 0x00, 0x00, 0x01, 0x02, 0x00,
-                0x00, 0x03, 0x00, 0x07,
-                0xDF, 0x00, 0x0A, 0x00, 0x0C, 0x00, 0x01, 0x00, 0x04, 0x00, 0x03, 0x00, 0x04, 0x20, 0x5C, 0x00
-            });
-            bodyWriter.Write(user.MD5_32);
-            bodyWriter.Write(new byte[] {0x68});
-            bodyWriter.Write(new byte[] {0x00, 0x00, 0x00, 0x00, 0x00, 0x2D, 0x00, 0x06, 0x00, 0x01});
-            bodyWriter.Write(Util.IPStringToByteArray(Util.GetExternalIp()));
+            bodyWriter.Write(new TLV_0007().Get_Tlv(user));
+            bodyWriter.Write(new TLV_000C().Get_Tlv(user));
+            bodyWriter.Write(new TLV_0015().Get_Tlv(user));
+            bodyWriter.Write(new TLV_0036().Get_Tlv(user));
+            bodyWriter.Write(new TLV_0018().Get_Tlv(user));
+            bodyWriter.Write(new TLV_001F().Get_Tlv(user));
+            bodyWriter.Write(new TLV_0105().Get_Tlv(user));
+            bodyWriter.Write(new TLV_010B().Get_Tlv(user));
+            bodyWriter.Write(new TLV_002D().Get_Tlv(user));
         }
     }
 }

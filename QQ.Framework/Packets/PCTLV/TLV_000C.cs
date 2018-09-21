@@ -5,6 +5,7 @@ using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.PCTLV
 {
+    [TlvTag(TlvTags.PingRedirect)]
     internal class TLV_000C : BaseTLV
     {
         public TLV_000C()
@@ -14,17 +15,17 @@ namespace QQ.Framework.Packets.PCTLV
             wSubVer = 0x0002;
         }
 
-        public byte[] get_tlv_000C(QQClient m_PCClient)
+        public byte[] Get_Tlv(QQUser User)
         {
             var data = new BinaryWriter(new MemoryStream());
             if (wSubVer == 0x0002)
             {
                 data.BEWrite(wSubVer); //wSubVer
-                data.BEWrite(0);
-                data.BEWrite(QQGlobal.dwIDC);
-                data.BEWrite(QQGlobal.dwISP);
-                data.Write(Util.IPStringToByteArray(m_PCClient.dwServerIP));
-                data.BEWrite(m_PCClient.wServerPort);
+                data.BEWrite((ushort)0);
+                data.BEWrite(User.TXProtocol.dwIDC);
+                data.BEWrite(User.TXProtocol.dwISP);
+                data.Write(Util.IPStringToByteArray(User.TXProtocol.dwServerIP));
+                data.BEWrite(User.TXProtocol.wServerPort);
                 data.BEWrite(0);
             }
             else
@@ -38,16 +39,18 @@ namespace QQ.Framework.Packets.PCTLV
             return get_buf();
         }
 
-        public void parser_tlv_0C(QQClient m_PCClient, BinaryReader buf)
+        public void Parser_Tlv(QQUser User, BinaryReader buf)
         {
+            var _type = buf.BEReadUInt16();//type
+            var _length = buf.BEReadUInt16();//length
             wSubVer = buf.BEReadUInt16(); //wSubVer
             if (wSubVer == 0x0002)
             {
                 buf.BEReadUInt16();
-                buf.BEReadInt32(); /*dwIDC =*/
-                buf.BEReadInt32(); /*dwISP =*/
-                buf.ReadBytes(4); /*dwRedirectIP =*/
-                buf.BEReadUInt16(); /*wRedirectPort =*/
+                User.TXProtocol.dwIDC = buf.BEReadUInt32(); /*dwIDC =*/
+                User.TXProtocol.dwISP = buf.BEReadUInt32(); /*dwISP =*/
+                User.TXProtocol.dwRedirectIP = Util.GetIpStringFromBytes(buf.ReadBytes(4));/*dwRedirectIP =*/
+                User.TXProtocol.wRedirectPort = buf.BEReadUInt16(); /*wRedirectPort =*/
             }
             else
             {

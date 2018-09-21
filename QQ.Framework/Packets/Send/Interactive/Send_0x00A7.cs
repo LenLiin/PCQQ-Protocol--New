@@ -13,7 +13,7 @@ namespace QQ.Framework.Packets.Send.Interactive
             : base(User)
         {
             Sequence = GetNextSeq();
-            _secretKey = user.QQ_SessionKey;
+            _secretKey = User.TXProtocol.SessionKey;
             Command = QQCommand.Interactive0x00AE;
             _AddQQ = AddQQ;
         }

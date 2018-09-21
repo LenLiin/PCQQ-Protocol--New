@@ -12,7 +12,7 @@ namespace QQ.Framework.Packets.Receive.Message
         ///     好友消息
         /// </summary>
         public Receive_0x00CE(byte[] byteBuffer, QQUser User)
-            : base(byteBuffer, User, User.QQ_SessionKey)
+            : base(byteBuffer, User, User.TXProtocol.SessionKey)
         {
         }
 
@@ -48,7 +48,7 @@ namespace QQ.Framework.Packets.Receive.Message
 
         protected override void ParseBody()
         {
-            Decrypt(user.QQ_SessionKey);
+            Decrypt(user.TXProtocol.SessionKey);
             FromQQ = (long) Util.GetQQNumRetUint(Util.ToHex(reader.ReadBytes(4)));
             reader.ReadBytes(4); //自己的QQ
             reader.ReadBytes(10);
