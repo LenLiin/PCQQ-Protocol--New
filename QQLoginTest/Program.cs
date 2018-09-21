@@ -10,10 +10,7 @@ using QQ.Framework.Packets.Receive.Message;
 using QQ.Framework.Packets.Send.Login;
 using QQ.Framework.Sockets;
 using QQ.Framework.Utils;
-#if NETCOREAPP2_0 || NETCOREAPP2_1
-#else 
-using QQ.FrameworkTest.Robots;
-#endif
+using QQLoginTest.Robots;
 
 namespace QQLoginTest
 {
@@ -31,13 +28,7 @@ namespace QQLoginTest
 
             var manage = new MessageManage(socketServer, user, transponder);
 
-            #if NETCOREAPP2_0 || NETCOREAPP2_1
-            
-            #else
-
             var robot = new TestRoBot(sendService, transponder, user);
-
-            #endif
 
             manage.Init();
             Console.ReadKey();
