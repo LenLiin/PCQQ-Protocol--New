@@ -21,7 +21,7 @@ namespace QQLoginTest
             #if NETCOREAPP2_0 || NETCOREAPP2_1
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             #endif
-            var user = new QQUser(MyQQ, MyPassWord);
+            var user = new QQUser(0, "");
             var socketServer = new SocketServiceImpl(user);
             var transponder = new Transponder();
             var sendService = new SendMessageServiceImpl(socketServer, user);
