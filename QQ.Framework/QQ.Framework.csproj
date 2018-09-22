@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <PackageReference Include="Iconic.Zlib.Netstandard" Version="1.0.0" />
-    <PackageReference Include="protobuf-net" Version="3.0.0-alpha.3" />
     <PackageReference Include="System.Drawing.Common" Version="4.5.0" />
   </ItemGroup>
 
@@ -21,6 +20,10 @@
     <Folder Include="Docs\UMLs\" />
     <Folder Include="Domains\Commands\ReceiveCommands\Interactive\" />
     <Folder Include="Docs\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\protobuf-net\protobuf-net.csproj" />
   </ItemGroup>
 
 </Project>

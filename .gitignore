@@ -18,3 +18,5 @@
 /QQ.FrameworkTest/bin/Debug
 /QQ.FrameworkTest/obj/Debug
 *.user
+/protobuf-net/bin/Debug/netstandard2.0
+/protobuf-net/obj
