@@ -3,7 +3,7 @@ namespace QQ.Framework
     /// <summary>
     ///     定义一些QQ用到的常量
     /// </summary>
-    public class QQGlobal
+    public static class QQGlobal
     {
         /// <summary>
         ///     包最大大小

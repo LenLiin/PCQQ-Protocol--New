@@ -14,7 +14,7 @@ using QQLoginTest.Robots;
 
 namespace QQLoginTest
 {
-    public partial class Program
+    public static partial class Program
     {
         private static void Main(string[] args)
         {
