@@ -5,7 +5,7 @@ using System.Text;
 
 namespace QQ.Framework.Utils
 {
-    public class QdData
+    public static class QdData
     {
         public static byte[] GetQdData(QQUser User)
         {
