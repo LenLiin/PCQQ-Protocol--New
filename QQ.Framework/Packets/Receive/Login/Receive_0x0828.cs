@@ -2,10 +2,10 @@ using QQ.Framework.TlvLib;
 
 namespace QQ.Framework.Packets.Receive.Login
 {
-    public class Receive_0x0828 : ReceivePacket
+    public class Receive_0X0828 : ReceivePacket
     {
-        public Receive_0x0828(byte[] byteBuffer, QQUser User)
-            : base(byteBuffer, User, User.TXProtocol.bufTGT_GTKey)
+        public Receive_0X0828(byte[] byteBuffer, QQUser user)
+            : base(byteBuffer, user, user.TXProtocol.BufTgtGtKey)
         {
         }
 
@@ -16,11 +16,11 @@ namespace QQ.Framework.Packets.Receive.Login
 
         protected override void ParseBody()
         {
-            Decrypt(_secretKey);
-            Result = reader.ReadByte();
-            var tlvs = Tlv.ParseTlv(reader.ReadBytes((int) (reader.BaseStream.Length - 1)));
+            Decrypt(SecretKey);
+            Result = Reader.ReadByte();
+            var tlvs = Tlv.ParseTlv(Reader.ReadBytes((int) (Reader.BaseStream.Length - 1)));
             //重置指针（因为tlv解包后指针已经移动到末尾）
-            reader.BaseStream.Position = 1;
+            Reader.BaseStream.Position = 1;
             TlvExecutionProcessing(tlvs);
         }
     }

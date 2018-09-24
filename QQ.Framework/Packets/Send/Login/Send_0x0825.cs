@@ -2,26 +2,26 @@ using QQ.Framework.Packets.PCTLV;
 
 namespace QQ.Framework.Packets.Send.Login
 {
-    public class Send_0x0825 : SendPacket
+    public class Send_0X0825 : SendPacket
     {
         /// <summary>
         ///     构造函数
         /// </summary>
-        /// <param name="User"></param>
-        /// <param name="Redirect">是否是重定向包</param>
-        public Send_0x0825(QQUser User, bool Redirect)
-            : base(User)
+        /// <param name="user"></param>
+        /// <param name="redirect">是否是重定向包</param>
+        public Send_0X0825(QQUser user, bool redirect)
+            : base(user)
         {
             Sequence = GetNextSeq();
-            redirect = Redirect;
-            _secretKey = !Redirect ? user.QQ_PACKET_0825KEY : user.QQ_PACKET_REDIRECTIONKEY;
-            Command = QQCommand.Login0x0825;
+            Redirect = redirect;
+            SecretKey = !redirect ? User.QQPacket0825Key : User.QQPacketRedirectionkey;
+            Command = QQCommand.Login0X0825;
         }
 
         /// <summary>
         ///     重定向标识
         /// </summary>
-        private bool redirect { get; }
+        private bool Redirect { get; }
 
         public override string GetPacketName()
         {
@@ -32,7 +32,7 @@ namespace QQ.Framework.Packets.Send.Login
         {
             base.PutHeader();
             SendPACKET_FIX();
-            writer.Write(_secretKey);
+            Writer.Write(SecretKey);
         }
 
         /// <summary>
@@ -40,10 +40,10 @@ namespace QQ.Framework.Packets.Send.Login
         /// </summary>
         protected override void PutBody()
         {
-            bodyWriter.Write(new TLV_0018().Get_Tlv(user));
-            bodyWriter.Write(new TLV_0309().Get_Tlv(user));
-            bodyWriter.Write(new TLV_0036().Get_Tlv(user));
-            bodyWriter.Write(new TLV_0114().Get_Tlv(user));
+            BodyWriter.Write(new TLV0018().Get_Tlv(User));
+            BodyWriter.Write(new TLV0309().Get_Tlv(User));
+            BodyWriter.Write(new TLV0036().Get_Tlv(User));
+            BodyWriter.Write(new TLV0114().Get_Tlv(User));
         }
     }
 }

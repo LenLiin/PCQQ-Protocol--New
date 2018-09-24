@@ -3,27 +3,27 @@ using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.Send.Interactive
 {
-    public class Send_0x00A8 : SendPacket
+    public class Send_0X00A8 : SendPacket
     {
-        public Send_0x00A8(QQUser User, long AddQQ, AddFriendType addType, string Message)
-            : base(User)
+        public Send_0X00A8(QQUser user, long addQQ, AddFriendType addType, string message)
+            : base(user)
         {
             Sequence = GetNextSeq();
-            _secretKey = User.TXProtocol.SessionKey;
-            Command = QQCommand.Interactive0x00AE;
-            _AddQQ = AddQQ;
-            this.addType = addType;
-            _message = Encoding.UTF8.GetBytes(Message);
+            SecretKey = user.TXProtocol.SessionKey;
+            Command = QQCommand.Interactive0X00Ae;
+            AddQQ = addQQ;
+            this.AddType = addType;
+            Message = Encoding.UTF8.GetBytes(message);
         }
 
-        public long _AddQQ { get; set; }
-        public AddFriendType addType { get; set; }
-        private byte[] _message { get; }
+        public long AddQQ { get; set; }
+        public AddFriendType AddType { get; set; }
+        private byte[] Message { get; }
 
         protected override void PutHeader()
         {
             base.PutHeader();
-            writer.Write(user.QQ_PACKET_FIXVER);
+            Writer.Write(User.QQPacketFixver);
         }
 
         /// <summary>
@@ -31,51 +31,51 @@ namespace QQ.Framework.Packets.Send.Interactive
         /// </summary>
         protected override void PutBody()
         {
-            if (addType == AddFriendType.AddFriend)
+            if (AddType == AddFriendType.AddFriend)
             {
-                bodyWriter.Write(new byte[]
+                BodyWriter.Write(new byte[]
                 {
                     0x00
                 });
-                bodyWriter.BEWrite(_AddQQ);
-                if (user.AddFriend_0018Value.Length > 0)
+                BodyWriter.BeWrite(AddQQ);
+                if (User.AddFriend0018Value.Length > 0)
                 {
-                    bodyWriter.BEWrite((ushort) user.AddFriend_0018Value.Length);
-                    bodyWriter.Write(user.AddFriend_0018Value);
-                    bodyWriter.BEWrite((ushort) user.AddFriend_0020Value.Length);
-                    bodyWriter.Write(user.AddFriend_0020Value);
+                    BodyWriter.BeWrite((ushort) User.AddFriend0018Value.Length);
+                    BodyWriter.Write(User.AddFriend0018Value);
+                    BodyWriter.BeWrite((ushort) User.AddFriend0020Value.Length);
+                    BodyWriter.Write(User.AddFriend0020Value);
                 }
                 else
                 {
-                    bodyWriter.Write(new byte[]
+                    BodyWriter.Write(new byte[]
                     {
                         0x00, 0x00
                     });
-                    bodyWriter.BEWrite((ushort) user.AddFriend_0020Value.Length);
-                    bodyWriter.Write(user.AddFriend_0020Value);
+                    BodyWriter.BeWrite((ushort) User.AddFriend0020Value.Length);
+                    BodyWriter.Write(User.AddFriend0020Value);
                 }
 
-                bodyWriter.Write(new byte[] {0x10, 0x00});
+                BodyWriter.Write(new byte[] {0x10, 0x00});
             }
             else
             {
-                bodyWriter.Write(new byte[]
+                BodyWriter.Write(new byte[]
                 {
                     0x02
                 });
-                bodyWriter.BEWrite(_AddQQ);
-                bodyWriter.Write(new byte[]
+                BodyWriter.BeWrite(AddQQ);
+                BodyWriter.Write(new byte[]
                 {
                     0x00, 0x00
                 });
-                bodyWriter.BEWrite((ushort) user.AddFriend_0020Value.Length);
-                bodyWriter.Write(user.AddFriend_0020Value);
-                bodyWriter.Write(new byte[] {0x10, 0x00});
-                bodyWriter.BEWrite((ushort) _message.Length);
-                bodyWriter.Write(_message);
+                BodyWriter.BeWrite((ushort) User.AddFriend0020Value.Length);
+                BodyWriter.Write(User.AddFriend0020Value);
+                BodyWriter.Write(new byte[] {0x10, 0x00});
+                BodyWriter.BeWrite((ushort) Message.Length);
+                BodyWriter.Write(Message);
             }
 
-            bodyWriter.Write(new byte[]
+            BodyWriter.Write(new byte[]
             {
                 0x01, 0x00, 0x00, 0x0F, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00,
                 0x00, 0x01, 0x00

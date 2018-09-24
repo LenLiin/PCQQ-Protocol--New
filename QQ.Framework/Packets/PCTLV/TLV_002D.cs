@@ -6,32 +6,32 @@ using QQ.Framework.Utils;
 namespace QQ.Framework.Packets.PCTLV
 {
     [TlvTag(TlvTags.LocalIP)]
-    internal class TLV_002D : BaseTLV
+    internal class TLV002D : BaseTLV
     {
-        public TLV_002D()
+        public TLV002D()
         {
-            cmd = 0x002D;
+            Command = 0x002D;
             Name = "TLV_LocalIP";
-            wSubVer = 0x0001;
+            WSubVer = 0x0001;
         }
 
-        public byte[] Get_Tlv(QQUser User)
+        public byte[] Get_Tlv(QQUser user)
         {
             var data = new BinaryWriter(new MemoryStream());
-            if (wSubVer == 0x0001)
+            if (WSubVer == 0x0001)
             {
-                data.BEWrite(wSubVer); //wSubVer 
+                data.BeWrite(WSubVer); //wSubVer 
                 data.Write(Util.IPStringToByteArray(GetLocalIP())); //本机内网IP地址
             }
             else
             {
-                throw new Exception($"{Name} 无法识别的版本号 {wSubVer}");
+                throw new Exception($"{Name} 无法识别的版本号 {WSubVer}");
             }
 
-            fill_head(cmd);
-            fill_body(data.BaseStream.ToBytesArray(), data.BaseStream.Length);
-            set_length();
-            return get_buf();
+            FillHead(Command);
+            FillBody(data.BaseStream.ToBytesArray(), data.BaseStream.Length);
+            SetLength();
+            return GetBuffer();
         }
 
         public static string GetLocalIP()

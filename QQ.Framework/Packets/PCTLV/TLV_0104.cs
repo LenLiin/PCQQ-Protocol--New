@@ -5,11 +5,11 @@ using QQ.Framework.Utils;
 namespace QQ.Framework.Packets.PCTLV
 {
     [TlvTag(TlvTags._0x0104)]
-    internal class TLV_0104 : BaseTLV
+    internal class TLV0104 : BaseTLV
     {
-        public TLV_0104()
+        public TLV0104()
         {
-            cmd = 0x0104;
+            Command = 0x0104;
             Name = "TLV_0104";
         }
 
@@ -20,15 +20,15 @@ namespace QQ.Framework.Packets.PCTLV
         /// </summary>
         public byte Next { get; private set; }
 
-        public void Parser_Tlv(QQUser User, BinaryReader buf)
+        public void Parser_Tlv(QQUser user, BinaryReader buf)
         {
-            var _type = buf.BEReadUInt16(); //type
-            var _length = buf.BEReadUInt16(); //length
-            wSubVer = buf.BEReadUInt16(); //wSubVer
-            if (wSubVer == 0x0001)
+            var type = buf.BeReadUInt16(); //type
+            var length = buf.BeReadUInt16(); //length
+            WSubVer = buf.BeReadUInt16(); //wSubVer
+            if (WSubVer == 0x0001)
             {
-                var wCsCmd = buf.BEReadUInt16();
-                var ErrorCode = buf.BEReadUInt32();
+                var wCsCmd = buf.BeReadUInt16();
+                var errorCode = buf.BeReadUInt32();
 
                 buf.ReadByte(); //0x00
                 buf.ReadByte(); //0x05
@@ -44,20 +44,20 @@ namespace QQ.Framework.Packets.PCTLV
                 }
                 else //ReplyCode != 0x01按下面走 兼容多版本
                 {
-                    buf.BEReadInt32(); //需要验证码时为00 00 01 23，不需要时为全0
-                    len = buf.BEReadUInt16();
+                    buf.BeReadInt32(); //需要验证码时为00 00 01 23，不需要时为全0
+                    len = buf.BeReadUInt16();
                 }
 
                 var buffer = buf.ReadBytes(len);
-                User.TXProtocol.bufSigPic = buffer;
+                user.TXProtocol.BufSigPic = buffer;
                 if (PngData == 0x01) //有验证码数据
                 {
-                    len = buf.BEReadUInt16();
+                    len = buf.BeReadUInt16();
                     buffer = buf.ReadBytes(len);
                     Next = buf.ReadByte();
                     buf.ReadByte();
                     var directory = Util.MapPath("Verify");
-                    var filename = Path.Combine(directory, User.QQ + ".png");
+                    var filename = Path.Combine(directory, user.QQ + ".png");
                     if (!Directory.Exists(directory))
                     {
                         Directory.CreateDirectory(directory);
@@ -71,20 +71,20 @@ namespace QQ.Framework.Packets.PCTLV
                     fs.Write(buffer, 0, buffer.Length);
                     fs.Close();
 
-                    len = buf.BEReadUInt16();
+                    len = buf.BeReadUInt16();
                     buffer = buf.ReadBytes(len);
-                    User.TXProtocol.PngToken = buffer;
+                    user.TXProtocol.PngToken = buffer;
 
-                    buf.BEReadUInt16();
+                    buf.BeReadUInt16();
 
-                    len = buf.BEReadUInt16();
+                    len = buf.BeReadUInt16();
                     buffer = buf.ReadBytes(len);
-                    User.TXProtocol.PngKey = buffer;
+                    user.TXProtocol.PngKey = buffer;
                 }
             }
             else
             {
-                throw new Exception($"{Name} 无法识别的版本号 {wSubVer}");
+                throw new Exception($"{Name} 无法识别的版本号 {WSubVer}");
             }
         }
     }

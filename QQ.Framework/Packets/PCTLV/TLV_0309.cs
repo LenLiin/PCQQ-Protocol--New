@@ -5,44 +5,44 @@ using QQ.Framework.Utils;
 namespace QQ.Framework.Packets.PCTLV
 {
     [TlvTag(TlvTags.Ping_Strategy)]
-    internal class TLV_0309 : BaseTLV
+    internal class TLV0309 : BaseTLV
     {
-        public TLV_0309()
+        public TLV0309()
         {
-            cmd = 0x0309;
+            Command = 0x0309;
             Name = "SSO2::TLV_Ping_Strategy_0x309";
-            wSubVer = 0x0001;
+            WSubVer = 0x0001;
         }
 
         /// <summary>
         ///     Ping_Strategy
         /// </summary>
-        /// <param name="User"></param>
+        /// <param name="user"></param>
         /// <returns></returns>
-        public byte[] Get_Tlv(QQUser User)
+        public byte[] Get_Tlv(QQUser user)
         {
             var data = new BinaryWriter(new MemoryStream());
-            if (wSubVer == 0x0001)
+            if (WSubVer == 0x0001)
             {
-                data.BEWrite(wSubVer); //wSubVer
-                data.Write(Util.IPStringToByteArray(User.TXProtocol.dwServerIP)); //LastServerIP - 服务器最后的登录IP，可以为0
-                data.Write((byte) User.TXProtocol.RedirectIP.Count); //cRedirectCount - 重定向的次数（IP的数量）
-                foreach (var ip in User.TXProtocol.RedirectIP)
+                data.BeWrite(WSubVer); //wSubVer
+                data.Write(Util.IPStringToByteArray(user.TXProtocol.DwServerIP)); //LastServerIP - 服务器最后的登录IP，可以为0
+                data.Write((byte) user.TXProtocol.RedirectIP.Count); //cRedirectCount - 重定向的次数（IP的数量）
+                foreach (var ip in user.TXProtocol.RedirectIP)
                 {
                     data.Write(ip);
                 }
 
-                data.Write(User.TXProtocol.cPingType); //cPingType 
+                data.Write(user.TXProtocol.CPingType); //cPingType 
             }
             else
             {
-                throw new Exception($"{Name} 无法识别的版本号 {wSubVer}");
+                throw new Exception($"{Name} 无法识别的版本号 {WSubVer}");
             }
 
-            fill_head(cmd);
-            fill_body(data.BaseStream.ToBytesArray(), data.BaseStream.Length);
-            set_length();
-            return get_buf();
+            FillHead(Command);
+            FillBody(data.BaseStream.ToBytesArray(), data.BaseStream.Length);
+            SetLength();
+            return GetBuffer();
         }
 
 

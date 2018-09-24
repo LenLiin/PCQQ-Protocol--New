@@ -4,20 +4,20 @@ using QQ.Framework.Utils;
 namespace QQ.Framework.Packets.PCTLV
 {
     [TlvTag(TlvTags.GTKey_TGTGT)]
-    internal class TLV_001E : BaseTLV
+    internal class TLV001E : BaseTLV
     {
-        public TLV_001E()
+        public TLV001E()
         {
-            cmd = 0x001E;
+            Command = 0x001E;
             Name = "SSO2::TLV_GTKey_TGTGT_0x1e";
         }
 
-        public void Parser_Tlv(QQUser User, BinaryReader buf)
+        public void Parser_Tlv(QQUser user, BinaryReader buf)
         {
-            var _type = buf.BEReadUInt16(); //type
-            var _length = buf.BEReadUInt16(); //length
-            User.TXProtocol.bufTGTGTKey =
-                buf.ReadBytes(_length);
+            var type = buf.BeReadUInt16(); //type
+            var length = buf.BeReadUInt16(); //length
+            user.TXProtocol.BufTgtgtKey =
+                buf.ReadBytes(length);
         }
     }
 }

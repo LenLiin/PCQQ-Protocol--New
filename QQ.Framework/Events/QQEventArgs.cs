@@ -4,10 +4,10 @@ using QQ.Framework.Packets;
 
 namespace QQ.Framework.Events
 {
-    public class QQEventArgs<R> : EventArgs
-        where R : ReceivePacket
+    public class QQEventArgs<TR> : EventArgs
+        where TR : ReceivePacket
     {
-        public QQEventArgs(SocketService service, QQUser user, R receivePacket)
+        public QQEventArgs(ISocketService service, QQUser user, TR receivePacket)
         {
             Service = service;
             User = user;
@@ -17,12 +17,12 @@ namespace QQ.Framework.Events
         /// <summary>
         ///     数据包
         /// </summary>
-        public R ReceivePacket { get; }
+        public TR ReceivePacket { get; }
 
         /// <summary>
         ///     Socket服务
         /// </summary>
-        public SocketService Service { get; }
+        public ISocketService Service { get; }
 
         /// <summary>
         ///     账号信息

@@ -2,21 +2,21 @@ using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.Send.Data
 {
-    public class Send_0x005C : SendPacket
+    public class Send_0X005C : SendPacket
     {
-        public Send_0x005C(QQUser User)
-            : base(User)
+        public Send_0X005C(QQUser user)
+            : base(user)
         {
             Sequence = GetNextSeq();
-            _secretKey = User.TXProtocol.SessionKey;
-            Command = QQCommand.Data0x005C;
+            SecretKey = user.TXProtocol.SessionKey;
+            Command = QQCommand.Data0X005C;
         }
 
         protected override void PutHeader()
         {
             base.PutHeader();
             Sequence = GetNextSeq();
-            writer.Write(user.QQ_PACKET_FIXVER);
+            Writer.Write(User.QQPacketFixver);
         }
 
         /// <summary>
@@ -24,9 +24,9 @@ namespace QQ.Framework.Packets.Send.Data
         /// </summary>
         protected override void PutBody()
         {
-            bodyWriter.Write((byte) 0x88);
-            bodyWriter.BEWrite(user.QQ);
-            bodyWriter.Write((byte) 0x00);
+            BodyWriter.Write((byte) 0x88);
+            BodyWriter.BeWrite(User.QQ);
+            BodyWriter.Write((byte) 0x00);
         }
     }
 }

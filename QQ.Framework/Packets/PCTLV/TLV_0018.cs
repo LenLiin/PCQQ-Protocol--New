@@ -5,42 +5,42 @@ using QQ.Framework.Utils;
 namespace QQ.Framework.Packets.PCTLV
 {
     [TlvTag(TlvTags.Ping)]
-    internal class TLV_0018 : BaseTLV
+    internal class TLV0018 : BaseTLV
     {
-        public TLV_0018()
+        public TLV0018()
         {
-            cmd = 0x0018;
+            Command = 0x0018;
             Name = "SSO2::TLV_Ping_0x18";
-            wSubVer = 0x0001;
+            WSubVer = 0x0001;
         }
 
         /// <summary>
         ///     Ping
         /// </summary>
-        /// <param name="User"></param>
+        /// <param name="user"></param>
         /// <returns></returns>
-        public byte[] Get_Tlv(QQUser User)
+        public byte[] Get_Tlv(QQUser user)
         {
             var data = new BinaryWriter(new MemoryStream());
-            if (wSubVer == 0x0001)
+            if (WSubVer == 0x0001)
             {
-                data.BEWrite(wSubVer); //wSubVer 
-                data.BEWrite(User.TXProtocol.dwSSOVersion); //dwSSOVersion
-                data.BEWrite(User.TXProtocol.dwServiceId); //dwServiceId
-                data.BEWrite(User.TXProtocol.dwClientVer); //dwClientVer
-                data.BEWrite((uint) User.QQ); //dwUin
-                data.BEWrite(User.TXProtocol.wRedirectCount); //wRedirectCount 
-                data.BEWrite((ushort) 0); //NullBuf
+                data.BeWrite(WSubVer); //wSubVer 
+                data.BeWrite(user.TXProtocol.DwSsoVersion); //dwSSOVersion
+                data.BeWrite(user.TXProtocol.DwServiceId); //dwServiceId
+                data.BeWrite(user.TXProtocol.DwClientVer); //dwClientVer
+                data.BeWrite((uint) user.QQ); //dwUin
+                data.BeWrite(user.TXProtocol.WRedirectCount); //wRedirectCount 
+                data.BeWrite((ushort) 0); //NullBuf
             }
             else
             {
-                throw new Exception($"{Name} 无法识别的版本号 {wSubVer}");
+                throw new Exception($"{Name} 无法识别的版本号 {WSubVer}");
             }
 
-            fill_head(cmd);
-            fill_body(data.BaseStream.ToBytesArray(), data.BaseStream.Length);
-            set_length();
-            return get_buf();
+            FillHead(Command);
+            FillBody(data.BaseStream.ToBytesArray(), data.BaseStream.Length);
+            SetLength();
+            return GetBuffer();
         }
     }
 }

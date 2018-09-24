@@ -10,17 +10,17 @@ namespace QQ.Framework.Packets
         /// <summary>
         ///     明文包体
         /// </summary>
-        public byte[] bodyDecrypted;
+        public byte[] BodyDecrypted;
 
         /// <summary>
         ///     密文包体
         /// </summary>
-        public byte[] bodyEcrypted;
+        public byte[] BodyEcrypted;
 
         /// <summary>
         ///     原始数据。对于接收的包，这个值为未解密的。
         /// </summary>
-        public byte[] buffer = new byte[QQGlobal.QQ_PACKET_MAX_SIZE];
+        public byte[] Buffer = new byte[QQGlobal.QQPacketMaxSize];
 
         /// <summary>
         ///     QQUser
@@ -29,32 +29,32 @@ namespace QQ.Framework.Packets
         ///     <remark>abu 2008-02-18 </remark>
         /// </summary>
         /// <value></value>
-        public QQUser user;
+        public QQUser User;
 
         public Packet()
         {
             DateTime = DateTime.Now;
         }
 
-        public Packet(QQUser User)
+        public Packet(QQUser user)
             : this()
         {
-            user = User;
+            this.User = user;
         }
 
         /// <summary>
         ///     构造一个指定参数的包
         /// </summary>
-        public Packet(byte[] byteBuffer, QQUser User)
-            : this(User)
+        public Packet(byte[] byteBuffer, QQUser user)
+            : this(user)
         {
-            buffer = byteBuffer;
+            Buffer = byteBuffer;
         }
 
         /// <summary>
         ///     加密密钥
         /// </summary>
-        public byte[] _secretKey { get; set; }
+        public byte[] SecretKey { get; set; }
 
         /// <summary>
         ///     包头字节

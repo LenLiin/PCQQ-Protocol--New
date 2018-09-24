@@ -6,14 +6,14 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Message
     /// <summary>
     ///     收到QQ好友消息
     /// </summary>
-    [ReceivePacketCommand(QQCommand.Message0x00CE)]
-    public class ReceiveQQFriendMessagesCommand : ReceiveCommand<Receive_0x00CE>
+    [ReceivePacketCommand(QQCommand.Message0X00Ce)]
+    public class ReceiveQQFriendMessagesCommand : ReceiveCommand<Receive_0X00Ce>
     {
-        public ReceiveQQFriendMessagesCommand(byte[] data, SocketService service, ServerMessageSubject transponder,
+        public ReceiveQQFriendMessagesCommand(byte[] data, ISocketService service, IServerMessageSubject transponder,
             QQUser user) : base(data, service, transponder, user)
         {
-            _packet = new Receive_0x00CE(data, _user);
-            _event_args = new QQEventArgs<Receive_0x00CE>(_service, _user, _packet);
+            _packet = new Receive_0X00Ce(data, _user);
+            _eventArgs = new QQEventArgs<Receive_0X00Ce>(_service, _user, _packet);
         }
 
         public override void Process()

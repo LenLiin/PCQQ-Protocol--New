@@ -4,20 +4,20 @@ using QQ.Framework.Utils;
 namespace QQ.Framework.Packets.PCTLV
 {
     [TlvTag(TlvTags._0x0033)]
-    internal class TLV_0033 : BaseTLV
+    internal class TLV0033 : BaseTLV
     {
-        public TLV_0033()
+        public TLV0033()
         {
-            cmd = 0x0033;
+            Command = 0x0033;
             Name = "SSO2::TLV_LoginReason_0x33";
-            wSubVer = 0x0002;
+            WSubVer = 0x0002;
         }
 
-        public void Parser_Tlv(QQUser User, BinaryReader buf)
+        public void Parser_Tlv(QQUser user, BinaryReader buf)
         {
-            var _type = buf.BEReadUInt16(); //type
-            var _length = buf.BEReadUInt16(); //length
-            buf.ReadBytes(_length);
+            var type = buf.BeReadUInt16(); //type
+            var length = buf.BeReadUInt16(); //length
+            buf.ReadBytes(length);
         }
     }
 }

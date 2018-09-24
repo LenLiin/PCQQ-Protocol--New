@@ -9,13 +9,13 @@ using QQ.Framework.Packets;
 
 namespace QQ.Framework.Utils
 {
-    public class ResponsePacketProcessor<PacketType> : PacketProcessor<PacketCommand>
-        where PacketType : ReceivePacket
+    public class ResponsePacketProcessor<TPacketType> : IPacketProcessor<IPacketCommand>
+        where TPacketType : ReceivePacket
     {
-        private readonly QQEventArgs<PacketType> _args;
+        private readonly QQEventArgs<TPacketType> _args;
         private readonly Type _receivePacketType;
 
-        protected ResponsePacketProcessor(QQEventArgs<PacketType> args, Type receivePacketType)
+        protected ResponsePacketProcessor(QQEventArgs<TPacketType> args, Type receivePacketType)
         {
             _args = args;
             _receivePacketType = receivePacketType;
@@ -25,7 +25,7 @@ namespace QQ.Framework.Utils
         ///     根据接收包的Command,自动寻找对应的回复包。
         /// </summary>
         /// <returns></returns>
-        public PacketCommand Process()
+        public IPacketCommand Process()
         {
             var receivePackageCommandAttributes = _receivePacketType.GetCustomAttributes<ReceivePacketCommand>();
             if (receivePackageCommandAttributes.Any())
@@ -43,7 +43,7 @@ namespace QQ.Framework.Utils
                     var responseCommand = attributes.First().Command;
                     if (responseCommand == packetCommand)
                     {
-                        return Activator.CreateInstance(type, _args) as PacketCommand;
+                        return Activator.CreateInstance(type, _args) as IPacketCommand;
                     }
                 }
             }
@@ -52,9 +52,9 @@ namespace QQ.Framework.Utils
                 _args.ReceivePacket));
         }
 
-        public static ResponsePacketProcessor<PacketType> of(QQEventArgs<PacketType> args, Type receivePacketType)
+        public static ResponsePacketProcessor<TPacketType> Of(QQEventArgs<TPacketType> args, Type receivePacketType)
         {
-            return new ResponsePacketProcessor<PacketType>(args, receivePacketType);
+            return new ResponsePacketProcessor<TPacketType>(args, receivePacketType);
         }
     }
 }

@@ -8,13 +8,13 @@ namespace QQ.Framework.Events
         public QQSendEventArgs(QQClient client, byte[] byteBuffer)
         {
             QQClient = client;
-            this.byteBuffer = new MemoryStream(byteBuffer);
+            this.ByteBuffer = new MemoryStream(byteBuffer);
         }
 
         /// <summary>
         ///     数据包
         /// </summary>
-        public MemoryStream byteBuffer { get; }
+        public MemoryStream ByteBuffer { get; }
 
         /// <summary>
         ///     客户端实例

@@ -1,22 +1,22 @@
 namespace QQ.Framework.Packets.Receive.Interactive
 {
-    public class Receive_0x0115 : ReceivePacket
+    public class Receive_0X0115 : ReceivePacket
     {
         /// <summary>
         ///     发送添加好友消息回执
         /// </summary>
-        public Receive_0x0115(byte[] byteBuffer, QQUser User)
-            : base(byteBuffer, User, User.TXProtocol.SessionKey)
+        public Receive_0X0115(byte[] byteBuffer, QQUser user)
+            : base(byteBuffer, user, user.TXProtocol.SessionKey)
         {
         }
 
-        public AddFriendType addFriendType { get; set; }
+        public AddFriendType AddFriendType { get; set; }
 
         protected override void ParseBody()
         {
-            Decrypt(user.TXProtocol.SessionKey);
-            reader.ReadBytes(28);
-            user.AddFriend_0018Value = reader.ReadBytes(24);
+            Decrypt(User.TXProtocol.SessionKey);
+            Reader.ReadBytes(28);
+            User.AddFriend0018Value = Reader.ReadBytes(24);
         }
     }
 }

@@ -5,7 +5,7 @@ namespace QQ.Framework.Packets.Send.Message
     /// <summary>
     ///     点赞
     /// </summary>
-    public class Send_0x03E3 : SendPacket
+    public class Send_0X03E3 : SendPacket
     {
         /// <summary>
         ///     好友QQ
@@ -15,21 +15,21 @@ namespace QQ.Framework.Packets.Send.Message
         /// <summary>
         ///     点赞
         /// </summary>
-        /// <param name="User"></param>
-        /// <param name="ToQQ">要点赞的QQ</param>
-        public Send_0x03E3(QQUser User, long ToQQ)
-            : base(User)
+        /// <param name="user"></param>
+        /// <param name="toQQ">要点赞的QQ</param>
+        public Send_0X03E3(QQUser user, long toQQ)
+            : base(user)
         {
             Sequence = GetNextSeq();
-            _secretKey = User.TXProtocol.SessionKey;
-            Command = QQCommand.Interactive0x03E3;
-            _toQQ = ToQQ;
+            SecretKey = user.TXProtocol.SessionKey;
+            Command = QQCommand.Interactive0X03E3;
+            _toQQ = toQQ;
         }
 
         protected override void PutHeader()
         {
             base.PutHeader();
-            writer.Write(new byte[]
+            Writer.Write(new byte[]
             {
                 0x04, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x00, 0x00, 0x68, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                 0x00, 0x00
@@ -38,26 +38,26 @@ namespace QQ.Framework.Packets.Send.Message
 
         protected override void PutBody()
         {
-            var myid = Util.HexStringToByteArray(Util.PB_toLength(user.QQ));
+            var myid = Util.HexStringToByteArray(Util.PB_toLength(User.QQ));
             var id = Util.HexStringToByteArray(Util.PB_toLength(_toQQ));
-            bodyWriter.Write(new byte[] {0x00, 0x00, 0x00});
-            bodyWriter.BEWrite(myid.Length + 11);
-            bodyWriter.Write(new byte[] {0x00, 0x00, 0x00});
-            bodyWriter.BEWrite(myid.Length + id.Length + 8);
-            bodyWriter.Write(new byte[] {0x08, 0x01});
-            bodyWriter.Write(new byte[] {0x12});
-            bodyWriter.BEWrite(myid.Length + 7);
-            bodyWriter.Write(new byte[] {0x08});
-            bodyWriter.Write(myid);
-            bodyWriter.Write(new byte[] {0x10, 0xE3, 0x07, 0x98, 0x01, 0x00});
-            bodyWriter.Write(new byte[] {0x08, 0xE5, 0x0F});
-            bodyWriter.Write(new byte[] {0x10, 0x01});
-            bodyWriter.Write(new byte[] {0x22});
-            bodyWriter.BEWrite(id.Length + 6);
-            bodyWriter.Write(new byte[] {0x58});
-            bodyWriter.Write(id);
-            bodyWriter.Write(new byte[] {0x60, 0x92, 0x4E});
-            bodyWriter.Write(new byte[] {0x68, 0x01});
+            BodyWriter.Write(new byte[] {0x00, 0x00, 0x00});
+            BodyWriter.BeWrite(myid.Length + 11);
+            BodyWriter.Write(new byte[] {0x00, 0x00, 0x00});
+            BodyWriter.BeWrite(myid.Length + id.Length + 8);
+            BodyWriter.Write(new byte[] {0x08, 0x01});
+            BodyWriter.Write(new byte[] {0x12});
+            BodyWriter.BeWrite(myid.Length + 7);
+            BodyWriter.Write(new byte[] {0x08});
+            BodyWriter.Write(myid);
+            BodyWriter.Write(new byte[] {0x10, 0xE3, 0x07, 0x98, 0x01, 0x00});
+            BodyWriter.Write(new byte[] {0x08, 0xE5, 0x0F});
+            BodyWriter.Write(new byte[] {0x10, 0x01});
+            BodyWriter.Write(new byte[] {0x22});
+            BodyWriter.BeWrite(id.Length + 6);
+            BodyWriter.Write(new byte[] {0x58});
+            BodyWriter.Write(id);
+            BodyWriter.Write(new byte[] {0x60, 0x92, 0x4E});
+            BodyWriter.Write(new byte[] {0x68, 0x01});
         }
     }
 }

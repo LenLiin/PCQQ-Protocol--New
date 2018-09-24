@@ -5,10 +5,10 @@ using QQ.Framework.Utils;
 
 namespace QQ.Framework.Domains.Commands.ResponseCommands.Login
 {
-    [ResponsePacketCommand(QQCommand.Login0x00BA)]
-    public class VerifyCodeResponseCommand : ResponseCommand<Receive_0x00BA>
+    [ResponsePacketCommand(QQCommand.Login0X00Ba)]
+    public class VerifyCodeResponseCommand : ResponseCommand<Receive_0X00Ba>
     {
-        public VerifyCodeResponseCommand(QQEventArgs<Receive_0x00BA> args) : base(args)
+        public VerifyCodeResponseCommand(QQEventArgs<Receive_0X00Ba> args) : base(args)
         {
         }
 
@@ -18,16 +18,16 @@ namespace QQ.Framework.Domains.Commands.ResponseCommands.Login
             {
                 if (_packet.VerifyCommand == 0x01)
                 {
-                    _service.Send(new Send_0x00BA(_user, ""));
+                    _service.Send(new Send_0X00Ba(_user, ""));
                 }
             }
             else
             {
-                _user.QQ_0836Token = _user.QQ_PACKET_00BAVerifyToken;
-                _user.QQ_PACKET_00BASequence = 0x00;
-                _user.QQ_PACKET_TgtgtKey = Util.RandomKey();
+                _user.QQ0836Token = _user.QQPacket00BaVerifyToken;
+                _user.QQPacket00BaSequence = 0x00;
+                _user.QQPacketTgtgtKey = Util.RandomKey();
                 //验证码验证成功后发送0836登录包
-                _service.Send(new Send_0x0836(_user, Login0x0836Type.Login0x0836_686, true));
+                _service.Send(new Send_0X0836(_user, Login0X0836Type.Login0X0836686, true));
             }
         }
     }

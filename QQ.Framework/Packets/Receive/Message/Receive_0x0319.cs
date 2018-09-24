@@ -1,15 +1,15 @@
 namespace QQ.Framework.Packets.Receive.Message
 {
-    public class Receive_0x0319 : ReceivePacket
+    public class Receive_0X0319 : ReceivePacket
     {
-        public Receive_0x0319(byte[] byteBuffer, QQUser User)
-            : base(byteBuffer, User, User.TXProtocol.SessionKey)
+        public Receive_0X0319(byte[] byteBuffer, QQUser user)
+            : base(byteBuffer, user, user.TXProtocol.SessionKey)
         {
         }
 
         protected override void ParseBody()
         {
-            Decrypt(user.TXProtocol.SessionKey);
+            Decrypt(User.TXProtocol.SessionKey);
         }
     }
 }

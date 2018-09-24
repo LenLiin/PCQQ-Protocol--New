@@ -1,28 +1,28 @@
 namespace QQ.Framework.Packets.Send.Message
 {
-    public class Send_Currency : SendPacket
+    public class SendCurrency : SendPacket
     {
         /// <summary>
         ///     通用响应包
         /// </summary>
-        /// <param name="User"></param>
-        /// <param name="Data">要发送的数据内容</param>
-        /// <param name="_sequence">序号</param>
-        public Send_Currency(QQUser User, byte[] Data, char _sequence, char _Command)
-            : base(User)
+        /// <param name="user"></param>
+        /// <param name="data">要发送的数据内容</param>
+        /// <param name="sequence">序号</param>
+        public SendCurrency(QQUser user, byte[] data, char sequence, char command)
+            : base(user)
         {
-            Sequence = _sequence;
-            _secretKey = User.TXProtocol.SessionKey;
-            Command = (QQCommand) _Command;
-            _data = Data;
+            Sequence = sequence;
+            SecretKey = user.TXProtocol.SessionKey;
+            Command = (QQCommand) command;
+            Data = data;
         }
 
-        private byte[] _data { get; }
+        private byte[] Data { get; }
 
         protected override void PutHeader()
         {
             base.PutHeader();
-            writer.Write(user.QQ_PACKET_FIXVER);
+            Writer.Write(User.QQPacketFixver);
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace QQ.Framework.Packets.Send.Message
         /// </summary>
         protected override void PutBody()
         {
-            bodyWriter.Write(_data);
+            BodyWriter.Write(Data);
         }
     }
 }

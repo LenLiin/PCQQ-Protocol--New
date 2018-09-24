@@ -5,7 +5,7 @@ namespace QQ.Framework.Domains
     /// <summary>
     ///     发送消息服务
     /// </summary>
-    public interface SendMessageService
+    public interface ISendMessageService
     {
         /// <summary>
         ///     发送给好友

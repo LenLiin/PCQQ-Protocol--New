@@ -1,6 +1,6 @@
 namespace QQ.Framework.Packets.Send.Message
 {
-    public class Send_0x01C0 : SendPacket
+    public class Send_0X01C0 : SendPacket
     {
         /// <summary>
         ///     好友QQ
@@ -9,21 +9,21 @@ namespace QQ.Framework.Packets.Send.Message
 
         /// <summary>
         /// </summary>
-        /// <param name="User"></param>
-        /// <param name="ToQQ"></param>
-        public Send_0x01C0(QQUser User, byte[] ToQQ)
-            : base(User)
+        /// <param name="user"></param>
+        /// <param name="toQQ"></param>
+        public Send_0X01C0(QQUser user, byte[] toQQ)
+            : base(user)
         {
             Sequence = GetNextSeq();
-            _secretKey = User.TXProtocol.SessionKey;
-            Command = QQCommand.Message0x01C0;
-            _toQQ = ToQQ;
+            SecretKey = user.TXProtocol.SessionKey;
+            Command = QQCommand.Message0X01C0;
+            _toQQ = toQQ;
         }
 
         protected override void PutHeader()
         {
             base.PutHeader();
-            writer.Write(user.QQ_PACKET_FIXVER);
+            Writer.Write(User.QQPacketFixver);
         }
 
         /// <summary>
@@ -31,8 +31,8 @@ namespace QQ.Framework.Packets.Send.Message
         /// </summary>
         protected override void PutBody()
         {
-            bodyWriter.Write((byte) 0x01);
-            bodyWriter.Write(_toQQ);
+            BodyWriter.Write((byte) 0x01);
+            BodyWriter.Write(_toQQ);
         }
     }
 }

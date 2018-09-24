@@ -2,23 +2,23 @@ namespace QQ.Framework.Utils
 {
     public static class XXTeaCrypter
     {
-        public static byte[] Encrypt(byte[] Data, byte[] Key)
+        public static byte[] Encrypt(byte[] data, byte[] key)
         {
-            if (Data.Length == 0)
+            if (data.Length == 0)
             {
-                return Data;
+                return data;
             }
 
-            return ToByteArray(Encrypt(ToUInt32Array(Data, true), ToUInt32Array(Key, false)), false);
+            return ToByteArray(Encrypt(ToUInt32Array(data, true), ToUInt32Array(key, false)), false);
         }
 
-        public static byte[] Decrypt(byte[] Data, byte[] Key)
+        public static byte[] Decrypt(byte[] data, byte[] key)
         {
             try
             {
-                return Data.Length == 0
-                    ? Data
-                    : ToByteArray(Decrypt(ToUInt32Array(Data, false), ToUInt32Array(Key, false)), true);
+                return data.Length == 0
+                    ? data
+                    : ToByteArray(Decrypt(ToUInt32Array(data, false), ToUInt32Array(key, false)), true);
             }
             catch
             {
@@ -106,36 +106,36 @@ namespace QQ.Framework.Utils
             return v;
         }
 
-        private static uint[] ToUInt32Array(byte[] Data, bool IncludeLength)
+        private static uint[] ToUInt32Array(byte[] data, bool includeLength)
         {
-            var num = (Data.Length & 3) == 0 ? Data.Length >> 2 : (Data.Length >> 2) + 1;
+            var num = (data.Length & 3) == 0 ? data.Length >> 2 : (data.Length >> 2) + 1;
             uint[] array;
-            if (IncludeLength)
+            if (includeLength)
             {
                 array = new uint[num + 1];
-                array[num] = (uint) Data.Length;
+                array[num] = (uint) data.Length;
             }
             else
             {
                 array = new uint[num];
             }
 
-            num = Data.Length;
+            num = data.Length;
             for (var i = 0; i < num; i++)
             {
-                array[i >> 2] |= (uint) (Data[i] << ((i & 3) << 3));
+                array[i >> 2] |= (uint) (data[i] << ((i & 3) << 3));
             }
 
             return array;
         }
 
-        private static byte[] ToByteArray(uint[] Data, bool IncludeLength)
+        private static byte[] ToByteArray(uint[] data, bool includeLength)
         {
-            var num = !IncludeLength ? Data.Length << 2 : (int) Data[Data.Length - 1];
+            var num = !includeLength ? data.Length << 2 : (int) data[data.Length - 1];
             var array = new byte[num];
             for (var i = 0; i < num; i++)
             {
-                array[i] = (byte) (Data[i >> 2] >> ((i & 3) << 3));
+                array[i] = (byte) (data[i >> 2] >> ((i & 3) << 3));
             }
 
             return array;

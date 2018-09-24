@@ -2,27 +2,27 @@ using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.Send.Interactive
 {
-    public class Send_0x0115 : SendPacket
+    public class Send_0X0115 : SendPacket
     {
         /// <summary>
         /// </summary>
-        /// <param name="User"></param>
-        /// <param name="AddQQ"></param>
-        public Send_0x0115(QQUser User, long AddQQ)
-            : base(User)
+        /// <param name="user"></param>
+        /// <param name="addQQ"></param>
+        public Send_0X0115(QQUser user, long addQQ)
+            : base(user)
         {
             Sequence = GetNextSeq();
-            _secretKey = User.TXProtocol.SessionKey;
-            Command = QQCommand.Interactive0x00AE;
-            _AddQQ = AddQQ;
+            SecretKey = user.TXProtocol.SessionKey;
+            Command = QQCommand.Interactive0X00Ae;
+            AddQQ = addQQ;
         }
 
-        public long _AddQQ { get; set; }
+        public long AddQQ { get; set; }
 
         protected override void PutHeader()
         {
             base.PutHeader();
-            writer.Write(user.QQ_PACKET_FIXVER);
+            Writer.Write(User.QQPacketFixver);
         }
 
         /// <summary>
@@ -30,11 +30,11 @@ namespace QQ.Framework.Packets.Send.Interactive
         /// </summary>
         protected override void PutBody()
         {
-            bodyWriter.Write(new byte[]
+            BodyWriter.Write(new byte[]
             {
                 0x03
             });
-            bodyWriter.BEWrite(_AddQQ);
+            BodyWriter.BeWrite(AddQQ);
         }
     }
 }

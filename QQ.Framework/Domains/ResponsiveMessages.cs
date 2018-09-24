@@ -5,7 +5,7 @@ namespace QQ.Framework.Domains
     /// <summary>
     ///     可响应的消息事件列表
     /// </summary>
-    public interface ResponsiveMessages
+    public interface IResponsiveMessages
     {
         /// <summary>
         ///     收到好友消息

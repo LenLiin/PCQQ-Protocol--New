@@ -1,18 +1,18 @@
 namespace QQ.Framework.Packets.Receive.Message
 {
-    public class Receive_0x00CD : ReceivePacket
+    public class Receive_0X00Cd : ReceivePacket
     {
         /// <summary>
         ///     发好友消息回复包
         /// </summary>
-        public Receive_0x00CD(byte[] byteBuffer, QQUser User)
-            : base(byteBuffer, User, User.TXProtocol.SessionKey)
+        public Receive_0X00Cd(byte[] byteBuffer, QQUser user)
+            : base(byteBuffer, user, user.TXProtocol.SessionKey)
         {
         }
 
         protected override void ParseBody()
         {
-            Decrypt(user.TXProtocol.SessionKey);
+            Decrypt(User.TXProtocol.SessionKey);
         }
     }
 }

@@ -13,8 +13,8 @@ namespace QQ.Framework.Utils
 {
     public static class Util
     {
-        private static readonly Encoding DefaultEncoding = Encoding.GetEncoding(QQGlobal.QQ_CHARSET_DEFAULT);
-        private static readonly DateTime baseDateTime = DateTime.Parse("1970-1-01 00:00:00.000");
+        private static readonly Encoding DefaultEncoding = Encoding.GetEncoding(QQGlobal.QQCharsetDefault);
+        private static readonly DateTime BaseDateTime = DateTime.Parse("1970-1-01 00:00:00.000");
 
         public static Random Random = new Random();
 
@@ -77,7 +77,7 @@ namespace QQ.Framework.Utils
 
         public static byte[] Int64_to_4byte(long paramLong)
         {
-            var array =
+            byte[] array =
             {
                 0, 0, 0, (byte) (int) paramLong
             };
@@ -107,22 +107,22 @@ namespace QQ.Framework.Utils
         ///     转换hex  长度不够前置补0
         /// </summary>
         /// <param name="qq"></param>
-        /// <param name="Length"></param>
+        /// <param name="length"></param>
         /// <returns></returns>
-        public static string NumToHexString(long qq, int Length = 8)
+        public static string NumToHexString(long qq, int length = 8)
         {
             var text = Convert.ToString(qq, 16);
-            if (text.Length == Length)
+            if (text.Length == length)
             {
                 return text;
             }
 
-            if (text.Length > Length)
+            if (text.Length > length)
             {
                 return null;
             }
 
-            var num = Length - text.Length;
+            var num = length - text.Length;
             var str = "";
             for (var i = 0; i < num; i++)
             {
@@ -143,9 +143,9 @@ namespace QQ.Framework.Utils
             return stringBuilder.ToString();
         }
 
-        public static string ConvertHexToString(string HexValue)
+        public static string ConvertHexToString(string hexValue)
         {
-            var bytes = HexStringToByteArray(HexValue);
+            var bytes = HexStringToByteArray(hexValue);
             return Encoding.UTF8.GetString(bytes);
         }
 
@@ -155,7 +155,7 @@ namespace QQ.Framework.Utils
         /// <param name="b">字节数组</param>
         /// <param name="encoding">encoding 编码方式</param>
         /// <returns> 如果encoding不支持，返回一个缺省编码的字符串</returns>
-        public static string GetString(byte[] b, string encoding = QQGlobal.QQ_CHARSET_DEFAULT)
+        public static string GetString(byte[] b, string encoding = QQGlobal.QQCharsetDefault)
         {
             try
             {
@@ -176,7 +176,7 @@ namespace QQ.Framework.Utils
         /// <param name="len">The len.</param>
         /// <param name="encoding">The encoding.</param>
         /// <returns></returns>
-        public static string GetString(byte[] b, int offset, int len, string encoding = QQGlobal.QQ_CHARSET_DEFAULT)
+        public static string GetString(byte[] b, int offset, int len, string encoding = QQGlobal.QQCharsetDefault)
         {
             var temp = new byte[len];
             Array.Copy(b, offset, temp, 0, len);
@@ -210,7 +210,7 @@ namespace QQ.Framework.Utils
         /// <returns></returns>
         public static byte[] RandomKey()
         {
-            var key = new byte[QQGlobal.QQ_LENGTH_KEY];
+            var key = new byte[QQGlobal.QQLengthKey];
             new Random().NextBytes(key);
             return key;
         }
@@ -235,12 +235,12 @@ namespace QQ.Framework.Utils
         /// <returns></returns>
         public static long GetTimeMillis(DateTime dateTime)
         {
-            return (long) (dateTime - baseDateTime).TotalMilliseconds;
+            return (long) (dateTime - BaseDateTime).TotalMilliseconds;
         }
 
         public static long GetTimeSeconds(DateTime dateTime)
         {
-            return (long) (dateTime - baseDateTime).TotalSeconds;
+            return (long) (dateTime - BaseDateTime).TotalSeconds;
         }
 
         /// <summary>
@@ -252,7 +252,7 @@ namespace QQ.Framework.Utils
         /// <returns></returns>
         public static DateTime GetDateTimeFromMillis(long millis)
         {
-            return baseDateTime.AddTicks(millis * TimeSpan.TicksPerSecond).AddHours(8);
+            return BaseDateTime.AddTicks(millis * TimeSpan.TicksPerSecond).AddHours(8);
         }
 
         /// <summary>
@@ -275,7 +275,7 @@ namespace QQ.Framework.Utils
             return $"{ip[0]}.{ip[1]}.{ip[2]}.{ip[3]}";
         }
 
-        public static string ToHex(byte[] bs, string NewLine = "", string Format = "{0} ")
+        public static string ToHex(byte[] bs, string newLine = "", string format = "{0} ")
         {
             var num = 0;
             var stringBuilder = new StringBuilder();
@@ -283,10 +283,10 @@ namespace QQ.Framework.Utils
             {
                 if (num++ % 16 == 0)
                 {
-                    stringBuilder.Append(NewLine);
+                    stringBuilder.Append(newLine);
                 }
 
-                stringBuilder.AppendFormat(Format, b.ToString("X2"));
+                stringBuilder.AppendFormat(format, b.ToString("X2"));
             }
 
             return stringBuilder.ToString().Trim();
@@ -347,7 +347,7 @@ namespace QQ.Framework.Utils
             return (num & 0x7FFFFFFF).ToString();
         }
 
-        public static string GetAntiCSRFToken(string skey)
+        public static string GetAntiCsrfToken(string skey)
         {
             var arg = "tencentQQVIP123443safde&!%^%1282";
             var list = new List<int>();
@@ -449,13 +449,13 @@ namespace QQ.Framework.Utils
 
         public static string GetMD5ToGuidHashFromFile(string fileName)
         {
-            var Md5 = GetMD5HashFromFile(fileName);
+            var md5 = GetMD5HashFromFile(fileName);
             return "{" +
-                   Md5.Substring(0, 8) + "-" +
-                   Md5.Substring(8, 4) + "-" +
-                   Md5.Substring(12, 4) + "-" +
-                   Md5.Substring(16, 4) + "-" +
-                   Md5.Substring(20) + "-" +
+                   md5.Substring(0, 8) + "-" +
+                   md5.Substring(8, 4) + "-" +
+                   md5.Substring(12, 4) + "-" +
+                   md5.Substring(16, 4) + "-" +
+                   md5.Substring(20) + "-" +
                    "}";
         }
 
@@ -477,21 +477,21 @@ namespace QQ.Framework.Utils
 
         #region TLV专属操作方法
 
-        public static void int16_to_buf(byte[] TEMP_BYTE_ARRAY, long index, long Num)
+        public static void int16_to_buf(byte[] tempByteArray, long index, long num)
         {
-            TEMP_BYTE_ARRAY[index] = (byte) ((Num & 0xff000000) >> 24);
-            TEMP_BYTE_ARRAY[index + 1] = (byte) ((Num & 0x00ff0000) >> 16);
-            TEMP_BYTE_ARRAY[index + 2] = (byte) ((Num & 0x0000ff00) >> 8);
-            TEMP_BYTE_ARRAY[index + 3] = (byte) (Num & 0x000000ff);
+            tempByteArray[index] = (byte) ((num & 0xff000000) >> 24);
+            tempByteArray[index + 1] = (byte) ((num & 0x00ff0000) >> 16);
+            tempByteArray[index + 2] = (byte) ((num & 0x0000ff00) >> 8);
+            tempByteArray[index + 3] = (byte) (num & 0x000000ff);
         }
 
-        public static int buf_to_int16(byte[] TEMP_BYTE_ARRAY, long index)
+        public static int buf_to_int16(byte[] tempByteArray, long index)
         {
-            return (TEMP_BYTE_ARRAY[index] << 24) | (TEMP_BYTE_ARRAY[index + 1] << 16) |
-                   (TEMP_BYTE_ARRAY[index + 2] << 8) | TEMP_BYTE_ARRAY[index + 3];
+            return (tempByteArray[index] << 24) | (tempByteArray[index + 1] << 16) |
+                   (tempByteArray[index + 2] << 8) | tempByteArray[index + 3];
         }
 
-        public static long currentTimeMillis()
+        public static long CurrentTimeMillis()
         {
             return GetTimeMillis(DateTime.Now);
         }
@@ -510,58 +510,58 @@ namespace QQ.Framework.Utils
            因此超过一个字节结构(char, ushort, int, long等)的读取和写入需要自定义。
            byte[]的读取/写入方式不需要更改。
         */
-        public static void BEWrite(this BinaryWriter bw, ushort v)
+        public static void BeWrite(this BinaryWriter bw, ushort v)
         {
             bw.Write(BitConverter.GetBytes(v).Reverse().ToArray());
         }
 
-        public static void BEWrite(this BinaryWriter bw, DateTime v)
+        public static void BeWrite(this BinaryWriter bw, DateTime v)
         {
-            bw.BEWrite(GetTimeSeconds(v));
+            bw.BeWrite(GetTimeSeconds(v));
         }
 
-        public static void BEWrite(this BinaryWriter bw, char v)
+        public static void BeWrite(this BinaryWriter bw, char v)
         {
             bw.Write(BitConverter.GetBytes((ushort) v).Reverse().ToArray());
         }
 
-        public static void BEWrite(this BinaryWriter bw, int v)
+        public static void BeWrite(this BinaryWriter bw, int v)
         {
             bw.Write(BitConverter.GetBytes(v).Reverse().ToArray());
         }
 
-        public static void BEUshortWrite(this BinaryWriter bw, ushort v)
+        public static void BeUshortWrite(this BinaryWriter bw, ushort v)
         {
-            bw.BEWrite(v);
+            bw.BeWrite(v);
         }
 
         // 注意: 此处的long和ulong均为四个字节，而不是八个。
-        public static void BEWrite(this BinaryWriter bw, long v)
+        public static void BeWrite(this BinaryWriter bw, long v)
         {
             bw.Write(BitConverter.GetBytes((uint) v).Reverse().ToArray());
         }
 
-        public static void BEWrite(this BinaryWriter bw, ulong v)
+        public static void BeWrite(this BinaryWriter bw, ulong v)
         {
             bw.Write(BitConverter.GetBytes((uint) v).Reverse().ToArray());
         }
 
-        public static char BEReadChar(this BinaryReader br)
+        public static char BeReadChar(this BinaryReader br)
         {
-            return (char) br.BEReadUInt16();
+            return (char) br.BeReadUInt16();
         }
 
-        public static ushort BEReadUInt16(this BinaryReader br)
+        public static ushort BeReadUInt16(this BinaryReader br)
         {
             return (ushort) ((br.ReadByte() << 8) + br.ReadByte());
         }
 
-        public static int BEReadInt32(this BinaryReader br)
+        public static int BeReadInt32(this BinaryReader br)
         {
             return (br.ReadByte() << 24) | (br.ReadByte() << 16) | (br.ReadByte() << 8) | br.ReadByte();
         }
 
-        public static uint BEReadUInt32(this BinaryReader br)
+        public static uint BeReadUInt32(this BinaryReader br)
         {
             return (uint) ((br.ReadByte() << 24) | (br.ReadByte() << 16) | (br.ReadByte() << 8) | br.ReadByte());
         }
@@ -573,7 +573,7 @@ namespace QQ.Framework.Utils
         /// <param name="v"></param>
         public static void WriteKey(this BinaryWriter bw, byte[] v)
         {
-            bw.BEWrite((ushort) v.Length);
+            bw.BeWrite((ushort) v.Length);
             bw.Write(v);
         }
 

@@ -19,7 +19,7 @@ namespace QQ.Framework
 {
     public class QQClient
     {
-        private readonly MessageManage messageManage;
+        private readonly MessageManage _messageManage;
 
         /// <summary>
         ///     线程池状态
@@ -67,8 +67,8 @@ namespace QQ.Framework
             {
                 Server.SendTo(byteBuffer, Point);
                 //发送数据时出发事件
-                var SendEvent = new QQSendEventArgs(this, byteBuffer);
-                OnSend(SendEvent);
+                var sendEvent = new QQSendEventArgs(this, byteBuffer);
+                OnSend(sendEvent);
             }).Start();
         }
 
@@ -87,9 +87,9 @@ namespace QQ.Framework
         public void Login()
         {
             //发送请求包
-            Send(new Send_0x0825(QQUser, false).WriteData());
+            Send(new Send_0X0825(QQUser, false).WriteData());
             MessageLog($"登陆服务器{LoginServerHost}");
-            messageManage.Init();
+            _messageManage.Init();
         }
 
         /// <summary>
@@ -105,19 +105,19 @@ namespace QQ.Framework
         /// <summary>
         ///     0836_686
         /// </summary>
-        public event EventHandler<QQEventArgs<Receive_0x0836>> EventReceive_0x0836_686;
+        public event EventHandler<QQEventArgs<Receive_0X0836>> EventReceive_0X0836686;
 
         /// <summary>
         ///     0836_686
         /// </summary>
         /// <param name="e"></param>
-        internal void OnReceive_0x0836_686(QQEventArgs<Receive_0x0836> e)
+        internal void OnReceive_0x0836_686(QQEventArgs<Receive_0X0836> e)
         {
             MessageLog("二次登陆");
             //二次发送0836登录包
-            Send(new Send_0x0836(e.ReceivePacket.user, Login0x0836Type.Login0x0836_686).WriteData());
+            Send(new Send_0X0836(e.ReceivePacket.User, Login0X0836Type.Login0X0836686).WriteData());
 
-            EventReceive_0x0836_686?.Invoke(this, e);
+            EventReceive_0X0836686?.Invoke(this, e);
         }
 
         #endregion
@@ -127,15 +127,15 @@ namespace QQ.Framework
         /// <summary>
         ///     0836_711
         /// </summary>
-        public event EventHandler<QQEventArgs<Receive_0x0836>> EventReceive_0x0836_711;
+        public event EventHandler<QQEventArgs<Receive_0X0836>> EventReceive_0X0836711;
 
         /// <summary>
         ///     0836_622
         /// </summary>
         /// <param name="e"></param>
-        internal void OnReceive_0x0836_711(QQEventArgs<Receive_0x0836> e)
+        internal void OnReceive_0x0836_711(QQEventArgs<Receive_0X0836> e)
         {
-            EventReceive_0x0836_711?.Invoke(this, e);
+            EventReceive_0X0836711?.Invoke(this, e);
         }
 
         #endregion
@@ -145,21 +145,21 @@ namespace QQ.Framework
         /// <summary>
         ///     0836_871
         /// </summary>
-        public event EventHandler<QQEventArgs<Receive_0x0836>> EventReceive_0x0836_871;
+        public event EventHandler<QQEventArgs<Receive_0X0836>> EventReceive_0X0836871;
 
         /// <summary>
         ///     0836_871
         /// </summary>
         /// <param name="e"></param>
-        internal void OnReceive_0x0836_871(QQEventArgs<Receive_0x0836> e)
+        internal void OnReceive_0x0836_871(QQEventArgs<Receive_0X0836> e)
         {
             //请求验证码
             if (e.ReceivePacket.Result == (byte) ResultCode.需要验证码)
             {
-                Send(new Send_0x00BA(e.ReceivePacket.user, "").WriteData());
+                Send(new Send_0X00Ba(e.ReceivePacket.User, "").WriteData());
             }
 
-            EventReceive_0x0836_871?.Invoke(this, e);
+            EventReceive_0X0836871?.Invoke(this, e);
         }
 
         #endregion
@@ -169,19 +169,19 @@ namespace QQ.Framework
         /// <summary>
         ///     获取SessionKey
         /// </summary>
-        public event EventHandler<QQEventArgs<Receive_0x0828>> EventReceive_0x0828;
+        public event EventHandler<QQEventArgs<Receive_0X0828>> EventReceive_0X0828;
 
         /// <summary>
         ///     0836_622
         /// </summary>
         /// <param name="e"></param>
-        internal void OnReceive_0x0828(QQEventArgs<Receive_0x0828> e)
+        internal void OnReceive_0x0828(QQEventArgs<Receive_0X0828> e)
         {
             MessageLog("获取SessionKey");
             //二次发送0836登录包
-            Send(new Send_0x00EC(e.ReceivePacket.user, LoginStatus.我在线上).WriteData());
+            Send(new Send_0X00Ec(e.ReceivePacket.User, LoginStatus.我在线上).WriteData());
 
-            EventReceive_0x0828?.Invoke(this, e);
+            EventReceive_0X0828?.Invoke(this, e);
         }
 
         #endregion
@@ -191,17 +191,17 @@ namespace QQ.Framework
         /// <summary>
         ///     00EC
         /// </summary>
-        public event EventHandler<QQEventArgs<Receive_0x00EC>> EventReceive_0x00EC;
+        public event EventHandler<QQEventArgs<Receive_0X00Ec>> EventReceive_0X00Ec;
 
         /// <summary>
         ///     00EC
         /// </summary>
         /// <param name="e"></param>
-        internal void OnReceive_0x00EC(QQEventArgs<Receive_0x00EC> e)
+        internal void OnReceive_0x00EC(QQEventArgs<Receive_0X00Ec> e)
         {
-            Send(new Send_0x001D(e.ReceivePacket.user).WriteData());
+            Send(new Send_0X001D(e.ReceivePacket.User).WriteData());
 
-            EventReceive_0x00EC?.Invoke(this, e);
+            EventReceive_0X00Ec?.Invoke(this, e);
         }
 
         #endregion
@@ -211,19 +211,19 @@ namespace QQ.Framework
         /// <summary>
         ///     验证码事件
         /// </summary>
-        public event EventHandler<QQEventArgs<Receive_0x00BA>> EventReceive_0x00BA;
+        public event EventHandler<QQEventArgs<Receive_0X00Ba>> EventReceive_0X00Ba;
 
         /// <summary>
         ///     验证码事件
         /// </summary>
         /// <param name="e"></param>
-        internal void OnReceive_0x00BA(QQEventArgs<Receive_0x00BA> e)
+        internal void OnReceive_0x00BA(QQEventArgs<Receive_0X00Ba> e)
         {
             if (e.ReceivePacket.Status == 0x01)
             {
                 if (e.ReceivePacket.VerifyCommand == 0x01)
                 {
-                    Send(new Send_0x00BA(e.ReceivePacket.user, "").WriteData());
+                    Send(new Send_0X00Ba(e.ReceivePacket.User, "").WriteData());
                 }
             }
             else
@@ -232,10 +232,10 @@ namespace QQ.Framework
 //                e.QQClient.QQUser.QQ_PACKET_00BASequence = 0x00;
 //                e.QQClient.QQUser.QQ_PACKET_TgtgtKey = Util.RandomKey();
                 //验证码验证成功后发送0836登录包
-                Send(new Send_0x0836(e.ReceivePacket.user, Login0x0836Type.Login0x0836_686, true).WriteData());
+                Send(new Send_0X0836(e.ReceivePacket.User, Login0X0836Type.Login0X0836686, true).WriteData());
             }
 
-            EventReceive_0x00BA?.Invoke(this, e);
+            EventReceive_0X00Ba?.Invoke(this, e);
         }
 
         #endregion
@@ -245,18 +245,18 @@ namespace QQ.Framework
         /// <summary>
         ///     001D
         /// </summary>
-        public event EventHandler<QQEventArgs<Receive_0x001D>> EventReceive_0x001D;
+        public event EventHandler<QQEventArgs<Receive_0X001D>> EventReceive_0X001D;
 
         /// <summary>
         ///     001D
         /// </summary>
         /// <param name="e"></param>
-        internal void OnReceive_0x001D(QQEventArgs<Receive_0x001D> e)
+        internal void OnReceive_0x001D(QQEventArgs<Receive_0X001D> e)
         {
             MessageLog("获取SKey");
-            Send(new Send_0x005C(e.ReceivePacket.user).WriteData());
+            Send(new Send_0X005C(e.ReceivePacket.User).WriteData());
 
-            EventReceive_0x001D?.Invoke(this, e);
+            EventReceive_0X001D?.Invoke(this, e);
         }
 
         #endregion
@@ -266,15 +266,15 @@ namespace QQ.Framework
         /// <summary>
         ///     005C
         /// </summary>
-        public event EventHandler<QQEventArgs<Receive_0x005C>> EventReceive_0x005C;
+        public event EventHandler<QQEventArgs<Receive_0X005C>> EventReceive_0X005C;
 
         /// <summary>
         ///     005C
         /// </summary>
         /// <param name="e"></param>
-        internal void OnReceive_0x005C(QQEventArgs<Receive_0x005C> e)
+        internal void OnReceive_0x005C(QQEventArgs<Receive_0X005C> e)
         {
-            EventReceive_0x005C?.Invoke(this, e);
+            EventReceive_0X005C?.Invoke(this, e);
         }
 
         #endregion
@@ -284,13 +284,13 @@ namespace QQ.Framework
         /// <summary>
         ///     收到群消息
         /// </summary>
-        public event EventHandler<QQEventArgs<Receive_0x0017>> EventReceive_0x0017;
+        public event EventHandler<QQEventArgs<Receive_0X0017>> EventReceive_0X0017;
 
         /// <summary>
         ///     收到群消息
         /// </summary>
         /// <param name="e"></param>
-        internal void OnReceive_0x0017(QQEventArgs<Receive_0x0017> e)
+        internal void OnReceive_0x0017(QQEventArgs<Receive_0X0017> e)
         {
             if (!string.IsNullOrEmpty(e.ReceivePacket.Message))
             {
@@ -309,9 +309,9 @@ namespace QQ.Framework
             }
 
             //提取数据
-            var dataReader = new BinaryReader(new MemoryStream(e.ReceivePacket.bodyDecrypted));
+            var dataReader = new BinaryReader(new MemoryStream(e.ReceivePacket.BodyDecrypted));
 
-            Send(new Send_0x0017(e.ReceivePacket.user, dataReader.ReadBytes(0x10), e.ReceivePacket.Sequence)
+            Send(new Send_0X0017(e.ReceivePacket.User, dataReader.ReadBytes(0x10), e.ReceivePacket.Sequence)
                 .WriteData());
 
             //if (!string.IsNullOrEmpty(e.ReceivePacket.Message))
@@ -331,7 +331,7 @@ namespace QQ.Framework
                 //    .WriteData());
 
                 QQUser.ReceiveSequences.Add(e.ReceivePacket.Sequence);
-                EventReceive_0x0017?.Invoke(this, e);
+                EventReceive_0X0017?.Invoke(this, e);
             }
         }
 
@@ -342,13 +342,13 @@ namespace QQ.Framework
         /// <summary>
         ///     收到好友消息
         /// </summary>
-        public event EventHandler<QQEventArgs<Receive_0x00CE>> EventReceive_0x00CE;
+        public event EventHandler<QQEventArgs<Receive_0X00Ce>> EventReceive_0X00Ce;
 
         /// <summary>
         ///     收到好友消息
         /// </summary>
         /// <param name="e"></param>
-        internal void OnReceive_0x00CE(QQEventArgs<Receive_0x00CE> e)
+        internal void OnReceive_0x00CE(QQEventArgs<Receive_0X00Ce> e)
         {
             if (!string.IsNullOrEmpty(e.ReceivePacket.Message.ToString()))
             {
@@ -367,9 +367,9 @@ namespace QQ.Framework
             }
 
             //提取数据
-            var dataReader = new BinaryReader(new MemoryStream(e.ReceivePacket.bodyDecrypted));
+            var dataReader = new BinaryReader(new MemoryStream(e.ReceivePacket.BodyDecrypted));
 
-            Send(new Send_0x00CE(e.ReceivePacket.user, dataReader.ReadBytes(0x10), e.ReceivePacket.Sequence)
+            Send(new Send_0X00Ce(e.ReceivePacket.User, dataReader.ReadBytes(0x10), e.ReceivePacket.Sequence)
                 .WriteData());
 
             //SendLongUserMessage("嘿嘿嘿[face1.gif]嘿嘿嘿[face2.gif]哈哈哈嘿嘿嘿[face1.gif]嘿嘿嘿[face2.gif]哈哈哈嘿嘿嘿[face1.gif]嘿嘿嘿[face2.gif]哈哈哈嘿嘿嘿[face1.gif]嘿嘿嘿[face2.gif]哈哈哈嘿嘿嘿[face1.gif]嘿嘿嘿[face2.gif]哈哈哈", e.ReceivePacket.FromQQ);
@@ -379,11 +379,11 @@ namespace QQ.Framework
                 !e.ReceivePacket.FromQQ.Equals(QQUser.QQ))
             {
                 //回复已接收成功
-                Send(new Send_0x0319(e.ReceivePacket.user, e.ReceivePacket.FromQQ, e.ReceivePacket.MessageDateTime)
+                Send(new Send_0X0319(e.ReceivePacket.User, e.ReceivePacket.FromQQ, e.ReceivePacket.MessageDateTime)
                     .WriteData());
 
                 QQUser.ReceiveSequences.Add(e.ReceivePacket.Sequence);
-                EventReceive_0x00CE?.Invoke(this, e);
+                EventReceive_0X00Ce?.Invoke(this, e);
             }
         }
 
@@ -394,14 +394,14 @@ namespace QQ.Framework
         /// <summary>
         ///     发送好友消息的回复包
         /// </summary>
-        public event EventHandler<QQEventArgs<Receive_0x00CD>> EventReceive_0x00CD;
+        public event EventHandler<QQEventArgs<Receive_0X00Cd>> EventReceive_0X00Cd;
 
         /// <summary>
         ///     发送好友消息的回复包
         /// </summary>
-        internal void OnReceive_0x00CD(QQEventArgs<Receive_0x00CD> e)
+        internal void OnReceive_0x00CD(QQEventArgs<Receive_0X00Cd> e)
         {
-            EventReceive_0x00CD?.Invoke(this, e);
+            EventReceive_0X00Cd?.Invoke(this, e);
         }
 
         #endregion
@@ -411,14 +411,14 @@ namespace QQ.Framework
         /// <summary>
         ///     发送群消息的回复包
         /// </summary>
-        public event EventHandler<QQEventArgs<Receive_0x0002>> EventReceive_0x0002;
+        public event EventHandler<QQEventArgs<Receive_0X0002>> EventReceive_0X0002;
 
         /// <summary>
         ///     发送群消息的回复包
         /// </summary>
-        internal void OnReceive_0x0002(QQEventArgs<Receive_0x0002> e)
+        internal void OnReceive_0x0002(QQEventArgs<Receive_0X0002> e)
         {
-            EventReceive_0x0002?.Invoke(this, e);
+            EventReceive_0X0002?.Invoke(this, e);
         }
 
         #endregion
@@ -437,7 +437,7 @@ namespace QQ.Framework
         {
             if (QQGlobal.DebugLog)
             {
-                MessageLog($"接收数据:{Util.ToHex(e.ReceivePacket.buffer)}");
+                MessageLog($"接收数据:{Util.ToHex(e.ReceivePacket.Buffer)}");
             }
 
             EventReceive?.Invoke(this, e);
@@ -460,7 +460,7 @@ namespace QQ.Framework
         {
             if (QQGlobal.DebugLog)
             {
-                MessageLog($"发送数据:{Util.ToHex(e.byteBuffer.ToArray())}");
+                MessageLog($"发送数据:{Util.ToHex(e.ByteBuffer.ToArray())}");
             }
 
             EventSend?.Invoke(this, e);
@@ -473,19 +473,19 @@ namespace QQ.Framework
         /// <summary>
         ///     通用未知响应消息
         /// </summary>
-        public event EventHandler<QQEventArgs<Receive_Currency>> EventReceive_Currency;
+        public event EventHandler<QQEventArgs<ReceiveCurrency>> EventReceiveCurrency;
 
         /// <summary>
         ///     通用未知响应消息
         /// </summary>
-        internal void OnReceive_Currency(QQEventArgs<Receive_Currency> e)
+        internal void OnReceive_Currency(QQEventArgs<ReceiveCurrency> e)
         {
             //提取数据
             //ByteBuffer DataBuf = new ByteBuffer(e.ReceivePacket.bodyDecrypted);
             //var buf = new ByteBuffer();
             //new Send_Currency(e.ReceivePacket.user, DataBuf.ReadBytes(0x10), e.ReceivePacket.Sequence,(char)e.ReceivePacket.GetQQCommand()).Fill(buf);
             //Send(buf);
-            EventReceive_Currency?.Invoke(this, e);
+            EventReceiveCurrency?.Invoke(this, e);
         }
 
         #endregion
@@ -495,14 +495,14 @@ namespace QQ.Framework
         /// <summary>
         ///     心跳包
         /// </summary>
-        public event EventHandler<QQEventArgs<Receive_0x0058>> EventReceive_0x0058;
+        public event EventHandler<QQEventArgs<Receive_0X0058>> EventReceive_0X0058;
 
         /// <summary>
         ///     心跳包
         /// </summary>
-        internal void OnReceive_0x0058(QQEventArgs<Receive_0x0058> e)
+        internal void OnReceive_0x0058(QQEventArgs<Receive_0X0058> e)
         {
-            EventReceive_0x0058?.Invoke(this, e);
+            EventReceive_0X0058?.Invoke(this, e);
         }
 
         #endregion
@@ -516,7 +516,7 @@ namespace QQ.Framework
         /// <param name="group"></param>
         public void SendLongGroupMessage(Richtext message, long group)
         {
-            foreach (var packet in Send_0x0002.SendLongMessage(QQUser, message, group))
+            foreach (var packet in Send_0X0002.SendLongMessage(QQUser, message, group))
             {
                 Send(packet.WriteData());
             }
@@ -529,7 +529,7 @@ namespace QQ.Framework
         /// <param name="user"></param>
         public void SendLongUserMessage(Richtext message, long user)
         {
-            foreach (var packet in Send_0x00CD.SendLongMessage(QQUser, message, user))
+            foreach (var packet in Send_0X00Cd.SendLongMessage(QQUser, message, user))
             {
                 Send(packet.WriteData());
             }

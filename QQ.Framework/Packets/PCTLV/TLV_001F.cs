@@ -5,52 +5,52 @@ using QQ.Framework.Utils;
 namespace QQ.Framework.Packets.PCTLV
 {
     [TlvTag(TlvTags.DeviceID)]
-    internal class TLV_001F : BaseTLV
+    internal class TLV001F : BaseTLV
     {
-        public TLV_001F()
+        public TLV001F()
         {
-            cmd = 0x001F;
+            Command = 0x001F;
             Name = "TLV_DeviceID";
-            wSubVer = 0x0001;
+            WSubVer = 0x0001;
         }
 
-        public byte[] Get_Tlv(QQUser User)
+        public byte[] Get_Tlv(QQUser user)
         {
-            if (User.TXProtocol.bufDeviceID == null)
+            if (user.TXProtocol.BufDeviceId == null)
             {
                 return new byte[] { };
             }
 
             var data = new BinaryWriter(new MemoryStream());
-            if (wSubVer == 0x0001)
+            if (WSubVer == 0x0001)
             {
-                data.BEWrite(wSubVer); //wSubVer
-                data.Write(User.TXProtocol.bufDeviceID);
+                data.BeWrite(WSubVer); //wSubVer
+                data.Write(user.TXProtocol.BufDeviceId);
             }
             else
             {
-                throw new Exception($"{Name} 无法识别的版本号 {wSubVer}");
+                throw new Exception($"{Name} 无法识别的版本号 {WSubVer}");
             }
 
-            fill_head(cmd);
-            fill_body(data.BaseStream.ToBytesArray(), data.BaseStream.Length);
-            set_length();
-            return get_buf();
+            FillHead(Command);
+            FillBody(data.BaseStream.ToBytesArray(), data.BaseStream.Length);
+            SetLength();
+            return GetBuffer();
         }
 
-        public void Parser_Tlv(QQUser User, BinaryReader buf)
+        public void Parser_Tlv(QQUser user, BinaryReader buf)
         {
-            var _type = buf.BEReadUInt16(); //type
-            var _length = buf.BEReadUInt16(); //length
-            if (wSubVer == 0x0001)
+            var type = buf.BeReadUInt16(); //type
+            var length = buf.BeReadUInt16(); //length
+            if (WSubVer == 0x0001)
             {
-                wSubVer = buf.BEReadUInt16(); //wSubVer
-                User.TXProtocol.bufDeviceID =
-                    buf.ReadBytes(_length - 2);
+                WSubVer = buf.BeReadUInt16(); //wSubVer
+                user.TXProtocol.BufDeviceId =
+                    buf.ReadBytes(length - 2);
             }
             else
             {
-                throw new Exception($"{Name} 无法识别的版本号 {wSubVer}");
+                throw new Exception($"{Name} 无法识别的版本号 {WSubVer}");
             }
         }
     }

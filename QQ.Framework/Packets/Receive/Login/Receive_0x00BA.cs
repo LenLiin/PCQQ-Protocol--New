@@ -5,13 +5,13 @@ namespace QQ.Framework.Packets.Receive.Login
     /// <summary>
     ///     验证码
     /// </summary>
-    public class Receive_0x00BA : ReceivePacket
+    public class Receive_0X00Ba : ReceivePacket
     {
         /// <summary>
         ///     验证码
         /// </summary>
-        public Receive_0x00BA(byte[] byteBuffer, QQUser User)
-            : base(byteBuffer, User, User.QQ_PACKET_00BA_Key)
+        public Receive_0X00Ba(byte[] byteBuffer, QQUser user)
+            : base(byteBuffer, user, user.QQPacket00BaKey)
         {
         }
 
@@ -22,34 +22,34 @@ namespace QQ.Framework.Packets.Receive.Login
 
         protected override void ParseBody()
         {
-            Decrypt(_secretKey);
-            VerifyType = reader.ReadByte();
-            reader.BEReadChar();
-            Status = reader.ReadByte();
-            reader.ReadBytes(4);
-            user.QQ_PACKET_00BAVerifyToken = reader.ReadBytes(reader.BEReadChar());
-            VerifyCode = reader.ReadBytes(reader.BEReadChar());
-            VerifyCommand = reader.ReadByte();
+            Decrypt(SecretKey);
+            VerifyType = Reader.ReadByte();
+            Reader.BeReadChar();
+            Status = Reader.ReadByte();
+            Reader.ReadBytes(4);
+            User.QQPacket00BaVerifyToken = Reader.ReadBytes(Reader.BeReadChar());
+            VerifyCode = Reader.ReadBytes(Reader.BeReadChar());
+            VerifyCommand = Reader.ReadByte();
             if (VerifyCommand == 0x00)
             {
-                VerifyCommand = reader.ReadByte();
+                VerifyCommand = Reader.ReadByte();
             }
 
-            reader.ReadByte();
-            if (user.QQ_PACKET_00BAVerifyCode?.Length == 0 || user.QQ_PACKET_00BAVerifyCode == null)
+            Reader.ReadByte();
+            if (User.QQPacket00BaVerifyCode?.Length == 0 || User.QQPacket00BaVerifyCode == null)
             {
-                user.QQ_PACKET_00BAVerifyCode = VerifyCode;
+                User.QQPacket00BaVerifyCode = VerifyCode;
             }
             else
             {
-                var resultArr = new byte[user.QQ_PACKET_00BAVerifyCode.Length + VerifyCode.Length];
-                user.QQ_PACKET_00BAVerifyCode.CopyTo(resultArr, 0);
-                VerifyCode.CopyTo(resultArr, user.QQ_PACKET_00BAVerifyCode.Length);
-                user.QQ_PACKET_00BAVerifyCode = resultArr;
+                var resultArr = new byte[User.QQPacket00BaVerifyCode.Length + VerifyCode.Length];
+                User.QQPacket00BaVerifyCode.CopyTo(resultArr, 0);
+                VerifyCode.CopyTo(resultArr, User.QQPacket00BaVerifyCode.Length);
+                User.QQPacket00BaVerifyCode = resultArr;
             }
 
-            user.TXProtocol.bufSigPic = reader.ReadBytes(reader.BEReadChar());
-            reader.ReadBytes(reader.BEReadChar());
+            User.TXProtocol.BufSigPic = Reader.ReadBytes(Reader.BeReadChar());
+            Reader.ReadBytes(Reader.BeReadChar());
         }
     }
 }

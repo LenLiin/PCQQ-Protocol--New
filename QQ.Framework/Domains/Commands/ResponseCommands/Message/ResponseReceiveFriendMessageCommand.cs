@@ -9,10 +9,10 @@ namespace QQ.Framework.Domains.Commands.ResponseCommands.Message
     /// <summary>
     ///     收到好友消息，回复已接收成功
     /// </summary>
-    [ResponsePacketCommand(QQCommand.Message0x00CE)]
-    public class ResponseReceiveFriendMessageCommand : ResponseCommand<Receive_0x00CE>
+    [ResponsePacketCommand(QQCommand.Message0X00Ce)]
+    public class ResponseReceiveFriendMessageCommand : ResponseCommand<Receive_0X00Ce>
     {
-        public ResponseReceiveFriendMessageCommand(QQEventArgs<Receive_0x00CE> args) : base(args)
+        public ResponseReceiveFriendMessageCommand(QQEventArgs<Receive_0X00Ce> args) : base(args)
         {
         }
 
@@ -33,12 +33,12 @@ namespace QQ.Framework.Domains.Commands.ResponseCommands.Message
                 _service.MessageLog($"收到好友{_packet.FromQQ}的空消息。");
             }
 
-            var dataReader = new BinaryReader(new MemoryStream(_packet.bodyDecrypted));
+            var dataReader = new BinaryReader(new MemoryStream(_packet.BodyDecrypted));
 
-            _service.Send(new Send_0x00CE(_user, dataReader.ReadBytes(0x10), _packet.Sequence));
+            _service.Send(new Send_0X00Ce(_user, dataReader.ReadBytes(0x10), _packet.Sequence));
 
             //查看消息确认
-            _service.Send(new Send_0x0319(_user, _packet.FromQQ, _packet.MessageDateTime));
+            _service.Send(new Send_0X0319(_user, _packet.FromQQ, _packet.MessageDateTime));
         }
     }
 }

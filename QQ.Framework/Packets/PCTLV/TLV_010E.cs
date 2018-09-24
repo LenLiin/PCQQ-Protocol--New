@@ -5,46 +5,46 @@ using QQ.Framework.Utils;
 namespace QQ.Framework.Packets.PCTLV
 {
     [TlvTag(TlvTags._0x010E)]
-    internal class TLV_010E : BaseTLV
+    internal class TLV010E : BaseTLV
     {
-        public TLV_010E()
+        public TLV010E()
         {
-            cmd = 0x010E;
+            Command = 0x010E;
             Name = "TLV_010E";
         }
 
-        public void Parser_Tlv(QQUser User, BinaryReader buf)
+        public void Parser_Tlv(QQUser user, BinaryReader buf)
         {
-            var _type = buf.BEReadUInt16(); //type
-            var _length = buf.BEReadUInt16(); //length
-            wSubVer = buf.BEReadUInt16(); //wSubVer
-            if (wSubVer == 0x0001)
+            var type = buf.BeReadUInt16(); //type
+            var length = buf.BeReadUInt16(); //length
+            WSubVer = buf.BeReadUInt16(); //wSubVer
+            if (WSubVer == 0x0001)
             {
-                int len = buf.BEReadUInt16();
+                int len = buf.BeReadUInt16();
                 var buffer = buf.ReadBytes(len);
                 var sig = new BinaryReader(new MemoryStream(buffer));
-                var dwUinLevel = sig.BEReadInt32();
-                var dwUinLevelEx = sig.BEReadInt32();
+                var dwUinLevel = sig.BeReadInt32();
+                var dwUinLevelEx = sig.BeReadInt32();
 
-                len = sig.BEReadUInt16();
+                len = sig.BeReadUInt16();
                 buffer = sig.ReadBytes(len);
-                var buf24byteSignature = buffer;
+                var buf24ByteSignature = buffer;
 
-                len = sig.BEReadUInt16();
+                len = sig.BeReadUInt16();
                 buffer = sig.ReadBytes(len);
-                var buf32byteValueAddedSignature = buffer;
+                var buf32ByteValueAddedSignature = buffer;
 
-                len = sig.BEReadUInt16();
+                len = sig.BeReadUInt16();
                 buffer = sig.ReadBytes(len);
-                var buf12byteUserBitmap = buffer;
+                var buf12ByteUserBitmap = buffer;
 
-                User.TXProtocol.ClientKey = buf32byteValueAddedSignature;
+                user.TXProtocol.ClientKey = buf32ByteValueAddedSignature;
                 //client.QQUser.ClientKeyString = Util.ToHex(buf32byteValueAddedSignature).Replace(" ", "");
                 //client.GetCookie();
             }
             else
             {
-                throw new Exception($"{Name} 无法识别的版本号 {wSubVer}");
+                throw new Exception($"{Name} 无法识别的版本号 {WSubVer}");
             }
         }
     }
