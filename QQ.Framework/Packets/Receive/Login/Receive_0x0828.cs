@@ -1,3 +1,5 @@
+using QQ.Framework.TlvLib;
+
 namespace QQ.Framework.Packets.Receive.Login
 {
     public class Receive_0x0828 : ReceivePacket
@@ -8,14 +10,15 @@ namespace QQ.Framework.Packets.Receive.Login
         }
 
         /// <summary>
-        /// 状态码
+        ///     状态码
         /// </summary>
         public byte Result { get; set; }
+
         protected override void ParseBody()
         {
             Decrypt(_secretKey);
             Result = reader.ReadByte();
-            var tlvs = TlvLib.Tlv.ParseTlv(reader.ReadBytes((int)(reader.BaseStream.Length - 1)));
+            var tlvs = Tlv.ParseTlv(reader.ReadBytes((int) (reader.BaseStream.Length - 1)));
             //重置指针（因为tlv解包后指针已经移动到末尾）
             reader.BaseStream.Position = 1;
             TlvExecutionProcessing(tlvs);

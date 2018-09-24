@@ -13,8 +13,9 @@ namespace QQ.Framework.Packets.PCTLV
             Name = "SSO2::TLV_DHParams_0x114";
             wSubVer = 0x0102;
         }
+
         /// <summary>
-        /// DHParams
+        ///     DHParams
         /// </summary>
         /// <param name="User"></param>
         /// <returns></returns>

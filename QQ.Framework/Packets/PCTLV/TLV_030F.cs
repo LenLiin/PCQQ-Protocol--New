@@ -16,7 +16,7 @@ namespace QQ.Framework.Packets.PCTLV
         public byte[] Get_Tlv(QQUser User)
         {
             var data = new BinaryWriter(new MemoryStream());
-            data.BEWrite((ushort)Encoding.UTF8.GetBytes(User.TXProtocol.bufComputerName).Length);
+            data.BEWrite((ushort) Encoding.UTF8.GetBytes(User.TXProtocol.bufComputerName).Length);
             data.Write(Encoding.UTF8.GetBytes(User.TXProtocol.bufComputerName));
             fill_head(cmd);
             fill_body(data.BaseStream.ToBytesArray(), data.BaseStream.Length);

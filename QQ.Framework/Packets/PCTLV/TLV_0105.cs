@@ -21,7 +21,7 @@ namespace QQ.Framework.Packets.PCTLV
             {
                 data.BEWrite(wSubVer); //wSubVer
                 data.Write(User.TXProtocol.xxoo_b);
-                data.Write((byte)2);
+                data.Write((byte) 2);
                 data.BEUshortWrite(0x0014);
                 data.BEWrite(0x01010010);
                 data.Write(Util.RandomKey());
@@ -42,8 +42,8 @@ namespace QQ.Framework.Packets.PCTLV
 
         public void Parser_Tlv(QQUser User, BinaryReader buf)
         {
-            var _type = buf.BEReadUInt16();//type
-            var _length = buf.BEReadUInt16();//length
+            var _type = buf.BEReadUInt16(); //type
+            var _length = buf.BEReadUInt16(); //length
             wSubVer = buf.BEReadUInt16(); //wSubVer
             if (wSubVer == 0x0001)
             {

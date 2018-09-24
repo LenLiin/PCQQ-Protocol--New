@@ -108,6 +108,7 @@ namespace QQ.Framework.Utils
 
             return CRC32ToUint(~num);
         }
+
         public static uint CRC32Reverse(byte[] ABytes)
         {
             MakeCRC32Table();
@@ -189,7 +190,10 @@ namespace QQ.Framework.Utils
         {
             var text = crc32.ToString("X2");
             if (text.Length == 7)
+            {
                 text = "0" + text;
+            }
+
             var text2 = "";
             for (var i = 6; i >= 0; i -= 2)
             {
@@ -199,7 +203,7 @@ namespace QQ.Framework.Utils
             uint result;
             try
             {
-                result = Convert.ToUInt32(text2.Replace(" ",""), 16);
+                result = Convert.ToUInt32(text2.Replace(" ", ""), 16);
             }
             catch
             {
@@ -208,13 +212,14 @@ namespace QQ.Framework.Utils
 
             return result;
         }
+
         private static uint CRC32ToUintReverse(uint crc32)
         {
             var text = crc32.ToString("X2");
             var text2 = "";
             for (var i = 6; i >= 0; i -= 2)
             {
-                text2 = text.Substring(i, 2) + " "+ text2;
+                text2 = text.Substring(i, 2) + " " + text2;
             }
 
             uint result;

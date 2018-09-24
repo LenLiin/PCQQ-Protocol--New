@@ -224,10 +224,10 @@ namespace QQ.Framework.Packets.Send.Message
 
         public long ConvertQQGroupId(long Code)
         {
-            string text = Code.ToString();
-            string text2 = text.Substring(0, text.Length - 6);
-            string arg = text.Substring(text.Length - 6, 6);
-            uint num = 0u;
+            var text = Code.ToString();
+            var text2 = text.Substring(0, text.Length - 6);
+            var arg = text.Substring(text.Length - 6, 6);
+            var num = 0u;
             if (text2.Length <= 0)
             {
                 num += 202;
@@ -260,6 +260,7 @@ namespace QQ.Framework.Packets.Send.Message
             {
                 num += 3490;
             }
+
             return long.Parse($"{num}{arg}");
         }
 

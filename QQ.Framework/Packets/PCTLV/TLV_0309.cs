@@ -13,8 +13,9 @@ namespace QQ.Framework.Packets.PCTLV
             Name = "SSO2::TLV_Ping_Strategy_0x309";
             wSubVer = 0x0001;
         }
+
         /// <summary>
-        /// Ping_Strategy
+        ///     Ping_Strategy
         /// </summary>
         /// <param name="User"></param>
         /// <returns></returns>
@@ -25,7 +26,7 @@ namespace QQ.Framework.Packets.PCTLV
             {
                 data.BEWrite(wSubVer); //wSubVer
                 data.Write(Util.IPStringToByteArray(User.TXProtocol.dwServerIP)); //LastServerIP - 服务器最后的登录IP，可以为0
-                data.Write((byte)User.TXProtocol.RedirectIP.Count); //cRedirectCount - 重定向的次数（IP的数量）
+                data.Write((byte) User.TXProtocol.RedirectIP.Count); //cRedirectCount - 重定向的次数（IP的数量）
                 foreach (var ip in User.TXProtocol.RedirectIP)
                 {
                     data.Write(ip);

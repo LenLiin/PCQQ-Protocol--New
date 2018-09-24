@@ -27,7 +27,7 @@ namespace QQ.Framework.Packets.PCTLV
                     data.BEWrite(User.TXProtocol.dwSSOVersion);
                     data.BEWrite(User.TXProtocol.dwServiceId);
                     data.BEWrite(User.TXProtocol.dwClientVer);
-                    data.BEWrite((ushort)0);
+                    data.BEWrite((ushort) 0);
                     data.Write(User.TXProtocol.bRememberPwdLogin);
                     data.Write(User.MD51); //密码的一次MD5值，服务器用该MD5值验证用户密码是否正确
                     data.BEWrite(User.TXProtocol.dwServerTime); //登录时间
@@ -57,8 +57,8 @@ namespace QQ.Framework.Packets.PCTLV
 
         public void Parser_Tlv(QQUser User, BinaryReader buf)
         {
-            var _type = buf.BEReadUInt16();//type
-            var _length = buf.BEReadUInt16();//length
+            var _type = buf.BEReadUInt16(); //type
+            var _length = buf.BEReadUInt16(); //length
             User.TXProtocol.bufTGTGT =
                 buf.ReadBytes(_length);
         }

@@ -147,7 +147,8 @@ namespace QQ.Framework
         /// </summary>
         public static bool DebugLog = true;
 
-        public static byte[] QQEXE_MD5 { get; set; } = { 0xfa, 0xcf, 0x7c, 0xc5, 0xae, 0x02, 0xe6, 0x65, 0x0c, 0x01, 0x07, 0xcd, 0xfe, 0x0e, 0x1b, 0x2c };
+        public static byte[] QQEXE_MD5 { get; set; } =
+            {0xfa, 0xcf, 0x7c, 0xc5, 0xae, 0x02, 0xe6, 0x65, 0x0c, 0x01, 0x07, 0xcd, 0xfe, 0x0e, 0x1b, 0x2c};
     }
 
     /// <summary>
@@ -430,7 +431,7 @@ namespace QQ.Framework
     }
 
     /// <summary>
-    /// Tlv类型枚举
+    ///     Tlv类型枚举
     /// </summary>
     public enum TlvTags
     {
@@ -480,17 +481,17 @@ namespace QQ.Framework
 
     public enum ResultCode
     {
-        成功=0x00,
-        需要更新TGTGT=0x01,
-        帐号被回收=0x33,
-        密码错误=0x34,
-        需要验证密保=0x3F,
-        DoMain=0xF8,
+        成功 = 0x00,
+        需要更新TGTGT = 0x01,
+        帐号被回收 = 0x33,
+        密码错误 = 0x34,
+        需要验证密保 = 0x3F,
+        DoMain = 0xF8,
         要求切换TCP = 0xF9,
         需要重新CheckTGTGT = 0xFA,
         需要验证码 = 0xFB,
         需要重定向 = 0xFE,
-        过载保护=0xFD,
+        过载保护 = 0xFD,
         其它错误 = 0xFF
     }
 }

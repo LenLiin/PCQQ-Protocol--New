@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using QQ.Framework.Utils;
 
 namespace QQ.Framework.TlvLib
 {
     /// <summary>
-    /// TLV data.
+    ///     TLV data.
     /// </summary>
     public class Tlv
     {
@@ -23,62 +24,66 @@ namespace QQ.Framework.TlvLib
         }
 
         /// <summary>
-        /// The raw TLV data.
+        ///     The raw TLV data.
         /// </summary>
-        public byte[] Data { get; private set; }
+        public byte[] Data { get; }
+
         /// <summary>
-        /// The raw TLV data.
+        ///     The raw TLV data.
         /// </summary>
         public string HexData => GetHexString(Data);
 
         /// <summary>
-        /// The TLV tag.
+        ///     The TLV tag.
         /// </summary>
-        public int Tag { get; private set; }
-        /// <summary>
-        /// The TLV tag.
-        /// </summary>
-        public string HexTag => Utils.Util.NumToHexString(Tag, 4);
+        public int Tag { get; }
 
         /// <summary>
-        /// The length of the TLV value.
+        ///     The TLV tag.
         /// </summary>
-        public int Length { get; private set; }
-        /// <summary>
-        /// The length of the TLV value.
-        /// </summary>
-        public string HexLength => Utils.Util.NumToHexString(Length, 4);
+        public string HexTag => Util.NumToHexString(Tag, 4);
 
         /// <summary>
-        /// The TLV value.
+        ///     The length of the TLV value.
+        /// </summary>
+        public int Length { get; }
+
+        /// <summary>
+        ///     The length of the TLV value.
+        /// </summary>
+        public string HexLength => Util.NumToHexString(Length, 4);
+
+        /// <summary>
+        ///     The TLV value.
         /// </summary>
         public byte[] Value
         {
             get
             {
-                byte[] result = new byte[Length];
+                var result = new byte[Length];
                 Array.Copy(Data, _valueOffset, result, 0, Length);
                 return result;
             }
         }
+
         /// <summary>
-        /// The TLV value.
+        ///     The TLV value.
         /// </summary>
         public string HexValue => GetHexString(Value);
 
         /// <summary>
-        /// TLV children.
+        ///     TLV children.
         /// </summary>
         public ICollection<Tlv> Children { get; set; }
 
         /// <summary>
-        /// Parse TLV data.
+        ///     Parse TLV data.
         /// </summary>
         /// <param name="tlv">The hex TLV blob.</param>
         /// <returns>A collection of TLVs.</returns>
         public static ICollection<Tlv> ParseTlv(string tlv)
         {
-            if(string.IsNullOrWhiteSpace(tlv))
+            if (string.IsNullOrWhiteSpace(tlv))
             {
                 throw new ArgumentException("tlv");
             }
@@ -87,13 +92,13 @@ namespace QQ.Framework.TlvLib
         }
 
         /// <summary>
-        /// Parse TLV data.
+        ///     Parse TLV data.
         /// </summary>
         /// <param name="tlv">The byte array TLV blob.</param>
         /// <returns>A collection of TLVs.</returns>
         public static ICollection<Tlv> ParseTlv(byte[] tlv)
         {
-            if(tlv == null || tlv.Length == 0)
+            if (tlv == null || tlv.Length == 0)
             {
                 throw new ArgumentException("tlv");
             }
@@ -106,16 +111,20 @@ namespace QQ.Framework.TlvLib
 
         private static void ParseTlv(byte[] rawTlv, ICollection<Tlv> result)
         {
-            for(int i = 0, start = 0; i < rawTlv.Length; start = i)
+            for (int i = 0, start = 0; i < rawTlv.Length; start = i)
             {
                 // parse Tag
-                bool constructedTlv = (rawTlv[i] & 0x20) != 0;
-                bool moreBytes = (rawTlv[i] & 0x1F) == 0x1F;
-                while(moreBytes && (rawTlv[++i] & 0x80) != 0) ;
-                //i++
-                i+=2;
+                var constructedTlv = (rawTlv[i] & 0x20) != 0;
+                var moreBytes = (rawTlv[i] & 0x1F) == 0x1F;
+                while (moreBytes && (rawTlv[++i] & 0x80) != 0)
+                {
+                    ;
+                }
 
-                int tag = GetInt(rawTlv, start, i - start);
+                //i++
+                i += 2;
+
+                var tag = GetInt(rawTlv, start, i - start);
 
                 //// parse Length
                 //bool multiByteLength = (rawTlv[i] & 0x80) != 0;
@@ -123,16 +132,16 @@ namespace QQ.Framework.TlvLib
                 //i = multiByteLength ? i + (rawTlv[i] & 0x1F) + 1 : i + 1;
                 i += 2;
                 start += 2;
-                int length = GetInt(rawTlv, start, i - start);
+                var length = GetInt(rawTlv, start, i - start);
 
                 i += length;
 
-                byte[] rawData = new byte[i - start];
+                var rawData = new byte[i - start];
                 Array.Copy(rawTlv, start, rawData, 0, i - start);
                 var tlv = new Tlv(tag, length, rawData.Length - length, rawData);
                 result.Add(tlv);
 
-                if(constructedTlv)
+                if (constructedTlv)
                 {
                     ParseTlv(tlv.Value, tlv.Children);
                 }
@@ -142,7 +151,7 @@ namespace QQ.Framework.TlvLib
         private static string GetHexString(byte[] arr)
         {
             var sb = new StringBuilder(arr.Length * 2);
-            foreach(byte b in arr)
+            foreach (var b in arr)
             {
                 sb.AppendFormat("{0:X2}", b);
             }
@@ -162,7 +171,7 @@ namespace QQ.Framework.TlvLib
         private static int GetInt(byte[] data, int offset, int length)
         {
             var result = 0;
-            for(var i = 0; i < length; i++)
+            for (var i = 0; i < length; i++)
             {
                 result = (result << 8) | data[offset + i];
             }

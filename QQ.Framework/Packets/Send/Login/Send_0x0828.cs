@@ -20,10 +20,10 @@ namespace QQ.Framework.Packets.Send.Login
         protected override void PutHeader()
         {
             base.PutHeader();
-            writer.Write(new byte[] { 0x02, 0x00, 0x00 });
+            writer.Write(new byte[] {0x02, 0x00, 0x00});
             writer.Write(user.TXProtocol.dwClientType);
             writer.Write(user.TXProtocol.dwPubNo);
-            writer.Write(new byte[] { 0x00, 0x30, 0x00, 0x3a});
+            writer.Write(new byte[] {0x00, 0x30, 0x00, 0x3a});
             writer.WriteKey(user.TXProtocol.bufSigSession);
         }
 

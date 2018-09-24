@@ -204,7 +204,7 @@ namespace QQ.Framework
         ///     密码一次MD5
         /// </summary>
         public byte[] MD51 { get; set; }
-        
+
         /// <summary>
         ///     QQ号
         /// </summary>
@@ -214,7 +214,7 @@ namespace QQ.Framework
         ///     本地端口，在QQ中其实只有两字节
         /// </summary>
         public int Port { get; set; }
-        
+
 
         /// <summary>
         ///     上一次登陆时间，在QQ中其实只有4字节
@@ -274,10 +274,8 @@ namespace QQ.Framework
 
         #region TXSSO  TLV参数
 
-
         public TXProtocol TXProtocol { get; set; } = new TXProtocol();
 
-       
         #endregion
 
         private void Initialize()

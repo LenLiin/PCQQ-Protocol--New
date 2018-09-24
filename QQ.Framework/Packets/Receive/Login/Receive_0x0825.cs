@@ -1,3 +1,5 @@
+using QQ.Framework.TlvLib;
+
 namespace QQ.Framework.Packets.Receive.Login
 {
     public class Receive_0x0825 : ReceivePacket
@@ -6,8 +8,9 @@ namespace QQ.Framework.Packets.Receive.Login
             : base(byteBuffer, User, User.QQ_PACKET_0825KEY)
         {
         }
+
         /// <summary>
-        /// ״̬��
+        ///     ״̬��
         /// </summary>
         public byte Result { get; set; }
 
@@ -15,7 +18,7 @@ namespace QQ.Framework.Packets.Receive.Login
         {
             Decrypt(!user.IsLoginRedirect ? user.QQ_PACKET_0825KEY : user.QQ_PACKET_REDIRECTIONKEY);
             Result = reader.ReadByte();
-            var tlvs = TlvLib.Tlv.ParseTlv(reader.ReadBytes((int)(reader.BaseStream.Length - 1)));
+            var tlvs = Tlv.ParseTlv(reader.ReadBytes((int) (reader.BaseStream.Length - 1)));
             reader.BaseStream.Position = 1;
             TlvExecutionProcessing(tlvs);
         }

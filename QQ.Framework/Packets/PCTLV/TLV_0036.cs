@@ -13,8 +13,9 @@ namespace QQ.Framework.Packets.PCTLV
             Name = "SSO2::TLV_LoginReason_0x36";
             wSubVer = 0x0002;
         }
+
         /// <summary>
-        /// LoginReason
+        ///     LoginReason
         /// </summary>
         /// <param name="User"></param>
         /// <returns></returns>

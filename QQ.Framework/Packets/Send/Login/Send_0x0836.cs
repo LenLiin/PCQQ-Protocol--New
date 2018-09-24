@@ -33,7 +33,7 @@ namespace QQ.Framework.Packets.Send.Login
             SendPACKET_FIX();
             writer.BEWrite(user.TXProtocol.SubVer);
             writer.BEWrite(user.TXProtocol.EcdhVer);
-            writer.BEWrite((ushort)0x19);
+            writer.BEWrite((ushort) 0x19);
             writer.Write(user.TXProtocol.bufDHPublicKey);
             writer.Write(new byte[] {0x00, 0x00, 0x00, 0x10});
             writer.Write(user.QQ_PACKET_0836_KEY1);
@@ -57,6 +57,7 @@ namespace QQ.Framework.Packets.Send.Login
                 bodyWriter.Write(new TLV_0110().Get_Tlv(user));
                 bodyWriter.Write(new TLV_0032().Get_Tlv(user));
             }
+
             bodyWriter.Write(new TLV_0312().Get_Tlv(user));
             bodyWriter.Write(new TLV_0508().Get_Tlv(user));
             bodyWriter.Write(new TLV_0313().Get_Tlv(user));

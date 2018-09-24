@@ -77,13 +77,13 @@ namespace QQ.Framework.Utils
 
         public static byte[] Int64_to_4byte(long paramLong)
         {
-            byte[] array = new byte[]
+            var array =
             {
-                0,0,0,(byte)((int)paramLong)
+                0, 0, 0, (byte) (int) paramLong
             };
-            array[2] = (byte)((int)(paramLong >> 8));
-            array[1] = (byte)((int)(paramLong >> 16));
-            array[0] = (byte)((int)(paramLong >> 24));
+            array[2] = (byte) (int) (paramLong >> 8);
+            array[1] = (byte) (int) (paramLong >> 16);
+            array[0] = (byte) (int) (paramLong >> 24);
             return array;
         }
 
@@ -102,8 +102,9 @@ namespace QQ.Framework.Utils
         {
             return Convert.ToUInt64(six.Replace(" ", ""), 16);
         }
+
         /// <summary>
-        /// 转换hex  长度不够前置补0
+        ///     转换hex  长度不够前置补0
         /// </summary>
         /// <param name="qq"></param>
         /// <param name="Length"></param>
@@ -337,31 +338,35 @@ namespace QQ.Framework.Utils
 
         public static string GET_GTK(string skey)
         {
-            int num = 5381;
-            for (int i = 0; i <= skey.Length - 1; i++)
+            var num = 5381;
+            for (var i = 0; i <= skey.Length - 1; i++)
             {
                 num += (num << 5) + Convert.ToInt32(char.Parse(skey.Substring(i, 1)));
             }
+
             return (num & 0x7FFFFFFF).ToString();
         }
+
         public static string GetAntiCSRFToken(string skey)
         {
-            string arg = "tencentQQVIP123443safde&!%^%1282";
-            List<int> list = new List<int>();
-            int num = 5381;
+            var arg = "tencentQQVIP123443safde&!%^%1282";
+            var list = new List<int>();
+            var num = 5381;
             list.Add(172192);
-            int i = 0;
-            for (int length = skey.Length; i < length; i++)
+            var i = 0;
+            for (var length = skey.Length; i < length; i++)
             {
                 int num2 = Encoding.UTF8.GetBytes(skey)[i];
                 list.Add((num << 5) + num2);
                 num = num2;
             }
-            StringBuilder stringBuilder = new StringBuilder();
+
+            var stringBuilder = new StringBuilder();
             for (i = 0; i < list.Count; i++)
             {
                 stringBuilder.Append(list[i].ToString());
             }
+
             return QQTea.Md5(stringBuilder + arg);
         }
 
@@ -374,7 +379,7 @@ namespace QQ.Framework.Utils
         {
             try
             {
-                string fileName = $"tencent://message/?uin={uin}&Site=qq&Menu=yes";
+                var fileName = $"tencent://message/?uin={uin}&Site=qq&Menu=yes";
                 Process.Start(fileName);
             }
             catch
@@ -509,6 +514,7 @@ namespace QQ.Framework.Utils
         {
             bw.Write(BitConverter.GetBytes(v).Reverse().ToArray());
         }
+
         public static void BEWrite(this BinaryWriter bw, DateTime v)
         {
             bw.BEWrite(GetTimeSeconds(v));
@@ -523,9 +529,10 @@ namespace QQ.Framework.Utils
         {
             bw.Write(BitConverter.GetBytes(v).Reverse().ToArray());
         }
+
         public static void BEUshortWrite(this BinaryWriter bw, ushort v)
         {
-           bw.BEWrite(v);
+            bw.BEWrite(v);
         }
 
         // 注意: 此处的long和ulong均为四个字节，而不是八个。
@@ -558,14 +565,15 @@ namespace QQ.Framework.Utils
         {
             return (uint) ((br.ReadByte() << 24) | (br.ReadByte() << 16) | (br.ReadByte() << 8) | br.ReadByte());
         }
+
         /// <summary>
-        /// 写入一串秘钥（因为结构需要前置秘钥长度）
+        ///     写入一串秘钥（因为结构需要前置秘钥长度）
         /// </summary>
         /// <param name="bw"></param>
         /// <param name="v"></param>
         public static void WriteKey(this BinaryWriter bw, byte[] v)
         {
-            bw.BEWrite((ushort)v.Length);
+            bw.BEWrite((ushort) v.Length);
             bw.Write(v);
         }
 

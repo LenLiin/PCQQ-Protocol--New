@@ -21,12 +21,12 @@ namespace QQ.Framework.Packets.PCTLV
             {
                 data.BEWrite(wSubVer); //wSubVer
 
-                data.Write((byte)0x01);
+                data.Write((byte) 0x01);
                 var thisKey = User.TXProtocol.bufComputerID;
                 data.BEWrite(CRC32.CRC32Reverse(thisKey));
                 data.WriteKey(thisKey);
 
-                data.Write((byte)0x02);
+                data.Write((byte) 0x02);
                 thisKey = User.TXProtocol.bufComputerIDEx;
                 data.BEWrite(CRC32.CRC32Reverse(thisKey));
                 data.WriteKey(thisKey);

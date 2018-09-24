@@ -154,7 +154,7 @@ namespace QQ.Framework
         internal void OnReceive_0x0836_871(QQEventArgs<Receive_0x0836> e)
         {
             //请求验证码
-            if (e.ReceivePacket.Result == (byte)ResultCode.需要验证码)
+            if (e.ReceivePacket.Result == (byte) ResultCode.需要验证码)
             {
                 Send(new Send_0x00BA(e.ReceivePacket.user, "").WriteData());
             }

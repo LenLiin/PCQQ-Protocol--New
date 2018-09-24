@@ -15,10 +15,11 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
 
         public override void Process()
         {
-            if (_packet.Result != (byte)ResultCode.成功)
+            if (_packet.Result != (byte) ResultCode.成功)
             {
                 _service.MessageLog(_packet.ErrorMsg);
             }
+
             Response();
         }
     }

@@ -41,7 +41,7 @@ namespace QQ.Framework.Packets.PCTLV
 
         public void fill_body(byte[] bufdata, long length)
         {
-            buf.BEWrite((ushort)length);
+            buf.BEWrite((ushort) length);
             buf.Write(bufdata);
         }
 
@@ -55,11 +55,9 @@ namespace QQ.Framework.Packets.PCTLV
             return buf.BaseStream.ToBytesArray();
         }
 
-       
 
         public void set_length()
         {
-            
         }
     }
 }

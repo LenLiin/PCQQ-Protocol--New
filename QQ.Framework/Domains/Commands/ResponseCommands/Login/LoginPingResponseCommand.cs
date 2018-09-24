@@ -16,7 +16,7 @@ namespace QQ.Framework.Domains.Commands.ResponseCommands.Login
         {
             if (_packet.Result == 0xFE)
             {
-                _service.MessageLog($"服务器{ _user.TXProtocol.dwRedirectIP}重定向");
+                _service.MessageLog($"服务器{_user.TXProtocol.dwRedirectIP}重定向");
                 //如果是登陆重定向，继续登陆
                 _user.IsLoginRedirect = true;
                 //刷新重定向后服务器IP

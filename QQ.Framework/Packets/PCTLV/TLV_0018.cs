@@ -13,8 +13,9 @@ namespace QQ.Framework.Packets.PCTLV
             Name = "SSO2::TLV_Ping_0x18";
             wSubVer = 0x0001;
         }
+
         /// <summary>
-        /// Ping
+        ///     Ping
         /// </summary>
         /// <param name="User"></param>
         /// <returns></returns>
@@ -27,9 +28,9 @@ namespace QQ.Framework.Packets.PCTLV
                 data.BEWrite(User.TXProtocol.dwSSOVersion); //dwSSOVersion
                 data.BEWrite(User.TXProtocol.dwServiceId); //dwServiceId
                 data.BEWrite(User.TXProtocol.dwClientVer); //dwClientVer
-                data.BEWrite((uint)User.QQ); //dwUin
+                data.BEWrite((uint) User.QQ); //dwUin
                 data.BEWrite(User.TXProtocol.wRedirectCount); //wRedirectCount 
-                data.BEWrite((ushort)0); //NullBuf
+                data.BEWrite((ushort) 0); //NullBuf
             }
             else
             {

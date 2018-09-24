@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -111,10 +112,10 @@ namespace QQ.Framework.Packets
 
 
         /// <summary>
-        /// 通过反射执行TLV返回包解析
+        ///     通过反射执行TLV返回包解析
         /// </summary>
         /// <param name="tlvs"></param>
-        internal void TlvExecutionProcessing(System.Collections.Generic.ICollection<Tlv> tlvs)
+        internal void TlvExecutionProcessing(ICollection<Tlv> tlvs)
         {
             var types = Assembly.GetExecutingAssembly().GetTypes();
             foreach (var tlv in tlvs)
@@ -128,12 +129,12 @@ namespace QQ.Framework.Packets
                     }
 
                     var attribute = attributes.First(attr => attr is TlvTagAttribute) as TlvTagAttribute;
-                    if ((int)attribute.Tag == tlv.Tag)
+                    if ((int) attribute.Tag == tlv.Tag)
                     {
                         var tlvClass = Assembly.GetExecutingAssembly().CreateInstance(type.FullName, true);
 
-                        MethodInfo methodinfo = type.GetMethod("Parser_Tlv");
-                        methodinfo.Invoke(tlvClass, new object[] { user, reader });
+                        var methodinfo = type.GetMethod("Parser_Tlv");
+                        methodinfo.Invoke(tlvClass, new object[] {user, reader});
                     }
                 }
             }

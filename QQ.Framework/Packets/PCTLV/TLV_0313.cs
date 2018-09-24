@@ -19,9 +19,9 @@ namespace QQ.Framework.Packets.PCTLV
             var data = new BinaryWriter(new MemoryStream());
             if (wSubVer == 0x01)
             {
-                data.Write((byte)1); 
-                data.Write((byte)1); 
-                data.Write((byte)2); 
+                data.Write((byte) 1);
+                data.Write((byte) 1);
+                data.Write((byte) 2);
                 data.WriteKey(User.TXProtocol.bufMacGuid);
                 data.BEWrite(2);
             }

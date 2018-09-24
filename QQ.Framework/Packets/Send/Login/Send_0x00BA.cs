@@ -43,10 +43,10 @@ namespace QQ.Framework.Packets.Send.Login
             {
                 bodyWriter.Write(new byte[] {0x13, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00});
                 bodyWriter.Write(user.QQ_PACKET_00BASequence);
-                bodyWriter.BEWrite((ushort)user.TXProtocol.bufSigPic.Length);
+                bodyWriter.BEWrite((ushort) user.TXProtocol.bufSigPic.Length);
                 if (user.TXProtocol.bufSigPic.Length == 0)
                 {
-                    bodyWriter.Write((byte)0x00);
+                    bodyWriter.Write((byte) 0x00);
                 }
                 else
                 {

@@ -19,16 +19,17 @@ namespace QQ.Framework.Packets.PCTLV
 
         public void Parser_Tlv(QQUser User, BinaryReader buf)
         {
-            var _type = buf.BEReadUInt16();//type
-            var _length = buf.BEReadUInt16();//length
+            var _type = buf.BEReadUInt16(); //type
+            var _length = buf.BEReadUInt16(); //length
             Parser_Tlv2(User, buf, _length);
         }
-        public void Parser_Tlv2(QQUser User, BinaryReader buf,int Length)
+
+        public void Parser_Tlv2(QQUser User, BinaryReader buf, int Length)
         {
             wSubVer = buf.BEReadUInt16(); //wSubVer
             if (wSubVer == 0x0001)
             {
-                PacketCommand = (char)buf.BEReadUInt16();
+                PacketCommand = (char) buf.BEReadUInt16();
                 var ErrorCode = buf.BEReadUInt32();
                 ErrorMsg = Encoding.UTF8.GetString(buf.ReadBytes(buf.BEReadUInt16()));
             }

@@ -19,23 +19,24 @@ namespace QQ.Framework.Packets.PCTLV
             var data = new BinaryWriter(new MemoryStream());
             if (wSubVer == 0x0002)
             {
-                data.BEWrite(this.wSubVer); //wSubVer
+                data.BEWrite(wSubVer); //wSubVer
                 var newbyte = User.TXProtocol.bufTGT;
                 var flag = EncodeLoginFlag(newbyte, QQGlobal.QQEXE_MD5);
                 data.Write(User.MD51);
                 data.Write(flag);
-                data.Write((byte)0x10);
+                data.Write((byte) 0x10);
                 data.BEWrite(0);
                 data.BEWrite(2);
-                byte[] qddata = QdData.GetQdData(User);
+                var qddata = QdData.GetQdData(User);
                 data.WriteKey(qddata);
                 data.BEWrite(0);
             }
             else
             {
-                throw new Exception($"{this.Name} 无法识别的版本号 {this.wSubVer}");
+                throw new Exception($"{Name} 无法识别的版本号 {wSubVer}");
             }
-            fill_head(this.cmd);
+
+            fill_head(cmd);
             fill_body(data.BaseStream.ToBytesArray(), data.BaseStream.Length);
             set_length();
             return get_buf();

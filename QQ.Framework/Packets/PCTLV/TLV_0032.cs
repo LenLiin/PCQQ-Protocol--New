@@ -14,7 +14,7 @@ namespace QQ.Framework.Packets.PCTLV
 
         public byte[] Get_Tlv(QQUser User)
         {
-            byte[] qddata = QdData.GetQdData(User);
+            var qddata = QdData.GetQdData(User);
             fill_head(cmd);
             fill_body(qddata, qddata.Length);
             set_length();

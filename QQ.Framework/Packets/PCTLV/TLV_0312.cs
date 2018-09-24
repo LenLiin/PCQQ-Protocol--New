@@ -15,7 +15,7 @@ namespace QQ.Framework.Packets.PCTLV
         public byte[] Get_Tlv(QQUser User)
         {
             var data = new BinaryWriter(new MemoryStream());
-            data.Write((byte)1);
+            data.Write((byte) 1);
             data.BEWrite(1);
             fill_head(cmd);
             fill_body(data.BaseStream.ToBytesArray(), data.BaseStream.Length);

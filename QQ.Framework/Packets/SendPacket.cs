@@ -11,7 +11,7 @@ namespace QQ.Framework.Packets
         /// <summary>
         ///     包起始序列号
         /// </summary>
-        protected static char seq = (char)0x3635;// (char)Util.Random.Next();
+        protected static char seq = (char) 0x3635; // (char)Util.Random.Next();
 
         public MemoryStream bodyStream;
         public BinaryWriter bodyWriter;
@@ -51,12 +51,13 @@ namespace QQ.Framework.Packets
             writer.Write(QQGlobal.QQ_HEADER_BASIC_FAMILY);
             writer.Write(user.TXProtocol.cMainVer);
             writer.Write(user.TXProtocol.cSubVer);
-            writer.BEWrite((ushort)Command);
+            writer.BEWrite((ushort) Command);
             writer.BEWrite(Sequence);
             writer.BEWrite(user.QQ);
         }
+
         /// <summary>
-        /// 包头描述部分
+        ///     包头描述部分
         /// </summary>
         protected void SendPACKET_FIX()
         {
