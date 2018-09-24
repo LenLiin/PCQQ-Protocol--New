@@ -14,6 +14,8 @@ namespace QQ.Framework.Domains.Commands.ResponseCommands.Login
         public override void Process()
         {
             _service.Send(new Send_0X001D(_user));
+            _service.Send(new Send_0X0195(_user));
+            _service.Send(new Send_0X019B(_user));
         }
     }
 }

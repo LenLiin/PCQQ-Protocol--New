@@ -305,6 +305,11 @@ namespace QQ.Framework
         ///     获取基本资料
         /// </summary>
         Data0X005C = 0x005C,
+        /// <summary>
+        /// 获取群分组
+        /// </summary>
+        Data0X0195 = 0x0195,
+        Data0X019B = 0x019B,
 
         /// <summary>
         ///     群消息
