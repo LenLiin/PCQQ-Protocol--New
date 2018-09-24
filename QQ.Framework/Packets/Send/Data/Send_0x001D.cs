@@ -1,19 +1,19 @@
 namespace QQ.Framework.Packets.Send.Data
 {
-    public class Send_0x001D : SendPacket
+    public class Send_0X001D : SendPacket
     {
-        public Send_0x001D(QQUser User)
-            : base(User)
+        public Send_0X001D(QQUser user)
+            : base(user)
         {
             Sequence = GetNextSeq();
-            _secretKey = User.TXProtocol.SessionKey;
-            Command = QQCommand.Data0x001D;
+            SecretKey = user.TXProtocol.SessionKey;
+            Command = QQCommand.Data0X001D;
         }
 
         protected override void PutHeader()
         {
             base.PutHeader();
-            writer.Write(user.QQ_PACKET_FIXVER);
+            Writer.Write(User.QQPacketFixver);
         }
 
         /// <summary>
@@ -21,7 +21,7 @@ namespace QQ.Framework.Packets.Send.Data
         /// </summary>
         protected override void PutBody()
         {
-            bodyWriter.Write(new byte[]
+            BodyWriter.Write(new byte[]
             {
                 0x33, 0x00, 0x05, 0x00, 0x08, 0x74, 0x2E, 0x71, 0x71, 0x2E, 0x63, 0x6F, 0x6D, 0x00, 0x0A,
                 0x71, 0x75, 0x6E, 0x2E, 0x71, 0x71, 0x2E, 0x63, 0x6F, 0x6D, 0x00, 0x0C, 0x71, 0x7A, 0x6F, 0x6E, 0x65,

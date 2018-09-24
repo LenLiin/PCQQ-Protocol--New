@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using QQ.Framework.Utils;
 
@@ -11,23 +10,23 @@ namespace QQ.Framework.Packets.PCTLV
         /// <summary>
         ///     包长度
         /// </summary>
-        internal long body_len;
+        internal long BodyLength;
 
-        public BinaryWriter buf;
+        protected readonly BinaryWriter _buffer;
 
         /// <summary>
         ///     tlv命令
         /// </summary>
-        internal ushort cmd;
+        internal ushort Command;
 
         /// <summary>
         ///     包头长度
         /// </summary>
-        internal int head_len = 4;
+        internal int HeadLength = 4;
 
         public BaseTLV()
         {
-            buf = new BinaryWriter(new MemoryStream());
+            _buffer = new BinaryWriter(new MemoryStream());
         }
 
         /// <summary>
@@ -38,29 +37,27 @@ namespace QQ.Framework.Packets.PCTLV
         /// <summary>
         ///     TLV版本
         /// </summary>
-        public ushort wSubVer { get; set; }
+        public ushort WSubVer { get; set; }
 
-        public void fill_body(byte[] bufdata, long length)
+        protected void FillBody(byte[] bufdata, long length)
         {
-            buf.BEWrite((ushort)length);
-            buf.Write(bufdata);
+            _buffer.BeWrite((ushort) length);
+            _buffer.Write(bufdata);
         }
 
-        public void fill_head(ushort cmd)
+        protected void FillHead(ushort cmd)
         {
-            buf.BEWrite(cmd);
+            _buffer.BeWrite(cmd);
         }
 
-        public byte[] get_buf()
+        protected byte[] GetBuffer()
         {
-            return buf.BaseStream.ToBytesArray();
+            return _buffer.BaseStream.ToBytesArray();
         }
 
-       
 
-        public void set_length()
+        protected void SetLength()
         {
-            
         }
     }
 }

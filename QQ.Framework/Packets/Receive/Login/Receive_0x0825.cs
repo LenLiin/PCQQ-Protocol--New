@@ -1,26 +1,25 @@
-using QQ.Framework.Packets.PCTLV;
 using QQ.Framework.TlvLib;
-using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.Receive.Login
 {
-    public class Receive_0x0825 : ReceivePacket
+    public class Receive_0X0825 : ReceivePacket
     {
-        public Receive_0x0825(byte[] byteBuffer, QQUser User)
-            : base(byteBuffer, User, User.QQ_PACKET_0825KEY)
+        public Receive_0X0825(byte[] byteBuffer, QQUser user)
+            : base(byteBuffer, user, user.QQPacket0825Key)
         {
         }
+
         /// <summary>
-        /// ״̬��
+        ///     ״̬��
         /// </summary>
         public byte Result { get; set; }
 
         protected override void ParseBody()
         {
-            Decrypt(!user.IsLoginRedirect ? user.QQ_PACKET_0825KEY : user.QQ_PACKET_REDIRECTIONKEY);
-            Result = reader.ReadByte();
-            var tlvs = TlvLib.Tlv.ParseTlv(reader.ReadBytes((int)(reader.BaseStream.Length - 1)));
-            reader.BaseStream.Position = 1;
+            Decrypt(!User.IsLoginRedirect ? User.QQPacket0825Key : User.QQPacketRedirectionkey);
+            Result = Reader.ReadByte();
+            var tlvs = Tlv.ParseTlv(Reader.ReadBytes((int) (Reader.BaseStream.Length - 1)));
+            Reader.BaseStream.Position = 1;
             TlvExecutionProcessing(tlvs);
         }
     }

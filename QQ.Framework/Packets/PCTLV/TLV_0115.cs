@@ -1,23 +1,22 @@
 using System.IO;
-using QQ.Framework;
 using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.PCTLV
 {
     [TlvTag(TlvTags.PacketMd5)]
-    internal class TLV_0115 : BaseTLV
+    internal class TLV0115 : BaseTLV
     {
-        public TLV_0115()
+        public TLV0115()
         {
-            cmd = 0x0115;
+            Command = 0x0115;
             Name = "SSO2::TLV_PacketMd5_0x115";
         }
 
-        public void Parser_Tlv(QQUser User, BinaryReader buf)
+        public void Parser_Tlv(QQUser user, BinaryReader buf)
         {
-            var _type = buf.BEReadUInt16();//type
-            var _length = buf.BEReadUInt16();//length
-            var bufPacketMD5 = buf.ReadBytes(_length);
+            var type = buf.BeReadUInt16(); //type
+            var length = buf.BeReadUInt16(); //length
+            var bufPacketMD5 = buf.ReadBytes(length);
         }
     }
 }

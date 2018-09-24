@@ -1,41 +1,39 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using QQ.Framework;
 using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.PCTLV
 {
     [TlvTag(TlvTags.GUID_Ex)]
-    internal class TLV_0313 : BaseTLV
+    internal class TLV0313 : BaseTLV
     {
-        public TLV_0313()
+        public TLV0313()
         {
-            cmd = 0x0313;
+            Command = 0x0313;
             Name = "SSO2::TLV_GUID_Ex_0x313";
-            wSubVer = 0x01;
+            WSubVer = 0x01;
         }
 
-        public byte[] Get_Tlv(QQUser User)
+        public byte[] Get_Tlv(QQUser user)
         {
             var data = new BinaryWriter(new MemoryStream());
-            if (wSubVer == 0x01)
+            if (WSubVer == 0x01)
             {
-                data.Write((byte)1); 
-                data.Write((byte)1); 
-                data.Write((byte)2); 
-                data.WriteKey(User.TXProtocol.bufMacGuid);
-                data.BEWrite(2);
+                data.Write((byte) 1);
+                data.Write((byte) 1);
+                data.Write((byte) 2);
+                data.WriteKey(user.TXProtocol.BufMacGuid);
+                data.BeWrite(2);
             }
             else
             {
-                throw new Exception($"{Name} 无法识别的版本号 {wSubVer}");
+                throw new Exception($"{Name} 无法识别的版本号 {WSubVer}");
             }
 
-            fill_head(cmd);
-            fill_body(data.BaseStream.ToBytesArray(), data.BaseStream.Length);
-            set_length();
-            return get_buf();
+            FillHead(Command);
+            FillBody(data.BaseStream.ToBytesArray(), data.BaseStream.Length);
+            SetLength();
+            return GetBuffer();
         }
     }
 }

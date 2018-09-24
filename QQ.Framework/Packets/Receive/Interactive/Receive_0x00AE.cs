@@ -1,23 +1,23 @@
 namespace QQ.Framework.Packets.Receive.Interactive
 {
-    public class Receive_0x00AE : ReceivePacket
+    public class Receive_0X00Ae : ReceivePacket
     {
         /// <summary>
         /// </summary>
-        public Receive_0x00AE(byte[] byteBuffer, QQUser User)
-            : base(byteBuffer, User, User.TXProtocol.SessionKey)
+        public Receive_0X00Ae(byte[] byteBuffer, QQUser user)
+            : base(byteBuffer, user, user.TXProtocol.SessionKey)
         {
         }
 
-        public AddFriendType addFriendType { get; set; }
+        public AddFriendType AddFriendType { get; set; }
 
         protected override void ParseBody()
         {
-            Decrypt(user.TXProtocol.SessionKey);
-            reader.ReadBytes(2);
-            addFriendType = (AddFriendType) reader.Read();
-            reader.ReadBytes(3);
-            user.AddFriend_0020Value = reader.ReadBytes(32);
+            Decrypt(User.TXProtocol.SessionKey);
+            Reader.ReadBytes(2);
+            AddFriendType = (AddFriendType) Reader.Read();
+            Reader.ReadBytes(3);
+            User.AddFriend0020Value = Reader.ReadBytes(32);
         }
     }
 }

@@ -5,20 +5,20 @@ namespace QQ.Framework.Utils
 {
     public class CRC32
     {
-        private static ushort[] CRC16Table;
+        private static ushort[] _crc16Table;
 
-        private static uint[] CRC32Table;
+        private static uint[] _crc32Table;
 
-        protected static ulong[] Crc32Table;
+        protected static ulong[] _crc32Table2;
 
         private static void MakeCRC16Table()
         {
-            if (CRC16Table != null)
+            if (_crc16Table != null)
             {
                 return;
             }
 
-            CRC16Table = new ushort[256];
+            _crc16Table = new ushort[256];
             for (ushort num = 0; num < 256; num += 1)
             {
                 var num2 = num;
@@ -34,18 +34,18 @@ namespace QQ.Framework.Utils
                     }
                 }
 
-                CRC16Table[num] = num2;
+                _crc16Table[num] = num2;
             }
         }
 
         private static void MakeCRC32Table()
         {
-            if (CRC32Table != null)
+            if (_crc32Table != null)
             {
                 return;
             }
 
-            CRC32Table = new uint[256];
+            _crc32Table = new uint[256];
             for (var num = 0u; num < 256u; num += 1u)
             {
                 var num2 = num;
@@ -61,25 +61,25 @@ namespace QQ.Framework.Utils
                     }
                 }
 
-                CRC32Table[(int) (UIntPtr) num] = num2;
+                _crc32Table[(int) (UIntPtr) num] = num2;
             }
         }
 
-        private static ushort UpdateCRC16(byte AByte, ushort ASeed)
+        private static ushort UpdateCRC16(byte aByte, ushort aSeed)
         {
-            return (ushort) (CRC16Table[(ASeed & 255) ^ AByte] ^ (ASeed >> 8));
+            return (ushort) (_crc16Table[(aSeed & 255) ^ aByte] ^ (aSeed >> 8));
         }
 
-        private static uint UpdateCRC32(byte AByte, uint ASeed)
+        private static uint UpdateCRC32(byte aByte, uint aSeed)
         {
-            return CRC32Table[(int) (UIntPtr) ((ASeed & 255u) ^ AByte)] ^ (ASeed >> 8);
+            return _crc32Table[(int) (UIntPtr) ((aSeed & 255u) ^ aByte)] ^ (aSeed >> 8);
         }
 
-        private static ushort CRC16(byte[] ABytes)
+        private static ushort CRC16(byte[] aBytes)
         {
             MakeCRC16Table();
             ushort num = 65535;
-            foreach (var aByte in ABytes)
+            foreach (var aByte in aBytes)
             {
                 num = UpdateCRC16(aByte, num);
             }
@@ -87,32 +87,33 @@ namespace QQ.Framework.Utils
             return num;
         }
 
-        private static ushort CRC16(string AString, Encoding AEncoding)
+        private static ushort CRC16(string aString, Encoding aEncoding)
         {
-            return CRC16(AEncoding.GetBytes(AString));
+            return CRC16(aEncoding.GetBytes(aString));
         }
 
-        private static ushort CRC16(string AString)
+        private static ushort CRC16(string aString)
         {
-            return CRC16(AString, Encoding.UTF8);
+            return CRC16(aString, Encoding.UTF8);
         }
 
-        public static uint CRC32Imp(byte[] ABytes)
+        public static uint CRC32Imp(byte[] aBytes)
         {
             MakeCRC32Table();
             var num = 4294967295u;
-            foreach (var aByte in ABytes)
+            foreach (var aByte in aBytes)
             {
                 num = UpdateCRC32(aByte, num);
             }
 
             return CRC32ToUint(~num);
         }
-        public static uint CRC32Reverse(byte[] ABytes)
+
+        public static uint CRC32Reverse(byte[] aBytes)
         {
             MakeCRC32Table();
             var num = 4294967295u;
-            foreach (var aByte in ABytes)
+            foreach (var aByte in aBytes)
             {
                 num = UpdateCRC32(aByte, num);
             }
@@ -123,25 +124,25 @@ namespace QQ.Framework.Utils
         //生成CRC32码表
         public static void GetCRC32Table()
         {
-            Crc32Table = new ulong[256];
+            _crc32Table2 = new ulong[256];
             int i;
             for (i = 0; i < 256; i++)
             {
-                var Crc = (ulong) i;
+                var crc = (ulong) i;
                 int j;
                 for (j = 8; j > 0; j--)
                 {
-                    if ((Crc & 1) == 1)
+                    if ((crc & 1) == 1)
                     {
-                        Crc = (Crc >> 1) ^ 0xEDB88320;
+                        crc = (crc >> 1) ^ 0xEDB88320;
                     }
                     else
                     {
-                        Crc >>= 1;
+                        crc >>= 1;
                     }
                 }
 
-                Crc32Table[i] = Crc;
+                _crc32Table2[i] = crc;
             }
         }
 
@@ -155,7 +156,7 @@ namespace QQ.Framework.Utils
             var len = buffer.Length;
             for (var i = 0; i < len; i++)
             {
-                value = (value >> 8) ^ Crc32Table[(value & 0xFF) ^ buffer[i]];
+                value = (value >> 8) ^ _crc32Table2[(value & 0xFF) ^ buffer[i]];
             }
 
             return value ^ 0xffffffff;
@@ -169,27 +170,30 @@ namespace QQ.Framework.Utils
             var len = buffer.Length;
             for (var i = 0; i < len; i++)
             {
-                value = (value >> 8) ^ Crc32Table[(value & 0xFF) ^ buffer[i]];
+                value = (value >> 8) ^ _crc32Table2[(value & 0xFF) ^ buffer[i]];
             }
 
             return value ^ 0xffffffff;
         }
 
-        private static uint CRC32Imp(string AString, Encoding AEncoding)
+        private static uint CRC32Imp(string aString, Encoding aEncoding)
         {
-            return CRC32Imp(AEncoding.GetBytes(AString));
+            return CRC32Imp(aEncoding.GetBytes(aString));
         }
 
-        private static uint CRC32Imp(string AString)
+        private static uint CRC32Imp(string aString)
         {
-            return CRC32Imp(AString, Encoding.UTF8);
+            return CRC32Imp(aString, Encoding.UTF8);
         }
 
         private static uint CRC32ToUint(uint crc32)
         {
             var text = crc32.ToString("X2");
             if (text.Length == 7)
+            {
                 text = "0" + text;
+            }
+
             var text2 = "";
             for (var i = 6; i >= 0; i -= 2)
             {
@@ -199,7 +203,7 @@ namespace QQ.Framework.Utils
             uint result;
             try
             {
-                result = Convert.ToUInt32(text2.Replace(" ",""), 16);
+                result = Convert.ToUInt32(text2.Replace(" ", ""), 16);
             }
             catch
             {
@@ -208,13 +212,14 @@ namespace QQ.Framework.Utils
 
             return result;
         }
+
         private static uint CRC32ToUintReverse(uint crc32)
         {
             var text = crc32.ToString("X2");
             var text2 = "";
             for (var i = 6; i >= 0; i -= 2)
             {
-                text2 = text.Substring(i, 2) + " "+ text2;
+                text2 = text.Substring(i, 2) + " " + text2;
             }
 
             uint result;

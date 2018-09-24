@@ -5,18 +5,18 @@ namespace QQ.Framework.Packets.Send.Login
     /// <summary>
     ///     验证码
     /// </summary>
-    public class Send_0x00BA : SendPacket
+    public class Send_0X00Ba : SendPacket
     {
         /// <summary>
         ///     验证码提交
         /// </summary>
-        public Send_0x00BA(QQUser User, string VerifyCode)
-            : base(User)
+        public Send_0X00Ba(QQUser user, string verifyCode)
+            : base(user)
         {
             Sequence = GetNextSeq();
-            _secretKey = user.QQ_PACKET_00BA_Key;
-            Command = QQCommand.Login0x00BA;
-            this.VerifyCode = VerifyCode;
+            SecretKey = User.QQPacket00BaKey;
+            Command = QQCommand.Login0X00Ba;
+            this.VerifyCode = verifyCode;
         }
 
         private string VerifyCode { get; }
@@ -24,8 +24,8 @@ namespace QQ.Framework.Packets.Send.Login
         protected override void PutHeader()
         {
             base.PutHeader();
-            writer.Write(user.QQ_PACKET_FIXVER);
-            writer.Write(_secretKey);
+            Writer.Write(User.QQPacketFixver);
+            Writer.Write(SecretKey);
         }
 
         /// <summary>
@@ -33,46 +33,46 @@ namespace QQ.Framework.Packets.Send.Login
         /// </summary>
         protected override void PutBody()
         {
-            bodyWriter.Write(new byte[] {0x00, 0x02, 0x00, 0x00, 0x08, 0x04, 0x01, 0xE0});
-            bodyWriter.Write(user.QQ_PACKET_0825DATA2);
-            bodyWriter.Write((byte) 0x00);
-            bodyWriter.WriteKey(user.TXProtocol.bufSigClientAddr);
-            bodyWriter.Write(new byte[] {0x01, 0x02});
-            bodyWriter.WriteKey(user.TXProtocol.bufDHPublicKey);
+            BodyWriter.Write(new byte[] {0x00, 0x02, 0x00, 0x00, 0x08, 0x04, 0x01, 0xE0});
+            BodyWriter.Write(User.QQPacket0825Data2);
+            BodyWriter.Write((byte) 0x00);
+            BodyWriter.WriteKey(User.TXProtocol.BufSigClientAddr);
+            BodyWriter.Write(new byte[] {0x01, 0x02});
+            BodyWriter.WriteKey(User.TXProtocol.BufDhPublicKey);
             if (string.IsNullOrEmpty(VerifyCode))
             {
-                bodyWriter.Write(new byte[] {0x13, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00});
-                bodyWriter.Write(user.QQ_PACKET_00BASequence);
-                bodyWriter.BEWrite((ushort)user.TXProtocol.bufSigPic.Length);
-                if (user.TXProtocol.bufSigPic.Length == 0)
+                BodyWriter.Write(new byte[] {0x13, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00});
+                BodyWriter.Write(User.QQPacket00BaSequence);
+                BodyWriter.BeWrite((ushort) User.TXProtocol.BufSigPic.Length);
+                if (User.TXProtocol.BufSigPic.Length == 0)
                 {
-                    bodyWriter.Write((byte)0x00);
+                    BodyWriter.Write((byte) 0x00);
                 }
                 else
                 {
-                    bodyWriter.Write(user.TXProtocol.bufSigPic);
+                    BodyWriter.Write(User.TXProtocol.BufSigPic);
                 }
             }
             else
             {
-                var VerifyCodeBytes = Util.HexStringToByteArray(Util.ConvertStringToHex(VerifyCode));
-                bodyWriter.Write(new byte[] {0x14, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00});
-                bodyWriter.BEWrite((ushort) VerifyCodeBytes.Length);
-                bodyWriter.Write(VerifyCodeBytes);
-                bodyWriter.BEWrite((ushort) user.QQ_PACKET_00BAVerifyToken.Length);
-                bodyWriter.Write(user.QQ_PACKET_00BAVerifyToken);
+                var verifyCodeBytes = Util.HexStringToByteArray(Util.ConvertStringToHex(VerifyCode));
+                BodyWriter.Write(new byte[] {0x14, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00});
+                BodyWriter.BeWrite((ushort) verifyCodeBytes.Length);
+                BodyWriter.Write(verifyCodeBytes);
+                BodyWriter.BeWrite((ushort) User.QQPacket00BaVerifyToken.Length);
+                BodyWriter.Write(User.QQPacket00BaVerifyToken);
                 //输入验证码后清空图片流
-                user.QQ_PACKET_00BAVerifyCode = new byte[] { };
+                User.QQPacket00BaVerifyCode = new byte[] { };
             }
 
-            bodyWriter.BEWrite((ushort) user.QQ_PACKET_00BA_FixKey.Length);
-            bodyWriter.Write(user.QQ_PACKET_00BA_FixKey);
+            BodyWriter.BeWrite((ushort) User.QQPacket00BaFixKey.Length);
+            BodyWriter.Write(User.QQPacket00BaFixKey);
         }
 
         protected override void PutTail()
         {
             base.PutTail();
-            user.QQ_PACKET_00BASequence++;
+            User.QQPacket00BaSequence++;
         }
     }
 }

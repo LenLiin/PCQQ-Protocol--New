@@ -1,15 +1,16 @@
-﻿using QQ.Framework.Packets.Receive.Login;
+﻿using QQ.Framework.Events;
+using QQ.Framework.Packets.Receive.Login;
 
 namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
 {
-    [ReceivePacketCommand(QQCommand.Login0x00BA)]
-    public class VerifyCodeCommand : ReceiveCommand<Receive_0x00BA>
+    [ReceivePacketCommand(QQCommand.Login0X00Ba)]
+    public class VerifyCodeCommand : ReceiveCommand<Receive_0X00Ba>
     {
-        public VerifyCodeCommand(byte[] data, SocketService service, ServerMessageSubject transponder, QQUser user) :
+        public VerifyCodeCommand(byte[] data, ISocketService service, IServerMessageSubject transponder, QQUser user) :
             base(data, service, transponder, user)
         {
-            _packet = new Receive_0x00BA(data, _user);
-            _event_args = new QQEventArgs<Receive_0x00BA>(_service, _user, _packet);
+            _packet = new Receive_0X00Ba(data, _user);
+            _eventArgs = new QQEventArgs<Receive_0X00Ba>(_service, _user, _packet);
         }
 
         public override void Process()
@@ -18,7 +19,7 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
 
             if (_packet.VerifyCommand == 0x02)
             {
-                _service.ReceiveVerifyCode(_user.QQ_PACKET_00BAVerifyCode);
+                _service.ReceiveVerifyCode(_user.QQPacket00BaVerifyCode);
             }
         }
     }

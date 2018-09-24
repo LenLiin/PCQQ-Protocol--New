@@ -1,20 +1,15 @@
 using System;
-using System.IO;
 #if NETCOREAPP2_0||NETCOREAPP2_1
 using System.Text;
 #endif
 using QQ.Framework;
 using QQ.Framework.Domains;
-using QQ.Framework.Packets.Receive.Login;
-using QQ.Framework.Packets.Receive.Message;
-using QQ.Framework.Packets.Send.Login;
 using QQ.Framework.Sockets;
-using QQ.Framework.Utils;
 using QQLoginTest.Robots;
 
 namespace QQLoginTest
 {
-    public static partial class Program
+    public static class Program
     {
         private static void Main(string[] args)
         {

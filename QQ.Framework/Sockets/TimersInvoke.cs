@@ -9,16 +9,16 @@ namespace QQ.Framework.Sockets
     /// </summary>
     public class TimersInvoke
     {
-        private readonly SocketService _service;
+        private readonly ISocketService _service;
         private readonly QQUser _user;
-        private readonly Timer timer = new Timer();
+        private readonly Timer _timer = new Timer();
 
         /// <summary>
         ///     定时发送心跳包
         /// </summary>
         /// <param name="service"></param>
         /// <param name="user"></param>
-        public TimersInvoke(SocketService service, QQUser user)
+        public TimersInvoke(ISocketService service, QQUser user)
         {
             _service = service;
             _user = user;
@@ -29,10 +29,10 @@ namespace QQ.Framework.Sockets
         /// </summary>
         public void StartTimer()
         {
-            timer.Elapsed += InvokeFailMsg;
-            timer.Enabled = true; //是否触发Elapsed事件
-            timer.AutoReset = true; //每到指定时间Elapsed事件是触发一次（false），还是一直触发（true）
-            timer.Interval = 20000; // 设置时间间隔为20秒
+            _timer.Elapsed += InvokeFailMsg;
+            _timer.Enabled = true; //是否触发Elapsed事件
+            _timer.AutoReset = true; //每到指定时间Elapsed事件是触发一次（false），还是一直触发（true）
+            _timer.Interval = 20000; // 设置时间间隔为20秒
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace QQ.Framework.Sockets
         /// </summary>
         public void InvokeFailMsg(object sender, ElapsedEventArgs e)
         {
-            _service.Send(new Send_0x0058(_user));
+            _service.Send(new Send_0X0058(_user));
         }
     }
 }

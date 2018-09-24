@@ -1,13 +1,14 @@
-﻿using QQ.Framework.Packets.Receive.Login;
+﻿using QQ.Framework.Events;
+using QQ.Framework.Packets.Receive.Login;
 using QQ.Framework.Packets.Send.Login;
 using QQ.Framework.Sockets;
 
 namespace QQ.Framework.Domains.Commands.ResponseCommands.Login
 {
-    [ResponsePacketCommand(QQCommand.Login0x0828)]
-    public class PreLoginResponseCommand : ResponseCommand<Receive_0x0828>
+    [ResponsePacketCommand(QQCommand.Login0X0828)]
+    public class PreLoginResponseCommand : ResponseCommand<Receive_0X0828>
     {
-        public PreLoginResponseCommand(QQEventArgs<Receive_0x0828> args) : base(args)
+        public PreLoginResponseCommand(QQEventArgs<Receive_0X0828> args) : base(args)
         {
         }
 
@@ -15,7 +16,7 @@ namespace QQ.Framework.Domains.Commands.ResponseCommands.Login
         {
             _service.MessageLog("获取SessionKey");
             //登录成功改变在线状态
-            _service.Send(new Send_0x00EC(_user, LoginStatus.我在线上));
+            _service.Send(new Send_0X00Ec(_user, LoginStatus.我在线上));
 
             //定时发送心跳包
             var timersInvoke = new TimersInvoke(_service, _user);

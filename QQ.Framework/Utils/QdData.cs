@@ -1,58 +1,54 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using System.IO;
 
 namespace QQ.Framework.Utils
 {
     public static class QdData
     {
-        public static byte[] GetQdData(QQUser User)
+        public static byte[] GetQdData(QQUser user)
         {
-            byte[] result = null;
             try
             {
                 var data = new BinaryWriter(new MemoryStream());
-                data.Write(User.TXProtocol.dwServerIP);
+                data.Write(user.TXProtocol.DwServerIP);
 
                 var qddata = new BinaryWriter(new MemoryStream());
-                qddata.Write(User.TXProtocol.dwQdVerion);
-                qddata.Write(User.TXProtocol.dwPubNo);
-                qddata.BEWrite(User.QQ);
-                qddata.BEWrite((ushort)data.BaseStream.Length);
+                qddata.Write(user.TXProtocol.DwQdVerion);
+                qddata.Write(user.TXProtocol.DwPubNo);
+                qddata.BeWrite(user.QQ);
+                qddata.BeWrite((ushort) data.BaseStream.Length);
 
                 data = new BinaryWriter(new MemoryStream());
-                data.Write(User.TXProtocol.QdPreFix);
-                data.BEWrite(User.TXProtocol.cQdProtocolVer);
-                data.BEWrite(User.TXProtocol.dwQdVerion);
-                data.Write((byte)0);
-                data.BEWrite(User.TXProtocol.wQdCsCmdNo);
-                data.Write(User.TXProtocol.cQdCcSubNo);
-                data.Write(new byte[] { 0x0E, 0x88 });//xrand(0xFFFF) + 1
-                data.BEWrite(0);//四个0
-                data.Write(User.TXProtocol.bufComputerIDEx);
-                data.Write(User.TXProtocol.cOsType);
-                data.Write(User.TXProtocol.bIsWOW64);
-                data.Write(User.TXProtocol.dwPubNo);
-                data.BEWrite((ushort)User.TXProtocol.dwClientVer);
-                data.BEWrite(User.TXProtocol.dwDrvVersionInfo / 0x10000);
-                data.BEWrite(User.TXProtocol.dwDrvVersionInfo % 0x10000);
-                data.Write(User.TXProtocol.bufVersion_TSSafeEdit_dat);
-                data.Write(User.TXProtocol.bufVersion_QScanEngine_dll);
-                data.Write((byte)0);
+                data.Write(user.TXProtocol.QdPreFix);
+                data.BeWrite(user.TXProtocol.CQdProtocolVer);
+                data.BeWrite(user.TXProtocol.DwQdVerion);
+                data.Write((byte) 0);
+                data.BeWrite(user.TXProtocol.WQdCsCmdNo);
+                data.Write(user.TXProtocol.CQdCcSubNo);
+                data.Write(new byte[] {0x0E, 0x88}); //xrand(0xFFFF) + 1
+                data.BeWrite(0); //四个0
+                data.Write(user.TXProtocol.BufComputerIdEx);
+                data.Write(user.TXProtocol.COsType);
+                data.Write(user.TXProtocol.BIsWow64);
+                data.Write(user.TXProtocol.DwPubNo);
+                data.BeWrite((ushort) user.TXProtocol.DwClientVer);
+                data.BeWrite(user.TXProtocol.DwDrvVersionInfo / 0x10000);
+                data.BeWrite(user.TXProtocol.DwDrvVersionInfo % 0x10000);
+                data.Write(user.TXProtocol.BufVersionTsSafeEditDat);
+                data.Write(user.TXProtocol.BufVersionQScanEngineDll);
+                data.Write((byte) 0);
 
-                data.Write(new TeaCrypter().Encrypt(qddata.BaseStream.ToBytesArray(), User.TXProtocol.bufQdKey));
+                data.Write(new TeaCrypter().Encrypt(qddata.BaseStream.ToBytesArray(), user.TXProtocol.BufQdKey));
 
-                data.Write(User.TXProtocol.QdSufFix);
+                data.Write(user.TXProtocol.QdSufFix);
 
                 var size = data.BaseStream.Length + 3;
                 qddata = new BinaryWriter(new MemoryStream());
-                qddata.Write(User.TXProtocol.QdPreFix);
+                qddata.Write(user.TXProtocol.QdPreFix);
                 qddata.Write(size);
                 qddata.Write(data.BaseStream.Length);
 
-                result = data.BaseStream.ToBytesArray();
-                User.TXProtocol.QdData = result;
+                var result = data.BaseStream.ToBytesArray();
+                user.TXProtocol.QdData = result;
                 return result;
             }
             catch

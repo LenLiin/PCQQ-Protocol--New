@@ -1,15 +1,16 @@
-﻿using QQ.Framework.Packets;
+﻿using QQ.Framework.Events;
+using QQ.Framework.Packets;
 
 namespace QQ.Framework.Domains.Commands
 {
-    public abstract class ResponseCommand<PacketType> : PacketCommand
-        where PacketType : ReceivePacket
+    public abstract class ResponseCommand<TPacketType> : IPacketCommand
+        where TPacketType : ReceivePacket
     {
-        protected readonly PacketType _packet;
-        protected readonly SocketService _service;
+        protected readonly TPacketType _packet;
+        protected readonly ISocketService _service;
         protected QQUser _user;
 
-        public ResponseCommand(QQEventArgs<PacketType> args)
+        public ResponseCommand(QQEventArgs<TPacketType> args)
         {
             _packet = args.ReceivePacket;
             _service = args.Service;

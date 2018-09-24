@@ -1,5 +1,6 @@
 using System.Threading;
 using QQ.Framework.Domains;
+using QQ.Framework.Events;
 using QQ.Framework.Packets;
 using QQ.Framework.Utils;
 
@@ -13,7 +14,7 @@ namespace QQ.Framework.Sockets
         /// <summary>
         ///     Socket连接服务
         /// </summary>
-        private readonly SocketService _service;
+        private readonly ISocketService _service;
 
         /// <summary>
         ///     账号信息
@@ -23,9 +24,9 @@ namespace QQ.Framework.Sockets
         /// <summary>
         ///     消息转发器
         /// </summary>
-        private readonly ServerMessageSubject _transponder;
+        private readonly IServerMessageSubject _transponder;
 
-        public MessageManage(SocketService service, QQUser user, ServerMessageSubject transponder)
+        public MessageManage(ISocketService service, QQUser user, IServerMessageSubject transponder)
         {
             _service = service;
             _user = user;
@@ -50,16 +51,16 @@ namespace QQ.Framework.Sockets
                 //包装到ByteBuffer
                 var tempBuf = Util.HexStringToByteArray(hexStr);
                 //需要一个基础包 
-                var _ReceivePacket = new ReceivePacket(tempBuf, _user, null);
+                var receivePacket = new ReceivePacket(tempBuf, _user, null);
                 //接收消息后触发事件
-                var ReceiveEvent = new QQEventArgs<ReceivePacket>(_service, _user, _ReceivePacket);
-                _service.MessageLog($"接收数据:{Util.ToHex(ReceiveEvent.ReceivePacket.buffer)}");
+                var receiveEvent = new QQEventArgs<ReceivePacket>(_service, _user, receivePacket);
+                _service.MessageLog($"接收数据:{Util.ToHex(receiveEvent.ReceivePacket.Buffer)}");
 
                 // 通过Command, 利用反射+Attribute, 分发到管理具体某个包的Command中,最后直接调用Receive方法即可。
                 // 将对包的处理移到具体Command中，此处只负责分发。
-                var receive_command = DispatchPacketToCommand.Of(tempBuf, _service, _transponder, _user)
-                    .dispatch_receive_packet(_ReceivePacket.Command);
-                receive_command.Process();
+                var receiveCommand = DispatchPacketToCommand.Of(tempBuf, _service, _transponder, _user)
+                    .dispatch_receive_packet(receivePacket.Command);
+                receiveCommand.Process();
             }
         }
 

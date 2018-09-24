@@ -8,7 +8,7 @@ using QQ.Framework.Utils;
 
 namespace QQ.Framework.Domains
 {
-    public class SocketServiceImpl : SocketService
+    public class SocketServiceImpl : ISocketService
     {
         private readonly QQUser _user;
 
@@ -35,22 +35,22 @@ namespace QQ.Framework.Domains
             _user = user;
             _server = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             _host = Util.GetHostAddresses("sz2.tencent.com"); ////sz.tencent.com,sz{2-9}.tencent.com
-            _user.TXProtocol.dwServerIP = _host;
-            _port = _user.TXProtocol.wServerPort;
+            _user.TXProtocol.DwServerIP = _host;
+            _port = _user.TXProtocol.WServerPort;
             _point = new IPEndPoint(IPAddress.Parse(_host), _port);
         }
 
         public ReceiveData Receive()
         {
-            EndPoint end_point = new IPEndPoint(IPAddress.Any, 0); //用来保存发送方的ip和端口号
-            var buffer = new byte[QQGlobal.QQ_PACKET_MAX_SIZE];
-            var len = _server.ReceiveFrom(buffer, ref end_point);
+            EndPoint endPoint = new IPEndPoint(IPAddress.Any, 0); //用来保存发送方的ip和端口号
+            var buffer = new byte[QQGlobal.QQPacketMaxSize];
+            var len = _server.ReceiveFrom(buffer, ref endPoint);
 
             return new ReceiveData
             {
                 Data = buffer,
                 DataLength = len,
-                From = end_point
+                From = endPoint
             };
         }
 
@@ -72,7 +72,7 @@ namespace QQ.Framework.Domains
 
         public void Login()
         {
-            Send(new Send_0x0825(_user, false));
+            Send(new Send_0X0825(_user, false));
             MessageLog($"登录服务器{_host}");
         }
 
@@ -81,11 +81,11 @@ namespace QQ.Framework.Domains
             var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "yanzhengma");
             var img = ImageHelper.CreateImageFromBytes(path, data);
 
-            Console.Write($"请输入验证码:");
+            Console.Write("请输入验证码:");
             var code = Console.ReadLine();
             if (!string.IsNullOrEmpty(code))
             {
-                Send(new Send_0x00BA(_user, code));
+                Send(new Send_0X00Ba(_user, code));
             }
         }
     }

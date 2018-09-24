@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -10,7 +11,7 @@ namespace QQ.Framework.Packets
 {
     public class ReceivePacket : Packet
     {
-        public BinaryReader reader;
+        public BinaryReader Reader;
 
         public ReceivePacket()
         {
@@ -20,15 +21,15 @@ namespace QQ.Framework.Packets
         ///     构造一个指定参数的包
         /// </summary>
         /// <param name="byteBuffer"></param>
-        /// <param name="User"></param>
-        /// <param name="Key">解密Key</param>
-        public ReceivePacket(byte[] byteBuffer, QQUser User, byte[] Key)
-            : base(byteBuffer, User)
+        /// <param name="user"></param>
+        /// <param name="key">解密Key</param>
+        public ReceivePacket(byte[] byteBuffer, QQUser user, byte[] key)
+            : base(byteBuffer, user)
         {
-            reader = new BinaryReader(new MemoryStream(buffer));
-            bodyEcrypted = byteBuffer;
+            Reader = new BinaryReader(new MemoryStream(Buffer));
+            BodyEcrypted = byteBuffer;
             //指定随包解密Key
-            _secretKey = Key;
+            SecretKey = key;
             //提取包头部分
             ParseHeader();
 
@@ -39,7 +40,7 @@ namespace QQ.Framework.Packets
             }
             catch (Exception e)
             {
-                user.MessageLog($"包内容解析出错,错误{e.Message}，包名: {ToString()}");
+                base.User.MessageLog($"包内容解析出错,错误{e.Message}，包名: {ToString()}");
             }
 
             //提取包尾部分
@@ -50,14 +51,14 @@ namespace QQ.Framework.Packets
 
         public void Decrypt(byte[] key)
         {
-            bodyDecrypted = QQTea.Decrypt(buffer, (int) reader.BaseStream.Position,
-                (int) (buffer.Length - reader.BaseStream.Position - 1), key);
-            if (bodyDecrypted == null)
+            BodyDecrypted = QQTea.Decrypt(Buffer, (int) Reader.BaseStream.Position,
+                (int) (Buffer.Length - Reader.BaseStream.Position - 1), key);
+            if (BodyDecrypted == null)
             {
                 throw new Exception($"包内容解析出错，抛弃该包: {ToString()}");
             }
 
-            reader = new BinaryReader(new MemoryStream(bodyDecrypted));
+            Reader = new BinaryReader(new MemoryStream(BodyDecrypted));
         }
 
         /// <summary>
@@ -66,7 +67,7 @@ namespace QQ.Framework.Packets
         /// <returns></returns>
         public int GetPacketLength()
         {
-            return bodyEcrypted.Length;
+            return BodyEcrypted.Length;
         }
 
         /// <summary>
@@ -76,7 +77,7 @@ namespace QQ.Framework.Packets
         {
             try
             {
-                reader.ReadByte();
+                Reader.ReadByte();
             }
             catch
             {
@@ -95,26 +96,26 @@ namespace QQ.Framework.Packets
         /// </summary>
         protected virtual void ParseHeader()
         {
-            Header = reader.ReadByte();
-            Version = reader.BEReadChar();
-            Command = (QQCommand) reader.BEReadUInt16();
-            Sequence = reader.BEReadChar();
-            QQ = reader.BEReadInt32();
-            reader.ReadBytes(3);
+            Header = Reader.ReadByte();
+            Version = Reader.BeReadChar();
+            Command = (QQCommand) Reader.BeReadUInt16();
+            Sequence = Reader.BeReadChar();
+            QQ = Reader.BeReadInt32();
+            Reader.ReadBytes(3);
         }
 
-        public void GetImage(string FileName)
+        public void GetImage(string fileName)
         {
-            var Api =
+            var api =
                 "https://gchat.qpic.cn/gchatpic_new/807977219/485750189-2603962136-64ECA8CA06FC5B0CE6F047FEB66768B0/0?vuin=417085811&term=2addtime=1515123740";
         }
 
 
         /// <summary>
-        /// 通过反射执行TLV返回包解析
+        ///     通过反射执行TLV返回包解析
         /// </summary>
         /// <param name="tlvs"></param>
-        internal void TlvExecutionProcessing(System.Collections.Generic.ICollection<Tlv> tlvs)
+        internal void TlvExecutionProcessing(ICollection<Tlv> tlvs)
         {
             var types = Assembly.GetExecutingAssembly().GetTypes();
             foreach (var tlv in tlvs)
@@ -128,12 +129,12 @@ namespace QQ.Framework.Packets
                     }
 
                     var attribute = attributes.First(attr => attr is TlvTagAttribute) as TlvTagAttribute;
-                    if ((int)attribute.Tag == tlv.Tag)
+                    if ((int) attribute.Tag == tlv.Tag)
                     {
                         var tlvClass = Assembly.GetExecutingAssembly().CreateInstance(type.FullName, true);
 
-                        MethodInfo methodinfo = type.GetMethod("Parser_Tlv");
-                        methodinfo.Invoke(tlvClass, new object[] { user, reader });
+                        var methodinfo = type.GetMethod("Parser_Tlv");
+                        methodinfo.Invoke(tlvClass, new object[] {User, Reader});
                     }
                 }
             }

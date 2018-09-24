@@ -1,36 +1,35 @@
 using System;
 using System.IO;
-using QQ.Framework;
 using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.PCTLV
 {
     [TlvTag(TlvTags.ClientInfo)]
-    internal class TLV_0017 : BaseTLV
+    internal class TLV0017 : BaseTLV
     {
-        public TLV_0017()
+        public TLV0017()
         {
-            cmd = 0x0017;
+            Command = 0x0017;
             Name = "SSO2::TLV_ClientInfo_0x17";
         }
 
-        public void Parser_Tlv(QQUser User, BinaryReader buf)
+        public void Parser_Tlv(QQUser user, BinaryReader buf)
         {
-            var _type = buf.BEReadUInt16();//type
-            var _length = buf.BEReadUInt16();//length
-            wSubVer = buf.BEReadUInt16(); //wSubVer
-            if (wSubVer == 0x0001)
+            var type = buf.BeReadUInt16(); //type
+            var length = buf.BeReadUInt16(); //length
+            WSubVer = buf.BeReadUInt16(); //wSubVer
+            if (WSubVer == 0x0001)
             {
-                long TimeMillis = buf.BEReadUInt32();
-                User.TXProtocol.dwServerTime = Util.GetDateTimeFromMillis(TimeMillis);
-                User.TXProtocol.time_difference = (uint.MaxValue & TimeMillis) - Util.currentTimeMillis() / 1000;
-                User.TXProtocol.dwClientIP = Util.GetIpStringFromBytes(buf.ReadBytes(4));
-                User.TXProtocol.wClientPort = buf.BEReadUInt16();
-                buf.BEReadUInt16(); //UNKNOW
+                long timeMillis = buf.BeReadUInt32();
+                user.TXProtocol.DwServerTime = Util.GetDateTimeFromMillis(timeMillis);
+                user.TXProtocol.TimeDifference = (uint.MaxValue & timeMillis) - Util.CurrentTimeMillis() / 1000;
+                user.TXProtocol.DwClientIP = Util.GetIpStringFromBytes(buf.ReadBytes(4));
+                user.TXProtocol.WClientPort = buf.BeReadUInt16();
+                buf.BeReadUInt16(); //UNKNOW
             }
             else
             {
-                throw new Exception($"{Name} 无法识别的版本号 {wSubVer}");
+                throw new Exception($"{Name} 无法识别的版本号 {WSubVer}");
             }
         }
     }

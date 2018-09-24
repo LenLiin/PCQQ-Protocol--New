@@ -1,31 +1,30 @@
 using System;
 using System.IO;
-using QQ.Framework;
 using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.PCTLV
 {
     [TlvTag(TlvTags._0x002F)]
-    internal class TLV_002F : BaseTLV
+    internal class TLV002F : BaseTLV
     {
-        public TLV_002F()
+        public TLV002F()
         {
-            cmd = 0x002F;
+            Command = 0x002F;
             Name = "TLV_Control";
         }
 
-        public void Parser_Tlv(QQUser User, BinaryReader buf)
+        public void Parser_Tlv(QQUser user, BinaryReader buf)
         {
-            var _type = buf.BEReadUInt16();//type
-            var _length = buf.BEReadUInt16();//length
-            wSubVer = buf.BEReadUInt16(); //wSubVer
-            if (wSubVer == 0x0001)
+            var type = buf.BeReadUInt16(); //type
+            var length = buf.BeReadUInt16(); //length
+            WSubVer = buf.BeReadUInt16(); //wSubVer
+            if (WSubVer == 0x0001)
             {
-                var bufControl = buf.ReadBytes(_length-2);
+                var bufControl = buf.ReadBytes(length - 2);
             }
             else
             {
-                throw new Exception($"{Name} 无法识别的版本号 {wSubVer}");
+                throw new Exception($"{Name} 无法识别的版本号 {WSubVer}");
             }
         }
     }

@@ -8,131 +8,131 @@ namespace QQ.Framework
         /// <summary>
         ///     包最大大小
         /// </summary>
-        public const int QQ_PACKET_MAX_SIZE = 65535;
+        public const int QQPacketMaxSize = 65535;
 
         /// <summary>
         ///     QQ缺省编码方式
         /// </summary>
-        public const string QQ_CHARSET_DEFAULT = "UTF-8";
+        public const string QQCharsetDefault = "UTF-8";
 
         /// <summary>
         ///     密钥长度
         /// </summary>
-        public const int QQ_LENGTH_KEY = 16;
+        public const int QQLengthKey = 16;
 
         /// <summary>
         ///     包起始标识
         /// </summary>
-        public const byte QQ_HEADER_BASIC_FAMILY = 0x02;
+        public const byte QQHeaderBasicFamily = 0x02;
 
         /// <summary>
         ///     包结尾标识
         /// </summary>
-        public const byte QQ_HEADER_03_FAMILY = 0x03;
+        public const byte QQHeader03Family = 0x03;
 
 
         /// <summary>
         ///     基本协议族输入包的包头长度
         /// </summary>
-        public const int QQ_LENGTH_BASIC_FAMILY_IN_HEADER = 7;
+        public const int QQLengthBasicFamilyInHeader = 7;
 
         /// <summary>
         ///     基本协议族输出包的包头长度
         /// </summary>
-        public const int QQ_LENGTH_BASIC_FAMILY_OUT_HEADER = 11;
+        public const int QQLengthBasicFamilyOutHeader = 11;
 
         /// <summary>
         ///     基本协议族包尾长度
         /// </summary>
-        public const int QQ_LENGTH_BASIC_FAMILY_TAIL = 1;
+        public const int QQLengthBasicFamilyTail = 1;
 
         /// <summary>
         ///     FTP协议族包头长度
         /// </summary>
-        public const int QQ_LENGTH_FTP_FAMILY_HEADER = 46;
+        public const int QQLengthFtpFamilyHeader = 46;
 
         /// <summary>
         ///     05协议族包头长度
         /// </summary>
-        public const int QQ_LENGTH_05_FAMILY_HEADER = 13;
+        public const int QQLength05FamilyHeader = 13;
 
         /// <summary>
         ///     05协议族包尾长度
         /// </summary>
-        public const int QQ_LENGTH_05_FAMILY_TAIL = 1;
+        public const int QQLength05FamilyTail = 1;
 
         /// <summary>
         ///     网络硬盘协议族输入包包头长度
         /// </summary>
-        public const int QQ_LENGTH_DISK_FAMILY_IN_HEADER = 82;
+        public const int QQLengthDiskFamilyInHeader = 82;
 
         /// <summary>
         ///     网络硬盘协议族输出包包头长度
         /// </summary>
-        public const int QQ_LENGTH_DISK_FAMILY_OUT_HEADER = 154;
+        public const int QQLengthDiskFamilyOutHeader = 154;
 
         /// <summary>
         ///     程序缺省使用的客户端版本号
         /// </summary>
-        public const char QQ_CLIENT_VERSION = QQ_CLIENT_VERSION_0E1B;
+        public const char QQClientVersion = QQClientVersion_0E1B;
 
         /// <summary>
         ///     客户端版本号标志 - TIM1.0
         /// </summary>
-        public const char QQ_CLIENT_VERSION_0E1B = (char) 0x3713;
+        public const char QQClientVersion_0E1B = (char) 0x3713;
 
         /// <summary>
         ///     QQ UDP缺省端口
         /// </summary>
-        public const int QQ_PORT_UDP = 8000;
+        public const int QQPortUdp = 8000;
 
         /// <summary>
         ///     QQ TCP缺省端口
         /// </summary>
-        public const int QQ_PORT_TCP = 443;
+        public const int QQPortTcp = 443;
 
         /// <summary>
         ///     使用HTTP代理时连接QQ服务器的端口
         /// </summary>
-        public const int QQ_PORT_HTTP = 80;
+        public const int QQPortHttp = 80;
 
 
         /// <summary>
         ///     QQ分组的名称最大字节长度，注意一个汉字是两个字节
         /// </summary>
-        public const int QQ_MAX_GROUP_NAME = 16;
+        public const int QQMaxGroupName = 16;
 
         /// <summary>
         ///     QQ昵称的最长长度
         /// </summary>
-        public const int QQ_MAX_NAME_LENGTH = 250;
+        public const int QQMaxNameLength = 250;
 
         /// <summary>
         ///     QQ缺省表情个数
         /// </summary>
-        public const int QQ_COUNT_DEFAULT_FACE = 96;
+        public const int QQCountDefaultFace = 96;
 
         /// <summary>
         ///     得到用户信息的回复包字段个数
         /// </summary>
-        public const int QQ_COUNT_GET_USER_INFO_FIELD = 37;
+        public const int QQCountGetUserInfoField = 37;
 
         /// <summary>
         ///     修改用户信息的请求包字段个数，比实际的多1，最开始的QQ号不包括
         /// </summary>
-        public const int QQ_COUNT_MODIFY_USER_INFO_FIELD = 35;
+        public const int QQCountModifyUserInfoField = 35;
 
         /// <summary>
         ///     用户备注信息的字段个数
         /// </summary>
-        public const int QQ_COUNT_REMARK_FIELD = 7;
+        public const int QQCountRemarkField = 7;
 
 
         // 用户标志，比如QQFriend类，好友状态改变包都包含这样的标志
         /// <summary>
         ///     有摄像头
         /// </summary>
-        public const int QQ_FLAG_CAM = 0x80;
+        public const int QQFlagCam = 0x80;
 
 
         /// <summary>
@@ -140,14 +140,15 @@ namespace QQ.Framework
         ///     不一定真的是表示服务器端版本号，似乎和发出的包不同，这个有其他的含义，
         ///     感觉像是包的类型标志
         /// </summary>
-        public const char QQ_SERVER_VERSION_0100 = (char) 0x0100;
+        public const char QQServerVersion0100 = (char) 0x0100;
 
         /// <summary>
         ///     是否打开控制台日志
         /// </summary>
         public static bool DebugLog = true;
 
-        public static byte[] QQEXE_MD5 { get; set; } = { 0xfa, 0xcf, 0x7c, 0xc5, 0xae, 0x02, 0xe6, 0x65, 0x0c, 0x01, 0x07, 0xcd, 0xfe, 0x0e, 0x1b, 0x2c };
+        public static byte[] QqexeMD5 { get; set; } =
+            {0xfa, 0xcf, 0x7c, 0xc5, 0xae, 0x02, 0xe6, 0x65, 0x0c, 0x01, 0x07, 0xcd, 0xfe, 0x0e, 0x1b, 0x2c};
     }
 
     /// <summary>
@@ -195,22 +196,22 @@ namespace QQ.Framework
         /// <summary>
         ///     在线
         /// </summary>
-        ONLINE = 0x0A,
+        Online = 0x0A,
 
         /// <summary>
         ///     离线
         /// </summary>
-        OFFLINE = 0x14,
+        Offline = 0x14,
 
         /// <summary>
         ///     离开
         /// </summary>
-        AWAY = 0x1E,
+        Away = 0x1E,
 
         /// <summary>
         ///     隐身
         /// </summary>
-        HIDDEN = 0x28
+        Hidden = 0x28
     }
 
     /// <summary>
@@ -263,93 +264,93 @@ namespace QQ.Framework
         /// <summary>
         ///     保持在线状态
         /// </summary>
-        Message0x0002 = 0x0002,
+        Message0X0002 = 0x0002,
 
         /// <summary>
         ///     登录Ping
         /// </summary>
-        Login0x0825 = 0x0825,
+        Login0X0825 = 0x0825,
 
         /// <summary>
         ///     登录校验
         /// </summary>
-        Login0x0836 = 0x0836,
+        Login0X0836 = 0x0836,
 
         /// <summary>
         ///     取SessionKey
         /// </summary>
-        Login0x0828 = 0x0828,
+        Login0X0828 = 0x0828,
 
         /// <summary>
         ///     改变在线状态
         /// </summary>
-        Login0x00EC = 0x00EC,
+        Login0X00Ec = 0x00EC,
 
         /// <summary>
         ///     Token请求
         /// </summary>
-        Interactive0x00AE = 0x00AE,
+        Interactive0X00Ae = 0x00AE,
 
         /// <summary>
         ///     验证码提交
         /// </summary>
-        Login0x00BA = 0x00BA,
+        Login0X00Ba = 0x00BA,
 
         /// <summary>
         ///     请求一些操作需要的密钥，比如文件中转，视频也有可能  目前用来获取Skey
         /// </summary>
-        Data0x001D = 0x001D,
+        Data0X001D = 0x001D,
 
         /// <summary>
         ///     获取基本资料
         /// </summary>
-        Data0x005C = 0x005C,
+        Data0X005C = 0x005C,
 
         /// <summary>
         ///     群消息
         /// </summary>
-        Message0x0017 = 0x0017,
+        Message0X0017 = 0x0017,
 
         /// <summary>
         ///     群消息查看确认
         /// </summary>
-        Message0x0360 = 0x0360,
-        Message0x01C0 = 0x01C0,
+        Message0X0360 = 0x0360,
+        Message0X01C0 = 0x01C0,
 
         /// <summary>
         ///     好友消息
         /// </summary>
-        Message0x00CE = 0x00CE,
+        Message0X00Ce = 0x00CE,
 
         /// <summary>
         ///     消息查看确认
         /// </summary>
-        Message0x0319 = 0x0319,
+        Message0X0319 = 0x0319,
 
         /// <summary>
         ///     发送好友消息
         /// </summary>
-        Message0x00CD = 0x00CD,
+        Message0X00Cd = 0x00CD,
 
         /// <summary>
         ///     获取Ukey
         /// </summary>
-        Message0x0352 = 0x0352,
+        Message0X0352 = 0x0352,
 
         /// <summary>
         ///     获取Ukey
         /// </summary>
-        Message0x0388 = 0x0388,
+        Message0X0388 = 0x0388,
 
         /// <summary>
         ///     心跳包
         /// </summary>
-        Message0x0058 = 0x0058,
+        Message0X0058 = 0x0058,
 
         /// <summary>
         ///     点赞
         /// </summary>
-        Interactive0x03E3 = 0x03E3,
+        Interactive0X03E3 = 0x03E3,
 
         /// <summary>
         ///     未知包
@@ -430,7 +431,7 @@ namespace QQ.Framework
     }
 
     /// <summary>
-    /// Tlv类型枚举
+    ///     Tlv类型枚举
     /// </summary>
     public enum TlvTags
     {
@@ -480,17 +481,17 @@ namespace QQ.Framework
 
     public enum ResultCode
     {
-        成功=0x00,
-        需要更新TGTGT=0x01,
-        帐号被回收=0x33,
-        密码错误=0x34,
-        需要验证密保=0x3F,
-        DoMain=0xF8,
+        成功 = 0x00,
+        需要更新TGTGT = 0x01,
+        帐号被回收 = 0x33,
+        密码错误 = 0x34,
+        需要验证密保 = 0x3F,
+        DoMain = 0xF8,
         要求切换TCP = 0xF9,
         需要重新CheckTGTGT = 0xFA,
         需要验证码 = 0xFB,
         需要重定向 = 0xFE,
-        过载保护=0xFD,
+        过载保护 = 0xFD,
         其它错误 = 0xFF
     }
 }

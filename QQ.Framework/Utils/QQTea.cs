@@ -7,7 +7,7 @@ namespace QQ.Framework.Utils
 {
     public static class QQTea
     {
-        private static void code(byte[] In, int inOffset, int inPos, byte[] Out, int outOffset, int outPos, byte[] key)
+        private static void Code(byte[] In, int inOffset, int inPos, byte[] Out, int outOffset, int outPos, byte[] key)
         {
             if (outPos > 0)
             {
@@ -43,7 +43,7 @@ namespace QQ.Framework.Utils
             }
         }
 
-        private static void decode(byte[] In, int inOffset, int inPos, byte[] Out, int outOffset, int outPos,
+        private static void Decode(byte[] In, int inOffset, int inPos, byte[] Out, int outOffset, int outPos,
             byte[] key)
         {
             if (outPos > 0)
@@ -78,7 +78,7 @@ namespace QQ.Framework.Utils
 
         public static byte[] Decrypt(byte[] In, byte[] key)
         {
-            var Into = new List<byte>();
+            var @into = new List<byte>();
             var tail = true;
             for (var i = In.Length - 1; i >= 0; i--)
             {
@@ -93,17 +93,17 @@ namespace QQ.Framework.Utils
                     }
                     else
                     {
-                        Into.Insert(0, In[i]);
+                        @into.Insert(0, In[i]);
                         tail = false;
                     }
                 }
                 else
                 {
-                    Into.Insert(0, In[i]);
+                    @into.Insert(0, In[i]);
                 }
             }
 
-            return Decrypt(Into.ToArray(), 0, Into.Count, key);
+            return Decrypt(@into.ToArray(), 0, @into.Count, key);
         }
 
         public static byte[] Decrypt(byte[] In, int offset, int len, byte[] key)
@@ -118,7 +118,7 @@ namespace QQ.Framework.Utils
             var array = new byte[len];
             for (var i = 0; i < len; i += 8)
             {
-                decode(temp, offset, i, array, 0, i, key);
+                Decode(temp, offset, i, array, 0, i, key);
             }
 
             for (var j = 8; j < len; j++)
@@ -165,7 +165,7 @@ namespace QQ.Framework.Utils
             var array2 = new byte[len + num + 10];
             for (var k = 0; k < array2.Length; k += 8)
             {
-                code(array, 0, k, array2, 0, k, key);
+                Code(array, 0, k, array2, 0, k, key);
             }
 
             return array2;
@@ -245,8 +245,8 @@ namespace QQ.Framework.Utils
         /// <returns></returns>
         public static byte[] MD5(byte[] data)
         {
-            var MD5Instance = System.Security.Cryptography.MD5.Create();
-            return MD5Instance.ComputeHash(data);
+            var md5Instance = System.Security.Cryptography.MD5.Create();
+            return md5Instance.ComputeHash(data);
         }
 
         /// <summary>

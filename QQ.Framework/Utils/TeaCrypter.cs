@@ -3,34 +3,34 @@ namespace QQ.Framework.Utils
     public class TeaCrypter
     {
         // Token: 0x04000334 RID: 820
-        private long contextStart;
+        private long _contextStart;
 
         // Token: 0x04000335 RID: 821
-        private long Crypt;
+        private long _crypt;
 
         // Token: 0x04000336 RID: 822
-        private long preCrypt;
+        private long _preCrypt;
 
         // Token: 0x04000337 RID: 823
-        private bool Header;
+        private bool _header;
 
         // Token: 0x04000338 RID: 824
-        private byte[] Key = new byte[16];
+        private byte[] _key = new byte[16];
 
         // Token: 0x04000339 RID: 825
-        private byte[] Out;
+        private byte[] _out;
 
         // Token: 0x0400033A RID: 826
-        private long padding;
+        private long _padding;
 
         // Token: 0x0400033B RID: 827
-        private byte[] Plain;
+        private byte[] _plain;
 
         // Token: 0x0400033C RID: 828
-        private long Pos;
+        private long _pos;
 
         // Token: 0x0400033D RID: 829
-        private byte[] prePlain;
+        private byte[] _prePlain;
 
         // Token: 0x06000629 RID: 1577 RVA: 0x000256F4 File Offset: 0x000238F4
         public byte[] MD5(byte[] data)
@@ -39,40 +39,40 @@ namespace QQ.Framework.Utils
         }
 
         // Token: 0x0600062A RID: 1578 RVA: 0x00025710 File Offset: 0x00023910
-        private byte[] CopyMemory(byte[] arr, int arr_index, long input)
+        private byte[] CopyMemory(byte[] arr, int arrIndex, long input)
         {
-            if (arr_index + 4 > arr.Length)
+            if (arrIndex + 4 > arr.Length)
             {
                 return arr;
             }
 
-            arr[arr_index + 3] = (byte) ((input & 4278190080u) >> 24);
-            arr[arr_index + 2] = (byte) ((input & 0xFF0000) >> 16);
-            arr[arr_index + 1] = (byte) ((input & 0xFF00) >> 8);
-            arr[arr_index] = (byte) (input & 0xFF);
-            arr[arr_index] &= byte.MaxValue;
-            arr[arr_index + 1] &= byte.MaxValue;
-            arr[arr_index + 2] &= byte.MaxValue;
-            arr[arr_index + 3] &= byte.MaxValue;
+            arr[arrIndex + 3] = (byte) ((input & 4278190080u) >> 24);
+            arr[arrIndex + 2] = (byte) ((input & 0xFF0000) >> 16);
+            arr[arrIndex + 1] = (byte) ((input & 0xFF00) >> 8);
+            arr[arrIndex] = (byte) (input & 0xFF);
+            arr[arrIndex] &= byte.MaxValue;
+            arr[arrIndex + 1] &= byte.MaxValue;
+            arr[arrIndex + 2] &= byte.MaxValue;
+            arr[arrIndex + 3] &= byte.MaxValue;
             return arr;
         }
 
-        private long CopyMemory(long Out, byte[] arr, int arr_index)
+        private long CopyMemory(long Out, byte[] arr, int arrIndex)
         {
-            if (arr_index + 4 > arr.Length)
+            if (arrIndex + 4 > arr.Length)
             {
                 return Out;
             }
 
-            long num = arr[arr_index + 3] << 24;
-            long num2 = arr[arr_index + 2] << 16;
-            long num3 = arr[arr_index + 1] << 8;
-            long num4 = arr[arr_index];
+            long num = arr[arrIndex + 3] << 24;
+            long num2 = arr[arrIndex + 2] << 16;
+            long num3 = arr[arrIndex + 1] << 8;
+            long num4 = arr[arrIndex];
             var num5 = num | num2 | num3 | num4;
             return num5 & uint.MaxValue;
         }
 
-        private long getUnsignedInt(byte[] arrayIn, int offset, int len)
+        private long GetUnsignedInt(byte[] arrayIn, int offset, int len)
         {
             var num = 0L;
             var num2 = len <= 8 ? offset + len : offset + 8;
@@ -110,12 +110,12 @@ namespace QQ.Framework.Utils
             num &= uint.MaxValue;
             var num2 = 2654435769L;
             num2 &= uint.MaxValue;
-            var num3 = getUnsignedInt(arrayIn, (int) offset, 4);
-            var num4 = getUnsignedInt(arrayIn, (int) offset + 4, 4);
-            var unsignedInt = getUnsignedInt(arrayKey, 0, 4);
-            var unsignedInt2 = getUnsignedInt(arrayKey, 4, 4);
-            var unsignedInt3 = getUnsignedInt(arrayKey, 8, 4);
-            var unsignedInt4 = getUnsignedInt(arrayKey, 12, 4);
+            var num3 = GetUnsignedInt(arrayIn, (int) offset, 4);
+            var num4 = GetUnsignedInt(arrayIn, (int) offset + 4, 4);
+            var unsignedInt = GetUnsignedInt(arrayKey, 0, 4);
+            var unsignedInt2 = GetUnsignedInt(arrayKey, 4, 4);
+            var unsignedInt3 = GetUnsignedInt(arrayKey, 8, 4);
+            var unsignedInt4 = GetUnsignedInt(arrayKey, 12, 4);
             for (var i = 1; i <= 16; i++)
             {
                 num4 -= ((num3 << 4) + unsignedInt3) ^ (num3 + num) ^ ((num3 >> 5) + unsignedInt4);
@@ -152,12 +152,12 @@ namespace QQ.Framework.Utils
             var num = 0L;
             var num2 = 2654435769L;
             num2 &= uint.MaxValue;
-            var num3 = getUnsignedInt(arrayIn, (int) offset, 4);
-            var num4 = getUnsignedInt(arrayIn, (int) offset + 4, 4);
-            var unsignedInt = getUnsignedInt(arrayKey, 0, 4);
-            var unsignedInt2 = getUnsignedInt(arrayKey, 4, 4);
-            var unsignedInt3 = getUnsignedInt(arrayKey, 8, 4);
-            var unsignedInt4 = getUnsignedInt(arrayKey, 12, 4);
+            var num3 = GetUnsignedInt(arrayIn, (int) offset, 4);
+            var num4 = GetUnsignedInt(arrayIn, (int) offset + 4, 4);
+            var unsignedInt = GetUnsignedInt(arrayKey, 0, 4);
+            var unsignedInt2 = GetUnsignedInt(arrayKey, 4, 4);
+            var unsignedInt3 = GetUnsignedInt(arrayKey, 8, 4);
+            var unsignedInt4 = GetUnsignedInt(arrayKey, 12, 4);
             for (var i = 1; i <= 16; i++)
             {
                 num += num2;
@@ -184,100 +184,100 @@ namespace QQ.Framework.Utils
         // Token: 0x06000632 RID: 1586 RVA: 0x00025BD4 File Offset: 0x00023DD4
         private void Encrypt8Bytes()
         {
-            for (Pos = 0L; Pos < 8; Pos++)
+            for (_pos = 0L; _pos < 8; _pos++)
             {
-                if (Header)
+                if (_header)
                 {
-                    Plain[Pos] = (byte) (Plain[Pos] ^ prePlain[Pos]);
+                    _plain[_pos] = (byte) (_plain[_pos] ^ _prePlain[_pos]);
                 }
                 else
                 {
-                    Plain[Pos] = (byte) (Plain[Pos] ^ Out[preCrypt + Pos]);
+                    _plain[_pos] = (byte) (_plain[_pos] ^ _out[_preCrypt + _pos]);
                 }
             }
 
-            var array = Encipher(Plain, Key);
+            var array = Encipher(_plain, _key);
             for (var i = 0; i <= 7; i++)
             {
-                Out[Crypt + i] = array[i];
+                _out[_crypt + i] = array[i];
             }
 
-            for (Pos = 0L; Pos <= 7; Pos++)
+            for (_pos = 0L; _pos <= 7; _pos++)
             {
-                Out[Crypt + Pos] = (byte) (Out[Crypt + Pos] ^ prePlain[Pos]);
+                _out[_crypt + _pos] = (byte) (_out[_crypt + _pos] ^ _prePlain[_pos]);
             }
 
-            Plain.CopyTo(prePlain, 0);
-            preCrypt = Crypt;
-            Crypt += 8L;
-            Pos = 0L;
-            Header = false;
+            _plain.CopyTo(_prePlain, 0);
+            _preCrypt = _crypt;
+            _crypt += 8L;
+            _pos = 0L;
+            _header = false;
         }
 
         // Token: 0x06000633 RID: 1587 RVA: 0x00025D88 File Offset: 0x00023F88
         private bool Decrypt8Bytes(byte[] arrayIn, long offset = 0L)
         {
-            for (Pos = 0L; Pos <= 7; Pos++)
+            for (_pos = 0L; _pos <= 7; _pos++)
             {
-                if (contextStart + Pos > arrayIn.Length - 1)
+                if (_contextStart + _pos > arrayIn.Length - 1)
                 {
                     return true;
                 }
 
-                prePlain[Pos] = (byte) (prePlain[Pos] ^ arrayIn[offset + Crypt + Pos]);
+                _prePlain[_pos] = (byte) (_prePlain[_pos] ^ arrayIn[offset + _crypt + _pos]);
             }
 
             try
             {
-                prePlain = Decipher(prePlain, Key);
+                _prePlain = Decipher(_prePlain, _key);
             }
             catch
             {
                 return false;
             }
 
-            var num = prePlain.Length - 1;
-            contextStart += 8L;
-            Crypt += 8L;
-            Pos = 0L;
+            var num = _prePlain.Length - 1;
+            _contextStart += 8L;
+            _crypt += 8L;
+            _pos = 0L;
             return true;
         }
 
         // Token: 0x06000635 RID: 1589 RVA: 0x00025EB0 File Offset: 0x000240B0
         public byte[] Encrypt(byte[] arrayIn, byte[] arrayKey, long offset)
         {
-            Plain = new byte[8];
-            prePlain = new byte[8];
-            Pos = 1L;
-            padding = 0L;
-            Crypt = preCrypt = 0L;
-            Key = arrayKey;
-            Header = true;
-            Pos = 2L;
-            Pos = (arrayIn.Length + 10) % 8;
-            if (Pos != 0)
+            _plain = new byte[8];
+            _prePlain = new byte[8];
+            _pos = 1L;
+            _padding = 0L;
+            _crypt = _preCrypt = 0L;
+            _key = arrayKey;
+            _header = true;
+            _pos = 2L;
+            _pos = (arrayIn.Length + 10) % 8;
+            if (_pos != 0)
             {
-                Pos = 8 - Pos;
+                _pos = 8 - _pos;
             }
 
-            Out = new byte[arrayIn.Length + Pos + 10];
-            Plain[0] = (byte) ((Rand() & 0xF8) | Pos);
-            for (var i = 1; i <= Pos; i++)
+            _out = new byte[arrayIn.Length + _pos + 10];
+            _plain[0] = (byte) ((Rand() & 0xF8) | _pos);
+            for (var i = 1; i <= _pos; i++)
             {
-                Plain[i] = (byte) (Rand() & 0xFF);
+                _plain[i] = (byte) (Rand() & 0xFF);
             }
 
-            Pos++;
-            padding = 1L;
-            while (padding < 3)
+            _pos++;
+            _padding = 1L;
+            while (_padding < 3)
             {
-                if (Pos < 8)
+                if (_pos < 8)
                 {
-                    Plain[Pos] = (byte) (Rand() & 0xFF);
-                    padding++;
-                    Pos++;
+                    _plain[_pos] = (byte) (Rand() & 0xFF);
+                    _padding++;
+                    _pos++;
                 }
-                else if (Pos == 8)
+                else if (_pos == 8)
                 {
                     Encrypt8Bytes();
                 }
@@ -287,35 +287,35 @@ namespace QQ.Framework.Utils
             long num2 = arrayIn.Length;
             while (num2 > 0)
             {
-                if (Pos < 8)
+                if (_pos < 8)
                 {
-                    Plain[Pos] = arrayIn[num];
+                    _plain[_pos] = arrayIn[num];
                     num++;
-                    Pos++;
+                    _pos++;
                     num2--;
                 }
-                else if (Pos == 8)
+                else if (_pos == 8)
                 {
                     Encrypt8Bytes();
                 }
             }
 
-            padding = 1L;
-            while (padding < 9)
+            _padding = 1L;
+            while (_padding < 9)
             {
-                if (Pos < 8)
+                if (_pos < 8)
                 {
-                    Plain[Pos] = 0;
-                    Pos++;
-                    padding++;
+                    _plain[_pos] = 0;
+                    _pos++;
+                    _padding++;
                 }
-                else if (Pos == 8)
+                else if (_pos == 8)
                 {
                     Encrypt8Bytes();
                 }
             }
 
-            return Out;
+            return _out;
         }
 
         // Token: 0x06000636 RID: 1590 RVA: 0x000261C0 File Offset: 0x000243C0
@@ -364,30 +364,30 @@ namespace QQ.Framework.Utils
             }
 
             var array = new byte[offset + 8];
-            arrayKey.CopyTo(Key, 0);
-            Crypt = preCrypt = 0L;
-            prePlain = Decipher(arrayIn, arrayKey, offset);
-            Pos = prePlain[0] & 7;
-            var num = arrayIn.Length - Pos - 10;
+            arrayKey.CopyTo(_key, 0);
+            _crypt = _preCrypt = 0L;
+            _prePlain = Decipher(arrayIn, arrayKey, offset);
+            _pos = _prePlain[0] & 7;
+            var num = arrayIn.Length - _pos - 10;
             if (num <= 0)
             {
                 return result;
             }
 
-            Out = new byte[num];
-            preCrypt = 0L;
-            Crypt = 8L;
-            contextStart = 8L;
-            Pos++;
-            padding = 1L;
-            while (padding < 3)
+            _out = new byte[num];
+            _preCrypt = 0L;
+            _crypt = 8L;
+            _contextStart = 8L;
+            _pos++;
+            _padding = 1L;
+            while (_padding < 3)
             {
-                if (Pos < 8)
+                if (_pos < 8)
                 {
-                    Pos++;
-                    padding++;
+                    _pos++;
+                    _padding++;
                 }
-                else if (Pos == 8)
+                else if (_pos == 8)
                 {
                     for (var i = 0; i < array.Length; i++)
                     {
@@ -404,17 +404,17 @@ namespace QQ.Framework.Utils
             var num2 = 0L;
             while (num != 0)
             {
-                if (Pos < 8)
+                if (_pos < 8)
                 {
-                    Out[num2] = (byte) (array[offset + preCrypt + Pos] ^ prePlain[Pos]);
+                    _out[num2] = (byte) (array[offset + _preCrypt + _pos] ^ _prePlain[_pos]);
                     num2++;
                     num--;
-                    Pos++;
+                    _pos++;
                 }
-                else if (Pos == 8)
+                else if (_pos == 8)
                 {
                     array = arrayIn;
-                    preCrypt = Crypt - 8;
+                    _preCrypt = _crypt - 8;
                     if (!Decrypt8Bytes(arrayIn, offset))
                     {
                         return result;
@@ -422,25 +422,25 @@ namespace QQ.Framework.Utils
                 }
             }
 
-            for (padding = 1L; padding <= 7; padding++)
+            for (_padding = 1L; _padding <= 7; _padding++)
             {
-                if (Pos < 8)
+                if (_pos < 8)
                 {
-                    if ((array[offset + preCrypt + Pos] ^ prePlain[Pos]) != 0)
+                    if ((array[offset + _preCrypt + _pos] ^ _prePlain[_pos]) != 0)
                     {
                         return result;
                     }
 
-                    Pos++;
+                    _pos++;
                 }
-                else if (Pos == 8)
+                else if (_pos == 8)
                 {
                     for (var i = 0; i < array.Length; i++)
                     {
                         array[i] = arrayIn[i];
                     }
 
-                    preCrypt = Crypt;
+                    _preCrypt = _crypt;
                     if (!Decrypt8Bytes(arrayIn, offset))
                     {
                         return result;
@@ -448,7 +448,7 @@ namespace QQ.Framework.Utils
                 }
             }
 
-            return Out;
+            return _out;
         }
     }
 }

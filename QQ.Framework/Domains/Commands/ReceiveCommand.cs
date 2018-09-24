@@ -1,18 +1,19 @@
-﻿using QQ.Framework.Packets;
+﻿using QQ.Framework.Events;
+using QQ.Framework.Packets;
 using QQ.Framework.Utils;
 
 namespace QQ.Framework.Domains.Commands
 {
-    public abstract class ReceiveCommand<PacketType> : PacketCommand
-        where PacketType : ReceivePacket
+    public abstract class ReceiveCommand<TPacketType> : IPacketCommand
+        where TPacketType : ReceivePacket
     {
-        protected readonly SocketService _service;
-        protected readonly ServerMessageSubject _transponder;
+        protected readonly ISocketService _service;
+        protected readonly IServerMessageSubject _transponder;
         protected readonly QQUser _user;
-        protected PacketType _packet;
-        protected QQEventArgs<PacketType> _event_args;
+        protected TPacketType _packet;
+        protected QQEventArgs<TPacketType> _eventArgs;
 
-        public ReceiveCommand(byte[] data, SocketService service, ServerMessageSubject transponder, QQUser user)
+        public ReceiveCommand(byte[] data, ISocketService service, IServerMessageSubject transponder, QQUser user)
         {
             _service = service;
             _transponder = transponder;
@@ -29,8 +30,8 @@ namespace QQ.Framework.Domains.Commands
         /// </summary>
         protected void Response()
         {
-            var response_command = ResponsePacketProcessor<PacketType>.of(_event_args, GetType()).Process();
-            response_command.Process();
+            var responseCommand = ResponsePacketProcessor<TPacketType>.Of(_eventArgs, GetType()).Process();
+            responseCommand.Process();
         }
     }
 }

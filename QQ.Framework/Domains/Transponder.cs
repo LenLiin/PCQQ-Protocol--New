@@ -7,16 +7,16 @@ namespace QQ.Framework.Domains
     /// <summary>
     ///     消息转发器
     /// </summary>
-    public class Transponder : ServerMessageSubject
+    public class Transponder : IServerMessageSubject
     {
         /// <summary>
         ///     机器人列表
         /// </summary>
-        private readonly IList<ServerMessageObserver> _robots;
+        private readonly IList<IServerMessageObserver> _robots;
 
         public Transponder()
         {
-            _robots = new List<ServerMessageObserver>();
+            _robots = new List<IServerMessageObserver>();
         }
 
         public void ReceiveFriendMessage(long friendNumber, Richtext content)
@@ -39,7 +39,7 @@ namespace QQ.Framework.Domains
         ///     添加机器人
         /// </summary>
         /// <param name="robot"></param>
-        public void AddCustomRoBot(ServerMessageObserver robot)
+        public void AddCustomRoBot(IServerMessageObserver robot)
         {
             if (!_robots.Contains(robot))
             {
@@ -51,7 +51,7 @@ namespace QQ.Framework.Domains
         ///     移除机器人
         /// </summary>
         /// <param name="robot"></param>
-        public void RemoveCustomRoBot(ServerMessageObserver robot)
+        public void RemoveCustomRoBot(IServerMessageObserver robot)
         {
             if (_robots.Contains(robot))
             {

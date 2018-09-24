@@ -3,19 +3,19 @@ namespace QQ.Framework.Packets.Receive.Message
     /// <summary>
     ///     点赞回复包
     /// </summary>
-    public class Receive_0x03E3 : ReceivePacket
+    public class Receive_0X03E3 : ReceivePacket
     {
         /// <summary>
         ///     点赞回复包
         /// </summary>
-        public Receive_0x03E3(byte[] byteBuffer, QQUser User)
-            : base(byteBuffer, User, User.TXProtocol.SessionKey)
+        public Receive_0X03E3(byte[] byteBuffer, QQUser user)
+            : base(byteBuffer, user, user.TXProtocol.SessionKey)
         {
         }
 
         protected override void ParseBody()
         {
-            Decrypt(user.TXProtocol.SessionKey);
+            Decrypt(User.TXProtocol.SessionKey);
         }
     }
 }

@@ -5,7 +5,7 @@ namespace QQ.Framework.Domains
     /// <summary>
     ///     连接服务
     /// </summary>
-    public interface SocketService
+    public interface ISocketService
     {
         /// <summary>
         ///     接收来自服务器的消息

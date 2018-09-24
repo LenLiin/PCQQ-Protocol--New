@@ -1,27 +1,24 @@
-using System;
-using System.IO;
-using QQ.Framework;
 using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.PCTLV
 {
     [TlvTag(TlvTags.QdData)]
-    internal class TLV_0032 : BaseTLV
+    internal class TLV0032 : BaseTLV
     {
-        public TLV_0032()
+        public TLV0032()
         {
-            cmd = 0x0032;
+            Command = 0x0032;
             Name = "TLV_QdData";
-            wSubVer = 0x0002;
+            WSubVer = 0x0002;
         }
 
-        public byte[] Get_Tlv(QQUser User)
+        public byte[] Get_Tlv(QQUser user)
         {
-            byte[] qddata = QdData.GetQdData(User);
-            fill_head(cmd);
-            fill_body(qddata, qddata.Length);
-            set_length();
-            return get_buf();
+            var qddata = QdData.GetQdData(user);
+            FillHead(Command);
+            FillBody(qddata, qddata.Length);
+            SetLength();
+            return GetBuffer();
         }
     }
 }

@@ -11,12 +11,12 @@ namespace QQ.Framework.Packets
         /// <summary>
         ///     包起始序列号
         /// </summary>
-        protected static char seq = (char)0x3635;// (char)Util.Random.Next();
+        protected static char _seq = (char) 0x3635; // (char)Util.Random.Next();
 
-        public MemoryStream bodyStream;
-        public BinaryWriter bodyWriter;
+        public MemoryStream BodyStream;
+        public BinaryWriter BodyWriter;
 
-        public BinaryWriter writer = new BinaryWriter(new MemoryStream());
+        public BinaryWriter Writer = new BinaryWriter(new MemoryStream());
 
         public SendPacket()
         {
@@ -25,10 +25,10 @@ namespace QQ.Framework.Packets
         /// <summary>
         ///     构造一个指定参数的包
         /// </summary>
-        public SendPacket(QQUser User)
-            : base(User)
+        public SendPacket(QQUser user)
+            : base(user)
         {
-            Version = QQGlobal.QQ_CLIENT_VERSION;
+            Version = QQGlobal.QQClientVersion;
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace QQ.Framework.Packets
         /// <returns>加密的包体</returns>
         public byte[] EncryptBody(byte[] buf, int offset, int length)
         {
-            return QQTea.Encrypt(buf, offset, length, _secretKey);
+            return QQTea.Encrypt(buf, offset, length, SecretKey);
         }
 
         /// <summary>
@@ -48,36 +48,37 @@ namespace QQ.Framework.Packets
         /// </summary>
         protected virtual void PutHeader()
         {
-            writer.Write(QQGlobal.QQ_HEADER_BASIC_FAMILY);
-            writer.Write(user.TXProtocol.cMainVer);
-            writer.Write(user.TXProtocol.cSubVer);
-            writer.BEWrite((ushort)Command);
-            writer.BEWrite(Sequence);
-            writer.BEWrite(user.QQ);
+            Writer.Write(QQGlobal.QQHeaderBasicFamily);
+            Writer.Write(User.TXProtocol.CMainVer);
+            Writer.Write(User.TXProtocol.CSubVer);
+            Writer.BeWrite((ushort) Command);
+            Writer.BeWrite(Sequence);
+            Writer.BeWrite(User.QQ);
         }
+
         /// <summary>
-        /// 包头描述部分
+        ///     包头描述部分
         /// </summary>
         protected void SendPACKET_FIX()
         {
-            writer.Write(user.TXProtocol.xxoo_a);
-            writer.Write(user.TXProtocol.dwClientType);
-            writer.Write(user.TXProtocol.dwPubNo);
-            writer.Write(user.TXProtocol.xxoo_d);
+            Writer.Write(User.TXProtocol.XxooA);
+            Writer.Write(User.TXProtocol.DwClientType);
+            Writer.Write(User.TXProtocol.DwPubNo);
+            Writer.Write(User.TXProtocol.XxooD);
         }
 
         protected static char GetNextSeq()
         {
-            seq++;
+            _seq++;
             // 为了兼容iQQ
             // iQQ把序列号的高位都为0，如果为1，它可能会拒绝，wqfox称是因为TX是这样做的
-            seq &= (char) 0x7FFF;
-            if (seq == 0)
+            _seq &= (char) 0x7FFF;
+            if (_seq == 0)
             {
-                seq++;
+                _seq++;
             }
 
-            return seq;
+            return _seq;
         }
 
         /// <summary>
@@ -90,7 +91,7 @@ namespace QQ.Framework.Packets
         /// </summary>
         protected virtual void PutTail()
         {
-            writer.Write(QQGlobal.QQ_HEADER_03_FAMILY);
+            Writer.Write(QQGlobal.QQHeader03Family);
         }
 
         /// <summary>
@@ -100,23 +101,23 @@ namespace QQ.Framework.Packets
         public byte[] WriteData()
         {
             //保存当前pos
-            var pos = (int) writer.BaseStream.Position;
+            var pos = (int) Writer.BaseStream.Position;
             //填充头部
             PutHeader();
             //填充包体
-            bodyStream = new MemoryStream();
-            bodyWriter = new BinaryWriter(bodyStream);
+            BodyStream = new MemoryStream();
+            BodyWriter = new BinaryWriter(BodyStream);
             PutBody();
             //需要加密的包体
-            bodyDecrypted = bodyStream.ToArray();
-            var enc = EncryptBody(bodyDecrypted, 0, bodyDecrypted.Length);
+            BodyDecrypted = BodyStream.ToArray();
+            var enc = EncryptBody(BodyDecrypted, 0, BodyDecrypted.Length);
             // 加密内容写入最终buf
-            writer.Write(enc);
+            Writer.Write(enc);
             // 填充尾部
             PutTail();
             // 回填
             PostFill(pos);
-            return writer.BaseStream.ToBytesArray();
+            return Writer.BaseStream.ToBytesArray();
         }
 
         /// <summary>
@@ -127,13 +128,13 @@ namespace QQ.Framework.Packets
         public void PostFill(int startPos)
         {
             // 如果是tcp包，到包的开头处填上包长度，然后回到目前的pos
-            if (!user.IsUdp)
+            if (!User.IsUdp)
             {
-                var len = (int) (writer.BaseStream.Length - startPos);
-                var currentPos = writer.BaseStream.Position;
-                writer.BaseStream.Position = startPos;
-                writer.BEWrite((ushort) len);
-                writer.BaseStream.Position = currentPos;
+                var len = (int) (Writer.BaseStream.Length - startPos);
+                var currentPos = Writer.BaseStream.Position;
+                Writer.BaseStream.Position = startPos;
+                Writer.BeWrite((ushort) len);
+                Writer.BaseStream.Position = currentPos;
             }
         }
 
@@ -144,10 +145,10 @@ namespace QQ.Framework.Packets
         /// <returns>包体字节数组</returns>
         protected byte[] GetBodyBytes(int length)
         {
-            var buf = new byte[QQGlobal.QQ_PACKET_MAX_SIZE];
+            var buf = new byte[QQGlobal.QQPacketMaxSize];
             // 得到包体长度
-            var bodyLen = length - QQGlobal.QQ_LENGTH_BASIC_FAMILY_OUT_HEADER - QQGlobal.QQ_LENGTH_BASIC_FAMILY_TAIL;
-            if (!user.IsUdp)
+            var bodyLen = length - QQGlobal.QQLengthBasicFamilyOutHeader - QQGlobal.QQLengthBasicFamilyTail;
+            if (!User.IsUdp)
             {
                 bodyLen -= 2;
             }
@@ -162,18 +163,18 @@ namespace QQ.Framework.Packets
         /// <summary>
         ///     带表情消息
         /// </summary>
-        /// <param name="Message"></param>
+        /// <param name="message"></param>
         /// <returns></returns>
-        public static byte[] ConstructMessage(string Message)
+        public static byte[] ConstructMessage(string message)
         {
             var bw = new BinaryWriter(new MemoryStream());
             var r = new Regex(@"([^\[]+)*(\[face\d+\.gif\])([^\[]+)*");
-            if (r.IsMatch(Message))
+            if (r.IsMatch(message))
             {
-                var Faces = r.Matches(Message);
-                for (var i = 0; i < Faces.Count; i++)
+                var faces = r.Matches(message);
+                for (var i = 0; i < faces.Count; i++)
                 {
-                    var face = Faces[i];
+                    var face = faces[i];
                     for (var j = 1; j < face.Groups.Count; j++)
                     {
                         var group = face.Groups[j].Value;
@@ -195,9 +196,9 @@ namespace QQ.Framework.Packets
                         }
                         else if (!string.IsNullOrEmpty(group))
                         {
-                            var GroupMsg = Encoding.UTF8.GetBytes(group);
+                            var groupMsg = Encoding.UTF8.GetBytes(group);
                             //普通消息
-                            ConstructMessage(bw, GroupMsg);
+                            ConstructMessage(bw, groupMsg);
                         }
                     }
                 }
@@ -210,50 +211,50 @@ namespace QQ.Framework.Packets
         ///     普通消息
         /// </summary>
         /// <param name="writer"></param>
-        /// <param name="GroupMsg"></param>
-        public static void ConstructMessage(BinaryWriter writer, byte[] GroupMsg)
+        /// <param name="groupMsg"></param>
+        public static void ConstructMessage(BinaryWriter writer, byte[] groupMsg)
         {
             writer.Write(new byte[] {0x01});
-            writer.BEWrite((ushort) (GroupMsg.Length + 3));
+            writer.BeWrite((ushort) (groupMsg.Length + 3));
             writer.Write(new byte[] {0x01});
-            writer.BEWrite((ushort) GroupMsg.Length);
-            writer.Write(GroupMsg);
+            writer.BeWrite((ushort) groupMsg.Length);
+            writer.Write(groupMsg);
         }
 
 
-        public static void SendAudio(uint QQ, string file)
+        public static void SendAudio(uint qq, string file)
         {
         }
 
 
-        public static void SendOfflineFile(uint QQ, string file)
+        public static void SendOfflineFile(uint qq, string file)
         {
         }
 
         /// <summary>
         ///     XML消息组装
         /// </summary>
-        /// <param name="_DateTime">时间</param>
+        /// <param name="dateTime">时间</param>
         /// <param name="compressMsg">压缩消息数组</param>
-        public static byte[] SendXML(long _DateTime, byte[] compressMsg)
+        public static byte[] SendXml(long dateTime, byte[] compressMsg)
         {
             var bw = new BinaryWriter(new MemoryStream());
-            bw.BEWrite(_DateTime);
+            bw.BeWrite(dateTime);
             bw.Write(Util.RandomKey(4));
             bw.Write(new byte[] {0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00});
             bw.Write(new byte[] {0x00, 0x0C});
             bw.Write(new byte[] {0xE5, 0xBE, 0xAE, 0xE8, 0xBD, 0xAF, 0xE9, 0x9B, 0x85, 0xE9, 0xBB, 0x91});
             bw.Write(new byte[] {0x00, 0x00, 0x14});
-            bw.BEWrite((ushort) (compressMsg.Length + 11));
+            bw.BeWrite((ushort) (compressMsg.Length + 11));
             bw.Write((byte) 0x01);
-            bw.BEWrite((ushort) (compressMsg.Length + 1));
+            bw.BeWrite((ushort) (compressMsg.Length + 1));
             bw.Write((byte) 0x01);
             bw.Write(compressMsg);
             bw.Write(new byte[] {0x02, 0x00, 0x04, 0x00, 0x00, 0x00, 0x4D});
             return bw.BaseStream.ToBytesArray();
         }
 
-        public static byte[] SendJson(string Message)
+        public static byte[] SendJson(string message)
         {
             throw new Exception();
         }

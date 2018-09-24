@@ -1,14 +1,15 @@
 ﻿using System.IO;
 using System.Linq;
+using QQ.Framework.Events;
 using QQ.Framework.Packets.Receive.Message;
 using QQ.Framework.Packets.Send.Message;
 
 namespace QQ.Framework.Domains.Commands.ResponseCommands.Message
 {
-    [ResponsePacketCommand(QQCommand.Message0x0017)]
-    public class ResponseGroupOrSystemMessageCommand : ResponseCommand<Receive_0x0017>
+    [ResponsePacketCommand(QQCommand.Message0X0017)]
+    public class ResponseGroupOrSystemMessageCommand : ResponseCommand<Receive_0X0017>
     {
-        public ResponseGroupOrSystemMessageCommand(QQEventArgs<Receive_0x0017> args) : base(args)
+        public ResponseGroupOrSystemMessageCommand(QQEventArgs<Receive_0X0017> args) : base(args)
         {
         }
 
@@ -29,9 +30,9 @@ namespace QQ.Framework.Domains.Commands.ResponseCommands.Message
             }
 
             //提取数据
-            var dataReader = new BinaryReader(new MemoryStream(_packet.bodyDecrypted));
+            var dataReader = new BinaryReader(new MemoryStream(_packet.BodyDecrypted));
 
-            _service.Send(new Send_0x0017(_user, dataReader.ReadBytes(0x10), _packet.Sequence));
+            _service.Send(new Send_0X0017(_user, dataReader.ReadBytes(0x10), _packet.Sequence));
 
 
             //查看群消息确认

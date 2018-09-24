@@ -6,13 +6,13 @@ namespace QQ.Framework.Packets.Receive.Message
     /// <summary>
     ///     好友消息
     /// </summary>
-    public class Receive_0x00CE : ReceivePacket
+    public class Receive_0X00Ce : ReceivePacket
     {
         /// <summary>
         ///     好友消息
         /// </summary>
-        public Receive_0x00CE(byte[] byteBuffer, QQUser User)
-            : base(byteBuffer, User, User.TXProtocol.SessionKey)
+        public Receive_0X00Ce(byte[] byteBuffer, QQUser user)
+            : base(byteBuffer, user, user.TXProtocol.SessionKey)
         {
         }
 
@@ -48,32 +48,32 @@ namespace QQ.Framework.Packets.Receive.Message
 
         protected override void ParseBody()
         {
-            Decrypt(user.TXProtocol.SessionKey);
-            FromQQ = (long) Util.GetQQNumRetUint(Util.ToHex(reader.ReadBytes(4)));
-            reader.ReadBytes(4); //自己的QQ
-            reader.ReadBytes(10);
-            MessageType = reader.ReadBytes(2);
-            reader.BEReadChar();
-            reader.ReadBytes(reader.BEReadChar()); //未知
-            reader.BEReadChar(); //消息来源QQ的版本号
-            reader.ReadBytes(4); //FromQQ
-            reader.ReadBytes(4); //自己的QQ
-            reader.ReadBytes(20);
-            MessageDateTime = reader.ReadBytes(4);
-            reader.BEReadChar(); //00
-            reader.ReadBytes(4); //MessageDateTime
-            reader.ReadBytes(5); //00
-            reader.ReadBytes(3);
-            reader.ReadBytes(5); //00
-            reader.ReadBytes(4); //MessageDateTime
-            reader.ReadBytes(4);
-            reader.ReadBytes(8);
-            FontStyle = reader.ReadBytes(reader.BEReadChar());
-            reader.ReadBytes(6);
-            MessageLength = reader.BEReadChar();
+            Decrypt(User.TXProtocol.SessionKey);
+            FromQQ = (long) Util.GetQQNumRetUint(Util.ToHex(Reader.ReadBytes(4)));
+            Reader.ReadBytes(4); //自己的QQ
+            Reader.ReadBytes(10);
+            MessageType = Reader.ReadBytes(2);
+            Reader.BeReadChar();
+            Reader.ReadBytes(Reader.BeReadChar()); //未知
+            Reader.BeReadChar(); //消息来源QQ的版本号
+            Reader.ReadBytes(4); //FromQQ
+            Reader.ReadBytes(4); //自己的QQ
+            Reader.ReadBytes(20);
+            MessageDateTime = Reader.ReadBytes(4);
+            Reader.BeReadChar(); //00
+            Reader.ReadBytes(4); //MessageDateTime
+            Reader.ReadBytes(5); //00
+            Reader.ReadBytes(3);
+            Reader.ReadBytes(5); //00
+            Reader.ReadBytes(4); //MessageDateTime
+            Reader.ReadBytes(4);
+            Reader.ReadBytes(8);
+            FontStyle = Reader.ReadBytes(Reader.BeReadChar());
+            Reader.ReadBytes(6);
+            MessageLength = Reader.BeReadChar();
             // TODO: 解析富文本
-            Message = Richtext.FromLiteral(Encoding.UTF8.GetString(reader.ReadBytes(MessageLength)));
-            reader.ReadBytes(22);
+            Message = Richtext.FromLiteral(Encoding.UTF8.GetString(Reader.ReadBytes(MessageLength)));
+            Reader.ReadBytes(22);
         }
     }
 }

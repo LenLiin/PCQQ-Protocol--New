@@ -19,7 +19,7 @@ namespace QQ.Framework
         ///// <summary>
         ///// QQTIM1.0 PUBLICKEY
         ///// </summary>
-        public byte[] QQ_PUBLIC_KEY { get; set; } =
+        public byte[] QQPublicKey { get; set; } =
         {
             0x02, 0x6D, 0x28, 0x41, 0xD2, 0xA5, 0x6F, 0xD2, 0xFC,
             0x3E, 0x2A, 0x1F, 0x03, 0x75, 0xDE, 0x6E, 0x28, 0x8F, 0xA8, 0x19, 0x3E, 0x5F, 0x16, 0x49, 0xD3
@@ -36,7 +36,7 @@ namespace QQ.Framework
         /// <summary>
         ///     QQTIM1.0 SHAREKEY
         /// </summary>
-        public byte[] QQ_SHARE_KEY { get; set; } =
+        public byte[] QQShareKey { get; set; } =
         {
             0x1A, 0xE9, 0x7F, 0x7D, 0xC9, 0x73, 0x75, 0x98, 0xAC,
             0x02, 0xE0, 0x80, 0x5F, 0xA9, 0xC6, 0xAF
@@ -59,52 +59,52 @@ namespace QQ.Framework
         /// <summary>
         ///     包体占位段(暂时未解析出具体含义)
         /// </summary>
-        public byte[] QQ_PACKET_FIXVER { get; set; } =
+        public byte[] QQPacketFixver { get; set; } =
             {0x03, 0x00, 0x00, 0x00, 0x01, 0x2E, 0x01, 0x00, 0x00, 0x68, 0x52, 0x00, 0x00, 0x00, 0x00};
 
         /// <summary>
         ///     登录包包体占位段0(暂时未解析出具体含义)
         /// </summary>
-        public byte[] QQ_PACKET_0825DATA0 { get; set; } = {0x00, 0x18, 0x00, 0x16, 0x00, 0x01};
+        public byte[] QQPacket0825Data0 { get; set; } = {0x00, 0x18, 0x00, 0x16, 0x00, 0x01};
 
         /// <summary>
         ///     登录包包体占位段2(暂时未解析出具体含义)
         /// </summary>
-        public byte[] QQ_PACKET_0825DATA2 { get; set; } =
+        public byte[] QQPacket0825Data2 { get; set; } =
             {0x00, 0x00, 0x04, 0x53, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x15, 0x85};
 
         /// <summary>
         ///     登录包密钥
         /// </summary>
-        public byte[] QQ_PACKET_0825KEY { get; set; } = Util.RandomKey();
+        public byte[] QQPacket0825Key { get; set; } = Util.RandomKey();
 
         /// <summary>
         ///     重定向密钥
         /// </summary>
-        public byte[] QQ_PACKET_REDIRECTIONKEY { get; set; } = Util.RandomKey();
+        public byte[] QQPacketRedirectionkey { get; set; } = Util.RandomKey();
 
         /// <summary>
         ///     验证码报文秘钥
         /// </summary>
-        public byte[] QQ_PACKET_00BA_Key { get; set; } = Util.RandomKey();
+        public byte[] QQPacket00BaKey { get; set; } = Util.RandomKey();
 
 
         /// <summary>
         ///     0836登录包包体占位段(暂时未解析出具体含义)
         /// </summary>
-        public byte[] QQ_PACKET_0836FIX { get; set; } =
+        public byte[] QQPacket0836Fix { get; set; } =
         {
             0x06, 0xA9, 0x12, 0x97, 0xB7, 0xF8, 0x76,
             0x25, 0xAF, 0xAF, 0xD3, 0xEA, 0xB4, 0xC8, 0xBC, 0xE7
         };
 
-        public byte[] QQ_PACKET_TgtgtKey { get; set; } = Util.RandomKey();
-        public byte[] QQ_PACKET_Crc32_Code { get; set; } = Util.RandomKey();
+        public byte[] QQPacketTgtgtKey { get; set; } = Util.RandomKey();
+        public byte[] QQPacketCrc32Code { get; set; } = Util.RandomKey();
 
         /// <summary>
         ///     00BA占位段(暂时未解析出具体含义)
         /// </summary>
-        public byte[] QQ_PACKET_00BA_FixKey { get; set; } =
+        public byte[] QQPacket00BaFixKey { get; set; } =
         {
             0x69, 0x20, 0xD1, 0x14, 0x74, 0xF5, 0xB3,
             0x93, 0xE4, 0xD5, 0x02, 0xB3, 0x71, 0x1A, 0xCD, 0x2A
@@ -113,7 +113,7 @@ namespace QQ.Framework
         /// <summary>
         ///     占位段1(暂时未解析出具体含义)
         /// </summary>
-        public byte[] QQ_PACKET_FIX1 { get; set; } =
+        public byte[] QQPacketFix1 { get; set; } =
         {
             0x03, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x00,
             0x00, 0x68, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x03, 0x00, 0x19
@@ -122,7 +122,7 @@ namespace QQ.Framework
         /// <summary>
         ///     占位段2(暂时未解析出具体含义)
         /// </summary>
-        public byte[] QQ_PACKET_FIX2 { get; set; } =
+        public byte[] QQPacketFix2 { get; set; } =
         {
             0x00, 0x15, 0x00, 0x30, 0x00, 0x01, 0x01, 0x27,
             0x9B, 0xC7, 0xF5, 0x00, 0x10, 0x65, 0x03, 0xFD,
@@ -135,9 +135,9 @@ namespace QQ.Framework
         /// <summary>
         ///     0836密钥1
         /// </summary>
-        public byte[] QQ_PACKET_0836_KEY1 { get; set; } = Util.RandomKey();
+        public byte[] QQPacket0836Key1 { get; set; } = Util.RandomKey();
 
-        public byte[] QQ_DeviceID { get; set; } =
+        public byte[] QQDeviceId { get; set; } =
         {
             0x1A, 0x68, 0x73, 0x66, 0xE4, 0xBA, 0x79, 0x92, 0xCC, 0xC2, 0xD4, 0xEC, 0x14, 0x7C, 0x8B, 0xAF, 0x43, 0xB0,
             0x62, 0xFB, 0x65, 0x58, 0xA9, 0xEB, 0x37, 0x55, 0x1D, 0x26, 0x13, 0xA8, 0xE5, 0x3D
@@ -146,54 +146,54 @@ namespace QQ.Framework
         /// <summary>
         ///     客户端Key
         /// </summary>
-        public byte[] QQ_ClientKey { get; set; }
+        public byte[] QQClientKey { get; set; }
 
-        public byte[] QQ_tlv_0006_encr { get; set; }
-        public byte[] QQ_tlv_001A_encr { get; set; }
-        public byte[] QQ_tlv_0105 { get; set; }
-        public byte[] QQ_PACKET_00BAToken { get; set; }
-        public byte[] QQ_PACKET_00BAVerifyToken { get; set; }
-        public byte[] QQ_PACKET_00BAVerifyCode { get; set; }
-        public byte QQ_PACKET_00BASequence { get; set; } = 0x01;
+        public byte[] Qqtlv0006Encr { get; set; }
+        public byte[] Qqtlv001AEncr { get; set; }
+        public byte[] Qqtlv0105 { get; set; }
+        public byte[] QQPacket00BaToken { get; set; }
+        public byte[] QQPacket00BaVerifyToken { get; set; }
+        public byte[] QQPacket00BaVerifyCode { get; set; }
+        public byte QQPacket00BaSequence { get; set; } = 0x01;
 
         /// <summary>
         ///     0828解密密钥
         /// </summary>
-        public byte[] QQ_0828_rec_decr_key { get; set; }
+        public byte[] QQ0828RecDecrKey { get; set; }
 
         /// <summary>
         ///     0828加密密钥
         /// </summary>
-        public byte[] QQ_0828_rec_ecr_key { get; set; }
+        public byte[] QQ0828RecEcrKey { get; set; }
 
         /// <summary>
         ///     0825Token
         /// </summary>
-        public byte[] QQ_0825Token { get; set; }
+        public byte[] QQ0825Token { get; set; }
 
-        public byte[] QQ_0836Token { get; set; }
-        public byte[] QQ_0836_038Token { get; set; }
-        public byte[] QQ_0836_088Token { get; set; }
-
-        /// <summary>
-        ///     加 好友/群 所需Token
-        /// </summary>
-        public byte[] AddFriend_0018Value { get; set; }
+        public byte[] QQ0836Token { get; set; }
+        public byte[] QQ0836038Token { get; set; }
+        public byte[] QQ0836088Token { get; set; }
 
         /// <summary>
         ///     加 好友/群 所需Token
         /// </summary>
-        public byte[] AddFriend_0020Value { get; set; }
+        public byte[] AddFriend0018Value { get; set; }
+
+        /// <summary>
+        ///     加 好友/群 所需Token
+        /// </summary>
+        public byte[] AddFriend0020Value { get; set; }
 
         /// <summary>
         ///     MD5_32
         /// </summary>
-        public byte[] MD5_32 { get; set; } = Util.RandomKey(32);
+        public byte[] MD532 { get; set; } = Util.RandomKey(32);
 
         /// <summary>
         ///     登录令牌
         /// </summary>
-        public byte[] QQ_SessionKey { get; set; }
+        public byte[] QQSessionKey { get; set; }
 
         /// <summary>
         ///     MD5处理的用户密码
@@ -204,7 +204,7 @@ namespace QQ.Framework
         ///     密码一次MD5
         /// </summary>
         public byte[] MD51 { get; set; }
-        
+
         /// <summary>
         ///     QQ号
         /// </summary>
@@ -214,7 +214,7 @@ namespace QQ.Framework
         ///     本地端口，在QQ中其实只有两字节
         /// </summary>
         public int Port { get; set; }
-        
+
 
         /// <summary>
         ///     上一次登陆时间，在QQ中其实只有4字节
@@ -261,9 +261,9 @@ namespace QQ.Framework
         /// </summary>
         public byte Gender { get; set; }
 
-        public string QQ_Skey { get; set; }
-        public string QQ_Cookies { get; set; }
-        public string QQ_Gtk { get; set; }
+        public string QQSkey { get; set; }
+        public string QQCookies { get; set; }
+        public string QQGtk { get; set; }
 
         /// <summary>
         ///     已接收数据包序号集合
@@ -274,10 +274,8 @@ namespace QQ.Framework
 
         #region TXSSO  TLV参数
 
-
         public TXProtocol TXProtocol { get; set; } = new TXProtocol();
 
-       
         #endregion
 
         private void Initialize()
@@ -314,8 +312,8 @@ namespace QQ.Framework
         {
             var byteBuffer = new BinaryWriter(new MemoryStream());
             byteBuffer.Write(MD51);
-            byteBuffer.BEWrite(0);
-            byteBuffer.BEWrite(QQ);
+            byteBuffer.BeWrite(0);
+            byteBuffer.BeWrite(QQ);
             return MD5.Create().ComputeHash(((MemoryStream) byteBuffer.BaseStream).ToArray());
         }
     }

@@ -1,34 +1,33 @@
 using System.IO;
-using QQ.Framework;
 using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.PCTLV
 {
     [TlvTag(TlvTags.SigIP2)]
-    internal class TLV_0112 : BaseTLV
+    internal class TLV0112 : BaseTLV
     {
-        public TLV_0112()
+        public TLV0112()
         {
-            cmd = 0x0112;
+            Command = 0x0112;
             Name = "SSO2::TLV_SigIP2_0x112";
         }
 
-        public byte[] Get_Tlv(QQUser User)
+        public byte[] Get_Tlv(QQUser user)
         {
             var data = new BinaryWriter(new MemoryStream());
-            data.Write(User.TXProtocol.bufSigClientAddr);
-            fill_head(cmd);
-            fill_body(data.BaseStream.ToBytesArray(), data.BaseStream.Length);
-            set_length();
-            return get_buf();
+            data.Write(user.TXProtocol.BufSigClientAddr);
+            FillHead(Command);
+            FillBody(data.BaseStream.ToBytesArray(), data.BaseStream.Length);
+            SetLength();
+            return GetBuffer();
         }
 
-        public void Parser_Tlv(QQUser User, BinaryReader buf)
+        public void Parser_Tlv(QQUser user, BinaryReader buf)
         {
-            var _type = buf.BEReadUInt16();//type
-            var _length = buf.BEReadUInt16();//length
-            User.TXProtocol.bufSigClientAddr =
-                buf.ReadBytes(_length);//bufSigClientAddr
+            var type = buf.BeReadUInt16(); //type
+            var length = buf.BeReadUInt16(); //length
+            user.TXProtocol.BufSigClientAddr =
+                buf.ReadBytes(length); //bufSigClientAddr
         }
     }
 }
