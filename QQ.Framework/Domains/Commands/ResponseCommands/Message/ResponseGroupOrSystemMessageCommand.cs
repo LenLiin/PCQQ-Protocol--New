@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
+using QQ.Framework.Events;
 using QQ.Framework.Packets.Receive.Message;
 using QQ.Framework.Packets.Send.Message;
 

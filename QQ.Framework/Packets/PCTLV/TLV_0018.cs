@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using QQ.Framework;
 using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.PCTLV
@@ -17,7 +16,7 @@ namespace QQ.Framework.Packets.PCTLV
         /// <summary>
         /// Ping
         /// </summary>
-        /// <param name="m_PCClient"></param>
+        /// <param name="User"></param>
         /// <returns></returns>
         public byte[] Get_Tlv(QQUser User)
         {

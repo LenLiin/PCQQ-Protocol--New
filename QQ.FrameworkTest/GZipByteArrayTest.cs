@@ -1,6 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using QQ.Framework.Utils;
-using System;
 
 namespace QQ.FrameworkTest
 {

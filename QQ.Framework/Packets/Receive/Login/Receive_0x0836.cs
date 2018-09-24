@@ -1,10 +1,6 @@
-using System;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using QQ.Framework.Packets.PCTLV;
-using QQ.Framework.TlvLib;
 using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.Receive.Login
@@ -36,9 +32,9 @@ namespace QQ.Framework.Packets.Receive.Login
                 //重置指针（因为tlv解包后指针已经移动到末尾）
                 reader.BaseStream.Position = 1;
                 TlvExecutionProcessing(tlvs);
-                if (tlvs.Where(c => c.Tag == 0x0100).Any())
+                if (tlvs.Any(c => c.Tag == 0x0100))
                 {
-                    var errorData = tlvs.Where(c => c.Tag == 0x0100).FirstOrDefault();
+                    var errorData = tlvs.FirstOrDefault(c => c.Tag == 0x0100);
                     var ErrReader = new BinaryReader(new MemoryStream(errorData.Value));
                     var tlv = new TLV_0100();
                     tlv.Parser_Tlv2(user, ErrReader,errorData.Length);

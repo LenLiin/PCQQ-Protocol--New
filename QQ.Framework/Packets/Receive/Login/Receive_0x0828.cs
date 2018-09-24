@@ -1,6 +1,3 @@
-using QQ.Framework.Utils;
-using System;
-
 namespace QQ.Framework.Packets.Receive.Login
 {
     public class Receive_0x0828 : ReceivePacket

@@ -1,5 +1,4 @@
 using QQ.Framework.Packets.PCTLV;
-using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.Send.Login
 {

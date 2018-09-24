@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using System.IO;
 
 namespace QQ.Framework.Utils
 {
@@ -9,7 +6,6 @@ namespace QQ.Framework.Utils
     {
         public static byte[] GetQdData(QQUser User)
         {
-            byte[] result = null;
             try
             {
                 var data = new BinaryWriter(new MemoryStream());
@@ -51,7 +47,7 @@ namespace QQ.Framework.Utils
                 qddata.Write(size);
                 qddata.Write(data.BaseStream.Length);
 
-                result = data.BaseStream.ToBytesArray();
+                var result = data.BaseStream.ToBytesArray();
                 User.TXProtocol.QdData = result;
                 return result;
             }

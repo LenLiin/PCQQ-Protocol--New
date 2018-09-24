@@ -1,7 +1,3 @@
-using QQ.Framework.Packets.PCTLV;
-using QQ.Framework.TlvLib;
-using QQ.Framework.Utils;
-
 namespace QQ.Framework.Packets.Receive.Login
 {
     public class Receive_0x0825 : ReceivePacket
@@ -11,7 +7,7 @@ namespace QQ.Framework.Packets.Receive.Login
         {
         }
         /// <summary>
-        /// ״̬��
+        /// ״̬��
         /// </summary>
         public byte Result { get; set; }
 

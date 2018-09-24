@@ -1,4 +1,5 @@
-﻿using QQ.Framework.Packets.Receive.Message;
+﻿using QQ.Framework.Events;
+using QQ.Framework.Packets.Receive.Message;
 
 namespace QQ.Framework.Domains.Commands.ReceiveCommands.Message
 {

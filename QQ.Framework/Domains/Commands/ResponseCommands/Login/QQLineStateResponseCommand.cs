@@ -1,4 +1,5 @@
-﻿using QQ.Framework.Packets.Receive.Login;
+﻿using QQ.Framework.Events;
+using QQ.Framework.Packets.Receive.Login;
 using QQ.Framework.Packets.Send.Data;
 
 namespace QQ.Framework.Domains.Commands.ResponseCommands.Login

@@ -1,5 +1,6 @@
 using System.Threading;
 using QQ.Framework.Domains;
+using QQ.Framework.Events;
 using QQ.Framework.Packets;
 using QQ.Framework.Utils;
 

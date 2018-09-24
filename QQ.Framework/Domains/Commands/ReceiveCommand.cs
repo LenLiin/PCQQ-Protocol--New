@@ -1,4 +1,5 @@
-﻿using QQ.Framework.Packets;
+﻿using QQ.Framework.Events;
+using QQ.Framework.Packets;
 using QQ.Framework.Utils;
 
 namespace QQ.Framework.Domains.Commands

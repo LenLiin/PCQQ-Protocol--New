@@ -2,7 +2,7 @@ using System;
 using QQ.Framework.Domains;
 using QQ.Framework.Packets;
 
-namespace QQ.Framework
+namespace QQ.Framework.Events
 {
     public class QQEventArgs<R> : EventArgs
         where R : ReceivePacket

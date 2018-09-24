@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using QQ.Framework;
 using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.PCTLV
@@ -18,7 +17,7 @@ namespace QQ.Framework.Packets.PCTLV
         public byte[] Get_Tlv(QQUser User)
         {
             var data = new BinaryWriter(new MemoryStream());
-            if (this.wSubVer == 0x0002)
+            if (wSubVer == 0x0002)
             {
                 data.BEWrite(this.wSubVer); //wSubVer
                 var newbyte = User.TXProtocol.bufTGT;
@@ -34,7 +33,7 @@ namespace QQ.Framework.Packets.PCTLV
             }
             else
             {
-                throw new Exception(string.Format("{0} 无法识别的版本号 {1}", this.Name, this.wSubVer));
+                throw new Exception($"{this.Name} 无法识别的版本号 {this.wSubVer}");
             }
             fill_head(this.cmd);
             fill_body(data.BaseStream.ToBytesArray(), data.BaseStream.Length);

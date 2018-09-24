@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Net;
-using QQ.Framework;
 using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.PCTLV

@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using QQ.Framework;
 using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.PCTLV
@@ -18,7 +17,6 @@ namespace QQ.Framework.Packets.PCTLV
         {
             var _type = buf.BEReadUInt16();//type
             var _length = buf.BEReadUInt16();//length
-            int len;
             wSubVer = buf.BEReadUInt16(); //wSubVer
             if (wSubVer == 0x0001)
             {
@@ -33,7 +31,7 @@ namespace QQ.Framework.Packets.PCTLV
                 var dwReLoginConnIP = buf.ReadBytes(4);
                 var dwReLoginCtrlFlag = buf.BEReadInt32();
 
-                len = buf.BEReadUInt16();
+                int len = buf.BEReadUInt16();
                 var bufComputerIDSig = buf.ReadBytes(len);
 
                 len = buf.ReadByte();

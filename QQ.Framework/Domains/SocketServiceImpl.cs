@@ -81,7 +81,7 @@ namespace QQ.Framework.Domains
             var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "yanzhengma");
             var img = ImageHelper.CreateImageFromBytes(path, data);
 
-            Console.Write($"请输入验证码:");
+            Console.Write("请输入验证码:");
             var code = Console.ReadLine();
             if (!string.IsNullOrEmpty(code))
             {

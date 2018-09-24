@@ -511,7 +511,7 @@ namespace QQ.Framework.Utils
         }
         public static void BEWrite(this BinaryWriter bw, DateTime v)
         {
-            bw.BEWrite(Util.GetTimeSeconds(v));
+            bw.BEWrite(GetTimeSeconds(v));
         }
 
         public static void BEWrite(this BinaryWriter bw, char v)

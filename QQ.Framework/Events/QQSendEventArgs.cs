@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace QQ.Framework
+namespace QQ.Framework.Events
 {
     public class QQSendEventArgs : EventArgs
     {

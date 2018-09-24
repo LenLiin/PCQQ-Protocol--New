@@ -29,7 +29,8 @@ namespace QQ.Framework.TlvLib
         /// <summary>
         /// The raw TLV data.
         /// </summary>
-        public string HexData { get { return GetHexString(Data); } }
+        public string HexData => GetHexString(Data);
+
         /// <summary>
         /// The TLV tag.
         /// </summary>
@@ -37,11 +38,8 @@ namespace QQ.Framework.TlvLib
         /// <summary>
         /// The TLV tag.
         /// </summary>
-        public string HexTag {
-            get {
-                return Utils.Util.NumToHexString(Tag, 4);
-            }
-        }
+        public string HexTag => Utils.Util.NumToHexString(Tag, 4);
+
         /// <summary>
         /// The length of the TLV value.
         /// </summary>
@@ -49,13 +47,8 @@ namespace QQ.Framework.TlvLib
         /// <summary>
         /// The length of the TLV value.
         /// </summary>
-        public string HexLength
-        {
-            get
-            {
-                return Utils.Util.NumToHexString(Length, 4);
-            }
-        }
+        public string HexLength => Utils.Util.NumToHexString(Length, 4);
+
         /// <summary>
         /// The TLV value.
         /// </summary>
@@ -71,7 +64,8 @@ namespace QQ.Framework.TlvLib
         /// <summary>
         /// The TLV value.
         /// </summary>
-        public string HexValue { get { return GetHexString(Value); } }
+        public string HexValue => GetHexString(Value);
+
         /// <summary>
         /// TLV children.
         /// </summary>
