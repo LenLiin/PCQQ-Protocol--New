@@ -66,16 +66,16 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\QQ.Framework\QQ.Framework.csproj">
-      <Project>{155BC652-D6ED-4DBF-82D2-A9188CB57C52}</Project>
-      <Name>QQ.Framework</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Domains\Commands\ReceiveCommands\Data\" />
     <Folder Include="Domains\Commands\ReceiveCommands\Interactive\" />
     <Folder Include="Domains\Commands\ReceiveCommands\Login\" />
     <Folder Include="Domains\Commands\ReceiveCommands\Message\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\QQ.Framework\QQ.Framework.csproj">
+      <Project>{13a2cfe6-7b1a-4231-bd19-5aade3b4f33c}</Project>
+      <Name>QQ.Framework</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -336,7 +336,7 @@ namespace QQ.Framework.Utils
             return ips[0].ToString();
         }
 
-        public static string GET_GTK(string skey)
+        public static string GetBkn(string skey)
         {
             var num = 5381;
             for (var i = 0; i <= skey.Length - 1; i++)
@@ -347,7 +347,7 @@ namespace QQ.Framework.Utils
             return (num & 0x7FFFFFFF).ToString();
         }
 
-        public static string GetAntiCsrfToken(string skey)
+        public static string GET_GTK(string skey)
         {
             var arg = "tencentQQVIP123443safde&!%^%1282";
             var list = new List<int>();

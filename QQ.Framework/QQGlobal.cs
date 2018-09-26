@@ -309,7 +309,30 @@ namespace QQ.Framework
         /// 获取群分组
         /// </summary>
         Data0X0195 = 0x0195,
+        /// <summary>
+        /// 查询黑名单
+        /// </summary>
+        Data0X01A5 = 0x01A5,
         Data0X019B = 0x019B,
+        /// <summary>
+        /// 获取好友和群列表
+        /// </summary>
+        Data0X0134 = 0x0134,
+        Data0X01C4 = 0x01C4,
+        Data0X01C5 = 0x01C5,
+        Data0X0126 = 0x0126,
+        /// <summary>
+        /// 天气预报
+        /// </summary>
+        Data0X00A6 = 0x00A6,
+        /// <summary>
+        /// PM2.5浓度
+        /// </summary>
+        Data0X0397 = 0x0397,
+        /// <summary>
+        /// 问问个人中心API地址
+        /// </summary>
+        Data0X00D8 = 0x00D8,
 
         /// <summary>
         ///     群消息

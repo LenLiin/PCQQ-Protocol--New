@@ -1,26 +1,251 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{13A2CFE6-7B1A-4231-BD19-5AADE3B4F33C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>QQ.Framework</RootNamespace>
+    <AssemblyName>QQ.Framework</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
-
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+  </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Domains\IPacket.cs" />
-    <Compile Remove="Domains\ReceiveCommand.cs" />
-    <Compile Remove="Domains\ReceivePackageCommand.cs" />
+    <Reference Include="Ionic.Zlib, Version=1.9.1.5, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ionic.Zlib.1.9.1.5\lib\Ionic.Zlib.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="Iconic.Zlib.Netstandard" Version="1.0.0" />
-    <PackageReference Include="protobuf-net" Version="3.0.0-alpha.3" />
-    <PackageReference Include="System.Drawing.Common" Version="4.5.0" />
+    <Compile Include="Domains\Commands\PacketCommand.cs" />
+    <Compile Include="Domains\Commands\ReceiveCommand.cs" />
+    <Compile Include="Domains\Commands\ReceiveCommands\Data\Data0X00D8Command.cs" />
+    <Compile Include="Domains\Commands\ReceiveCommands\Data\Data0X0134Command.cs" />
+    <Compile Include="Domains\Commands\ReceiveCommands\Data\Data0X019BCommand.cs" />
+    <Compile Include="Domains\Commands\ReceiveCommands\Data\Data0X01C4Command.cs" />
+    <Compile Include="Domains\Commands\ReceiveCommands\Data\Data0X01C5Command.cs" />
+    <Compile Include="Domains\Commands\ReceiveCommands\Data\GetQQLevelCommand.cs" />
+    <Compile Include="Domains\Commands\ReceiveCommands\Data\GroupCategoryCommand.cs" />
+    <Compile Include="Domains\Commands\ReceiveCommands\Data\KeyQueryCommand.cs" />
+    <Compile Include="Domains\Commands\ReceiveCommands\DefaultReceiveCommand.cs" />
+    <Compile Include="Domains\Commands\ReceiveCommands\Login\GetTGTGTCommand.cs" />
+    <Compile Include="Domains\Commands\ReceiveCommands\Login\LoginPingCommand.cs" />
+    <Compile Include="Domains\Commands\ReceiveCommands\Login\OnLineStateCommand.cs" />
+    <Compile Include="Domains\Commands\ReceiveCommands\Login\PreLoginCommand.cs" />
+    <Compile Include="Domains\Commands\ReceiveCommands\Login\VerifyCodeCommand.cs" />
+    <Compile Include="Domains\Commands\ReceiveCommands\Message\KeepAliveCommand.cs" />
+    <Compile Include="Domains\Commands\ReceiveCommands\Message\ReceiveGroupSystemMessagesCommand.cs" />
+    <Compile Include="Domains\Commands\ReceiveCommands\Message\ReceiveQQFriendMessagesCommand.cs" />
+    <Compile Include="Domains\Commands\ReceiveCommands\Message\SendingGroupSystemMessagesCommand.cs" />
+    <Compile Include="Domains\Commands\ReceiveCommands\Message\SendingQQMessagesCommand.cs" />
+    <Compile Include="Domains\Commands\ReceivePacketCommand.cs" />
+    <Compile Include="Domains\Commands\ResponseCommand.cs" />
+    <Compile Include="Domains\Commands\ResponseCommands\Data\Data0X0134Command.cs" />
+    <Compile Include="Domains\Commands\ResponseCommands\Data\ResponseKeyQueryCommand.cs" />
+    <Compile Include="Domains\Commands\ResponseCommands\DefaultResponseCommand.cs" />
+    <Compile Include="Domains\Commands\ResponseCommands\Login\LoginPingResponseCommand.cs" />
+    <Compile Include="Domains\Commands\ResponseCommands\Login\LoginVerifyCommand.cs" />
+    <Compile Include="Domains\Commands\ResponseCommands\Login\PreLoginResponseCommand.cs" />
+    <Compile Include="Domains\Commands\ResponseCommands\Login\QQLineStateResponseCommand.cs" />
+    <Compile Include="Domains\Commands\ResponseCommands\Login\VerifyCodeResponseCommand.cs" />
+    <Compile Include="Domains\Commands\ResponseCommands\Message\ResponseGroupOrSystemMessageCommand.cs" />
+    <Compile Include="Domains\Commands\ResponseCommands\Message\ResponseKeepliveCommand.cs" />
+    <Compile Include="Domains\Commands\ResponseCommands\Message\ResponseReceiveFriendMessageCommand.cs" />
+    <Compile Include="Domains\Commands\ResponsePacketCommand.cs" />
+    <Compile Include="Domains\CustomRoBot.cs" />
+    <Compile Include="Domains\Observers\ServerMessageObserver.cs" />
+    <Compile Include="Domains\PacketProcessor.cs" />
+    <Compile Include="Domains\ReceiveData.cs" />
+    <Compile Include="Domains\ResponsiveMessages.cs" />
+    <Compile Include="Domains\SendMessageService.cs" />
+    <Compile Include="Domains\SendMessageServiceImpl.cs" />
+    <Compile Include="Domains\ServerMessageSubject.cs" />
+    <Compile Include="Domains\SocketService.cs" />
+    <Compile Include="Domains\SocketServiceImpl.cs" />
+    <Compile Include="Domains\Transponder.cs" />
+    <Compile Include="Events\QQEventArgs.cs" />
+    <Compile Include="Events\QQSendEventArgs.cs" />
+    <Compile Include="Packets\HttpEntity\FriendList.cs" />
+    <Compile Include="Packets\HttpEntity\GroupList.cs" />
+    <Compile Include="Packets\HttpEntity\GroupMembers.cs" />
+    <Compile Include="Packets\Packet.cs" />
+    <Compile Include="Packets\PCTLV\BaseTLV.cs" />
+    <Compile Include="Packets\PCTLV\TlvTagAttribute.cs" />
+    <Compile Include="Packets\PCTLV\TLV_0004.cs" />
+    <Compile Include="Packets\PCTLV\TLV_0005.cs" />
+    <Compile Include="Packets\PCTLV\TLV_0006.cs" />
+    <Compile Include="Packets\PCTLV\TLV_0007.cs" />
+    <Compile Include="Packets\PCTLV\TLV_0008.cs" />
+    <Compile Include="Packets\PCTLV\TLV_000A.cs" />
+    <Compile Include="Packets\PCTLV\TLV_000C.cs" />
+    <Compile Include="Packets\PCTLV\TLV_000D.cs" />
+    <Compile Include="Packets\PCTLV\TLV_0014.cs" />
+    <Compile Include="Packets\PCTLV\TLV_0015.cs" />
+    <Compile Include="Packets\PCTLV\TLV_0017.cs" />
+    <Compile Include="Packets\PCTLV\TLV_0018.cs" />
+    <Compile Include="Packets\PCTLV\TLV_001A.cs" />
+    <Compile Include="Packets\PCTLV\TLV_001E.cs" />
+    <Compile Include="Packets\PCTLV\TLV_001F.cs" />
+    <Compile Include="Packets\PCTLV\TLV_002D.cs" />
+    <Compile Include="Packets\PCTLV\TLV_002F.cs" />
+    <Compile Include="Packets\PCTLV\TLV_0032.cs" />
+    <Compile Include="Packets\PCTLV\TLV_0033.cs" />
+    <Compile Include="Packets\PCTLV\TLV_0036.cs" />
+    <Compile Include="Packets\PCTLV\TLV_0100.cs" />
+    <Compile Include="Packets\PCTLV\TLV_0102.cs" />
+    <Compile Include="Packets\PCTLV\TLV_0103.cs" />
+    <Compile Include="Packets\PCTLV\TLV_0104.cs" />
+    <Compile Include="Packets\PCTLV\TLV_0105.cs" />
+    <Compile Include="Packets\PCTLV\TLV_0107.cs" />
+    <Compile Include="Packets\PCTLV\TLV_0108.cs" />
+    <Compile Include="Packets\PCTLV\TLV_0109.cs" />
+    <Compile Include="Packets\PCTLV\TLV_010B.cs" />
+    <Compile Include="Packets\PCTLV\TLV_010C.cs" />
+    <Compile Include="Packets\PCTLV\TLV_010D.cs" />
+    <Compile Include="Packets\PCTLV\TLV_010E.cs" />
+    <Compile Include="Packets\PCTLV\TLV_0110.cs" />
+    <Compile Include="Packets\PCTLV\TLV_0112.cs" />
+    <Compile Include="Packets\PCTLV\TLV_0114.cs" />
+    <Compile Include="Packets\PCTLV\TLV_0115.cs" />
+    <Compile Include="Packets\PCTLV\TLV_0309.cs" />
+    <Compile Include="Packets\PCTLV\TLV_030F.cs" />
+    <Compile Include="Packets\PCTLV\TLV_0310.cs" />
+    <Compile Include="Packets\PCTLV\TLV_0312.cs" />
+    <Compile Include="Packets\PCTLV\TLV_0313.cs" />
+    <Compile Include="Packets\PCTLV\TLV_0508.cs" />
+    <Compile Include="Packets\ReceivePacket.cs" />
+    <Compile Include="Packets\Receive\Data\Receive_0x001D.cs" />
+    <Compile Include="Packets\Receive\Data\Receive_0x005C.cs" />
+    <Compile Include="Packets\Receive\Data\Receive_0x00D8.cs" />
+    <Compile Include="Packets\Receive\Data\Receive_0x0126.cs" />
+    <Compile Include="Packets\Receive\Data\Receive_0x0134.cs" />
+    <Compile Include="Packets\Receive\Data\Receive_0x0195.cs" />
+    <Compile Include="Packets\Receive\Data\Receive_0x019B.cs" />
+    <Compile Include="Packets\Receive\Data\Receive_0x01A5.cs" />
+    <Compile Include="Packets\Receive\Data\Receive_0x01C4.cs" />
+    <Compile Include="Packets\Receive\Data\Receive_0x01C5.cs" />
+    <Compile Include="Packets\Receive\Interactive\Receive_0x00A7.cs" />
+    <Compile Include="Packets\Receive\Interactive\Receive_0x00A8.cs" />
+    <Compile Include="Packets\Receive\Interactive\Receive_0x00AE.cs" />
+    <Compile Include="Packets\Receive\Interactive\Receive_0x0115.cs" />
+    <Compile Include="Packets\Receive\Login\Receive_0x00BA.cs" />
+    <Compile Include="Packets\Receive\Login\Receive_0x00EC.cs" />
+    <Compile Include="Packets\Receive\Login\Receive_0x0825.cs" />
+    <Compile Include="Packets\Receive\Login\Receive_0x0828.cs" />
+    <Compile Include="Packets\Receive\Login\Receive_0x0836.cs" />
+    <Compile Include="Packets\Receive\Message\Receive_0x0002.cs" />
+    <Compile Include="Packets\Receive\Message\Receive_0x0017.cs" />
+    <Compile Include="Packets\Receive\Message\Receive_0x0058.cs" />
+    <Compile Include="Packets\Receive\Message\Receive_0x00CD.cs" />
+    <Compile Include="Packets\Receive\Message\Receive_0x00CE.cs" />
+    <Compile Include="Packets\Receive\Message\Receive_0x01C0.cs" />
+    <Compile Include="Packets\Receive\Message\Receive_0x0319.cs" />
+    <Compile Include="Packets\Receive\Message\Receive_0x0352.cs" />
+    <Compile Include="Packets\Receive\Message\Receive_0x0360.cs" />
+    <Compile Include="Packets\Receive\Message\Receive_0x0388.cs" />
+    <Compile Include="Packets\Receive\Message\Receive_0x03E3.cs" />
+    <Compile Include="Packets\Receive\Message\Receive_Currency.cs" />
+    <Compile Include="Packets\SendPacket.cs" />
+    <Compile Include="Packets\Send\Data\Send_0x001D.cs" />
+    <Compile Include="Packets\Send\Data\Send_0x005C.cs" />
+    <Compile Include="Packets\Send\Data\Send_0x00D8.cs" />
+    <Compile Include="Packets\Send\Data\Send_0x0126.cs" />
+    <Compile Include="Packets\Send\Data\Send_0x0134.cs" />
+    <Compile Include="Packets\Send\Data\Send_0x0195.cs" />
+    <Compile Include="Packets\Send\Data\Send_0x019B.cs" />
+    <Compile Include="Packets\Send\Data\Send_0x01A5.cs" />
+    <Compile Include="Packets\Send\Data\Send_0x01C4.cs" />
+    <Compile Include="Packets\Send\Data\Send_0x01C5.cs" />
+    <Compile Include="Packets\Send\Interactive\Send_0x00A7.cs" />
+    <Compile Include="Packets\Send\Interactive\Send_0x00A8.cs" />
+    <Compile Include="Packets\Send\Interactive\Send_0x00AE.cs" />
+    <Compile Include="Packets\Send\Interactive\Send_0x0115.cs" />
+    <Compile Include="Packets\Send\Login\Send_0x00BA.cs" />
+    <Compile Include="Packets\Send\Login\Send_0x00EC.cs" />
+    <Compile Include="Packets\Send\Login\Send_0x0825.cs" />
+    <Compile Include="Packets\Send\Login\Send_0x0828.cs" />
+    <Compile Include="Packets\Send\Login\Send_0x0836.cs" />
+    <Compile Include="Packets\Send\Message\Send_0x0002.cs" />
+    <Compile Include="Packets\Send\Message\Send_0x0017.cs" />
+    <Compile Include="Packets\Send\Message\Send_0x0058.cs" />
+    <Compile Include="Packets\Send\Message\Send_0x00CD.cs" />
+    <Compile Include="Packets\Send\Message\Send_0x00CE.cs" />
+    <Compile Include="Packets\Send\Message\Send_0x01C0.cs" />
+    <Compile Include="Packets\Send\Message\Send_0x0319.cs" />
+    <Compile Include="Packets\Send\Message\Send_0x0352.cs" />
+    <Compile Include="Packets\Send\Message\Send_0x0360.cs" />
+    <Compile Include="Packets\Send\Message\Send_0x0388.cs" />
+    <Compile Include="Packets\Send\Message\Send_0x03E3.cs" />
+    <Compile Include="Packets\Send\Message\Send_Currency.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QQClient.cs" />
+    <Compile Include="QQGlobal.cs" />
+    <Compile Include="QQUser.cs" />
+    <Compile Include="Sockets\MessageManage.cs" />
+    <Compile Include="Sockets\TimersInvoke.cs" />
+    <Compile Include="TlvLib\Tlv.cs" />
+    <Compile Include="TXProtocol.cs" />
+    <Compile Include="Utils\CRC32.cs" />
+    <Compile Include="Utils\DispatchPacketToCommand.cs" />
+    <Compile Include="Utils\GZipByteArray.cs" />
+    <Compile Include="Utils\HttpWebClient.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Utils\ImageHelper.cs" />
+    <Compile Include="Utils\QdData.cs" />
+    <Compile Include="Utils\QQTea.cs" />
+    <Compile Include="Utils\ResponsePacketProcessor.cs" />
+    <Compile Include="Utils\Richtext.cs" />
+    <Compile Include="Utils\StringHandlingPackets.cs" />
+    <Compile Include="Utils\TeaCrypter.cs" />
+    <Compile Include="Utils\Util.cs" />
+    <Compile Include="Utils\XXTeaCrypter.cs" />
   </ItemGroup>
-
   <ItemGroup>
-    <Folder Include="Docs\UMLs\" />
+    <None Include="Docs\add_your_custom_robot.md" />
+    <None Include="Docs\MessageManage.md" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Docs\UMLs\RoBot.png" />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="Domains\Commands\ReceiveCommands\Interactive\" />
-    <Folder Include="Docs\" />
   </ItemGroup>
-
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
