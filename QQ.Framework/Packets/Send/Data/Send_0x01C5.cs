@@ -8,12 +8,12 @@ namespace QQ.Framework.Packets.Send.Data
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="User"></param>
-        public Send_0X01C5(QQUser User)
-            : base(User)
+        /// <param name="user"></param>
+        public Send_0X01C5(QQUser user)
+            : base(user)
         {
             Sequence = GetNextSeq();
-            SecretKey = User.TXProtocol.SessionKey;
+            SecretKey = user.TXProtocol.SessionKey;
             Command = QQCommand.Data0X01C5;
         }
 

@@ -6,39 +6,39 @@ namespace QQ.Framework.HttpEntity
 
     public class GroupMembers
     {
-        public int? ec { get; set; }
-        public int? adm_max { get; set; }
-        public int? adm_num { get; set; }
-        public int? count { get; set; }
-        public int? max_count { get; set; }
-        public int? search_count { get; set; }
-        public long? svr_time { get; set; }
-        public int? vecsize { get; set; }
-        public List<LevelName> levelname { get; set; }
-        public List<GroupMember> mems { get; set; }
+        public int? Ec { get; set; }
+        public int? AdmMax { get; set; }
+        public int? AdmNum { get; set; }
+        public int? Count { get; set; }
+        public int? MaxCount { get; set; }
+        public int? SearchCount { get; set; }
+        public long? SvrTime { get; set; }
+        public int? Vecsize { get; set; }
+        public List<LevelName> Levelname { get; set; }
+        public List<GroupMember> Mems { get; set; }
     }
     public class LevelName
     {
-        public int? level { get; set; }
-        public string name { get; set; }
+        public int? Level { get; set; }
+        public string Name { get; set; }
     }
     public class GroupMember
     {
-        public string card { get; set; }
-        public int? flag { get; set; }
-        public int? g { get; set; }
-        public long? join_time { get; set; }
-        public long? last_speak_time { get; set; }
-        public Level lv { get; set; }
-        public string nick { get; set; }
-        public int? qage { get; set; }
-        public int? role { get; set; }
-        public int? tags { get; set; }
-        public long? uin { get; set; }
+        public string Card { get; set; }
+        public int? Flag { get; set; }
+        public int? G { get; set; }
+        public long? JoinTime { get; set; }
+        public long? LastSpeakTime { get; set; }
+        public QQLevel Lv { get; set; }
+        public string Nick { get; set; }
+        public int? Qage { get; set; }
+        public int? Role { get; set; }
+        public int? Tags { get; set; }
+        public long? Uin { get; set; }
     }
-    public class Level
+    public class QQLevel
     {
-        public int? level { get; set; }
-        public int? point { get; set; }
+        public int? Level { get; set; }
+        public int? Point { get; set; }
     }
 }

@@ -7,7 +7,7 @@ namespace QQ.Framework.Utils
 {
     class HttpWebClient : WebClient
     {
-        private WebResponse webResponse;
+        private WebResponse _webResponse;
 
         public int Timeout
         {
@@ -15,7 +15,7 @@ namespace QQ.Framework.Utils
             set;
         }
 
-        public WebResponse response { get; set; }
+        public WebResponse Response { get; set; }
 
         public CookieContainer Cookies { get; set; }
 
@@ -33,8 +33,8 @@ namespace QQ.Framework.Utils
 
         protected override WebResponse GetWebResponse(WebRequest request, IAsyncResult result)
         {
-            response = base.GetWebResponse(request, result);
-            return response;
+            Response = base.GetWebResponse(request, result);
+            return Response;
         }
 
         protected override WebRequest GetWebRequest(Uri address)
