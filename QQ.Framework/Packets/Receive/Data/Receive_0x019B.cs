@@ -4,13 +4,13 @@ using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.Receive.Data
 {
-    public class Receive_0x019B : ReceivePacket
+    public class Receive_0X019B : ReceivePacket
     {
         /// <summary>
         ///     改变在线状态
         /// </summary>
-        public Receive_0x019B(byte[] byteBuffer, QQUser User)
-            : base(byteBuffer, User, User.TXProtocol.SessionKey)
+        public Receive_0X019B(byte[] byteBuffer, QQUser user)
+            : base(byteBuffer, user, user.TXProtocol.SessionKey)
         {
         }
 

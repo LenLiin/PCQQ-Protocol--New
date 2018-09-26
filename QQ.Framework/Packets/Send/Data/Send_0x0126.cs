@@ -8,14 +8,14 @@ namespace QQ.Framework.Packets.Send.Data
         /// <summary>
         /// 获取昵称
         /// </summary>
-        /// <param name="User"></param>
-        public Send_0X0126(QQUser User, long ToQQ)
-            : base(User)
+        /// <param name="user"></param>
+        public Send_0X0126(QQUser user, long toQQ)
+            : base(user)
         {
             Sequence = GetNextSeq();
-            SecretKey = User.TXProtocol.SessionKey;
+            SecretKey = user.TXProtocol.SessionKey;
             Command = QQCommand.Data0X0126;
-            this.ToQQ = ToQQ;
+            this.ToQQ = toQQ;
         }
         public long ToQQ { get; set; }
 

@@ -7,12 +7,12 @@ namespace QQ.Framework.Packets.Send.Data
         /// <summary>
         /// 获取好友和群列表
         /// </summary>
-        /// <param name="User"></param>
-        public Send_0X0134(QQUser User)
-            : base(User)
+        /// <param name="user"></param>
+        public Send_0X0134(QQUser user)
+            : base(user)
         {
             Sequence = GetNextSeq();
-            SecretKey = User.TXProtocol.SessionKey;
+            SecretKey = user.TXProtocol.SessionKey;
             Command = QQCommand.Data0X0134;
         }
 

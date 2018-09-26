@@ -6,34 +6,34 @@ namespace QQ.Framework.HttpEntity
 
     public class GroupList
     {
-        public int? ec { get; set; }
+        public int? Ec { get; set; }
         /// <summary>
         /// 我创建的
         /// </summary>
-        public List<GroupItem> create { get; set; }
+        public List<GroupItem> Create { get; set; }
         /// <summary>
         /// 我加入的
         /// </summary>
-        public List<GroupItem> join { get; set; }
+        public List<GroupItem> Join { get; set; }
         /// <summary>
         /// 我管理的
         /// </summary>
-        public List<GroupItem> manage { get; set; }
+        public List<GroupItem> Manage { get; set; }
     }
     public class GroupItem
     {
         /// <summary>
         /// 群号
         /// </summary>
-        public long? gc { get; set; }
+        public long? Gc { get; set; }
         /// <summary>
         /// 群名称
         /// </summary>
-        public string gn { get; set; }
+        public string Gn { get; set; }
         /// <summary>
         /// 群主
         /// </summary>
-        public long? owner { get; set; }
+        public long? Owner { get; set; }
         public GroupMembers Members { get; set; }
     }
 }
