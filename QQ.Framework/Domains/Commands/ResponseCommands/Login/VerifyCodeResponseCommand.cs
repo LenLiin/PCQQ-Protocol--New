@@ -23,7 +23,7 @@ namespace QQ.Framework.Domains.Commands.ResponseCommands.Login
             }
             else
             {
-                _user.QQ0836Token = _user.QQPacket00BaVerifyToken;
+                _user.QQ0836Token = _user.TXProtocol.BufSigPic;
                 _user.QQPacket00BaSequence = 0x00;
                 _user.QQPacketTgtgtKey = Util.RandomKey();
                 //验证码验证成功后发送0836登录包

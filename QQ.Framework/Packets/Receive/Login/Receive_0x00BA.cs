@@ -27,29 +27,35 @@ namespace QQ.Framework.Packets.Receive.Login
             Reader.BeReadChar();
             Status = Reader.ReadByte();
             Reader.ReadBytes(4);
-            User.QQPacket00BaVerifyToken = Reader.ReadBytes(Reader.BeReadChar());
-            VerifyCode = Reader.ReadBytes(Reader.BeReadChar());
-            VerifyCommand = Reader.ReadByte();
-            if (VerifyCommand == 0x00)
-            {
-                VerifyCommand = Reader.ReadByte();
-            }
-
-            Reader.ReadByte();
-            if (User.QQPacket00BaVerifyCode?.Length == 0 || User.QQPacket00BaVerifyCode == null)
-            {
-                User.QQPacket00BaVerifyCode = VerifyCode;
-            }
-            else
-            {
-                var resultArr = new byte[User.QQPacket00BaVerifyCode.Length + VerifyCode.Length];
-                User.QQPacket00BaVerifyCode.CopyTo(resultArr, 0);
-                VerifyCode.CopyTo(resultArr, User.QQPacket00BaVerifyCode.Length);
-                User.QQPacket00BaVerifyCode = resultArr;
-            }
-
             User.TXProtocol.BufSigPic = Reader.ReadBytes(Reader.BeReadChar());
-            Reader.ReadBytes(Reader.BeReadChar());
+            if (VerifyType == 0x13)
+            {
+                VerifyCode = Reader.ReadBytes(Reader.BeReadChar());
+                VerifyCommand = Reader.ReadByte();
+                if (VerifyCommand == 0x00)
+                {
+                    VerifyCommand = Reader.ReadByte();
+                }
+                else
+                {
+                    Reader.ReadByte();
+                }
+
+                if (User.QQPacket00BaVerifyCode?.Length == 0 || User.QQPacket00BaVerifyCode == null)
+                {
+                    User.QQPacket00BaVerifyCode = VerifyCode;
+                }
+                else
+                {
+                    var resultArr = new byte[User.QQPacket00BaVerifyCode.Length + VerifyCode.Length];
+                    User.QQPacket00BaVerifyCode.CopyTo(resultArr, 0);
+                    VerifyCode.CopyTo(resultArr, User.QQPacket00BaVerifyCode.Length);
+                    User.QQPacket00BaVerifyCode = resultArr;
+                }
+
+                User.TXProtocol.PngToken = Reader.ReadBytes(Reader.BeReadChar());
+                Reader.ReadBytes(Reader.BeReadChar());
+            }
         }
     }
 }

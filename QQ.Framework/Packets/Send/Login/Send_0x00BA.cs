@@ -34,7 +34,9 @@ namespace QQ.Framework.Packets.Send.Login
         protected override void PutBody()
         {
             BodyWriter.Write(new byte[] {0x00, 0x02, 0x00, 0x00, 0x08, 0x04, 0x01, 0xE0});
-            BodyWriter.Write(User.QQPacket0825Data2);
+            BodyWriter.BeWrite(User.TXProtocol.DwSsoVersion);
+            BodyWriter.BeWrite(User.TXProtocol.DwServiceId);
+            BodyWriter.BeWrite(User.TXProtocol.DwClientVer);
             BodyWriter.Write((byte) 0x00);
             BodyWriter.WriteKey(User.TXProtocol.BufSigClientAddr);
             BodyWriter.Write(new byte[] {0x01, 0x02});
@@ -43,14 +45,13 @@ namespace QQ.Framework.Packets.Send.Login
             {
                 BodyWriter.Write(new byte[] {0x13, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00});
                 BodyWriter.Write(User.QQPacket00BaSequence);
-                BodyWriter.BeWrite((ushort) User.TXProtocol.BufSigPic.Length);
-                if (User.TXProtocol.BufSigPic.Length == 0)
+                if (User.TXProtocol.PngToken==null|| User.TXProtocol.PngToken?.Length==0)
                 {
                     BodyWriter.Write((byte) 0x00);
                 }
                 else
                 {
-                    BodyWriter.Write(User.TXProtocol.BufSigPic);
+                    BodyWriter.WriteKey(User.TXProtocol.PngToken);
                 }
             }
             else
@@ -59,14 +60,11 @@ namespace QQ.Framework.Packets.Send.Login
                 BodyWriter.Write(new byte[] {0x14, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00});
                 BodyWriter.BeWrite((ushort) verifyCodeBytes.Length);
                 BodyWriter.Write(verifyCodeBytes);
-                BodyWriter.BeWrite((ushort) User.QQPacket00BaVerifyToken.Length);
-                BodyWriter.Write(User.QQPacket00BaVerifyToken);
+                BodyWriter.WriteKey(User.TXProtocol.BufSigPic);
                 //输入验证码后清空图片流
                 User.QQPacket00BaVerifyCode = new byte[] { };
             }
-
-            BodyWriter.BeWrite((ushort) User.QQPacket00BaFixKey.Length);
-            BodyWriter.Write(User.QQPacket00BaFixKey);
+            BodyWriter.WriteKey(User.QQPacket00BaFixKey);
         }
 
         protected override void PutTail()

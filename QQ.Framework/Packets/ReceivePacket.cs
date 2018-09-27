@@ -122,19 +122,26 @@ namespace QQ.Framework.Packets
             {
                 foreach (var type in types)
                 {
-                    var attributes = type.GetCustomAttributes();
-                    if (!attributes.Any(attr => attr is TlvTagAttribute))
+                    try
                     {
-                        continue;
+                        var attributes = type.GetCustomAttributes();
+                        if (!attributes.Any(attr => attr is TlvTagAttribute))
+                        {
+                            continue;
+                        }
+
+                        var attribute = attributes.First(attr => attr is TlvTagAttribute) as TlvTagAttribute;
+                        if ((int)attribute.Tag == tlv.Tag)
+                        {
+                            var tlvClass = Assembly.GetExecutingAssembly().CreateInstance(type.FullName, true);
+
+                            var methodinfo = type.GetMethod("Parser_Tlv");
+                            methodinfo.Invoke(tlvClass, new object[] { User, Reader });
+                        }
                     }
-
-                    var attribute = attributes.First(attr => attr is TlvTagAttribute) as TlvTagAttribute;
-                    if ((int) attribute.Tag == tlv.Tag)
+                    catch (Exception ex)
                     {
-                        var tlvClass = Assembly.GetExecutingAssembly().CreateInstance(type.FullName, true);
-
-                        var methodinfo = type.GetMethod("Parser_Tlv");
-                        methodinfo.Invoke(tlvClass, new object[] {User, Reader});
+                        throw ex;
                     }
                 }
             }
