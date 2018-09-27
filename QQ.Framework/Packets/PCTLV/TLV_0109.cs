@@ -17,24 +17,28 @@ namespace QQ.Framework.Packets.PCTLV
         {
             var type = buf.BeReadUInt16(); //type
             var length = buf.BeReadUInt16(); //length
-            WSubVer = buf.BeReadUInt16(); //wSubVer
+            var Data = buf.ReadBytes(length);
+            var bufData = new BinaryReader(new MemoryStream(Data));
+            WSubVer = bufData.BeReadUInt16(); //wSubVer
             if (WSubVer == 0x0001)
             {
-                var buffer = buf.ReadBytes(16);
+                var buffer = bufData.ReadBytes(16);
                 user.TXProtocol.BufSessionKey = buffer;
 
-                var len = buf.BeReadUInt16();
-                buffer = buf.ReadBytes(len);
+                var len = bufData.BeReadUInt16();
+                buffer = bufData.ReadBytes(len);
                 user.TXProtocol.BufSigSession = buffer;
 
-                len = buf.BeReadUInt16();
-                buffer = buf.ReadBytes(len);
+                len = bufData.BeReadUInt16();
+                buffer = bufData.ReadBytes(len);
                 user.TXProtocol.BufPwdForConn = buffer;
-
-                len = buf.BeReadUInt16(); //bufBill
-                if (len > 0)
+                if (bufData.BaseStream.Length > bufData.BaseStream.Position)
                 {
-                    buf.ReadBytes(len);
+                    len = bufData.BeReadUInt16(); //bufBill
+                    if (len > 0)
+                    {
+                        bufData.ReadBytes(len);
+                    }
                 }
             }
             else
