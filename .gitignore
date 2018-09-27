@@ -4,19 +4,14 @@
 
 /.vs
 /packages
-/QQ.Framework/.vs/QQ-King
 /QQ.Framework/bin
 /QQ.Framework/obj
-/QQ.Framework/bin_netfx
-/QQ.Framework/obj_netfx
 /QQLoginTest/bin
 /QQLoginTest/obj
-/QQLoginTest/bin_netfx
-/QQLoginTest/obj_netfx
 /QQLoginTest/MyUser.cs
 /QQ.Framework/Utils/Private
-/QQ.FrameworkTest/bin/Debug
-/QQ.FrameworkTest/obj/Debug
+/QQ.FrameworkTest/bin
+/QQ.FrameworkTest/obj
 *.user
 /protobuf-net/bin/Debug/netstandard2.0
 /protobuf-net/obj
