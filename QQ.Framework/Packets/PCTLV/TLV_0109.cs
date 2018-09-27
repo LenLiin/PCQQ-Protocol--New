@@ -30,7 +30,12 @@ namespace QQ.Framework.Packets.PCTLV
                 len = buf.BeReadUInt16();
                 buffer = buf.ReadBytes(len);
                 user.TXProtocol.BufPwdForConn = buffer;
-                buf.BeReadUInt16(); //bufBill
+
+                len = buf.BeReadUInt16(); //bufBill
+                if (len > 0)
+                {
+                    buf.ReadBytes(len);
+                }
             }
             else
             {

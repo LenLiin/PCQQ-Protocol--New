@@ -35,6 +35,13 @@
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ionic.Zlib, Version=1.9.1.5, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ionic.Zlib.1.9.1.5\lib\Ionic.Zlib.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
@@ -227,20 +234,13 @@
   <ItemGroup>
     <None Include="Docs\add_your_custom_robot.md" />
     <None Include="Docs\MessageManage.md" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Docs\UMLs\RoBot.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Domains\Commands\ReceiveCommands\Interactive\" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Ionic.Zlib">
-      <Version>1.9.1.5</Version>
-    </PackageReference>
-    <PackageReference Include="Newtonsoft.Json">
-      <Version>11.0.2</Version>
-    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
