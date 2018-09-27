@@ -135,6 +135,7 @@
     <Compile Include="Packets\PCTLV\TLV_0310.cs" />
     <Compile Include="Packets\PCTLV\TLV_0312.cs" />
     <Compile Include="Packets\PCTLV\TLV_0313.cs" />
+    <Compile Include="Packets\PCTLV\TLV_0404.cs" />
     <Compile Include="Packets\PCTLV\TLV_0508.cs" />
     <Compile Include="Packets\ReceivePacket.cs" />
     <Compile Include="Packets\Receive\Data\Receive_0x001D.cs" />

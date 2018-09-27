@@ -504,6 +504,7 @@ namespace QQ.Framework
         ServerAddress = 0x0310,
         Misc_Flag = 0x0312,
         GUID_Ex = 0x0313,
+        _0x0404 = 0x0404,
         _0x0508 = 0x0508
     }
 
