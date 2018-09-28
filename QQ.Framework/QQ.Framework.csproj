@@ -87,7 +87,6 @@
     <Compile Include="Domains\SocketServiceImpl.cs" />
     <Compile Include="Domains\Transponder.cs" />
     <Compile Include="Events\QQEventArgs.cs" />
-    <Compile Include="Events\QQSendEventArgs.cs" />
     <Compile Include="Packets\HttpEntity\FriendList.cs" />
     <Compile Include="Packets\HttpEntity\GroupList.cs" />
     <Compile Include="Packets\HttpEntity\GroupMembers.cs" />
@@ -202,7 +201,6 @@
     <Compile Include="Packets\Send\Message\Send_0x03E3.cs" />
     <Compile Include="Packets\Send\Message\Send_Currency.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QQClient.cs" />
     <Compile Include="QQGlobal.cs" />
     <Compile Include="QQUser.cs" />
     <Compile Include="Sockets\MessageManage.cs" />
