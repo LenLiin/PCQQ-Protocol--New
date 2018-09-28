@@ -275,6 +275,7 @@ namespace QQ.Framework
         ///     登录校验
         /// </summary>
         Login0X0836 = 0x0836,
+        Login0X0839 = 0x0839,
 
         /// <summary>
         ///     取SessionKey
@@ -505,7 +506,8 @@ namespace QQ.Framework
         Misc_Flag = 0x0312,
         GUID_Ex = 0x0313,
         _0x0404 = 0x0404,
-        _0x0508 = 0x0508
+        _0x0508 = 0x0508,
+        _0x050C = 0x050C
     }
 
     public enum ResultCode

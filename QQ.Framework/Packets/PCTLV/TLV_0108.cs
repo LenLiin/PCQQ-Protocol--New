@@ -35,7 +35,7 @@ namespace QQ.Framework.Packets.PCTLV
                     user.NickName = Encoding.UTF8.GetString(info.ReadBytes(len));
                 }
 
-                var cSsoAccountCGender = info.ReadByte();
+                user.Gender = info.ReadByte();
                 var dwSsoAccountDwUinFlag = info.BeReadUInt32();
                 user.Age = info.ReadByte();
 

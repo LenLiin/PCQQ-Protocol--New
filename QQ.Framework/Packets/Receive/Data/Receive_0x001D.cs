@@ -19,8 +19,8 @@ namespace QQ.Framework.Packets.Receive.Data
         {
             Decrypt(User.TXProtocol.SessionKey);
             Reader.ReadBytes(4);
-            User.QQSKey = Encoding.UTF8.GetString(Reader.ReadBytes(10));
-            if (string.IsNullOrEmpty(User.QQSKey))
+            User.QQSkey = Encoding.UTF8.GetString(Reader.ReadBytes(10));
+            if (string.IsNullOrEmpty(User.QQSkey))
             {
                 throw new Exception("skey获取失败");
             }

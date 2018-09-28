@@ -69,7 +69,7 @@ namespace QQ.Framework.Packets.Send.Message
                     }
                     case MessageType.Picture:
                     {
-                        HttpUpLoadGroupImg(_group, User.UKey, snippet.Content);
+                        HttpUpLoadGroupImg(_group, User.Ukey, snippet.Content);
                         BodyWriter.Write((byte) 0x2A);
                         BodyWriter.BeWrite(group);
                         var guid = Encoding.UTF8.GetBytes(Util.GetMD5ToGuidHashFromFile(snippet.Content));

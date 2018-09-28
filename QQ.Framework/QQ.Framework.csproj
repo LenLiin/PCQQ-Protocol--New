@@ -136,6 +136,7 @@
     <Compile Include="Packets\PCTLV\TLV_0313.cs" />
     <Compile Include="Packets\PCTLV\TLV_0404.cs" />
     <Compile Include="Packets\PCTLV\TLV_0508.cs" />
+    <Compile Include="Packets\PCTLV\TLV_050C.cs" />
     <Compile Include="Packets\ReceivePacket.cs" />
     <Compile Include="Packets\Receive\Data\Receive_0x001D.cs" />
     <Compile Include="Packets\Receive\Data\Receive_0x005C.cs" />
@@ -188,6 +189,7 @@
     <Compile Include="Packets\Send\Login\Send_0x0825.cs" />
     <Compile Include="Packets\Send\Login\Send_0x0828.cs" />
     <Compile Include="Packets\Send\Login\Send_0x0836.cs" />
+    <Compile Include="Packets\Send\Login\Send_0x0839.cs" />
     <Compile Include="Packets\Send\Message\Send_0x0002.cs" />
     <Compile Include="Packets\Send\Message\Send_0x0017.cs" />
     <Compile Include="Packets\Send\Message\Send_0x0058.cs" />
