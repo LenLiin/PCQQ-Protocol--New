@@ -6,9 +6,6 @@ PCQQ协议
 
 [![Build Status](https://travis-ci.org/luojinfang/PCQQ-Protocol.svg?branch=master)](https://travis-ci.org/luojinfang/PCQQ-Protocol)
 
-自定义机器人相关类图
-<img src="/QQ.Framework/Docs/UMLs/RoBot.png?raw=true" width="800px" alt="自定义机器人相关类图">
-
 源码仅供参考，欢迎吐槽
 ------------------------------------------
 #### 2018-9-26
