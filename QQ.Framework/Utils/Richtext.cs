@@ -29,6 +29,21 @@ namespace QQ.Framework.Utils
         {
             return string.Join("", Snippets);
         }
+
+        public static implicit operator string(Richtext text)
+        {
+            return text.ToString();
+        }
+
+        public static implicit operator Richtext(string text)
+        {
+            return FromLiteral(text);
+        }
+
+        public static implicit operator Richtext(TextSnippet text)
+        {
+            return FromSnippets(text);
+        }
     }
 
     public class TextSnippet
@@ -88,6 +103,16 @@ namespace QQ.Framework.Utils
                 default:
                     return "[特殊代码]";
             }
+        }
+
+        public static implicit operator string(TextSnippet text)
+        {
+            return text.ToString();
+        }
+
+        public static implicit operator TextSnippet(string text)
+        {
+            return new TextSnippet(text);
         }
     }
 }
