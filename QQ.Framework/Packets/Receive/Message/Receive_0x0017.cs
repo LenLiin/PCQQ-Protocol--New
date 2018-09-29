@@ -31,7 +31,7 @@ namespace QQ.Framework.Packets.Receive.Message
         /// <summary>
         ///     消息
         /// </summary>
-        public Richtext Message { get; set; }
+        public Richtext Message { get; set; } = "";
 
         /// <summary>
         ///     字体
