@@ -15,14 +15,14 @@ namespace QQ.Framework.Domains.Commands.ResponseCommands.Message
 
         public override void Process()
         {
-            if (!string.IsNullOrEmpty(_packet.Message.ToString()))
+            if (!string.IsNullOrEmpty(_packet.Message))
             {
                 if (!QQGlobal.DebugLog && _packet.Message.ToString().Count(c => c == '\0') > 5)
                 {
                     _service.MessageLog($"收到群{_packet.Group}的{_packet.FromQQ}的乱码消息。");
                 }
 
-                _service.MessageLog($"收到群{_packet.Group}的{_packet.FromQQ}的消息:{_packet.Message.ToString()}");
+                _service.MessageLog($"收到群{_packet.Group}的{_packet.FromQQ}的消息:{_packet.Message}");
             }
             else
             {
