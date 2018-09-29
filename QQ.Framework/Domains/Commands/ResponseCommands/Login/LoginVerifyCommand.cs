@@ -27,6 +27,7 @@ namespace QQ.Framework.Domains.Commands.ResponseCommands.Login
             }
             else if (_packet.Result == (byte) ResultCode.成功)
             {
+                //_service.Send(new Send_0X0839(_user));
                 _service.MessageLog("登陆成功获取个人基本信息");
                 _service.MessageLog($"账号：{_user.QQ}，昵称：{_user.NickName}，年龄：{_user.Age}，性别：{_user.Gender}");
                 _service.Send(new Send_0X0828(_user));

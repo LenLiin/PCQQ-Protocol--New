@@ -2,11 +2,11 @@ using System;
 using System.Text;
 using QQ.Framework.Utils;
 
-namespace QQ.Framework.Packets.Receive.Data
+namespace QQ.Framework.Packets.Receive.Login
 {
-    public class Receive_0X01C5 : ReceivePacket
+    public class Receive_0X0839 : ReceivePacket
     {
-        public Receive_0X01C5(byte[] byteBuffer, QQUser User)
+        public Receive_0X0839(byte[] byteBuffer, QQUser User)
             : base(byteBuffer, User, User.TXProtocol.SessionKey)
         {
         }

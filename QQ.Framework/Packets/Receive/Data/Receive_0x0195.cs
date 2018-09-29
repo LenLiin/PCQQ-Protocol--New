@@ -11,8 +11,8 @@ namespace QQ.Framework.Packets.Receive.Data
         /// <summary>
         ///     群分组信息查询
         /// </summary>
-        public Receive_0X0195(byte[] byteBuffer, QQUser user)
-            : base(byteBuffer, user, user.TXProtocol.SessionKey)
+        public Receive_0X0195(byte[] byteBuffer, QQUser User)
+            : base(byteBuffer, User, User.TXProtocol.SessionKey)
         {
         }
         /// <summary>
@@ -23,21 +23,21 @@ namespace QQ.Framework.Packets.Receive.Data
         {
             Decrypt(User.TXProtocol.SessionKey);
             Reader.BeReadUInt16();
-            var groupCategoryLength = Reader.BeReadUInt16();
+            var GroupCategoryLength = Reader.BeReadUInt16();
             Reader.ReadBytes(3);
             Reader.ReadByte();
             Reader.BeReadUInt16();
             Reader.ReadByte();
             Reader.ReadBytes(2);
-            var data = Util.ToHex(Reader.ReadBytes((int)(Reader.BaseStream.Length - Reader.BaseStream.Position - 2)));
-            foreach (var item in data.Replace("00 18", "_").Split('_'))
+            var Data = Util.ToHex(Reader.ReadBytes((int)(Reader.BaseStream.Length - Reader.BaseStream.Position - 2)));
+            foreach (var item in Data.Replace("00 18", "_").Split('_'))
             {
-                var itemReader = new BinaryReader(new MemoryStream(Util.HexStringToByteArray(item.Trim())));
-                itemReader.ReadByte();
-                var indnex = itemReader.ReadByte();
-                var cateName = Util.GetString(itemReader.ReadBytes(itemReader.ReadByte()));
-                GroupCategory.Add(cateName);
-                User.MessageLog($"群分组{indnex}：{cateName}");
+                var ItemReader = new BinaryReader(new MemoryStream(Util.HexStringToByteArray(item.Trim())));
+                ItemReader.ReadByte();
+                var Indnex = ItemReader.ReadByte();
+                var CateName = Util.GetString(ItemReader.ReadBytes(ItemReader.ReadByte()));
+                GroupCategory.Add(CateName);
+                User.MessageLog($"群分组{Indnex}：{CateName}");
             }
             Reader.ReadBytes(2);
         }

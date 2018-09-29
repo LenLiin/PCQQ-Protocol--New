@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.PCTLV
@@ -14,41 +15,33 @@ namespace QQ.Framework.Packets.PCTLV
 
         public byte[] Get_Tlv(QQUser user)
         {
-            var data = new BinaryWriter(new MemoryStream());
-            /*
-            05 0C //TagIndex:1,length:117
-            00 75 
-            00 00 00 00 
-            3F 33 83 CF 
-            76 71 01 9D 
-            5B AD EF 37 
-            00 00 00 01 
-            77 69 6E 64 6F 77 73 00 04 5F 80 33 01 01 
-            00 00 15 D9 
-            66 35 4D F1 AB DC 98 F0 70 69 FC 2A 2B 86
-            06 1B 
-            00 01 
-            3C 
-            00 00 00 00 
-            18 DC 39 73 
-            76 71 01 9D 
-            5B AD 7D EF 
-            00 00 68 D9 
-            00 00 00 00 
-            3F 33 83 CF 
-            76 71 01 9D 
-            5B AD EB B2 
-            00 00 68 D9  
-            00 00 00 00 
-            3F 33 83 CF 
-            76 71 01 9D
-            5B AD EF 37
-            00 00 68 D9 
-             */
+            var Buf = new BinaryWriter(new MemoryStream());
+            var _dataTime = DateTime.Now;
+            Buf.BeWrite(0);
+            Buf.BeWrite(user.QQ);
+            Buf.Write(new byte[] { 0x76, 0x71, 0x01, 0x9d });
+            Buf.BeWrite(Util.GetTimeMillis(_dataTime));
+            Buf.BeWrite(user.TXProtocol.DwServiceId);
+            Buf.Write(new byte[] { 0x77, 0x69, 0x6e, 0x64, 0x6f, 0x77, 0x73, 0x00, 0x04, 0x5f, 0x80, 0x33, 0x01, 0x01 });
+            Buf.BeWrite(user.TXProtocol.DwClientVer);
+            Buf.Write(new byte[] { 0x66, 0x35, 0x4d, 0xf1, 0xab, 0xdc, 0x98, 0xf0, 0x70, 0x69, 0xfc, 0x2a, 0x2b, 0x86, 0x06, 0x1b });
+            Buf.BeWrite(user.TXProtocol.SubVer);
+
+            var Data = new BinaryWriter(new MemoryStream());
+            Data.BeWrite(0);
+            Data.BeWrite(user.QQ);
+            Data.Write(new byte[] { 0x76, 0x71, 0x01, 0x9d });
+            Data.BeWrite(Util.GetTimeMillis(_dataTime));
+            Data.Write(user.TXProtocol.DwPubNo);
+
+            Buf.Write((byte)Data.BaseStream.Length * 3);
+            Buf.Write(Data.BaseStream.ToBytesArray());
+            Buf.Write(Data.BaseStream.ToBytesArray());
+            Buf.Write(Data.BaseStream.ToBytesArray());
 
 
             FillHead(Command);
-            FillBody(data.BaseStream.ToBytesArray(), data.BaseStream.Length);
+            FillBody(Buf.BaseStream.ToBytesArray(), Buf.BaseStream.Length);
             SetLength();
             return GetBuffer();
         }

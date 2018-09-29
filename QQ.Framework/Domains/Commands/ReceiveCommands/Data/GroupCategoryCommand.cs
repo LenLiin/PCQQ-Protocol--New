@@ -21,7 +21,7 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Data
 
         public override void Process()
         {
-            Response();
+
         }
     }
 }

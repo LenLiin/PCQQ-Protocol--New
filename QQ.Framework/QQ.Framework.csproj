@@ -53,6 +53,7 @@
     <Compile Include="Domains\Commands\ReceiveCommands\DefaultReceiveCommand.cs" />
     <Compile Include="Domains\Commands\ReceiveCommands\Login\GetTGTGTCommand.cs" />
     <Compile Include="Domains\Commands\ReceiveCommands\Login\LoginPingCommand.cs" />
+    <Compile Include="Domains\Commands\ReceiveCommands\Login\LogonCollectionCommand.cs" />
     <Compile Include="Domains\Commands\ReceiveCommands\Login\OnLineStateCommand.cs" />
     <Compile Include="Domains\Commands\ReceiveCommands\Login\PreLoginCommand.cs" />
     <Compile Include="Domains\Commands\ReceiveCommands\Login\VerifyCodeCommand.cs" />
@@ -157,6 +158,7 @@
     <Compile Include="Packets\Receive\Login\Receive_0x0825.cs" />
     <Compile Include="Packets\Receive\Login\Receive_0x0828.cs" />
     <Compile Include="Packets\Receive\Login\Receive_0x0836.cs" />
+    <Compile Include="Packets\Receive\Login\Receive_0x0839.cs" />
     <Compile Include="Packets\Receive\Message\Receive_0x0002.cs" />
     <Compile Include="Packets\Receive\Message\Receive_0x0017.cs" />
     <Compile Include="Packets\Receive\Message\Receive_0x0058.cs" />
