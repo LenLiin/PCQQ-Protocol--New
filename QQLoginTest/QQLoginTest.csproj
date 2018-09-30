@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D8B56D74-D61C-4498-9A3A-499C615877E2}</ProjectGuid>
+    <ProjectGuid>{6D22F31C-0758-4CE8-888A-A256DB9E46BE}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>QQLoginTest</RootNamespace>
     <AssemblyName>QQLoginTest</AssemblyName>
