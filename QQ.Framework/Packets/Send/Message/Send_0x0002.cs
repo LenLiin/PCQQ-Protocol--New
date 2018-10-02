@@ -17,7 +17,7 @@ namespace QQ.Framework.Packets.Send.Message
         private readonly byte _packetCount = 1;
         private byte _packetIndex;
 
-        public Send_0X0002(QQUser user, Richtext message, MessageType messageType, long @group)
+        public Send_0X0002(QQUser user, Richtext message, MessageType messageType, long group)
             : base(user)
         {
             Sequence = GetNextSeq();
@@ -25,7 +25,7 @@ namespace QQ.Framework.Packets.Send.Message
             Command = QQCommand.Message0X0002;
             Message = message;
             MessageType = messageType;
-            _group = @group;
+            _group = group;
         }
 
         /// <summary>
@@ -53,54 +53,54 @@ namespace QQ.Framework.Packets.Send.Message
                 switch (snippet.Type)
                 {
                     case MessageType.Normal:
+                    {
+                        BodyWriter.Write((byte) 0x2A);
+                        BodyWriter.BeWrite(group);
+                        var messageData = Encoding.UTF8.GetBytes(snippet.Content);
+                        BodyWriter.BeWrite((ushort) (messageData.Length + 56));
+                        BodyWriter.Write(new byte[]
                         {
-                            BodyWriter.Write((byte)0x2A);
-                            BodyWriter.BeWrite(group);
-                            var messageData = Encoding.UTF8.GetBytes(snippet.Content);
-                            BodyWriter.BeWrite((ushort)(messageData.Length + 56));
-                            BodyWriter.Write(new byte[]
-                            {
                             0x00, 0x01, _packetCount, _packetIndex, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4D, 0x53,
                             0x47, 0x00,
                             0x00, 0x00, 0x00, 0x00
-                            });
-                            BodyWriter.BeWrite(dateTime);
-                            BodyWriter.Write(Util.RandomKey(4));
-                            BodyWriter.Write(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00 });
-                            BodyWriter.Write(new byte[] { 0x00, 0x0C });
-                            BodyWriter.Write(new byte[]
-                                {0xE5, 0xBE, 0xAE, 0xE8, 0xBD, 0xAF, 0xE9, 0x9B, 0x85, 0xE9, 0xBB, 0x91});
-                            BodyWriter.Write(new byte[] { 0x00, 0x00 });
+                        });
+                        BodyWriter.BeWrite(dateTime);
+                        BodyWriter.Write(Util.RandomKey(4));
+                        BodyWriter.Write(new byte[] {0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00});
+                        BodyWriter.Write(new byte[] {0x00, 0x0C});
+                        BodyWriter.Write(new byte[]
+                            {0xE5, 0xBE, 0xAE, 0xE8, 0xBD, 0xAF, 0xE9, 0x9B, 0x85, 0xE9, 0xBB, 0x91});
+                        BodyWriter.Write(new byte[] {0x00, 0x00});
 
-                            ConstructMessage(BodyWriter, messageData);
-                            break;
-                        }
+                        ConstructMessage(BodyWriter, messageData);
+                        break;
+                    }
                     case MessageType.Emoji:
+                    {
+                        BodyWriter.Write((byte) 0x2A);
+                        BodyWriter.BeWrite(group);
+                        BodyWriter.BeWrite((ushort) (Encoding.UTF8.GetByteCount(snippet.Content) + 56));
+                        BodyWriter.Write(new byte[]
                         {
-                            BodyWriter.Write((byte)0x2A);
-                            BodyWriter.BeWrite(group);
-                            BodyWriter.BeWrite((ushort)(Encoding.UTF8.GetByteCount(snippet.Content) + 56));
-                            BodyWriter.Write(new byte[]
-                            {
                             0x00, 0x01, _packetCount, _packetIndex, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4D, 0x53,
                             0x47, 0x00,
                             0x00, 0x00, 0x00, 0x00
-                            });
-                            BodyWriter.BeWrite(dateTime);
-                            BodyWriter.Write(Util.RandomKey(4));
-                            BodyWriter.Write(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00 });
-                            BodyWriter.Write(new byte[] { 0x00, 0x0C });
-                            BodyWriter.Write(new byte[]
-                                {0xE5, 0xBE, 0xAE, 0xE8, 0xBD, 0xAF, 0xE9, 0x9B, 0x85, 0xE9, 0xBB, 0x91});
-                            BodyWriter.Write(new byte[] { 0x00, 0x00 });
-                            var messageData = ConstructMessage(snippet.Content);
-                            if (messageData.Length != 0)
-                            {
-                                BodyWriter.Write(messageData);
-                            }
-
-                            break;
+                        });
+                        BodyWriter.BeWrite(dateTime);
+                        BodyWriter.Write(Util.RandomKey(4));
+                        BodyWriter.Write(new byte[] {0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00});
+                        BodyWriter.Write(new byte[] {0x00, 0x0C});
+                        BodyWriter.Write(new byte[]
+                            {0xE5, 0xBE, 0xAE, 0xE8, 0xBD, 0xAF, 0xE9, 0x9B, 0x85, 0xE9, 0xBB, 0x91});
+                        BodyWriter.Write(new byte[] {0x00, 0x00});
+                        var messageData = ConstructMessage(snippet.Content);
+                        if (messageData.Length != 0)
+                        {
+                            BodyWriter.Write(messageData);
                         }
+
+                        break;
+                    }
                     case MessageType.Xml:
                     {
                         BodyWriter.Write((byte) 0x2A);
@@ -113,7 +113,8 @@ namespace QQ.Framework.Packets.Send.Message
                             0x47, 0x00,
                             0x00, 0x00, 0x00, 0x00
                         });
-                        BodyWriter.Write(SendXml(dateTime, compressMsg));
+                        BodyWriter.BeWrite(dateTime);
+                        BodyWriter.Write(SendXml(compressMsg));
                         break;
                     }
                     case MessageType.Picture:
@@ -229,41 +230,41 @@ namespace QQ.Framework.Packets.Send.Message
             if (left >= 1 && left <= 10)
             {
                 right = group.Substring(group.Length - 6, 6);
-                gid = (left + 202).ToString() + right;
+                gid = left + 202 + right;
             }
             else if (left >= 11 && left <= 19)
             {
                 right = group.Substring(group.Length - 6, 6);
-                gid = (left + 469).ToString() + right;
+                gid = left + 469 + right;
             }
             else if (left >= 20 && left <= 66)
             {
                 left = Convert.ToInt64(left.ToString().Substring(0, 1));
                 right = group.Substring(group.Length - 7, 7);
-                gid = (left + 208).ToString() + right;
+                gid = left + 208 + right;
             }
             else if (left >= 67 && left <= 156)
             {
                 right = group.Substring(group.Length - 6, 6);
-                gid = (left + 1943).ToString() + right;
+                gid = left + 1943 + right;
             }
             else if (left >= 157 && left <= 209)
             {
                 left = Convert.ToInt64(left.ToString().Substring(0, 2));
                 right = group.Substring(group.Length - 7, 7);
-                gid = (left + 199).ToString() + right;
+                gid = left + 199 + right;
             }
             else if (left >= 210 && left <= 309)
             {
                 left = Convert.ToInt64(left.ToString().Substring(0, 2));
                 right = group.Substring(group.Length - 7, 7);
-                gid = (left + 389).ToString() + right;
+                gid = left + 389 + right;
             }
             else if (left >= 310 && left <= 499)
             {
                 left = Convert.ToInt64(left.ToString().Substring(0, 2));
                 right = group.Substring(group.Length - 7, 7);
-                gid = (left + 349).ToString() + right;
+                gid = left + 349 + right;
             }
             else
             {
@@ -273,7 +274,7 @@ namespace QQ.Framework.Packets.Send.Message
             return Convert.ToInt64(gid);
         }
 
-        public static List<Send_0X0002> SendLongMessage(QQUser user, Richtext message, long @group)
+        public static List<Send_0X0002> SendLongMessage(QQUser user, Richtext message, long group)
         {
             throw new NotImplementedException();
         }

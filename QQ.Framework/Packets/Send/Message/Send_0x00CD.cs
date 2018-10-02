@@ -55,7 +55,6 @@ namespace QQ.Framework.Packets.Send.Message
                 {
                     case MessageType.Xml:
                     {
-                        var compressMsg = GZipByteArray.CompressBytes(snippet.Content);
                         BodyWriter.BeWrite(User.QQ);
                         BodyWriter.BeWrite(_toQQ);
                         BodyWriter.Write(new byte[] {0x00, 0x00, 0x00, 0x08, 0x00, 0x01, 0x00, 0x04});
@@ -74,6 +73,7 @@ namespace QQ.Framework.Packets.Send.Message
                             0x00, 0x00, 0x00, 0x00, 0x00
                         });
                         BodyWriter.BeWrite(dateTime);
+                        var compressMsg = GZipByteArray.CompressBytes(snippet.Content);
                         BodyWriter.Write(SendXml(compressMsg));
                         break;
                     }
