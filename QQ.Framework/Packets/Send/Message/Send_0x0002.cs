@@ -38,7 +38,7 @@ namespace QQ.Framework.Packets.Send.Message
         protected override void PutHeader()
         {
             base.PutHeader();
-            Writer.Write(User.QQPacketFixver);
+            SendPACKET_FIX();
         }
 
         /// <summary>
@@ -223,44 +223,54 @@ namespace QQ.Framework.Packets.Send.Message
 
         public long ConvertQQGroupId(long code)
         {
-            var text = code.ToString();
-            var text2 = text.Substring(0, text.Length - 6);
-            var arg = text.Substring(text.Length - 6, 6);
-            var num = 0u;
-            if (text2.Length <= 0)
+            var group = code.ToString();
+            var left = Convert.ToInt64(group.Substring(0, group.Length - 6));
+            string right = "", gid = "";
+            if (left >= 1 && left <= 10)
             {
-                num += 202;
+                right = group.Substring(group.Length - 6, 6);
+                gid = (left + 202).ToString() + right;
             }
-            else if (num < 11)
+            else if (left >= 11 && left <= 19)
             {
-                num += 202;
+                right = group.Substring(group.Length - 6, 6);
+                gid = (left + 469).ToString() + right;
             }
-            else if (num < 20)
+            else if (left >= 20 && left <= 66)
             {
-                num += 469;
+                left = Convert.ToInt64(left.ToString().Substring(0, 1));
+                right = group.Substring(group.Length - 7, 7);
+                gid = (left + 208).ToString() + right;
             }
-            else if (num < 67)
+            else if (left >= 67 && left <= 156)
             {
-                num += 2080;
+                right = group.Substring(group.Length - 6, 6);
+                gid = (left + 1943).ToString() + right;
             }
-            else if (num < 157)
+            else if (left >= 157 && left <= 209)
             {
-                num += 1943;
+                left = Convert.ToInt64(left.ToString().Substring(0, 2));
+                right = group.Substring(group.Length - 7, 7);
+                gid = (left + 199).ToString() + right;
             }
-            else if (num < 210)
+            else if (left >= 210 && left <= 309)
             {
-                num += 1990;
+                left = Convert.ToInt64(left.ToString().Substring(0, 2));
+                right = group.Substring(group.Length - 7, 7);
+                gid = (left + 389).ToString() + right;
             }
-            else if (num < 310)
+            else if (left >= 310 && left <= 499)
             {
-                num += 3890;
+                left = Convert.ToInt64(left.ToString().Substring(0, 2));
+                right = group.Substring(group.Length - 7, 7);
+                gid = (left + 349).ToString() + right;
             }
-            else if (num < 336)
+            else
             {
-                num += 3490;
+                return code;
             }
 
-            return long.Parse($"{num}{arg}");
+            return Convert.ToInt64(gid);
         }
 
         public static List<Send_0X0002> SendLongMessage(QQUser user, Richtext message, long @group)

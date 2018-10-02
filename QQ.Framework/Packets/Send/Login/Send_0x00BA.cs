@@ -24,7 +24,7 @@ namespace QQ.Framework.Packets.Send.Login
         protected override void PutHeader()
         {
             base.PutHeader();
-            Writer.Write(User.QQPacketFixver);
+            SendPACKET_FIX();
             Writer.Write(SecretKey);
         }
 

@@ -25,13 +25,6 @@ namespace QQ.Framework
         /// </summary>
         /// <value></value>
         public bool IsLoginRedirect { get; set; }
-
-        /// <summary>
-        ///     包体占位段(暂时未解析出具体含义)
-        /// </summary>
-        public byte[] QQPacketFixver { get; set; } =
-            {0x03, 0x00, 0x00, 0x00, 0x01, 0x2E, 0x01, 0x00, 0x00, 0x68, 0x52, 0x00, 0x00, 0x00, 0x00};
-
         /// <summary>
         ///     登录包密钥
         /// </summary>

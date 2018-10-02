@@ -16,7 +16,7 @@ namespace QQ.Framework.Packets.Send.Data
         {
             base.PutHeader();
             Sequence = GetNextSeq();
-            Writer.Write(User.QQPacketFixver);
+            SendPACKET_FIX();
         }
 
         /// <summary>

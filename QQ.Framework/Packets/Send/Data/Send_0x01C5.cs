@@ -20,7 +20,7 @@ namespace QQ.Framework.Packets.Send.Data
         protected override void PutHeader()
         {
             base.PutHeader();
-            Writer.Write(User.QQPacketFixver);
+            SendPACKET_FIX();
         }
 
         /// <summary>
