@@ -27,11 +27,6 @@ namespace QQ.Framework.Packets.Receive.Message
         public byte[] MessageType { get; set; }
 
         /// <summary>
-        ///     消息长度
-        /// </summary>
-        public char MessageLength { get; set; }
-
-        /// <summary>
         ///     消息时间
         /// </summary>
         public byte[] MessageDateTime { get; set; }
@@ -70,9 +65,7 @@ namespace QQ.Framework.Packets.Receive.Message
             Reader.ReadBytes(8);
             FontStyle = Reader.ReadBytes(Reader.BeReadChar());
             Reader.ReadBytes(6);
-            MessageLength = Reader.BeReadChar();
-            // TODO: 解析富文本
-            Message = Richtext.FromLiteral(Encoding.UTF8.GetString(Reader.ReadBytes(MessageLength)));
+            Message = Reader.ReadRichtext();
             Reader.ReadBytes(22);
         }
     }

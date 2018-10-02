@@ -546,6 +546,75 @@ namespace QQ.Framework.Utils
             bw.Write(BitConverter.GetBytes((uint) v).Reverse().ToArray());
         }
 
+        /// <summary>
+        ///     写入一串秘钥（因为结构需要前置秘钥长度）
+        /// </summary>
+        /// <param name="bw"></param>
+        /// <param name="v"></param>
+        public static void WriteKey(this BinaryWriter bw, byte[] v)
+        {
+            bw.BeWrite((ushort)v.Length);
+            bw.Write(v);
+        }
+
+        public static void Write(this BinaryWriter bw, TextSnippet snippet)
+        {
+            // TODO: 富文本支持
+            switch (snippet.Type)
+            {
+                case MessageType.Normal:
+                    bw.Write(new byte[] { 0x01 });
+                    bw.BeWrite((ushort)(snippet.Content.Length + 3));
+                    bw.Write(new byte[] { 0x01 });
+                    bw.BeWrite((ushort)snippet.Content.Length);
+                    bw.Write(snippet.Content);
+                    return;
+                case MessageType.At:
+                    break;
+                case MessageType.Emoji:
+                    var faceIndex = Convert.ToByte(snippet.Content);
+                    if (faceIndex > 199)
+                    {
+                        faceIndex = 0;
+                    }
+                    bw.Write(new byte[] { 0x02, 0x00, 0x14, 0x01, 0x00, 0x01 });
+                    bw.Write(faceIndex);
+                    bw.Write(new byte[] { 0xFF, 0x00, 0x02, 0x14 });
+                    bw.Write((byte)(faceIndex + 65));
+                    bw.Write(new byte[] { 0x0B, 0x00, 0x08, 0x00, 0x01, 0x00, 0x04, 0x52, 0xCC, 0x85, 0x50 });
+                    break;
+                case MessageType.Picture:
+                    break;
+                case MessageType.Xml:
+                    break;
+                case MessageType.Json:
+                    break;
+                case MessageType.Shake:
+                    break;
+                case MessageType.Audio:
+                    break;
+                case MessageType.Video:
+                    break;
+                case MessageType.ExitGroup:
+                    break;
+                case MessageType.GetGroupImformation:
+                    break;
+                case MessageType.AddGroup:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        public static void Write(this BinaryWriter bw, Richtext richtext)
+        {
+            // TODO: 富文本支持
+            foreach (var snippet in richtext.Snippets)
+            {
+                bw.Write(snippet);
+            }
+        }
+
         public static char BeReadChar(this BinaryReader br)
         {
             return (char) br.BeReadUInt16();
@@ -566,15 +635,11 @@ namespace QQ.Framework.Utils
             return (uint) ((br.ReadByte() << 24) | (br.ReadByte() << 16) | (br.ReadByte() << 8) | br.ReadByte());
         }
 
-        /// <summary>
-        ///     写入一串秘钥（因为结构需要前置秘钥长度）
-        /// </summary>
-        /// <param name="bw"></param>
-        /// <param name="v"></param>
-        public static void WriteKey(this BinaryWriter bw, byte[] v)
+        public static Richtext ReadRichtext(this BinaryReader br)
         {
-            bw.BeWrite((ushort) v.Length);
-            bw.Write(v);
+            // TODO: 解析富文本
+            // 目前进度: 仅读取第一部分
+            return Encoding.UTF8.GetString(br.ReadBytes(br.BeReadChar()));
         }
 
         #endregion

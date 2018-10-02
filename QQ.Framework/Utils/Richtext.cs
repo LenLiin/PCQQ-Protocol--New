@@ -100,6 +100,16 @@ namespace QQ.Framework.Utils
                     return $"[表情{Content}]";
                 case MessageType.At:
                     return $"[@{Content}]";
+                case MessageType.Audio:
+                    return $"[音频{Content}]";
+                case MessageType.Video:
+                    return $"[视频{Content}]";
+                case MessageType.ExitGroup:
+                    return "[退出群]";
+                case MessageType.GetGroupImformation:
+                    return "[获取群信息]";
+                case MessageType.AddGroup:
+                    return "[加群]";
                 default:
                     return "[特殊代码]";
             }

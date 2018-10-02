@@ -52,6 +52,55 @@ namespace QQ.Framework.Packets.Send.Message
             {
                 switch (snippet.Type)
                 {
+                    case MessageType.Normal:
+                        {
+                            BodyWriter.Write((byte)0x2A);
+                            BodyWriter.BeWrite(group);
+                            var messageData = Encoding.UTF8.GetBytes(snippet.Content);
+                            BodyWriter.BeWrite((ushort)(messageData.Length + 56));
+                            BodyWriter.Write(new byte[]
+                            {
+                            0x00, 0x01, _packetCount, _packetIndex, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4D, 0x53,
+                            0x47, 0x00,
+                            0x00, 0x00, 0x00, 0x00
+                            });
+                            BodyWriter.BeWrite(dateTime);
+                            BodyWriter.Write(Util.RandomKey(4));
+                            BodyWriter.Write(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00 });
+                            BodyWriter.Write(new byte[] { 0x00, 0x0C });
+                            BodyWriter.Write(new byte[]
+                                {0xE5, 0xBE, 0xAE, 0xE8, 0xBD, 0xAF, 0xE9, 0x9B, 0x85, 0xE9, 0xBB, 0x91});
+                            BodyWriter.Write(new byte[] { 0x00, 0x00 });
+
+                            ConstructMessage(BodyWriter, messageData);
+                            break;
+                        }
+                    case MessageType.Emoji:
+                        {
+                            BodyWriter.Write((byte)0x2A);
+                            BodyWriter.BeWrite(group);
+                            BodyWriter.BeWrite((ushort)(Encoding.UTF8.GetByteCount(snippet.Content) + 56));
+                            BodyWriter.Write(new byte[]
+                            {
+                            0x00, 0x01, _packetCount, _packetIndex, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4D, 0x53,
+                            0x47, 0x00,
+                            0x00, 0x00, 0x00, 0x00
+                            });
+                            BodyWriter.BeWrite(dateTime);
+                            BodyWriter.Write(Util.RandomKey(4));
+                            BodyWriter.Write(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00 });
+                            BodyWriter.Write(new byte[] { 0x00, 0x0C });
+                            BodyWriter.Write(new byte[]
+                                {0xE5, 0xBE, 0xAE, 0xE8, 0xBD, 0xAF, 0xE9, 0x9B, 0x85, 0xE9, 0xBB, 0x91});
+                            BodyWriter.Write(new byte[] { 0x00, 0x00 });
+                            var messageData = ConstructMessage(snippet.Content);
+                            if (messageData.Length != 0)
+                            {
+                                BodyWriter.Write(messageData);
+                            }
+
+                            break;
+                        }
                     case MessageType.Xml:
                     {
                         BodyWriter.Write((byte) 0x2A);
@@ -140,55 +189,6 @@ namespace QQ.Framework.Packets.Send.Message
                     {
                         BodyWriter.Write(new byte[] {0x09});
                         BodyWriter.BeWrite(group);
-                        break;
-                    }
-                    case MessageType.Normal:
-                    {
-                        BodyWriter.Write((byte) 0x2A);
-                        BodyWriter.BeWrite(group);
-                        var messageData = Encoding.UTF8.GetBytes(snippet.Content);
-                        BodyWriter.BeWrite((ushort) (messageData.Length + 56));
-                        BodyWriter.Write(new byte[]
-                        {
-                            0x00, 0x01, _packetCount, _packetIndex, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4D, 0x53,
-                            0x47, 0x00,
-                            0x00, 0x00, 0x00, 0x00
-                        });
-                        BodyWriter.BeWrite(dateTime);
-                        BodyWriter.Write(Util.RandomKey(4));
-                        BodyWriter.Write(new byte[] {0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00});
-                        BodyWriter.Write(new byte[] {0x00, 0x0C});
-                        BodyWriter.Write(new byte[]
-                            {0xE5, 0xBE, 0xAE, 0xE8, 0xBD, 0xAF, 0xE9, 0x9B, 0x85, 0xE9, 0xBB, 0x91});
-                        BodyWriter.Write(new byte[] {0x00, 0x00});
-
-                        ConstructMessage(BodyWriter, messageData);
-                        break;
-                    }
-                    case MessageType.Emoji:
-                    {
-                        BodyWriter.Write((byte) 0x2A);
-                        BodyWriter.BeWrite(group);
-                        BodyWriter.BeWrite((ushort) (Encoding.UTF8.GetByteCount(snippet.Content) + 56));
-                        BodyWriter.Write(new byte[]
-                        {
-                            0x00, 0x01, _packetCount, _packetIndex, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4D, 0x53,
-                            0x47, 0x00,
-                            0x00, 0x00, 0x00, 0x00
-                        });
-                        BodyWriter.BeWrite(dateTime);
-                        BodyWriter.Write(Util.RandomKey(4));
-                        BodyWriter.Write(new byte[] {0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00});
-                        BodyWriter.Write(new byte[] {0x00, 0x0C});
-                        BodyWriter.Write(new byte[]
-                            {0xE5, 0xBE, 0xAE, 0xE8, 0xBD, 0xAF, 0xE9, 0x9B, 0x85, 0xE9, 0xBB, 0x91});
-                        BodyWriter.Write(new byte[] {0x00, 0x00});
-                        var messageData = ConstructMessage(snippet.Content);
-                        if (messageData.Length != 0)
-                        {
-                            BodyWriter.Write(messageData);
-                        }
-
                         break;
                     }
                     default:

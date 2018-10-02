@@ -395,9 +395,9 @@ namespace QQ.Framework
         Normal,
 
         /// <summary>
-        ///     抖动
+        ///     @他人
         /// </summary>
-        Shake,
+        At,
 
         /// <summary>
         ///     系统表情
@@ -420,6 +420,21 @@ namespace QQ.Framework
         Json,
 
         /// <summary>
+        ///     抖动
+        /// </summary>
+        Shake,
+
+        /// <summary>
+        /// 音频
+        /// </summary>
+        Audio,
+
+        /// <summary>
+        /// 视频
+        /// </summary>
+        Video,
+
+        /// <summary>
         ///     退群
         /// </summary>
         ExitGroup,
@@ -432,12 +447,7 @@ namespace QQ.Framework
         /// <summary>
         ///     加群
         /// </summary>
-        AddGroup,
-
-        /// <summary>
-        ///     @他人
-        /// </summary>
-        At
+        AddGroup
     }
 
     public static class LoginStatus

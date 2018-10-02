@@ -73,7 +73,8 @@ namespace QQ.Framework.Packets.Send.Message
                             0x53, 0x47,
                             0x00, 0x00, 0x00, 0x00, 0x00
                         });
-                        BodyWriter.Write(SendXml(dateTime, compressMsg));
+                        BodyWriter.BeWrite(dateTime);
+                        BodyWriter.Write(SendXml(compressMsg));
                         break;
                     }
                     case MessageType.Shake:
