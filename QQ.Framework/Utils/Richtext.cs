@@ -111,6 +111,8 @@ namespace QQ.Framework.Utils
                     return "[获取群信息]";
                 case MessageType.AddGroup:
                     return "[加群]";
+                case MessageType.OfflineFile:
+                    return $"[离线文件{Content}]";
                 default:
                     return "[特殊代码]";
             }

@@ -441,6 +441,11 @@ namespace QQ.Framework
         Video,
 
         /// <summary>
+        ///     发送离线文件
+        /// </summary>
+        OfflineFile,
+
+        /// <summary>
         ///     退群
         /// </summary>
         ExitGroup,

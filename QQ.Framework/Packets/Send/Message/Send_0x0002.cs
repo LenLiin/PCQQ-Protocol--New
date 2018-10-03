@@ -68,12 +68,13 @@ namespace QQ.Framework.Packets.Send.Message
             var group = ConvertQQGroupId(_group);
             switch (Message.Snippets[0].Type)
             {
+                case MessageType.At:
                 case MessageType.Normal:
                 case MessageType.Emoji:
                 {
                     BodyWriter.Write((byte) 0x2A);
                     BodyWriter.BeWrite(group);
-                    BodyWriter.BeWrite((ushort) (_data.Length + 56));
+                    BodyWriter.BeWrite((ushort) (_data.Length + 50)); // 字符串长度 + 56，但是_data里面包含了和长度有关的额外六个byte
                     BodyWriter.Write(new byte[]
                     {
                         0x00, 0x01, _packetCount, _packetIndex, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4D, 0x53,
@@ -165,7 +166,6 @@ namespace QQ.Framework.Packets.Send.Message
                     var messageData = Encoding.UTF8.GetBytes(Message.Snippets[0].Content);
                     Writer.BeWrite((ushort) messageData.Length);
                     Writer.Write(messageData);
-
                     BodyWriter.Write(new byte[] {0x01, 0x00, 0x01, 0x00, 0x04, 0x00, 0x01, 0x00, 0x09});
                     break;
                 }
