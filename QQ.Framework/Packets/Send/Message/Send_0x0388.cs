@@ -1,3 +1,4 @@
+using System.Drawing;
 using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.Send.Message

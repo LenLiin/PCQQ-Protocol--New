@@ -1,3 +1,4 @@
+using System.Drawing;
 using System.IO;
 using QQ.Framework.Utils;
 
