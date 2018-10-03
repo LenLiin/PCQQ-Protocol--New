@@ -76,7 +76,7 @@
     <Compile Include="Domains\Commands\ResponseCommands\Message\ResponseKeepliveCommand.cs" />
     <Compile Include="Domains\Commands\ResponseCommands\Message\ResponseReceiveFriendMessageCommand.cs" />
     <Compile Include="Domains\Commands\ResponsePacketCommand.cs" />
-    <Compile Include="Domains\CustomRoBot.cs" />
+    <Compile Include="Domains\CustomRobot.cs" />
     <Compile Include="Domains\Observers\ServerMessageObserver.cs" />
     <Compile Include="Domains\PacketProcessor.cs" />
     <Compile Include="Domains\ReceiveData.cs" />
