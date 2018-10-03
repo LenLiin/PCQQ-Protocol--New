@@ -9,7 +9,7 @@ namespace QQ.Framework.Domains.Commands.ResponseCommands.Data
     {
         public Data0X0134Command(QQEventArgs<Receive_0X0134> args) : base(args)
         {
-        } 
+        }
 
         public override void Process()
         {

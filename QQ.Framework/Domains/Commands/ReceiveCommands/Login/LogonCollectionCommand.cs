@@ -15,7 +15,6 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
 
         public override void Process()
         {
-
         }
     }
 }

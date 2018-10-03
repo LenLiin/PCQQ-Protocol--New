@@ -1,12 +1,11 @@
-using QQ.Framework.Utils;
 using System;
+using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.Send.Data
 {
     public class Send_0X01C4 : SendPacket
     {
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="user"></param>
         public Send_0X01C4(QQUser user)
@@ -28,8 +27,8 @@ namespace QQ.Framework.Packets.Send.Data
         /// </summary>
         protected override void PutBody()
         {
-            BodyWriter.Write(new byte[] { 0x00, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00 });
-            string data = "{\"t1\":" + Util.GetTimeSeconds(DateTime.Now).ToString() + "}";
+            BodyWriter.Write(new byte[] {0x00, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00});
+            var data = "{\"t1\":" + Util.GetTimeSeconds(DateTime.Now) + "}";
             BodyWriter.WriteKey(Util.GetBytes(data));
         }
     }

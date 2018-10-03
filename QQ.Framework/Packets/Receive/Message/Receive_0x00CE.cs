@@ -1,4 +1,3 @@
-using System.Text;
 using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.Receive.Message

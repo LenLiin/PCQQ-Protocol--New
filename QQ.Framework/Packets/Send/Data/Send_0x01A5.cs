@@ -1,12 +1,9 @@
-using QQ.Framework.Utils;
-using System;
-
 namespace QQ.Framework.Packets.Send.Data
 {
     public class Send_0X01A5 : SendPacket
     {
         /// <summary>
-        /// 查询黑名单
+        ///     查询黑名单
         /// </summary>
         /// <param name="user"></param>
         public Send_0X01A5(QQUser user)
@@ -28,7 +25,7 @@ namespace QQ.Framework.Packets.Send.Data
         /// </summary>
         protected override void PutBody()
         {
-            BodyWriter.Write(new byte[] { 0x01, 0x00, 0x00, 0x00, 0x0c, 0x01, 0x00, 0x00 });
+            BodyWriter.Write(new byte[] {0x01, 0x00, 0x00, 0x00, 0x0c, 0x01, 0x00, 0x00});
         }
     }
 }

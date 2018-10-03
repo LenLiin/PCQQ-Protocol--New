@@ -1,7 +1,3 @@
-using System;
-using System.Text;
-using QQ.Framework.Utils;
-
 namespace QQ.Framework.Packets.Receive.Data
 {
     public class Receive_0X01C4 : ReceivePacket

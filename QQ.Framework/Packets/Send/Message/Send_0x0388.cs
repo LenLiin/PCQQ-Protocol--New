@@ -1,4 +1,3 @@
-using System.Drawing;
 using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.Send.Message
@@ -8,14 +7,14 @@ namespace QQ.Framework.Packets.Send.Message
     /// </summary>
     public class Send_0X0388 : SendPacket
     {
-        public Send_0X0388(QQUser user, string fileName, long @group)
+        public Send_0X0388(QQUser user, string fileName, long group)
             : base(user)
         {
             Sequence = GetNextSeq();
             SecretKey = user.TXProtocol.SessionKey;
             Command = QQCommand.Message0X0388;
             FileName = fileName;
-            Group = @group;
+            Group = group;
         }
 
         public string FileName { get; set; }

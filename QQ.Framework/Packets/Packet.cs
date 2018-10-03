@@ -39,7 +39,7 @@ namespace QQ.Framework.Packets
         public Packet(QQUser user)
             : this()
         {
-            this.User = user;
+            User = user;
         }
 
         /// <summary>

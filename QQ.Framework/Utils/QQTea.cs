@@ -78,7 +78,7 @@ namespace QQ.Framework.Utils
 
         public static byte[] Decrypt(byte[] In, byte[] key)
         {
-            var @into = new List<byte>();
+            var into = new List<byte>();
             var tail = true;
             for (var i = In.Length - 1; i >= 0; i--)
             {
@@ -93,17 +93,17 @@ namespace QQ.Framework.Utils
                     }
                     else
                     {
-                        @into.Insert(0, In[i]);
+                        into.Insert(0, In[i]);
                         tail = false;
                     }
                 }
                 else
                 {
-                    @into.Insert(0, In[i]);
+                    into.Insert(0, In[i]);
                 }
             }
 
-            return Decrypt(@into.ToArray(), 0, @into.Count, key);
+            return Decrypt(into.ToArray(), 0, into.Count, key);
         }
 
         public static byte[] Decrypt(byte[] In, int offset, int len, byte[] key)

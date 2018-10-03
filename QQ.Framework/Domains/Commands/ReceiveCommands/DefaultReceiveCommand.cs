@@ -5,7 +5,8 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands
 {
     public class DefaultReceiveCommand : ReceiveCommand<ReceiveCurrency>
     {
-        public DefaultReceiveCommand(byte[] data, ISocketService service, IServerMessageSubject transponder, QQUser user)
+        public DefaultReceiveCommand(byte[] data, ISocketService service, IServerMessageSubject transponder,
+            QQUser user)
             : base(data, service, transponder, user)
         {
             _packet = new ReceiveCurrency(data, _user);

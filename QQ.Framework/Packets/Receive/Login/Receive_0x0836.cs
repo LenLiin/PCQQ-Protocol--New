@@ -26,9 +26,12 @@ namespace QQ.Framework.Packets.Receive.Login
             Result = Reader.ReadByte();
             //返回错误
             if (Result == (byte) ResultCode.DoMain || Result == (byte) ResultCode.其它错误
-                || Result == (byte) ResultCode.密码错误 || Result == (byte) ResultCode.帐号被回收
-                || Result == (byte) ResultCode.要求切换TCP || Result == (byte) ResultCode.过载保护
-                || Result == (byte) ResultCode.需要验证密保 || Result == (byte) ResultCode.需要验证码)
+                                                   || Result == (byte) ResultCode.密码错误 ||
+                                                   Result == (byte) ResultCode.帐号被回收
+                                                   || Result == (byte) ResultCode.要求切换TCP ||
+                                                   Result == (byte) ResultCode.过载保护
+                                                   || Result == (byte) ResultCode.需要验证密保 ||
+                                                   Result == (byte) ResultCode.需要验证码)
             {
                 var tlvs = Tlv.ParseTlv(Reader.ReadBytes((int) (Reader.BaseStream.Length - 1)));
                 //重置指针（因为tlv解包后指针已经移动到末尾）
