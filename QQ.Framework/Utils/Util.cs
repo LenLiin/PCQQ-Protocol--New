@@ -576,15 +576,15 @@ namespace QQ.Framework.Utils
                     foreach (var chr in snippet.Content)
                     {
                         var bytes = Encoding.UTF8.GetBytes(chr.ToString());
-                        if (length + bw.BaseStream.Length + bytes.Length > 705
-                        ) // 705 = 699 + byte + short + byte + short
+                        // 705 = 699 + 6个byte: (byte + short + byte + short)
+                        if (length + bw.BaseStream.Length + bytes.Length > 705)
                         {
                             var pos = bw.BaseStream.Position;
                             bw.BaseStream.Position = 0;
                             bw.Write(new byte[] {0x01});
-                            bw.BeWrite((ushort) (pos + 3));
+                            bw.BeWrite((ushort) (pos - 3)); // 本来是+3和0的，但是提前预留了6个byte给它们，所以变成了-3和-6。下同理。
                             bw.Write(new byte[] {0x01});
-                            bw.BeWrite((ushort) pos);
+                            bw.BeWrite((ushort) (pos - 6));
                             bw.BaseStream.Position = pos;
                             ret.Add(bw.BaseStream.ToBytesArray());
                             bw = new BinaryWriter(new MemoryStream());
@@ -595,6 +595,16 @@ namespace QQ.Framework.Utils
                         bw.Write(bytes);
                     }
 
+                    // 在最后一段的开头补充结构 
+                    {
+                        var pos = bw.BaseStream.Position;
+                        bw.BaseStream.Position = 0;
+                        bw.Write(new byte[] {0x01});
+                        bw.BeWrite((ushort) (pos - 3));
+                        bw.Write(new byte[] {0x01});
+                        bw.BeWrite((ushort) (pos - 6));
+                        bw.BaseStream.Position = pos;
+                    }
                     break;
                 }
                 case MessageType.At:
