@@ -1,12 +1,8 @@
-using QQ.Framework.Utils;
-using System;
-
 namespace QQ.Framework.Packets.Send.Data
 {
     public class Send_0X01C5 : SendPacket
     {
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="user"></param>
         public Send_0X01C5(QQUser user)
@@ -28,7 +24,7 @@ namespace QQ.Framework.Packets.Send.Data
         /// </summary>
         protected override void PutBody()
         {
-            BodyWriter.Write(new byte[] { 0x00, 0x01, 0x00 });
+            BodyWriter.Write(new byte[] {0x00, 0x01, 0x00});
         }
     }
 }

@@ -58,6 +58,7 @@ namespace QQ.Framework.Sockets
                 {
                     _service.MessageLog($"接收数据:{Util.ToHex(receiveEvent.ReceivePacket.Buffer)}");
                 }
+
                 // 通过Command, 利用反射+Attribute, 分发到管理具体某个包的Command中,最后直接调用Receive方法即可。
                 // 将对包的处理移到具体Command中，此处只负责分发。
                 var receiveCommand = DispatchPacketToCommand.Of(tempBuf, _service, _transponder, _user)

@@ -13,6 +13,9 @@ namespace QQ.Framework
 {
     public class QQUser
     {
+        private readonly string UA =
+            "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36";
+
         public QQUser(long qqNum, string pwd)
         {
             QQ = qqNum;
@@ -25,6 +28,7 @@ namespace QQ.Framework
         /// </summary>
         /// <value></value>
         public bool IsLoginRedirect { get; set; }
+
         /// <summary>
         ///     登录包密钥
         /// </summary>
@@ -126,18 +130,6 @@ namespace QQ.Framework
 
         public string Ukey { get; set; }
 
-        #region TXSSO  TLV参数
-
-        public TXProtocol TXProtocol { get; set; } = new TXProtocol();
-        /// <summary>
-        /// 好友列表
-        /// </summary>
-        public FriendList Friends { get; set; }
-        //群列表
-        public GroupList Groups { get; set; }
-
-        #endregion
-
         private void Initialize()
         {
             IsLoggedIn = false;
@@ -158,18 +150,19 @@ namespace QQ.Framework
         {
             try
             {
-                using (HttpWebClient httpWebClient = new HttpWebClient())
+                using (var httpWebClient = new HttpWebClient())
                 {
                     //string address = string.Format("http://ptlogin2.qq.com/jump?ptlang=2052&clientuin={0}&clientkey={1}&u1=http%3A%2F%2Fqzone.qq.com&ADUIN={0}&ADSESSION={2}&ADTAG=CLIENT.QQ.5365_.0&ADPUBNO=26405",
                     //    QQ, Util.ToHex(TXProtocol.ClientKey, "", "{0}"), Util.GetTimeMillis(DateTime.Now));
-                    string address = $"https://ssl.ptlogin2.qq.com/jump?pt_clientver=5593&pt_src=1&keyindex=9&ptlang=2052&clientuin={QQ}&clientkey={Util.ToHex(TXProtocol.BufServiceTicketHttp, "", "{0}")}&u1=https:%2F%2Fuser.qzone.qq.com%2F417085811%3FADUIN=417085811%26ADSESSION={Util.GetTimeMillis(DateTime.Now)}%26ADTAG=CLIENT.QQ.5593_MyTip.0%26ADPUBNO=26841&source=namecardhoverstar";
+                    var address =
+                        $"https://ssl.ptlogin2.qq.com/jump?pt_clientver=5593&pt_src=1&keyindex=9&ptlang=2052&clientuin={QQ}&clientkey={Util.ToHex(TXProtocol.BufServiceTicketHttp, "", "{0}")}&u1=https:%2F%2Fuser.qzone.qq.com%2F417085811%3FADUIN=417085811%26ADSESSION={Util.GetTimeMillis(DateTime.Now)}%26ADTAG=CLIENT.QQ.5593_MyTip.0%26ADPUBNO=26841&source=namecardhoverstar";
                     httpWebClient.Headers["User-Agent"] = UA;
-                    string text = Encoding.UTF8.GetString(httpWebClient.DownloadData(address));
+                    var text = Encoding.UTF8.GetString(httpWebClient.DownloadData(address));
                     QQCookies = httpWebClient.Cookies;
-                    CookieCollection cookies = QQCookies.GetCookies(new Uri("http://qq.com"));
+                    var cookies = QQCookies.GetCookies(new Uri("http://qq.com"));
                     if (cookies["skey"] != null)
                     {
-                        string value = cookies["skey"].Value;
+                        var value = cookies["skey"].Value;
                         if (!string.IsNullOrWhiteSpace(value))
                         {
                             QQSkey = value;
@@ -184,6 +177,7 @@ namespace QQ.Framework
             {
                 MessageLog("获取skey失败:" + ex.Message);
             }
+
             return false;
         }
 
@@ -191,25 +185,29 @@ namespace QQ.Framework
         {
             try
             {
-                using (HttpWebClient httpWebClient = new HttpWebClient())
+                using (var httpWebClient = new HttpWebClient())
                 {
-                    string address = string.Format("https://ssl.ptlogin2.qq.com/jump?pt_clientver=5509&pt_src=1&keyindex=9&clientuin={0}&clientkey={1}&u1=http%3A%2F%2Fqun.qq.com%2Fmember.html%23gid%3D168209441",
-                        QQ, Util.ToHex(TXProtocol.BufServiceTicketHttp/*QunKey*/, "", "{0}"), Util.GetTimeMillis(DateTime.Now));
+                    var address = string.Format(
+                        "https://ssl.ptlogin2.qq.com/jump?pt_clientver=5509&pt_src=1&keyindex=9&clientuin={0}&clientkey={1}&u1=http%3A%2F%2Fqun.qq.com%2Fmember.html%23gid%3D168209441",
+                        QQ, Util.ToHex(TXProtocol.BufServiceTicketHttp /*QunKey*/, "", "{0}"),
+                        Util.GetTimeMillis(DateTime.Now));
                     httpWebClient.Headers["User-Agent"] = UA;
                     var result = Encoding.UTF8.GetString(httpWebClient.DownloadData(address));
                     QunCookies = httpWebClient.Cookies;
-                    CookieCollection cookies = QunCookies.GetCookies(new Uri("http://qun.qq.com"));
+                    var cookies = QunCookies.GetCookies(new Uri("http://qun.qq.com"));
                     if (cookies["skey"] != null && !string.IsNullOrWhiteSpace(cookies["skey"].Value))
                     {
                         QQSkey = cookies["skey"].Value;
                         Bkn = Util.GetBkn(cookies["skey"].Value);
                     }
-                    string value2 = cookies["p_skey"].Value;
+
+                    var value2 = cookies["p_skey"].Value;
                     if (!string.IsNullOrWhiteSpace(value2))
                     {
                         QunPSkey = cookies["p_skey"].Value;
                         QunGtk = Util.GET_GTK(value2);
                     }
+
                     return true;
                 }
             }
@@ -217,40 +215,46 @@ namespace QQ.Framework
             {
                 MessageLog("获取skey失败:" + ex.Message);
             }
+
             return false;
         }
+
         public GroupMembers Search_Group_Members(long ExternalId)
         {
             try
             {
-                using (HttpWebClient httpWebClient = new HttpWebClient())
+                using (var httpWebClient = new HttpWebClient())
                 {
-                    string address = "https://qun.qq.com/cgi-bin/qun_mgr/search_group_members";
-                    string s = $"gc={ExternalId}&st=0&end=10000&sort=0&bkn={Bkn}";
+                    var address = "https://qun.qq.com/cgi-bin/qun_mgr/search_group_members";
+                    var s = $"gc={ExternalId}&st=0&end=10000&sort=0&bkn={Bkn}";
                     httpWebClient.Headers["Accept"] = "application/json, text/javascript, */*; q=0.01";
                     httpWebClient.Headers["Referer"] = "http://qun.qq.com/member.html";
                     httpWebClient.Headers["X-Requested-With"] = "XMLHttpRequest";
                     httpWebClient.Headers.Add("Cache-Control: no-cache");
                     httpWebClient.Headers["User-Agent"] = UA;
                     httpWebClient.Cookies = QunCookies;
-                    string text = Encoding.UTF8.GetString(httpWebClient.UploadData(address, "POST", Encoding.UTF8.GetBytes(s)));
+                    var text = Encoding.UTF8.GetString(httpWebClient.UploadData(address, "POST",
+                        Encoding.UTF8.GetBytes(s)));
 
-                    Regex r = new Regex("\"[0-9]+\":\"[^\"]+\"");
+                    var r = new Regex("\"[0-9]+\":\"[^\"]+\"");
                     if (r.IsMatch(text))
                     {
                         foreach (var match in r.Matches(text))
                         {
-                            var str = ((Capture)match).Value.Split(':');
-                            Regex r2 = new Regex("\"[0-9]+\"");
+                            var str = ((Capture) match).Value.Split(':');
+                            var r2 = new Regex("\"[0-9]+\"");
                             var Level = r2.Matches(str[0])[0].Value;
-                            Regex r3 = new Regex("\"[^\"]+\"");
+                            var r3 = new Regex("\"[^\"]+\"");
                             var Name = r3.Matches(str[1])[0].Value;
                             var DataItem = "{\"level\":" + Level + ",\"name\":" + Name + "}";
 
-                            text = text.Replace(((Capture)match).Value, DataItem);
+                            text = text.Replace(((Capture) match).Value, DataItem);
                         }
-                        text = text.Replace("\"levelname\":{", "\"levelname\":[").Replace("},\"max_count\"", "],\"max_count\"");
+
+                        text = text.Replace("\"levelname\":{", "\"levelname\":[")
+                            .Replace("},\"max_count\"", "],\"max_count\"");
                     }
+
                     MessageLog($"获取群{ExternalId}成员列表成功:{text}");
                     return JsonConvert.DeserializeObject<GroupMembers>(text);
                 }
@@ -259,23 +263,26 @@ namespace QQ.Framework
             {
                 MessageLog($"获取群{ExternalId}成员列表失败:{ex.Message}");
             }
+
             return null;
         }
+
         public GroupList Get_Group_List()
         {
             try
             {
-                using (HttpWebClient httpWebClient = new HttpWebClient())
+                using (var httpWebClient = new HttpWebClient())
                 {
-                    string address = "https://qun.qq.com/cgi-bin/qun_mgr/get_group_list";
-                    string s = $"bkn={Bkn}";
+                    var address = "https://qun.qq.com/cgi-bin/qun_mgr/get_group_list";
+                    var s = $"bkn={Bkn}";
                     httpWebClient.Headers["Accept"] = "application/json, text/javascript, */*; q=0.01";
                     httpWebClient.Headers["Referer"] = "http://qun.qq.com/member.html";
                     httpWebClient.Headers["X-Requested-With"] = "XMLHttpRequest";
                     httpWebClient.Headers.Add("Cache-Control: no-cache");
                     httpWebClient.Headers["User-Agent"] = UA;
                     httpWebClient.Cookies = QunCookies;
-                    string text = Encoding.UTF8.GetString(httpWebClient.UploadData(address, "POST", Encoding.UTF8.GetBytes(s)));
+                    var text = Encoding.UTF8.GetString(httpWebClient.UploadData(address, "POST",
+                        Encoding.UTF8.GetBytes(s)));
 
                     MessageLog("获取群列表成功:" + text);
 
@@ -284,23 +291,26 @@ namespace QQ.Framework
                     {
                         foreach (var item in Groups.Create)
                         {
-                            item.Members = Search_Group_Members((long)item.Gc);
+                            item.Members = Search_Group_Members((long) item.Gc);
                         }
                     }
+
                     if (Groups.Join != null)
                     {
                         foreach (var item in Groups.Join)
                         {
-                            item.Members = Search_Group_Members((long)item.Gc);
+                            item.Members = Search_Group_Members((long) item.Gc);
                         }
                     }
+
                     if (Groups.Manage != null)
                     {
                         foreach (var item in Groups.Manage)
                         {
-                            item.Members = Search_Group_Members((long)item.Gc);
+                            item.Members = Search_Group_Members((long) item.Gc);
                         }
                     }
+
                     return Groups;
                 }
             }
@@ -308,34 +318,38 @@ namespace QQ.Framework
             {
                 MessageLog("获取群列表失败:" + ex.Message);
             }
+
             return null;
         }
-        string UA = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36";
+
         public FriendList Get_Friend_List()
         {
             try
             {
-                using (HttpWebClient httpWebClient = new HttpWebClient())
+                using (var httpWebClient = new HttpWebClient())
                 {
-                    string address = "https://qun.qq.com/cgi-bin/qun_mgr/get_friend_list";
-                    string s = $"bkn={Bkn}";
+                    var address = "https://qun.qq.com/cgi-bin/qun_mgr/get_friend_list";
+                    var s = $"bkn={Bkn}";
                     httpWebClient.Headers["Accept"] = "application/json, text/javascript, */*; q=0.01";
                     httpWebClient.Headers["Referer"] = "http://qun.qq.com/member.html";
                     httpWebClient.Headers["X-Requested-With"] = "XMLHttpRequest";
                     httpWebClient.Headers["User-Agent"] = UA;
                     httpWebClient.Headers.Add("Cache-Control: no-cache");
                     httpWebClient.Cookies = QunCookies;
-                    string text = Encoding.UTF8.GetString(httpWebClient.UploadData(address, "POST", Encoding.UTF8.GetBytes(s)));
-                    Regex r = new Regex("\"[0-9]+\":");
+                    var text = Encoding.UTF8.GetString(httpWebClient.UploadData(address, "POST",
+                        Encoding.UTF8.GetBytes(s)));
+                    var r = new Regex("\"[0-9]+\":");
                     if (r.IsMatch(text))
                     {
                         foreach (var match in r.Matches(text))
                         {
-                            var str = ((Capture)match).Value;
+                            var str = ((Capture) match).Value;
                             text = text.Replace(str, "");
                         }
+
                         text = text.Replace("\"result\":{{", "\"result\":[{").Replace("\"}}}", "\"}]}");
                     }
+
                     MessageLog("获取好友列表成功:" + text);
                     return JsonConvert.DeserializeObject<FriendList>(text);
                 }
@@ -344,6 +358,7 @@ namespace QQ.Framework
             {
                 MessageLog("获取好友列表失败:" + ex.Message);
             }
+
             return null;
         }
 
@@ -366,7 +381,21 @@ namespace QQ.Framework
             byteBuffer.Write(MD51);
             byteBuffer.BeWrite(0);
             byteBuffer.BeWrite(QQ);
-            return MD5.Create().ComputeHash(((MemoryStream)byteBuffer.BaseStream).ToArray());
+            return MD5.Create().ComputeHash(((MemoryStream) byteBuffer.BaseStream).ToArray());
         }
+
+        #region TXSSO  TLV参数
+
+        public TXProtocol TXProtocol { get; set; } = new TXProtocol();
+
+        /// <summary>
+        ///     好友列表
+        /// </summary>
+        public FriendList Friends { get; set; }
+
+        //群列表
+        public GroupList Groups { get; set; }
+
+        #endregion
     }
 }

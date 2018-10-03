@@ -18,7 +18,7 @@ namespace QQ.Framework.Domains.Commands.ResponseCommands.Message
 
         public override void Process()
         {
-            if (!string.IsNullOrEmpty(_packet.Message.ToString()))
+            if (!string.IsNullOrEmpty(_packet.Message))
             {
                 if (!QQGlobal.DebugLog && _packet.Message.ToString().Count(c => c == '\0') > 5)
                 {

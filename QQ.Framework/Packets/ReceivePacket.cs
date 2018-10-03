@@ -40,7 +40,7 @@ namespace QQ.Framework.Packets
             }
             catch (Exception e)
             {
-                base.User.MessageLog($"包内容解析出错,错误{e.Message}，包名: {ToString()}");
+                User.MessageLog($"包内容解析出错,错误{e.Message}，包名: {ToString()}");
             }
 
             //提取包尾部分
@@ -131,12 +131,12 @@ namespace QQ.Framework.Packets
                         }
 
                         var attribute = attributes.First(attr => attr is TlvTagAttribute) as TlvTagAttribute;
-                        if ((int)attribute.Tag == tlv.Tag)
+                        if ((int) attribute.Tag == tlv.Tag)
                         {
                             var tlvClass = Assembly.GetExecutingAssembly().CreateInstance(type.FullName, true);
 
                             var methodinfo = type.GetMethod("Parser_Tlv");
-                            methodinfo.Invoke(tlvClass, new object[] { User, Reader });
+                            methodinfo.Invoke(tlvClass, new object[] {User, Reader});
                         }
                     }
                     catch (Exception ex)

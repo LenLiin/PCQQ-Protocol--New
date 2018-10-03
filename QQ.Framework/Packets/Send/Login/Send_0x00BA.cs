@@ -16,7 +16,7 @@ namespace QQ.Framework.Packets.Send.Login
             Sequence = GetNextSeq();
             SecretKey = User.QQPacket00BaKey;
             Command = QQCommand.Login0X00Ba;
-            this.VerifyCode = verifyCode;
+            VerifyCode = verifyCode;
         }
 
         private string VerifyCode { get; }
@@ -45,7 +45,7 @@ namespace QQ.Framework.Packets.Send.Login
             {
                 BodyWriter.Write(new byte[] {0x13, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00});
                 BodyWriter.Write(User.QQPacket00BaSequence);
-                if (User.TXProtocol.PngToken==null|| User.TXProtocol.PngToken?.Length==0)
+                if (User.TXProtocol.PngToken == null || User.TXProtocol.PngToken?.Length == 0)
                 {
                     BodyWriter.Write((byte) 0x00);
                 }
@@ -64,6 +64,7 @@ namespace QQ.Framework.Packets.Send.Login
                 //输入验证码后清空图片流
                 User.QQPacket00BaVerifyCode = new byte[] { };
             }
+
             BodyWriter.WriteKey(User.QQPacket00BaFixKey);
         }
 

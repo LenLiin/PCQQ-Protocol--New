@@ -16,12 +16,12 @@ namespace QQ.Framework.Domains
 
         public void SendToFriend(long friendNumber, Richtext content)
         {
-            _socketService.Send(new Send_0X00Cd(_user, content, MessageType.Normal, friendNumber));
+            _socketService.Send(new Send_0X00Cd(_user, content, friendNumber));
         }
 
         public void SendToGroup(long groupNumber, Richtext content)
         {
-            _socketService.Send(new Send_0X0002(_user, content, MessageType.Normal, groupNumber));
+            _socketService.Send(new Send_0X0002(_user, content, groupNumber));
         }
     }
 }

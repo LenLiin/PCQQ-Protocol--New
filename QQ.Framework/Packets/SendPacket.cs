@@ -44,7 +44,7 @@ namespace QQ.Framework.Packets
         }
 
         /// <summary>
-        ///     将包头部转化为字节流, 写入指定的ByteBuffer对象.
+        ///     将包头部写入流。
         /// </summary>
         protected virtual void PutHeader()
         {
@@ -159,12 +159,12 @@ namespace QQ.Framework.Packets
             return null;
         }
 
-
         /// <summary>
         ///     带表情消息
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
+        [Obsolete("请使用BinaryWriter.Write(Richtext)方法。")]
         public static byte[] ConstructMessage(string message)
         {
             var bw = new BinaryWriter(new MemoryStream());
@@ -212,6 +212,7 @@ namespace QQ.Framework.Packets
         /// </summary>
         /// <param name="writer"></param>
         /// <param name="groupMsg"></param>
+        [Obsolete("请使用BinaryWriter.Write(Richtext)方法。")]
         public static void ConstructMessage(BinaryWriter writer, byte[] groupMsg)
         {
             writer.Write(new byte[] {0x01});
@@ -221,11 +222,9 @@ namespace QQ.Framework.Packets
             writer.Write(groupMsg);
         }
 
-
         public static void SendAudio(uint qq, string file)
         {
         }
-
 
         public static void SendOfflineFile(uint qq, string file)
         {
@@ -236,10 +235,10 @@ namespace QQ.Framework.Packets
         /// </summary>
         /// <param name="dateTime">时间</param>
         /// <param name="compressMsg">压缩消息数组</param>
-        public static byte[] SendXml(long dateTime, byte[] compressMsg)
+        [Obsolete("请使用BinaryWriter.Write(Richtext)方法。")]
+        public static byte[] SendXml(byte[] compressMsg)
         {
             var bw = new BinaryWriter(new MemoryStream());
-            bw.BeWrite(dateTime);
             bw.Write(Util.RandomKey(4));
             bw.Write(new byte[] {0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00});
             bw.Write(new byte[] {0x00, 0x0C});

@@ -22,7 +22,7 @@ namespace QQ.Framework.Packets.Send.Login
             SecretKey = User.TXProtocol.BufDhShareKey;
             _type = type;
             Command = QQCommand.Login0X0836;
-            this.IsVerify = isVerify;
+            IsVerify = isVerify;
         }
 
         private bool IsVerify { get; }

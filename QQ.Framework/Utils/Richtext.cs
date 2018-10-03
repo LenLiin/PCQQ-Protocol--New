@@ -8,11 +8,12 @@ namespace QQ.Framework.Utils
     public class Richtext
     {
         public List<TextSnippet> Snippets = new List<TextSnippet>();
+        public int Length => Snippets.Sum(s => s.Length);
 
-        public static Richtext Parse(string message)
+        public static Richtext Parse(byte[] message)
         {
             // TODO: 解析富文本
-            return FromLiteral(message);
+            return Encoding.UTF8.GetString(message);
         }
 
         public static Richtext FromLiteral(string message)
@@ -32,7 +33,7 @@ namespace QQ.Framework.Utils
 
         public static implicit operator string(Richtext text)
         {
-            return text.ToString();
+            return text?.ToString();
         }
 
         public static implicit operator Richtext(string text)
@@ -100,6 +101,18 @@ namespace QQ.Framework.Utils
                     return $"[表情{Content}]";
                 case MessageType.At:
                     return $"[@{Content}]";
+                case MessageType.Audio:
+                    return $"[音频{Content}]";
+                case MessageType.Video:
+                    return $"[视频{Content}]";
+                case MessageType.ExitGroup:
+                    return "[退出群]";
+                case MessageType.GetGroupImformation:
+                    return "[获取群信息]";
+                case MessageType.AddGroup:
+                    return "[加群]";
+                case MessageType.OfflineFile:
+                    return $"[离线文件{Content}]";
                 default:
                     return "[特殊代码]";
             }
@@ -107,7 +120,7 @@ namespace QQ.Framework.Utils
 
         public static implicit operator string(TextSnippet text)
         {
-            return text.ToString();
+            return text?.ToString();
         }
 
         public static implicit operator TextSnippet(string text)

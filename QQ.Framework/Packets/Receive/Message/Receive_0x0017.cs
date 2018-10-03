@@ -1,4 +1,3 @@
-using System.Text;
 using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.Receive.Message
@@ -69,7 +68,7 @@ namespace QQ.Framework.Packets.Receive.Message
                 Reader.ReadBytes(12);
                 Font = Reader.ReadBytes(Reader.BeReadChar()); //字体
                 Reader.ReadBytes(6);
-                Message = Richtext.FromLiteral(Encoding.UTF8.GetString(Reader.ReadBytes(Reader.BeReadChar()))); //消息
+                Message = Reader.ReadRichtext(); //消息
                 Reader.ReadBytes(58);
                 Reader.ReadBytes(Reader.BeReadChar()); //消息
                 Reader.ReadBytes(11);

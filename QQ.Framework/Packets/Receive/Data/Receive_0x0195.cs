@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.Receive.Data
@@ -11,14 +9,16 @@ namespace QQ.Framework.Packets.Receive.Data
         /// <summary>
         ///     群分组信息查询
         /// </summary>
+        public List<string> GroupCategory = new List<string>();
+
+        /// <summary>
+        ///     群分组信息查询
+        /// </summary>
         public Receive_0X0195(byte[] byteBuffer, QQUser User)
             : base(byteBuffer, User, User.TXProtocol.SessionKey)
         {
         }
-        /// <summary>
-        /// 群分组信息查询
-        /// </summary>
-        public List<string> GroupCategory = new List<string>();
+
         protected override void ParseBody()
         {
             Decrypt(User.TXProtocol.SessionKey);
@@ -29,7 +29,7 @@ namespace QQ.Framework.Packets.Receive.Data
             Reader.BeReadUInt16();
             Reader.ReadByte();
             Reader.ReadBytes(2);
-            var Data = Util.ToHex(Reader.ReadBytes((int)(Reader.BaseStream.Length - Reader.BaseStream.Position - 2)));
+            var Data = Util.ToHex(Reader.ReadBytes((int) (Reader.BaseStream.Length - Reader.BaseStream.Position - 2)));
             foreach (var item in Data.Replace("00 18", "_").Split('_'))
             {
                 var ItemReader = new BinaryReader(new MemoryStream(Util.HexStringToByteArray(item.Trim())));
@@ -39,6 +39,7 @@ namespace QQ.Framework.Packets.Receive.Data
                 GroupCategory.Add(CateName);
                 User.MessageLog($"群分组{Indnex}：{CateName}");
             }
+
             Reader.ReadBytes(2);
         }
     }

@@ -17,7 +17,7 @@ namespace QQ.Framework.Packets.Send.Interactive
             SecretKey = user.TXProtocol.SessionKey;
             Command = QQCommand.Interactive0X00Ae;
             AddQQ = addQQ;
-            this.AddType = addType;
+            AddType = addType;
         }
 
         public long AddQQ { get; set; }

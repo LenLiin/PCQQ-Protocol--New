@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace QQ.Framework.HttpEntity
 {
-
     public class GroupMembers
     {
         public int? Ec { get; set; }
@@ -17,11 +15,13 @@ namespace QQ.Framework.HttpEntity
         public List<LevelName> Levelname { get; set; }
         public List<GroupMember> Mems { get; set; }
     }
+
     public class LevelName
     {
         public int? Level { get; set; }
         public string Name { get; set; }
     }
+
     public class GroupMember
     {
         public string Card { get; set; }
@@ -36,6 +36,7 @@ namespace QQ.Framework.HttpEntity
         public int? Tags { get; set; }
         public long? Uin { get; set; }
     }
+
     public class QQLevel
     {
         public int? Level { get; set; }
