@@ -158,7 +158,7 @@ namespace QQ.Framework.Packets
             // byte[] body = buf.ReadBytes(bodyLen);
             return null;
         }
-        
+
         /// <summary>
         ///     带表情消息
         /// </summary>
@@ -221,11 +221,11 @@ namespace QQ.Framework.Packets
             writer.BeWrite((ushort) groupMsg.Length);
             writer.Write(groupMsg);
         }
-        
+
         public static void SendAudio(uint qq, string file)
         {
         }
-        
+
         public static void SendOfflineFile(uint qq, string file)
         {
         }

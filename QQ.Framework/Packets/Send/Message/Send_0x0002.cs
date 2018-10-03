@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -71,8 +70,7 @@ namespace QQ.Framework.Packets.Send.Message
                         BodyWriter.Write(new byte[]
                             {0xE5, 0xBE, 0xAE, 0xE8, 0xBD, 0xAF, 0xE9, 0x9B, 0x85, 0xE9, 0xBB, 0x91});
                         BodyWriter.Write(new byte[] {0x00, 0x00});
-
-                        ConstructMessage(BodyWriter, messageData);
+                        BodyWriter.WriteSnippet(snippet);
                         break;
                     }
                     case MessageType.Emoji:
@@ -93,12 +91,7 @@ namespace QQ.Framework.Packets.Send.Message
                         BodyWriter.Write(new byte[]
                             {0xE5, 0xBE, 0xAE, 0xE8, 0xBD, 0xAF, 0xE9, 0x9B, 0x85, 0xE9, 0xBB, 0x91});
                         BodyWriter.Write(new byte[] {0x00, 0x00});
-                        var messageData = ConstructMessage(snippet.Content);
-                        if (messageData.Length != 0)
-                        {
-                            BodyWriter.Write(messageData);
-                        }
-
+                        BodyWriter.WriteSnippet(snippet);
                         break;
                     }
                     case MessageType.Xml:
@@ -272,11 +265,6 @@ namespace QQ.Framework.Packets.Send.Message
             }
 
             return Convert.ToInt64(gid);
-        }
-
-        public static List<Send_0X0002> SendLongMessage(QQUser user, Richtext message, long group)
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -553,20 +553,20 @@ namespace QQ.Framework.Utils
         /// <param name="v"></param>
         public static void WriteKey(this BinaryWriter bw, byte[] v)
         {
-            bw.BeWrite((ushort)v.Length);
+            bw.BeWrite((ushort) v.Length);
             bw.Write(v);
         }
 
-        public static void Write(this BinaryWriter bw, TextSnippet snippet)
+        public static void WriteSnippet(this BinaryWriter bw, TextSnippet snippet)
         {
             // TODO: 富文本支持
             switch (snippet.Type)
             {
                 case MessageType.Normal:
-                    bw.Write(new byte[] { 0x01 });
-                    bw.BeWrite((ushort)(snippet.Content.Length + 3));
-                    bw.Write(new byte[] { 0x01 });
-                    bw.BeWrite((ushort)snippet.Content.Length);
+                    bw.Write(new byte[] {0x01});
+                    bw.BeWrite((ushort) (snippet.Content.Length + 3));
+                    bw.Write(new byte[] {0x01});
+                    bw.BeWrite((ushort) snippet.Content.Length);
                     bw.Write(snippet.Content);
                     return;
                 case MessageType.At:
@@ -577,11 +577,12 @@ namespace QQ.Framework.Utils
                     {
                         faceIndex = 0;
                     }
-                    bw.Write(new byte[] { 0x02, 0x00, 0x14, 0x01, 0x00, 0x01 });
+
+                    bw.Write(new byte[] {0x02, 0x00, 0x14, 0x01, 0x00, 0x01});
                     bw.Write(faceIndex);
-                    bw.Write(new byte[] { 0xFF, 0x00, 0x02, 0x14 });
-                    bw.Write((byte)(faceIndex + 65));
-                    bw.Write(new byte[] { 0x0B, 0x00, 0x08, 0x00, 0x01, 0x00, 0x04, 0x52, 0xCC, 0x85, 0x50 });
+                    bw.Write(new byte[] {0xFF, 0x00, 0x02, 0x14});
+                    bw.Write((byte) (faceIndex + 65));
+                    bw.Write(new byte[] {0x0B, 0x00, 0x08, 0x00, 0x01, 0x00, 0x04, 0x52, 0xCC, 0x85, 0x50});
                     break;
                 case MessageType.Picture:
                     break;
@@ -606,7 +607,7 @@ namespace QQ.Framework.Utils
             }
         }
 
-        public static void Write(this BinaryWriter bw, Richtext richtext)
+        public static void WriteRichtext(this BinaryWriter bw, Richtext richtext)
         {
             // TODO: 富文本支持
             foreach (var snippet in richtext.Snippets)
