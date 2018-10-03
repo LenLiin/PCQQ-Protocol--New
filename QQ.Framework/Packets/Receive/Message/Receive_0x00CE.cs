@@ -38,7 +38,7 @@ namespace QQ.Framework.Packets.Receive.Message
         /// <summary>
         ///     消息内容
         /// </summary>
-        public Richtext Message { get; set; }
+        public Richtext Message { get; set; } = "";
 
         protected override void ParseBody()
         {

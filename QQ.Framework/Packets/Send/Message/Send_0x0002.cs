@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -14,23 +15,41 @@ namespace QQ.Framework.Packets.Send.Message
         private readonly long _group;
 
         private readonly byte _packetCount = 1;
-        private byte _packetIndex;
+        private readonly byte _packetIndex;
 
-        public Send_0X0002(QQUser user, Richtext message, MessageType messageType, long group)
+        public List<Send_0X0002> Following;
+        private readonly byte[] _data;
+
+        public Send_0X0002(QQUser user, Richtext message, long group)
             : base(user)
         {
             Sequence = GetNextSeq();
             SecretKey = user.TXProtocol.SessionKey;
             Command = QQCommand.Message0X0002;
             Message = message;
-            MessageType = messageType;
             _group = group;
+            Following = new List<Send_0X0002>();
+            var data = Util.WriteRichtext(message);
+            var count = data.Count;
+            var index = 1;
+            _data = data[0];
+            data.RemoveAt(0);
+            foreach (var part in data)
+            {
+                Following.Add(new Send_0X0002(user, part, group, index++, count));
+            }
         }
 
-        /// <summary>
-        ///     消息类型
-        /// </summary>
-        public MessageType MessageType { get; set; }
+        private Send_0X0002(QQUser user, byte[] data, long group, int index, int count) : base(user)
+        {
+            Sequence = GetNextSeq();
+            SecretKey = user.TXProtocol.SessionKey;
+            Command = QQCommand.Message0X0002;
+            _data = data;
+            _group = group;
+            _packetIndex = (byte) index;
+            _packetCount = (byte) count;
+        }
 
         private Richtext Message { get; }
 
@@ -47,148 +66,124 @@ namespace QQ.Framework.Packets.Send.Message
         {
             var dateTime = Util.GetTimeSeconds(DateTime.Now);
             var group = ConvertQQGroupId(_group);
-            foreach (var snippet in Message.Snippets)
+            switch (Message.Snippets[0].Type)
             {
-                switch (snippet.Type)
+                case MessageType.Normal:
+                case MessageType.Emoji:
                 {
-                    case MessageType.Normal:
+                    BodyWriter.Write((byte) 0x2A);
+                    BodyWriter.BeWrite(group);
+                    BodyWriter.BeWrite((ushort) (_data.Length + 56));
+                    BodyWriter.Write(new byte[]
                     {
-                        BodyWriter.Write((byte) 0x2A);
-                        BodyWriter.BeWrite(group);
-                        var messageData = Encoding.UTF8.GetBytes(snippet.Content);
-                        BodyWriter.BeWrite((ushort) (messageData.Length + 56));
-                        BodyWriter.Write(new byte[]
-                        {
-                            0x00, 0x01, _packetCount, _packetIndex, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4D, 0x53,
-                            0x47, 0x00,
-                            0x00, 0x00, 0x00, 0x00
-                        });
-                        BodyWriter.BeWrite(dateTime);
-                        BodyWriter.Write(Util.RandomKey(4));
-                        BodyWriter.Write(new byte[] {0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00});
-                        BodyWriter.Write(new byte[] {0x00, 0x0C});
-                        BodyWriter.Write(new byte[]
-                            {0xE5, 0xBE, 0xAE, 0xE8, 0xBD, 0xAF, 0xE9, 0x9B, 0x85, 0xE9, 0xBB, 0x91});
-                        BodyWriter.Write(new byte[] {0x00, 0x00});
-                        BodyWriter.WriteSnippet(snippet);
-                        break;
-                    }
-                    case MessageType.Emoji:
+                        0x00, 0x01, _packetCount, _packetIndex, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4D, 0x53,
+                        0x47, 0x00,
+                        0x00, 0x00, 0x00, 0x00
+                    });
+                    BodyWriter.BeWrite(dateTime);
+                    BodyWriter.Write(Util.RandomKey(4));
+                    BodyWriter.Write(new byte[] {0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00});
+                    BodyWriter.Write(new byte[] {0x00, 0x0C});
+                    BodyWriter.Write(new byte[]
+                        {0xE5, 0xBE, 0xAE, 0xE8, 0xBD, 0xAF, 0xE9, 0x9B, 0x85, 0xE9, 0xBB, 0x91});
+                    BodyWriter.Write(new byte[] {0x00, 0x00});
+                    BodyWriter.Write(_data);
+                    break;
+                }
+                case MessageType.Xml:
+                {
+                    BodyWriter.Write((byte) 0x2A);
+                    BodyWriter.BeWrite(group);
+                    var compressMsg = GZipByteArray.CompressBytes(Message.Snippets[0].Content);
+                    BodyWriter.BeWrite((ushort) (compressMsg.Length + 64));
+                    BodyWriter.Write(new byte[]
                     {
-                        BodyWriter.Write((byte) 0x2A);
-                        BodyWriter.BeWrite(group);
-                        BodyWriter.BeWrite((ushort) (Encoding.UTF8.GetByteCount(snippet.Content) + 56));
-                        BodyWriter.Write(new byte[]
-                        {
-                            0x00, 0x01, _packetCount, _packetIndex, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4D, 0x53,
-                            0x47, 0x00,
-                            0x00, 0x00, 0x00, 0x00
-                        });
-                        BodyWriter.BeWrite(dateTime);
-                        BodyWriter.Write(Util.RandomKey(4));
-                        BodyWriter.Write(new byte[] {0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00});
-                        BodyWriter.Write(new byte[] {0x00, 0x0C});
-                        BodyWriter.Write(new byte[]
-                            {0xE5, 0xBE, 0xAE, 0xE8, 0xBD, 0xAF, 0xE9, 0x9B, 0x85, 0xE9, 0xBB, 0x91});
-                        BodyWriter.Write(new byte[] {0x00, 0x00});
-                        BodyWriter.WriteSnippet(snippet);
-                        break;
-                    }
-                    case MessageType.Xml:
+                        0x00, 0x01, _packetCount, _packetIndex, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4D, 0x53,
+                        0x47, 0x00,
+                        0x00, 0x00, 0x00, 0x00
+                    });
+                    BodyWriter.BeWrite(dateTime);
+                    BodyWriter.Write(SendXml(compressMsg));
+                    break;
+                }
+                case MessageType.Picture:
+                {
+                    HttpUpLoadGroupImg(_group, User.Ukey, Message.Snippets[0].Content);
+                    BodyWriter.Write((byte) 0x2A);
+                    BodyWriter.BeWrite(group);
+                    var guid = Encoding.UTF8.GetBytes(Util.GetMD5ToGuidHashFromFile(Message.Snippets[0].Content));
+                    BodyWriter.Write(new byte[]
                     {
-                        BodyWriter.Write((byte) 0x2A);
-                        BodyWriter.BeWrite(group);
-                        var compressMsg = GZipByteArray.CompressBytes(snippet.Content);
-                        BodyWriter.BeWrite((ushort) (compressMsg.Length + 64));
-                        BodyWriter.Write(new byte[]
-                        {
-                            0x00, 0x01, _packetCount, _packetIndex, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4D, 0x53,
-                            0x47, 0x00,
-                            0x00, 0x00, 0x00, 0x00
-                        });
-                        BodyWriter.BeWrite(dateTime);
-                        BodyWriter.Write(SendXml(compressMsg));
-                        break;
-                    }
-                    case MessageType.Picture:
+                        0x00, 0x01, _packetCount, _packetIndex, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4D, 0x53,
+                        0x47, 0x00,
+                        0x00, 0x00, 0x00, 0x00
+                    });
+                    BodyWriter.BeWrite(dateTime);
+                    BodyWriter.Write(Util.RandomKey(4));
+                    BodyWriter.Write(new byte[] {0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00});
+                    BodyWriter.Write(new byte[]
+                        {0xE5, 0xBE, 0xAE, 0xE8, 0xBD, 0xAF, 0xE9, 0x9B, 0x85, 0xE9, 0xBB, 0x91});
+                    BodyWriter.Write(new byte[] {0x00, 0x00, 0x03, 0x00, 0xCB, 0x02});
+                    BodyWriter.Write(new byte[] {0x00, 0x2A});
+                    BodyWriter.Write(guid);
+                    BodyWriter.Write(new byte[] {0x04, 0x00, 0x04});
+                    BodyWriter.Write(new byte[]
                     {
-                        HttpUpLoadGroupImg(_group, User.Ukey, snippet.Content);
-                        BodyWriter.Write((byte) 0x2A);
-                        BodyWriter.BeWrite(group);
-                        var guid = Encoding.UTF8.GetBytes(Util.GetMD5ToGuidHashFromFile(snippet.Content));
-                        BodyWriter.Write(new byte[]
-                        {
-                            0x00, 0x01, _packetCount, _packetIndex, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4D, 0x53,
-                            0x47, 0x00,
-                            0x00, 0x00, 0x00, 0x00
-                        });
-                        BodyWriter.BeWrite(dateTime);
-                        BodyWriter.Write(Util.RandomKey(4));
-                        BodyWriter.Write(new byte[] {0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00});
-                        BodyWriter.Write(new byte[]
-                            {0xE5, 0xBE, 0xAE, 0xE8, 0xBD, 0xAF, 0xE9, 0x9B, 0x85, 0xE9, 0xBB, 0x91});
-                        BodyWriter.Write(new byte[] {0x00, 0x00, 0x03, 0x00, 0xCB, 0x02});
-                        BodyWriter.Write(new byte[] {0x00, 0x2A});
-                        BodyWriter.Write(guid);
-                        BodyWriter.Write(new byte[] {0x04, 0x00, 0x04});
-                        BodyWriter.Write(new byte[]
-                        {
-                            0x9B, 0x53, 0xB0, 0x08, 0x05, 0x00, 0x04, 0xD9, 0x8A, 0x5A, 0x70, 0x06, 0x00,
-                            0x04, 0x00, 0x00, 0x00, 0x50, 0x07, 0x00, 0x01, 0x43, 0x08, 0x00, 0x00, 0x09, 0x00, 0x01,
-                            0x01,
-                            0x0B,
-                            0x00, 0x00, 0x14, 0x00, 0x04, 0x11, 0x00, 0x00, 0x00, 0x15, 0x00, 0x04, 0x00, 0x00, 0x02,
-                            0xBC,
-                            0x16,
-                            0x00, 0x04, 0x00, 0x00, 0x02, 0xBC, 0x18, 0x00, 0x04, 0x00, 0x00, 0x7D, 0x5E, 0xFF, 0x00,
-                            0x5C,
-                            0x15,
-                            0x36, 0x20, 0x39, 0x32, 0x6B, 0x41, 0x31, 0x43, 0x39, 0x62, 0x35, 0x33, 0x62, 0x30, 0x30,
-                            0x38,
-                            0x64,
-                            0x39, 0x38, 0x61, 0x35, 0x61, 0x37, 0x30
-                        });
-                        BodyWriter.Write(new byte[]
-                        {
-                            0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x35, 0x30, 0x20, 0x20, 0x20, 0x20, 0x20,
-                            0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20
-                        });
-                        BodyWriter.Write(guid);
-                        BodyWriter.Write(0x41);
-                        break;
-                    }
-                    case MessageType.AddGroup:
+                        0x9B, 0x53, 0xB0, 0x08, 0x05, 0x00, 0x04, 0xD9, 0x8A, 0x5A, 0x70, 0x06, 0x00,
+                        0x04, 0x00, 0x00, 0x00, 0x50, 0x07, 0x00, 0x01, 0x43, 0x08, 0x00, 0x00, 0x09, 0x00, 0x01,
+                        0x01,
+                        0x0B,
+                        0x00, 0x00, 0x14, 0x00, 0x04, 0x11, 0x00, 0x00, 0x00, 0x15, 0x00, 0x04, 0x00, 0x00, 0x02,
+                        0xBC,
+                        0x16,
+                        0x00, 0x04, 0x00, 0x00, 0x02, 0xBC, 0x18, 0x00, 0x04, 0x00, 0x00, 0x7D, 0x5E, 0xFF, 0x00,
+                        0x5C,
+                        0x15,
+                        0x36, 0x20, 0x39, 0x32, 0x6B, 0x41, 0x31, 0x43, 0x39, 0x62, 0x35, 0x33, 0x62, 0x30, 0x30,
+                        0x38,
+                        0x64,
+                        0x39, 0x38, 0x61, 0x35, 0x61, 0x37, 0x30
+                    });
+                    BodyWriter.Write(new byte[]
                     {
-                        BodyWriter.Write(new byte[] {0x08});
-                        BodyWriter.BeWrite(group);
-                        BodyWriter.Write(new byte[] {0x01});
-                        BodyWriter.BeWrite((ushort) User.AddFriend0020Value.Length);
-                        BodyWriter.Write(User.AddFriend0020Value);
-                        BodyWriter.Write(new byte[] {0x00, 0x00, 0x00});
-                        //备注信息
-                        var messageData = Encoding.UTF8.GetBytes(snippet.Content);
-                        Writer.BeWrite((ushort) messageData.Length);
-                        Writer.Write(messageData);
+                        0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x35, 0x30, 0x20, 0x20, 0x20, 0x20, 0x20,
+                        0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20
+                    });
+                    BodyWriter.Write(guid);
+                    BodyWriter.Write(0x41);
+                    break;
+                }
+                case MessageType.AddGroup:
+                {
+                    BodyWriter.Write(new byte[] {0x08});
+                    BodyWriter.BeWrite(group);
+                    BodyWriter.Write(new byte[] {0x01});
+                    BodyWriter.BeWrite((ushort) User.AddFriend0020Value.Length);
+                    BodyWriter.Write(User.AddFriend0020Value);
+                    BodyWriter.Write(new byte[] {0x00, 0x00, 0x00});
+                    //备注信息
+                    var messageData = Encoding.UTF8.GetBytes(Message.Snippets[0].Content);
+                    Writer.BeWrite((ushort) messageData.Length);
+                    Writer.Write(messageData);
 
-                        BodyWriter.Write(new byte[] {0x01, 0x00, 0x01, 0x00, 0x04, 0x00, 0x01, 0x00, 0x09});
-                        break;
-                    }
-                    case MessageType.GetGroupImformation:
-                    {
-                        BodyWriter.Write(new byte[] {0x72});
-                        BodyWriter.BeWrite(group);
-                        break;
-                    }
-                    case MessageType.ExitGroup:
-                    {
-                        BodyWriter.Write(new byte[] {0x09});
-                        BodyWriter.BeWrite(group);
-                        break;
-                    }
-                    default:
-                    {
-                        throw new NotImplementedException();
-                    }
+                    BodyWriter.Write(new byte[] {0x01, 0x00, 0x01, 0x00, 0x04, 0x00, 0x01, 0x00, 0x09});
+                    break;
+                }
+                case MessageType.GetGroupImformation:
+                {
+                    BodyWriter.Write(new byte[] {0x72});
+                    BodyWriter.BeWrite(group);
+                    break;
+                }
+                case MessageType.ExitGroup:
+                {
+                    BodyWriter.Write(new byte[] {0x09});
+                    BodyWriter.BeWrite(group);
+                    break;
+                }
+                default:
+                {
+                    throw new NotImplementedException();
                 }
             }
         }

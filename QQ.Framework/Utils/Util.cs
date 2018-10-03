@@ -557,21 +557,55 @@ namespace QQ.Framework.Utils
             bw.Write(v);
         }
 
-        public static void WriteSnippet(this BinaryWriter bw, TextSnippet snippet)
+        public static List<byte[]> WriteSnippet(TextSnippet snippet, int length)
         {
             // TODO: 富文本支持
+            var ret = new List<byte[]>();
+            var bw = new BinaryWriter(new MemoryStream());
             switch (snippet.Type)
             {
                 case MessageType.Normal:
-                    bw.Write(new byte[] {0x01});
-                    bw.BeWrite((ushort) (snippet.Content.Length + 3));
-                    bw.Write(new byte[] {0x01});
-                    bw.BeWrite((ushort) snippet.Content.Length);
-                    bw.Write(snippet.Content);
-                    return;
+                {
+                    if (length + 6 >= 699) // 数字应该稍大点，但是我不清楚具体是多少
+                    {
+                        length = 0;
+                        ret.Add(new byte[0]);
+                    }
+
+                    bw.BaseStream.Position = 6;
+                    foreach (var chr in snippet.Content)
+                    {
+                        var bytes = Encoding.UTF8.GetBytes(chr.ToString());
+                        if (length + bw.BaseStream.Length + bytes.Length > 705
+                        ) // 705 = 699 + byte + short + byte + short
+                        {
+                            var pos = bw.BaseStream.Position;
+                            bw.BaseStream.Position = 0;
+                            bw.Write(new byte[] {0x01});
+                            bw.BeWrite((ushort) (pos + 3));
+                            bw.Write(new byte[] {0x01});
+                            bw.BeWrite((ushort) pos);
+                            bw.BaseStream.Position = pos;
+                            ret.Add(bw.BaseStream.ToBytesArray());
+                            bw = new BinaryWriter(new MemoryStream());
+                            bw.BaseStream.Position = 6;
+                            length = 0;
+                        }
+
+                        bw.Write(bytes);
+                    }
+
+                    break;
+                }
                 case MessageType.At:
                     break;
                 case MessageType.Emoji:
+                {
+                    if (length + 12 > 699)
+                    {
+                        ret.Add(new byte[0]);
+                    }
+
                     var faceIndex = Convert.ToByte(snippet.Content);
                     if (faceIndex > 199)
                     {
@@ -584,6 +618,7 @@ namespace QQ.Framework.Utils
                     bw.Write((byte) (faceIndex + 65));
                     bw.Write(new byte[] {0x0B, 0x00, 0x08, 0x00, 0x01, 0x00, 0x04, 0x52, 0xCC, 0x85, 0x50});
                     break;
+                }
                 case MessageType.Picture:
                     break;
                 case MessageType.Xml:
@@ -605,15 +640,51 @@ namespace QQ.Framework.Utils
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
+            if (bw.BaseStream.Position != 0)
+            {
+                ret.Add(bw.BaseStream.ToBytesArray());
+            }
+
+            return ret;
         }
 
-        public static void WriteRichtext(this BinaryWriter bw, Richtext richtext)
+        public static List<byte[]> WriteRichtext(Richtext richtext)
         {
+            if (richtext.Snippets.Count > 1)
+            {
+                if (!richtext.Snippets.TrueForAll(s =>
+                    s.Type == MessageType.Normal || s.Type == MessageType.At || s.Type == MessageType.Emoji ||
+                    s.Type == MessageType.Picture))
+                {
+                    throw new NotSupportedException("富文本中包含多个非聊天代码");
+                }
+            }
+
             // TODO: 富文本支持
+            var ret = new List<byte[]>();
+            var bw = new BinaryWriter(new MemoryStream());
             foreach (var snippet in richtext.Snippets)
             {
-                bw.Write(snippet);
+                var list = WriteSnippet(snippet, (int) bw.BaseStream.Position);
+                for (var i = 0; i < list.Count; i++)
+                {
+                    bw.Write(list[i]);
+                    // 除最后一个以外别的都开新的包
+                    //   如果有多个，那前几个一定是太长了被分段了，所以开新的包
+                    //   如果只有一个/是最后一个，那就不开
+                    if (i == list.Count - 1)
+                    {
+                        break;
+                    }
+
+                    ret.Add(bw.BaseStream.ToBytesArray());
+                    bw = new BinaryWriter(new MemoryStream());
+                }
             }
+
+            ret.Add(bw.BaseStream.ToBytesArray());
+            return ret;
         }
 
         public static char BeReadChar(this BinaryReader br)
@@ -640,7 +711,7 @@ namespace QQ.Framework.Utils
         {
             // TODO: 解析富文本
             // 目前进度: 仅读取第一部分
-            return Encoding.UTF8.GetString(br.ReadBytes(br.BeReadChar()));
+            return Richtext.Parse(br.ReadBytes(br.BeReadChar()));
         }
 
         #endregion
