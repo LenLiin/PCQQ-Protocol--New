@@ -18,7 +18,7 @@ namespace QQLoginTest
 
             var manage = new MessageManage(socketServer, user, transponder);
 
-            var robot = new TestRoBot(sendService, transponder, user);
+            var robot = new TestRobot(sendService, transponder, user);
 
             manage.Init();
             Console.ReadKey();

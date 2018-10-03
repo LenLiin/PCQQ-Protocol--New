@@ -5,9 +5,9 @@ using QQ.Framework.Utils;
 
 namespace QQ.FrameworkTest.Robots
 {
-    public class TestRoBot : CustomRoBot
+    public class TestRobot : CustomRobot
     {
-        public TestRoBot(ISendMessageService service, IServerMessageSubject transponder, QQUser user) : base(service, transponder, user)
+        public TestRobot(ISendMessageService service, IServerMessageSubject transponder, QQUser user) : base(service, transponder, user)
         {
         }
 

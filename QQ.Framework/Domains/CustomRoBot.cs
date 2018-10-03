@@ -6,7 +6,7 @@ namespace QQ.Framework.Domains
     /// <summary>
     ///     自定义机器人基类
     /// </summary>
-    public abstract class CustomRoBot : IServerMessageObserver
+    public abstract class CustomRobot : IServerMessageObserver
     {
         /// <summary>
         ///     消息发送服务
@@ -23,7 +23,7 @@ namespace QQ.Framework.Domains
         /// </summary>
         protected readonly QQUser _user;
 
-        public CustomRoBot(ISendMessageService service, IServerMessageSubject transponder, QQUser user)
+        public CustomRobot(ISendMessageService service, IServerMessageSubject transponder, QQUser user)
         {
             _service = service;
             _transponder = transponder;
