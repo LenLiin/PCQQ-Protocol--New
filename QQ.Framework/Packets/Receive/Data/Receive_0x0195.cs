@@ -28,19 +28,21 @@ namespace QQ.Framework.Packets.Receive.Data
             Reader.ReadByte();
             Reader.BeReadUInt16();
             Reader.ReadByte();
-            Reader.ReadBytes(2);
-            var Data = Util.ToHex(Reader.ReadBytes((int) (Reader.BaseStream.Length - Reader.BaseStream.Position - 2)));
-            foreach (var item in Data.Replace("00 18", "_").Split('_'))
+
+            var itemLength = Reader.BeReadUInt16();
+            while(itemLength > 0)
             {
-                var ItemReader = new BinaryReader(new MemoryStream(Util.HexStringToByteArray(item.Trim())));
+                var item = Reader.ReadBytes(itemLength);
+
+                var ItemReader = new BinaryReader(new MemoryStream(item));
                 ItemReader.ReadByte();
                 var Indnex = ItemReader.ReadByte();
                 var CateName = Util.GetString(ItemReader.ReadBytes(ItemReader.ReadByte()));
                 GroupCategory.Add(CateName);
                 User.MessageLog($"群分组{Indnex}：{CateName}");
-            }
 
-            Reader.ReadBytes(2);
+                itemLength = Reader.BeReadUInt16();
+            }
         }
     }
 }
