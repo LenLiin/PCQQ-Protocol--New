@@ -356,11 +356,23 @@ namespace QQ.Framework
         ///     好友消息
         /// </summary>
         Message0X00Ce = 0x00CE,
+        /// <summary>
+        ///     群消息查看确认
+        /// </summary>
+        Message0X0391 = 0x0391,
 
         /// <summary>
         ///     消息查看确认
         /// </summary>
         Message0X0319 = 0x0319,
+        /// <summary>
+        ///     群消息撤回
+        /// </summary>
+        Message0X03F7 = 0x03F7,
+        /// <summary>
+        ///     消息撤回
+        /// </summary>
+        Message0X03FC = 0x03FC,
 
         /// <summary>
         ///     发送好友消息
