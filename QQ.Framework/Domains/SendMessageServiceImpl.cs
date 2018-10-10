@@ -22,6 +22,7 @@ namespace QQ.Framework.Domains
             {
                 _socketService.Send(packet);
             }
+            _user.FriendMessages.Add(message);//添加到消息列表
         }
 
         public void SendToGroup(long groupNumber, Richtext content)
@@ -32,6 +33,7 @@ namespace QQ.Framework.Domains
             {
                 _socketService.Send(packet);
             }
+            _user.GroupMessages.Add(message);//添加到消息列表
         }
     }
 }

@@ -46,6 +46,14 @@ namespace QQ.Framework.Packets.Receive.Message
         ///     发送时间
         /// </summary>
         public byte[] SendTime { get; set; }
+        /// <summary>
+        ///     消息 id
+        /// </summary>
+        public byte[] MessageId { get; set; }
+        /// <summary>
+        /// 消息索引
+        /// </summary>
+        public byte[] MessageIndex { get; set; }
 
         protected override void ParseBody()
         {
@@ -65,7 +73,8 @@ namespace QQ.Framework.Packets.Receive.Message
                 ReceiveTime = Reader.ReadBytes(4); //接收时间  
                 Reader.ReadBytes(24);
                 SendTime = Reader.ReadBytes(4); //发送时间  
-                Reader.ReadBytes(12);
+                MessageId = Reader.ReadBytes(4); //消息 id
+                Reader.ReadBytes(8);
                 Font = Reader.ReadBytes(Reader.BeReadChar()); //字体
                 Reader.ReadBytes(6);
                 Message = Reader.ReadRichtext(); //消息

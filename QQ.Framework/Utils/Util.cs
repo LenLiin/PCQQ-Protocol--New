@@ -572,8 +572,152 @@ namespace QQ.Framework.Utils
         {
             bw.BeWrite((ushort)v.Length);
             bw.Write(v);
+        } 
+        public static List<byte[]> WriteSnippet(TextSnippet snippet, int length)
+        {
+            // TODO: 富文本支持
+            var ret = new List<byte[]>();
+            var bw = new BinaryWriter(new MemoryStream());
+            switch (snippet.Type)
+            {
+                case MessageType.Normal:
+                    {
+                        if (length + 6 >= 699) // 数字应该稍大点，但是我不清楚具体是多少
+                        {
+                            length = 0;
+                            ret.Add(new byte[0]);
+                        }
+
+                        bw.BaseStream.Position = 6;
+                        foreach (var chr in snippet.Content)
+                        {
+                            var bytes = Encoding.UTF8.GetBytes(chr.ToString());
+                            // 705 = 699 + 6个byte: (byte + short + byte + short)
+                            if (length + bw.BaseStream.Length + bytes.Length > 705)
+                            {
+                                var pos = bw.BaseStream.Position;
+                                bw.BaseStream.Position = 0;
+                                bw.Write(new byte[] { 0x01 });
+                                bw.BeWrite((ushort)(pos - 3)); // 本来是+3和0的，但是提前预留了6个byte给它们，所以变成了-3和-6。下同理。
+                                bw.Write(new byte[] { 0x01 });
+                                bw.BeWrite((ushort)(pos - 6));
+                                bw.BaseStream.Position = pos;
+                                ret.Add(bw.BaseStream.ToBytesArray());
+                                bw = new BinaryWriter(new MemoryStream());
+                                bw.BaseStream.Position = 6;
+                                length = 0;
+                            }
+
+                            bw.Write(bytes);
+                        }
+
+                        // 在最后一段的开头补充结构 
+                        {
+                            var pos = bw.BaseStream.Position;
+                            bw.BaseStream.Position = 0;
+                            bw.Write(new byte[] { 0x01 });
+                            bw.BeWrite((ushort)(pos - 3));
+                            bw.Write(new byte[] { 0x01 });
+                            bw.BeWrite((ushort)(pos - 6));
+                            bw.BaseStream.Position = pos;
+                        }
+                        break;
+                    }
+                case MessageType.At:
+                    break;
+                case MessageType.Emoji:
+                    {
+                        if (length + 12 > 699)
+                        {
+                            ret.Add(new byte[0]);
+                        }
+
+                        var faceIndex = Convert.ToByte(snippet.Content);
+                        if (faceIndex > 199)
+                        {
+                            faceIndex = 0;
+                        }
+
+                        bw.Write(new byte[] { 0x02, 0x00, 0x14, 0x01, 0x00, 0x01 });
+                        bw.Write(faceIndex);
+                        bw.Write(new byte[] { 0xFF, 0x00, 0x02, 0x14 });
+                        bw.Write((byte)(faceIndex + 65));
+                        bw.Write(new byte[] { 0x0B, 0x00, 0x08, 0x00, 0x01, 0x00, 0x04, 0x52, 0xCC, 0x85, 0x50 });
+                        break;
+                    }
+                case MessageType.Picture:
+                    break;
+                case MessageType.Xml:
+                    break;
+                case MessageType.Json:
+                    break;
+                case MessageType.Shake:
+                    break;
+                case MessageType.Audio:
+                    break;
+                case MessageType.Video:
+                    break;
+                case MessageType.ExitGroup:
+                    break;
+                case MessageType.GetGroupImformation:
+                    break;
+                case MessageType.AddGroup:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            if (bw.BaseStream.Position != 0)
+            {
+                ret.Add(bw.BaseStream.ToBytesArray());
+            }
+
+            return ret;
         }
 
+        public static List<byte[]> WriteRichtext(Richtext richtext)
+        {
+            if (richtext.Snippets.Count > 1)
+            {
+                if (!richtext.Snippets.TrueForAll(s =>
+                    s.Type == MessageType.Normal || s.Type == MessageType.At || s.Type == MessageType.Emoji ||
+                    s.Type == MessageType.Picture))
+                {
+                    throw new NotSupportedException("富文本中包含多个非聊天代码");
+                }
+            }
+
+            // TODO: 富文本支持
+            var ret = new List<byte[]>();
+            var bw = new BinaryWriter(new MemoryStream());
+            foreach (var snippet in richtext.Snippets)
+            {
+                var list = WriteSnippet(snippet, (int)bw.BaseStream.Position);
+                for (var i = 0; i < list.Count; i++)
+                {
+                    bw.Write(list[i]);
+                    // 除最后一个以外别的都开新的包
+                    //   如果有多个，那前几个一定是太长了被分段了，所以开新的包
+                    //   如果只有一个/是最后一个，那就不开
+                    if (i == list.Count - 1)
+                    {
+                        break;
+                    }
+
+                    ret.Add(bw.BaseStream.ToBytesArray());
+                    bw = new BinaryWriter(new MemoryStream());
+                }
+            }
+
+            ret.Add(bw.BaseStream.ToBytesArray());
+            return ret;
+        }
+        public static Richtext ReadRichtext(this BinaryReader br)
+        {
+            // TODO: 解析富文本
+            // 目前进度: 仅读取第一部分
+            return Richtext.Parse(br.ReadBytes(br.BeReadChar()));
+        }
         #endregion
     }
 }

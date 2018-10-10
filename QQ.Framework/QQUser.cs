@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using QQ.Framework.HttpEntity;
+using QQ.Framework.Packets.Send.Message;
 using QQ.Framework.Utils;
 
 namespace QQ.Framework
@@ -397,5 +398,13 @@ namespace QQ.Framework
         public GroupList Groups { get; set; }
 
         #endregion
+        /// <summary>
+        /// 好友消息合集
+        /// </summary>
+        public List<Send_0X00Cd> FriendMessages { get; set; } = new List<Send_0X00Cd>();
+        /// <summary>
+        /// 群消息合集
+        /// </summary>
+        public List<Send_0X0002> GroupMessages { get; set; } = new List<Send_0X0002>();
     }
 }

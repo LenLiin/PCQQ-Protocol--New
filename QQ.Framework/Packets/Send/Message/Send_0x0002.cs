@@ -19,6 +19,14 @@ namespace QQ.Framework.Packets.Send.Message
 
         public List<Send_0X0002> Following;
         private readonly byte[] _data;
+        /// <summary>
+        ///     消息 id
+        /// </summary>
+        public byte[] MessageId { get; set; }
+        /// <summary>
+        /// 消息索引
+        /// </summary>
+        public byte[] MessageIndex { get; set; }
 
         public Send_0X0002(QQUser user, Richtext message, long group)
             : base(user)
