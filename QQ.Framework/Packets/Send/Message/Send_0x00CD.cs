@@ -80,7 +80,8 @@ namespace QQ.Framework.Packets.Send.Message
                         0x00, 0x00, 0x00, 0x0D, 0x00, 0x01, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x00,
                         0x01, 0x01
                     });
-                    BodyWriter.Write(new byte[] {0x36, 0x43});
+                    BodyWriter.Write(User.TXProtocol.CMainVer);
+                    BodyWriter.Write(User.TXProtocol.CSubVer);
                     BodyWriter.BeWrite(User.QQ);
                     BodyWriter.BeWrite(_toQQ);
                     BodyWriter.Write(md5);
