@@ -52,6 +52,10 @@ namespace QQ.Framework.Packets.Send.Message
         }
 
         private Richtext Message { get; }
+        /// <summary>
+        ///     消息 id
+        /// </summary>
+        public byte[] MessageId { get; set; }
 
         protected override void PutHeader()
         {
@@ -95,7 +99,8 @@ namespace QQ.Framework.Packets.Send.Message
                         0x00, 0x00, 0x00, 0x00, 0x00
                     });
                     BodyWriter.BeWrite(dateTime);
-                    BodyWriter.Write(Util.RandomKey(4));
+                    MessageId = Util.RandomKey(4);
+                    BodyWriter.Write(MessageId);
                     BodyWriter.Write(new byte[] {0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00});
                     BodyWriter.Write(new byte[] {0x00, 0x06});
                     BodyWriter.Write(new byte[] {0xE5, 0xAE, 0x8B, 0xE4, 0xBD, 0x93});
@@ -139,7 +144,8 @@ namespace QQ.Framework.Packets.Send.Message
                     BodyWriter.Write(Util.RandomKey(2));
                     BodyWriter.BeWrite(dateTime);
                     BodyWriter.Write(new byte[] {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00});
-                    BodyWriter.Write(Util.RandomKey(4));
+                    MessageId = Util.RandomKey(4);
+                    BodyWriter.Write(MessageId);
                     BodyWriter.Write(new byte[] {0x00, 0x00, 0x00, 0x00});
                     break;
                 }
