@@ -375,7 +375,7 @@ namespace QQ.Framework
         /// <summary>
         ///     消息撤回
         /// </summary>
-        Message0X03FC = 0x03FC,
+        Message0X03FC = 0X03FC,
 
         /// <summary>
         ///     发送好友消息

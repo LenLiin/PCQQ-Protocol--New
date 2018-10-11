@@ -709,30 +709,30 @@ namespace QQ.Framework.Utils
             return ret;
         }
 
-        public static Richtext ReadRichtext(this BinaryReader Reader, byte _messageType, Richtext result)
+        public static Richtext ReadRichtext(this BinaryReader reader, byte messageType, Richtext result)
         {
             // TODO: 解析富文本
             try
             {
-                var DataLength = Reader.BeReadChar();
-                if (Reader.BaseStream.Length - Reader.BaseStream.Position >= DataLength)
+                var dataLength = reader.BeReadChar();
+                if (reader.BaseStream.Length - reader.BaseStream.Position >= dataLength)
                 {
-                    var Data = Reader.ReadBytes(DataLength);
-                    var subReader = new BinaryReader(new MemoryStream(Data));
+                    var data = reader.ReadBytes(dataLength);
+                    var subReader = new BinaryReader(new MemoryStream(data));
                     subReader.ReadByte();
-                    var MessageData = subReader.ReadBytes(subReader.BeReadChar());
-                    switch (_messageType) //文本消息
+                    var messageData = subReader.ReadBytes(subReader.BeReadChar());
+                    switch (messageType) //文本消息
                     {
                         case 0x01:
                         {
-                            var MessageStr = Encoding.UTF8.GetString(MessageData);
-                            if (MessageStr.Contains("@"))
+                            var messageStr = Encoding.UTF8.GetString(messageData);
+                            if (messageStr.Contains("@"))
                             {
                                 //Reader.ReadBytes(10);
                                 //var AtQQ = Util.GetQQNumRetUint(Util.ToHex(Reader.ReadBytes(4)));//被At人的QQ号
                                 result.Snippets.Add(new AtSnippet
                                 {
-                                    Content = MessageStr
+                                    Content = messageStr
                                     //AtQQ = AtQQ,
                                     //Type=Framework.MessageType.At
                                 });
@@ -741,7 +741,7 @@ namespace QQ.Framework.Utils
                             {
                                 result.Snippets.Add(new TextSnippet
                                 {
-                                    Content = MessageStr,
+                                    Content = messageStr,
                                     Type = Framework.MessageType.Normal
                                 });
                             }
@@ -753,7 +753,7 @@ namespace QQ.Framework.Utils
                         {
                             result.Snippets.Add(new TextSnippet
                             {
-                                Content = GetQQNumRetUint(ToHex(MessageData)).ToString(),
+                                Content = GetQQNumRetUint(ToHex(messageData)).ToString(),
                                 Type = Framework.MessageType.Emoji
                             });
                             break;
@@ -762,7 +762,7 @@ namespace QQ.Framework.Utils
                         {
                             result.Snippets.Add(new TextSnippet
                             {
-                                Content = Encoding.UTF8.GetString(MessageData),
+                                Content = Encoding.UTF8.GetString(messageData),
                                 Type = Framework.MessageType.Picture
                             });
                             break;
@@ -771,7 +771,7 @@ namespace QQ.Framework.Utils
                         {
                             result.Snippets.Add(new TextSnippet
                             {
-                                Content = Encoding.UTF8.GetString(MessageData),
+                                Content = Encoding.UTF8.GetString(messageData),
                                 Type = Framework.MessageType.Audio
                             });
                             break;
@@ -782,39 +782,39 @@ namespace QQ.Framework.Utils
                         }
                         case 0x19:
                         {
-                            var RedBagReader = new BinaryReader(new MemoryStream(MessageData));
-                            RedBagReader.ReadBytes(20);
-                            RedBagReader.ReadBytes(RedBagReader.ReadByte()); //恭喜发财
-                            RedBagReader.ReadByte();
-                            RedBagReader.ReadBytes(RedBagReader.ReadByte()); //赶紧点击拆开吧
-                            RedBagReader.ReadByte();
-                            RedBagReader.ReadBytes(RedBagReader.ReadByte()); //QQ红包
-                            RedBagReader.ReadBytes(5);
-                            RedBagReader.ReadBytes(RedBagReader.ReadByte()); //[QQ红包]恭喜发财
-                            RedBagReader.ReadBytes(22);
-                            var RedId = Encoding.UTF8.GetString(RedBagReader.ReadBytes(32)); //redid
-                            RedBagReader.ReadBytes(12);
-                            RedBagReader.ReadBytes(RedBagReader.BeReadChar());
-                            RedBagReader.ReadBytes(0x10);
-                            var Key1 = Encoding.UTF8.GetString(RedBagReader.ReadBytes(RedBagReader.ReadByte())); //Key1
-                            RedBagReader.BeReadChar();
-                            var Key2 = Encoding.UTF8.GetString(RedBagReader.ReadBytes(RedBagReader.ReadByte())); //Key2
+                            var redBagReader = new BinaryReader(new MemoryStream(messageData));
+                            redBagReader.ReadBytes(20);
+                            redBagReader.ReadBytes(redBagReader.ReadByte()); //恭喜发财
+                            redBagReader.ReadByte();
+                            redBagReader.ReadBytes(redBagReader.ReadByte()); //赶紧点击拆开吧
+                            redBagReader.ReadByte();
+                            redBagReader.ReadBytes(redBagReader.ReadByte()); //QQ红包
+                            redBagReader.ReadBytes(5);
+                            redBagReader.ReadBytes(redBagReader.ReadByte()); //[QQ红包]恭喜发财
+                            redBagReader.ReadBytes(22);
+                            var redId = Encoding.UTF8.GetString(redBagReader.ReadBytes(32)); //redid
+                            redBagReader.ReadBytes(12);
+                            redBagReader.ReadBytes(redBagReader.BeReadChar());
+                            redBagReader.ReadBytes(0x10);
+                            var key1 = Encoding.UTF8.GetString(redBagReader.ReadBytes(redBagReader.ReadByte())); //Key1
+                            redBagReader.BeReadChar();
+                            var key2 = Encoding.UTF8.GetString(redBagReader.ReadBytes(redBagReader.ReadByte())); //Key2
                             result.Snippets.Add(new RedBagSnippet
                             {
-                                RedId = RedId,
-                                Key1 = Key1,
-                                Key2 = Key2,
+                                RedId = redId,
+                                Key1 = key1,
+                                Key2 = key2,
                                 Type = Framework.MessageType.RedBag
                             });
                             break;
                         }
                     }
 
-                    var MessageType = Reader.ReadByte();
+                    var messageType2 = reader.ReadByte();
                     //如果没有结束继续解析消息内容
-                    if (Reader.BaseStream.Length - Reader.BaseStream.Position > 2)
+                    if (reader.BaseStream.Length - reader.BaseStream.Position > 2)
                     {
-                        Reader.ReadRichtext(MessageType, result);
+                        reader.ReadRichtext(messageType2, result);
                     }
                 }
             }
