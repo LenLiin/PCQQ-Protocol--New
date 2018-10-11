@@ -782,6 +782,19 @@ namespace QQ.Framework.Utils
                             Type = Framework.MessageType.Xml
                         });
                     }
+                    else if (_messageType == 0x18)//群文件
+                    {
+                        var XmlReader = new BinaryReader(new MemoryStream(MessageData));
+                        XmlReader.ReadBytes(3);
+                        var FileName = XmlReader.ReadBytes(XmlReader.ReadByte());//文件名称
+                        XmlReader.ReadByte();
+                        XmlReader.ReadBytes(XmlReader.ReadByte());//文件大小
+                        result.Snippets.Add(new TextSnippet()
+                        {
+                            Content = Encoding.UTF8.GetString(FileName),
+                            Type = Framework.MessageType.OfflineFile
+                        });
+                    }
                     else if (_messageType == 0x19)//红包秘钥段
                     {
                         var RedBagReader = new BinaryReader(new MemoryStream(MessageData));
