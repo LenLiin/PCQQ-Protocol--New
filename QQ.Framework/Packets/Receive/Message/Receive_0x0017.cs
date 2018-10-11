@@ -25,12 +25,12 @@ namespace QQ.Framework.Packets.Receive.Message
         /// <summary>
         ///     消息类型
         /// </summary>
-        public char MessageType { get; set; }
+        public byte MessageType { get; set; }
 
         /// <summary>
         ///     消息
         /// </summary>
-        public Richtext Message { get; set; } = "";
+        public Richtext Message { get; set; } = new Richtext();
 
         /// <summary>
         ///     字体
@@ -63,29 +63,24 @@ namespace QQ.Framework.Packets.Receive.Message
             Reader.ReadBytes(4);
             Reader.ReadBytes(4); //自己的QQ
             Reader.ReadBytes(10);
-            MessageType = Reader.BeReadChar(); //消息类型
-            if (MessageType == (char) 0x0052)
+            Reader.BeReadChar();
+            Reader.ReadBytes(2);
+            Reader.ReadBytes(Reader.BeReadChar());
+            Group = (long)Util.GetQQNumRetUint(Util.ToHex(Reader.ReadBytes(4))); //群号
+            if (Reader.ReadByte() == 0x01)
             {
-                Reader.ReadBytes(2);
-                Reader.ReadBytes(Reader.BeReadChar());
-                Group = (long) Util.GetQQNumRetUint(Util.ToHex(Reader.ReadBytes(4))); //群号
-                Reader.ReadByte();
-                FromQQ = (long) Util.GetQQNumRetUint(Util.ToHex(Reader.ReadBytes(4))); //发消息人的QQ
-                Reader.ReadBytes(4);
+                FromQQ = (long)Util.GetQQNumRetUint(Util.ToHex(Reader.ReadBytes(4))); //发消息人的QQ
+                MessageIndex = Reader.ReadBytes(4);//姑且叫消息索引吧
                 ReceiveTime = Reader.ReadBytes(4); //接收时间  
                 Reader.ReadBytes(24);
-                SendTime = Reader.ReadBytes(4); //发送时间  
+                SendTime = Reader.ReadBytes(4); //发送时间 
                 MessageId = Reader.ReadBytes(4); //消息 id
                 Reader.ReadBytes(8);
                 Font = Reader.ReadBytes(Reader.BeReadChar()); //字体
-                Reader.ReadBytes(6);
-                Message = Reader.ReadRichtext(); //消息
-                Reader.ReadBytes(58);
-                Reader.ReadBytes(Reader.BeReadChar()); //消息
-                Reader.ReadBytes(11);
-            }
-            else if (MessageType == (char) 0x0058)
-            {
+                Reader.ReadByte();
+                Reader.ReadByte();
+                MessageType = Reader.ReadByte();//消息类型
+                Reader.ReadRichtext(MessageType, Message);
             }
         }
     }

@@ -23,7 +23,12 @@ namespace QQ.Framework.Packets.Receive.Message
         /// <summary>
         ///     消息类型
         /// </summary>
-        public byte[] MessageType { get; set; }
+        public byte MessageType { get; set; }
+
+        /// <summary>
+        ///     消息长度
+        /// </summary>
+        public char MessageLength { get; set; }
 
         /// <summary>
         ///     消息时间
@@ -38,15 +43,22 @@ namespace QQ.Framework.Packets.Receive.Message
         /// <summary>
         ///     消息内容
         /// </summary>
-        public Richtext Message { get; set; } = "";
+        public Richtext Message { get; set; }
+        /// <summary>
+        ///     消息id
+        /// </summary>
+        public byte[] MessageId { get; set; }
+        public string Key1 { get; set; }
+        public string Key2 { get; set; }
+        public string RedId { get; set; }
 
         protected override void ParseBody()
         {
             Decrypt(User.TXProtocol.SessionKey);
-            FromQQ = (long) Util.GetQQNumRetUint(Util.ToHex(Reader.ReadBytes(4)));
+            FromQQ = (long)Util.GetQQNumRetUint(Util.ToHex(Reader.ReadBytes(4)));
             Reader.ReadBytes(4); //自己的QQ
             Reader.ReadBytes(10);
-            MessageType = Reader.ReadBytes(2);
+            Reader.ReadBytes(2);
             Reader.BeReadChar();
             Reader.ReadBytes(Reader.BeReadChar()); //未知
             Reader.BeReadChar(); //消息来源QQ的版本号
@@ -60,12 +72,13 @@ namespace QQ.Framework.Packets.Receive.Message
             Reader.ReadBytes(3);
             Reader.ReadBytes(5); //00
             Reader.ReadBytes(4); //MessageDateTime
-            Reader.ReadBytes(4);
+            MessageId = Reader.ReadBytes(4);
             Reader.ReadBytes(8);
             FontStyle = Reader.ReadBytes(Reader.BeReadChar());
-            Reader.ReadBytes(6);
-            Message = Reader.ReadRichtext();
-            Reader.ReadBytes(22);
+            Reader.ReadByte();
+            Reader.ReadByte();
+            MessageType = Reader.ReadByte();//消息类型
+            Reader.ReadRichtext(MessageType, Message);
         }
     }
 }

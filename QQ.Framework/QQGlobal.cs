@@ -421,6 +421,11 @@ namespace QQ.Framework
         At,
 
         /// <summary>
+        ///     红包
+        /// </summary>
+        RedBag,
+
+        /// <summary>
         ///     系统表情
         /// </summary>
         Emoji,

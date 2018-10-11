@@ -18,15 +18,21 @@ namespace QQ.Framework.Domains.Commands.ResponseCommands.Message
 
         public override void Process()
         {
-            if (!string.IsNullOrEmpty(_packet.Message))
+            if (!string.IsNullOrEmpty(_packet.Message.ToString()))
             {
-                if (!QQGlobal.DebugLog && _packet.Message.ToString().Count(c => c == '\0') > 5)
+                //只处理没有处理过的消息
+                if (!_user.FriendReceiveMessages.Where(c => c.Sequence == _packet.Sequence).Any())
                 {
-                    _service.MessageLog($"收到好友{_packet.FromQQ}的乱码消息。");
-                    //return;
-                }
+                    if (!QQGlobal.DebugLog && _packet.Message.ToString().Count(c => c == '\0') > 5)
+                    {
+                        _service.MessageLog($"收到好友{_packet.FromQQ}的乱码消息。");
+                    }
 
-                _service.MessageLog($"收到好友{_packet.FromQQ}的消息:{_packet.Message}");
+                    _service.MessageLog($"收到好友{_packet.FromQQ}的消息:{_packet.Message}");
+
+                    //添加到已处理消息列表
+                    _user.FriendReceiveMessages.Add(_packet);
+                }
             }
             else
             {

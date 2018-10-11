@@ -709,11 +709,101 @@ namespace QQ.Framework.Utils
             return ret;
         }
 
-        public static Richtext ReadRichtext(this BinaryReader br)
+        public static Richtext ReadRichtext(this BinaryReader Reader, byte _messageType, Richtext result)
         {
             // TODO: 解析富文本
-            // 目前进度: 仅读取第一部分
-            return Richtext.Parse(br.ReadBytes(br.BeReadChar()));
+            try
+            {
+                var Data = Reader.ReadBytes(Reader.BeReadChar());
+                var subReader = new BinaryReader(new MemoryStream(Data));
+                subReader.ReadByte();
+                var MessageData = subReader.ReadBytes(subReader.BeReadChar());
+                if (_messageType == 0x01)//文本消息
+                {
+                    var MessageStr = Encoding.UTF8.GetString(MessageData);
+                    if (MessageStr.Contains("@"))
+                    {
+                        //Reader.ReadBytes(10);
+                        //var AtQQ = Util.GetQQNumRetUint(Util.ToHex(Reader.ReadBytes(4)));//被At人的QQ号
+                        result.Snippets.Add(new AtSnippet()
+                        {
+                            Content = MessageStr,
+                            //AtQQ = AtQQ,
+                            Type = Framework.MessageType.At
+                        });
+                    }
+                    else
+                    {
+                        result.Snippets.Add(new TextSnippet()
+                        {
+                            Content = MessageStr,
+                            Type = Framework.MessageType.Normal
+                        });
+                    }
+                }
+                else if (_messageType == 0x02)//小黄豆表情
+                {
+                    result.Snippets.Add(new TextSnippet()
+                    {
+                        Content = Util.GetQQNumRetUint(Util.ToHex(MessageData)).ToString(),
+                        Type = Framework.MessageType.Emoji
+                    });
+                }
+                else if (_messageType == 0x03)//图片
+                {
+                    result.Snippets.Add(new TextSnippet()
+                    {
+                        Content = Encoding.UTF8.GetString(MessageData),
+                        Type = Framework.MessageType.Picture
+                    });
+                }
+                else if (_messageType == 0x0A)//音频
+                {
+                    result.Snippets.Add(new TextSnippet()
+                    {
+                        Content = Encoding.UTF8.GetString(MessageData),
+                        Type = Framework.MessageType.Audio
+                    });
+                }
+                else if (_messageType == 0x19)//红包秘钥段
+                {
+                    var RedBagReader = new BinaryReader(new MemoryStream(MessageData));
+                    RedBagReader.ReadBytes(20);
+                    RedBagReader.ReadBytes(RedBagReader.ReadByte());//恭喜发财
+                    RedBagReader.ReadByte();
+                    RedBagReader.ReadBytes(RedBagReader.ReadByte());//赶紧点击拆开吧
+                    RedBagReader.ReadByte();
+                    RedBagReader.ReadBytes(RedBagReader.ReadByte());//QQ红包
+                    RedBagReader.ReadBytes(5);
+                    RedBagReader.ReadBytes(RedBagReader.ReadByte());//[QQ红包]恭喜发财
+                    RedBagReader.ReadBytes(22);
+                    var RedId = Encoding.UTF8.GetString(RedBagReader.ReadBytes(32));//redid
+                    RedBagReader.ReadBytes(12);
+                    RedBagReader.ReadBytes(RedBagReader.BeReadChar());
+                    RedBagReader.ReadBytes(0x10);
+                    var Key1 = Encoding.UTF8.GetString(RedBagReader.ReadBytes(RedBagReader.ReadByte()));//Key1
+                    RedBagReader.BeReadChar();
+                    var Key2 = Encoding.UTF8.GetString(RedBagReader.ReadBytes(RedBagReader.ReadByte()));//Key2
+                    result.Snippets.Add(new RedBagSnippet
+                    {
+                        RedId = RedId,
+                        Key1 = Key1,
+                        Key2 = Key2,
+                        Type = Framework.MessageType.RedBag
+                    });
+                }
+                var MessageType = Reader.ReadByte();
+                //如果没有结束继续解析消息内容
+                if (MessageType != 0x0E)
+                {
+                    Reader.ReadRichtext(MessageType, result);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return result;
         }
 
         #endregion

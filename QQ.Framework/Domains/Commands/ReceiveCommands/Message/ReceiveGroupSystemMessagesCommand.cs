@@ -17,16 +17,6 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Message
             QQUser user) : base(data, service, transponder, user)
         {
             _packet = new Receive_0X0017(data, _user);
-            if (_user.GroupMessages.Where(c => c.Sequence == _packet.Sequence).Any())
-            {
-                var messageSend = _user.GroupMessages.Where(c => c.Sequence == _packet.Sequence).FirstOrDefault();
-                if (messageSend != null)
-                {
-                    messageSend.MessageId = _packet.MessageId;
-                    messageSend.MessageIndex = _packet.MessageIndex;
-                }
-            }
-
             _eventArgs = new QQEventArgs<Receive_0X0017>(_service, _user, _packet);
         }
 

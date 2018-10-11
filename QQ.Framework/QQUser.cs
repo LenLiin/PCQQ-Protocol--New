@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using QQ.Framework.HttpEntity;
+using QQ.Framework.Packets.Receive.Message;
 using QQ.Framework.Packets.Send.Message;
 using QQ.Framework.Utils;
 
@@ -400,13 +401,22 @@ namespace QQ.Framework
         #endregion
 
         /// <summary>
-        ///     好友消息合集
+        /// 好友发送消息合集
         /// </summary>
-        public List<Send_0X00Cd> FriendMessages { get; set; } = new List<Send_0X00Cd>();
+        public List<Send_0X00Cd> FriendSendMessages { get; set; } = new List<Send_0X00Cd>();
+        /// <summary>
+        /// 群发送消息合集
+        /// </summary>
+        public List<Send_0X0002> GroupSendMessages { get; set; } = new List<Send_0X0002>();
 
         /// <summary>
-        ///     群消息合集
+        /// 好友接收消息合集
         /// </summary>
-        public List<Send_0X0002> GroupMessages { get; set; } = new List<Send_0X0002>();
+        public List<Receive_0X00Ce> FriendReceiveMessages { get; set; } = new List<Receive_0X00Ce>();
+
+        /// <summary>
+        /// 群接收消息合集
+        /// </summary>
+        public List<Receive_0X0017> GroupReceiveMessages { get; set; } = new List<Receive_0X0017>();
     }
 }
