@@ -1,6 +1,6 @@
-﻿using QQ.Framework.Events;
+﻿using System.Linq;
+using QQ.Framework.Events;
 using QQ.Framework.Packets.Receive.Message;
-using System.Linq;
 
 namespace QQ.Framework.Domains.Commands.ReceiveCommands.Message
 {
@@ -26,6 +26,7 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Message
                     messageSend.MessageIndex = _packet.MessageIndex;
                 }
             }
+
             _eventArgs = new QQEventArgs<Receive_0X0017>(_service, _user, _packet);
         }
 

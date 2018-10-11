@@ -30,7 +30,7 @@ namespace QQ.Framework.Packets.Receive.Data
             Reader.ReadByte();
 
             var itemLength = Reader.BeReadUInt16();
-            while(itemLength > 0)
+            while (itemLength > 0)
             {
                 var item = Reader.ReadBytes(itemLength);
 

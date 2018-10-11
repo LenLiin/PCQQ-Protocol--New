@@ -35,7 +35,6 @@ namespace QQ.Framework.Domains.Commands.ResponseCommands.Message
             _service.Send(new Send_0X0017(_user, dataReader.ReadBytes(0x10), _packet.Sequence));
 
 
-
             //查看群消息确认
             if (_packet.ReceiveTime != null)
             {

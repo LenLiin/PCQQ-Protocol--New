@@ -1,5 +1,4 @@
 using System;
-using System.Text;
 using QQ.Framework;
 using QQ.Framework.Domains;
 using QQ.Framework.Sockets;

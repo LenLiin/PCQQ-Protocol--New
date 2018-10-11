@@ -46,12 +46,14 @@ namespace QQ.Framework.Packets.Receive.Message
         ///     发送时间
         /// </summary>
         public byte[] SendTime { get; set; }
+
         /// <summary>
         ///     消息 id
         /// </summary>
         public byte[] MessageId { get; set; }
+
         /// <summary>
-        /// 消息索引
+        ///     消息索引
         /// </summary>
         public byte[] MessageIndex { get; set; }
 

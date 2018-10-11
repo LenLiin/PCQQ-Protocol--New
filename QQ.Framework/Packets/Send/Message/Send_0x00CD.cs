@@ -52,6 +52,7 @@ namespace QQ.Framework.Packets.Send.Message
         }
 
         private Richtext Message { get; }
+
         /// <summary>
         ///     消息 id
         /// </summary>

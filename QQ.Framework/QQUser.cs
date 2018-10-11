@@ -398,12 +398,14 @@ namespace QQ.Framework
         public GroupList Groups { get; set; }
 
         #endregion
+
         /// <summary>
-        /// 好友消息合集
+        ///     好友消息合集
         /// </summary>
         public List<Send_0X00Cd> FriendMessages { get; set; } = new List<Send_0X00Cd>();
+
         /// <summary>
-        /// 群消息合集
+        ///     群消息合集
         /// </summary>
         public List<Send_0X0002> GroupMessages { get; set; } = new List<Send_0X0002>();
     }

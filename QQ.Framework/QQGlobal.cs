@@ -356,6 +356,7 @@ namespace QQ.Framework
         ///     好友消息
         /// </summary>
         Message0X00Ce = 0x00CE,
+
         /// <summary>
         ///     群消息查看确认
         /// </summary>
@@ -365,10 +366,12 @@ namespace QQ.Framework
         ///     消息查看确认
         /// </summary>
         Message0X0319 = 0x0319,
+
         /// <summary>
         ///     群消息撤回
         /// </summary>
         Message0X03F7 = 0x03F7,
+
         /// <summary>
         ///     消息撤回
         /// </summary>

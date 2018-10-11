@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using QQ.Framework.Utils;
 
@@ -6,7 +5,7 @@ namespace QQ.Framework.Packets.Send.Message
 {
     public class Send_0X0391 : SendPacket
     {
-        private long _groupQQ { get; set; }
+        private long _groupQQ { get; }
 
         /// <summary>
         /// </summary>
@@ -23,10 +22,10 @@ namespace QQ.Framework.Packets.Send.Message
         protected override void PutHeader()
         {
             base.PutHeader();
-            Writer.Write(new byte[] { 0x04, 0x00, 0x00 });
+            Writer.Write(new byte[] {0x04, 0x00, 0x00});
             Writer.Write(User.TXProtocol.DwClientType);
             Writer.Write(User.TXProtocol.DwPubNo);
-            Writer.Write(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
+            Writer.Write(new byte[] {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00});
         }
 
         /// <summary>
@@ -38,10 +37,10 @@ namespace QQ.Framework.Packets.Send.Message
             var data = new BinaryWriter(new MemoryStream());
             data.Write(new byte[] {0x0A, 0x12, 0x08});
             data.Write(Util.HexStringToByteArray(Util.PB_toLength(_groupQQ)));
-            data.Write(new byte[] { 0x12, 0x0a, 0x38, 0x00, 0x40, 0x00, 0x4a, 0x04, 0x08, 0x00, 0x10, 0x00 });
+            data.Write(new byte[] {0x12, 0x0a, 0x38, 0x00, 0x40, 0x00, 0x4a, 0x04, 0x08, 0x00, 0x10, 0x00});
             //数据长度
             BodyWriter.BeWrite(data.BaseStream.Length);
-            BodyWriter.Write(new byte[] { 0x08, 0x01, 0x12, 0x09, 0x10, 0x91, 0x07, 0x88, 0x01, 0x04, 0x98, 0x01, 0x00 });
+            BodyWriter.Write(new byte[] {0x08, 0x01, 0x12, 0x09, 0x10, 0x91, 0x07, 0x88, 0x01, 0x04, 0x98, 0x01, 0x00});
             //数据
             BodyWriter.Write(data.BaseStream.ToBytesArray());
         }

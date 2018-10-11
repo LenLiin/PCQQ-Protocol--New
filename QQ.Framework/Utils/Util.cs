@@ -81,9 +81,9 @@ namespace QQ.Framework.Utils
             {
                 0, 0, 0, (byte) (int) paramLong
             };
-            array[2] = (byte)(int)(paramLong >> 8);
-            array[1] = (byte)(int)(paramLong >> 16);
-            array[0] = (byte)(int)(paramLong >> 24);
+            array[2] = (byte) (int) (paramLong >> 8);
+            array[1] = (byte) (int) (paramLong >> 16);
+            array[0] = (byte) (int) (paramLong >> 24);
             return array;
         }
 
@@ -234,12 +234,12 @@ namespace QQ.Framework.Utils
         /// <returns></returns>
         public static long GetTimeMillis(DateTime dateTime)
         {
-            return (long)(dateTime - BaseDateTime).TotalMilliseconds;
+            return (long) (dateTime - BaseDateTime).TotalMilliseconds;
         }
 
         public static long GetTimeSeconds(DateTime dateTime)
         {
-            return (long)(dateTime - BaseDateTime).TotalSeconds;
+            return (long) (dateTime - BaseDateTime).TotalSeconds;
         }
 
         /// <summary>
@@ -297,7 +297,7 @@ namespace QQ.Framework.Utils
             {
                 for (var i = 0; i < 4; i++)
                 {
-                    array[i] = (byte)int.Parse(array2[i]);
+                    array[i] = (byte) int.Parse(array2[i]);
                 }
             }
 
@@ -413,7 +413,7 @@ namespace QQ.Framework.Utils
 
         public static byte[] ToBytesArray(this Stream stream)
         {
-            return ((MemoryStream)stream).ToArray();
+            return ((MemoryStream) stream).ToArray();
         }
 
         /// <summary>
@@ -440,20 +440,15 @@ namespace QQ.Framework.Utils
             }
             catch (Exception ex)
             {
-                throw new Exception("GetMD5HashFromFile() fail,error:" + ex.Message);
+                throw new Exception("GetMD5HashFromFile() fail, error:" + ex.Message);
             }
         }
 
         public static string GetMD5ToGuidHashFromFile(string fileName)
         {
             var md5 = GetMD5HashFromFile(fileName);
-            return "{" +
-                   md5.Substring(0, 8) + "-" +
-                   md5.Substring(8, 4) + "-" +
-                   md5.Substring(12, 4) + "-" +
-                   md5.Substring(16, 4) + "-" +
-                   md5.Substring(20) + "-" +
-                   "}";
+            return
+                $"{{{md5.Substring(0, 8)}-{md5.Substring(8, 4)}-{md5.Substring(12, 4)}-{md5.Substring(16, 4)}-{md5.Substring(20)}}}";
         }
 
         /// <summary>
@@ -468,7 +463,7 @@ namespace QQ.Framework.Utils
             {
                 var binaryReader = new BinaryReader(memoryStream);
                 memoryStream.Position = 0L;
-                return binaryReader.ReadBytes((int)memoryStream.Length);
+                return binaryReader.ReadBytes((int) memoryStream.Length);
             }
         }
 
@@ -476,10 +471,10 @@ namespace QQ.Framework.Utils
 
         public static void int16_to_buf(byte[] tempByteArray, long index, long num)
         {
-            tempByteArray[index] = (byte)((num & 0xff000000) >> 24);
-            tempByteArray[index + 1] = (byte)((num & 0x00ff0000) >> 16);
-            tempByteArray[index + 2] = (byte)((num & 0x0000ff00) >> 8);
-            tempByteArray[index + 3] = (byte)(num & 0x000000ff);
+            tempByteArray[index] = (byte) ((num & 0xff000000) >> 24);
+            tempByteArray[index + 1] = (byte) ((num & 0x00ff0000) >> 16);
+            tempByteArray[index + 2] = (byte) ((num & 0x0000ff00) >> 8);
+            tempByteArray[index + 3] = (byte) (num & 0x000000ff);
         }
 
         public static int buf_to_int16(byte[] tempByteArray, long index)
@@ -519,7 +514,7 @@ namespace QQ.Framework.Utils
 
         public static void BeWrite(this BinaryWriter bw, char v)
         {
-            bw.Write(BitConverter.GetBytes((ushort)v).Reverse().ToArray());
+            bw.Write(BitConverter.GetBytes((ushort) v).Reverse().ToArray());
         }
 
         public static void BeWrite(this BinaryWriter bw, int v)
@@ -535,22 +530,22 @@ namespace QQ.Framework.Utils
         // 注意: 此处的long和ulong均为四个字节，而不是八个。
         public static void BeWrite(this BinaryWriter bw, long v)
         {
-            bw.Write(BitConverter.GetBytes((uint)v).Reverse().ToArray());
+            bw.Write(BitConverter.GetBytes((uint) v).Reverse().ToArray());
         }
 
         public static void BeWrite(this BinaryWriter bw, ulong v)
         {
-            bw.Write(BitConverter.GetBytes((uint)v).Reverse().ToArray());
+            bw.Write(BitConverter.GetBytes((uint) v).Reverse().ToArray());
         }
 
         public static char BeReadChar(this BinaryReader br)
         {
-            return (char)br.BeReadUInt16();
+            return (char) br.BeReadUInt16();
         }
 
         public static ushort BeReadUInt16(this BinaryReader br)
         {
-            return (ushort)((br.ReadByte() << 8) + br.ReadByte());
+            return (ushort) ((br.ReadByte() << 8) + br.ReadByte());
         }
 
         public static int BeReadInt32(this BinaryReader br)
@@ -560,7 +555,7 @@ namespace QQ.Framework.Utils
 
         public static uint BeReadUInt32(this BinaryReader br)
         {
-            return (uint)((br.ReadByte() << 24) | (br.ReadByte() << 16) | (br.ReadByte() << 8) | br.ReadByte());
+            return (uint) ((br.ReadByte() << 24) | (br.ReadByte() << 16) | (br.ReadByte() << 8) | br.ReadByte());
         }
 
         /// <summary>
@@ -570,9 +565,10 @@ namespace QQ.Framework.Utils
         /// <param name="v"></param>
         public static void WriteKey(this BinaryWriter bw, byte[] v)
         {
-            bw.BeWrite((ushort)v.Length);
+            bw.BeWrite((ushort) v.Length);
             bw.Write(v);
-        } 
+        }
+
         public static List<byte[]> WriteSnippet(TextSnippet snippet, int length)
         {
             // TODO: 富文本支持
@@ -581,70 +577,70 @@ namespace QQ.Framework.Utils
             switch (snippet.Type)
             {
                 case MessageType.Normal:
+                {
+                    if (length + 6 >= 699) // 数字应该稍大点，但是我不清楚具体是多少
                     {
-                        if (length + 6 >= 699) // 数字应该稍大点，但是我不清楚具体是多少
-                        {
-                            length = 0;
-                            ret.Add(new byte[0]);
-                        }
+                        length = 0;
+                        ret.Add(new byte[0]);
+                    }
 
-                        bw.BaseStream.Position = 6;
-                        foreach (var chr in snippet.Content)
-                        {
-                            var bytes = Encoding.UTF8.GetBytes(chr.ToString());
-                            // 705 = 699 + 6个byte: (byte + short + byte + short)
-                            if (length + bw.BaseStream.Length + bytes.Length > 705)
-                            {
-                                var pos = bw.BaseStream.Position;
-                                bw.BaseStream.Position = 0;
-                                bw.Write(new byte[] { 0x01 });
-                                bw.BeWrite((ushort)(pos - 3)); // 本来是+3和0的，但是提前预留了6个byte给它们，所以变成了-3和-6。下同理。
-                                bw.Write(new byte[] { 0x01 });
-                                bw.BeWrite((ushort)(pos - 6));
-                                bw.BaseStream.Position = pos;
-                                ret.Add(bw.BaseStream.ToBytesArray());
-                                bw = new BinaryWriter(new MemoryStream());
-                                bw.BaseStream.Position = 6;
-                                length = 0;
-                            }
-
-                            bw.Write(bytes);
-                        }
-
-                        // 在最后一段的开头补充结构 
+                    bw.BaseStream.Position = 6;
+                    foreach (var chr in snippet.Content)
+                    {
+                        var bytes = Encoding.UTF8.GetBytes(chr.ToString());
+                        // 705 = 699 + 6个byte: (byte + short + byte + short)
+                        if (length + bw.BaseStream.Length + bytes.Length > 705)
                         {
                             var pos = bw.BaseStream.Position;
                             bw.BaseStream.Position = 0;
-                            bw.Write(new byte[] { 0x01 });
-                            bw.BeWrite((ushort)(pos - 3));
-                            bw.Write(new byte[] { 0x01 });
-                            bw.BeWrite((ushort)(pos - 6));
+                            bw.Write(new byte[] {0x01});
+                            bw.BeWrite((ushort) (pos - 3)); // 本来是+3和0的，但是提前预留了6个byte给它们，所以变成了-3和-6。下同理。
+                            bw.Write(new byte[] {0x01});
+                            bw.BeWrite((ushort) (pos - 6));
                             bw.BaseStream.Position = pos;
+                            ret.Add(bw.BaseStream.ToBytesArray());
+                            bw = new BinaryWriter(new MemoryStream());
+                            bw.BaseStream.Position = 6;
+                            length = 0;
                         }
-                        break;
+
+                        bw.Write(bytes);
                     }
+
+                    // 在最后一段的开头补充结构 
+                    {
+                        var pos = bw.BaseStream.Position;
+                        bw.BaseStream.Position = 0;
+                        bw.Write(new byte[] {0x01});
+                        bw.BeWrite((ushort) (pos - 3));
+                        bw.Write(new byte[] {0x01});
+                        bw.BeWrite((ushort) (pos - 6));
+                        bw.BaseStream.Position = pos;
+                    }
+                    break;
+                }
                 case MessageType.At:
                     break;
                 case MessageType.Emoji:
+                {
+                    if (length + 12 > 699)
                     {
-                        if (length + 12 > 699)
-                        {
-                            ret.Add(new byte[0]);
-                        }
-
-                        var faceIndex = Convert.ToByte(snippet.Content);
-                        if (faceIndex > 199)
-                        {
-                            faceIndex = 0;
-                        }
-
-                        bw.Write(new byte[] { 0x02, 0x00, 0x14, 0x01, 0x00, 0x01 });
-                        bw.Write(faceIndex);
-                        bw.Write(new byte[] { 0xFF, 0x00, 0x02, 0x14 });
-                        bw.Write((byte)(faceIndex + 65));
-                        bw.Write(new byte[] { 0x0B, 0x00, 0x08, 0x00, 0x01, 0x00, 0x04, 0x52, 0xCC, 0x85, 0x50 });
-                        break;
+                        ret.Add(new byte[0]);
                     }
+
+                    var faceIndex = Convert.ToByte(snippet.Content);
+                    if (faceIndex > 199)
+                    {
+                        faceIndex = 0;
+                    }
+
+                    bw.Write(new byte[] {0x02, 0x00, 0x14, 0x01, 0x00, 0x01});
+                    bw.Write(faceIndex);
+                    bw.Write(new byte[] {0xFF, 0x00, 0x02, 0x14});
+                    bw.Write((byte) (faceIndex + 65));
+                    bw.Write(new byte[] {0x0B, 0x00, 0x08, 0x00, 0x01, 0x00, 0x04, 0x52, 0xCC, 0x85, 0x50});
+                    break;
+                }
                 case MessageType.Picture:
                     break;
                 case MessageType.Xml:
@@ -692,7 +688,7 @@ namespace QQ.Framework.Utils
             var bw = new BinaryWriter(new MemoryStream());
             foreach (var snippet in richtext.Snippets)
             {
-                var list = WriteSnippet(snippet, (int)bw.BaseStream.Position);
+                var list = WriteSnippet(snippet, (int) bw.BaseStream.Position);
                 for (var i = 0; i < list.Count; i++)
                 {
                     bw.Write(list[i]);
@@ -712,12 +708,14 @@ namespace QQ.Framework.Utils
             ret.Add(bw.BaseStream.ToBytesArray());
             return ret;
         }
+
         public static Richtext ReadRichtext(this BinaryReader br)
         {
             // TODO: 解析富文本
             // 目前进度: 仅读取第一部分
             return Richtext.Parse(br.ReadBytes(br.BeReadChar()));
         }
+
         #endregion
     }
 }

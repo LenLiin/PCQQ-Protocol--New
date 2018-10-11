@@ -7,7 +7,8 @@ namespace QQLoginTest.Robots
 {
     public class TestRobot : CustomRobot
     {
-        public TestRobot(ISendMessageService service, IServerMessageSubject transponder, QQUser user) : base(service, transponder, user)
+        public TestRobot(ISendMessageService service, IServerMessageSubject transponder, QQUser user) : base(service,
+            transponder, user)
         {
         }
 
