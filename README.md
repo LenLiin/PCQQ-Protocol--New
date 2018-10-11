@@ -6,7 +6,7 @@ PCQQ协议
 
 [![Build Status](https://travis-ci.org/luojinfang/PCQQ-Protocol.svg?branch=master)](https://travis-ci.org/luojinfang/PCQQ-Protocol)
 [![Discord](https://discordapp.com/api/guilds/499612703447580683/widget.png?style=shield)](https://discord.gg/vp6bXfb)
-[Tg](https://t.me/joinchat/FTcG4kuKAAo1BqojyDxNzQ)
+[![Tg](https://img.shields.io/badge/Telegram-group-blue.svg)](https://t.me/joinchat/FTcG4kuKAAo1BqojyDxNzQ)
 
 源码仅供参考，欢迎吐槽
 ------------------------------------------
