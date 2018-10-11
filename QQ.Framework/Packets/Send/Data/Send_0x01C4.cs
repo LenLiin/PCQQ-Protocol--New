@@ -27,7 +27,7 @@ namespace QQ.Framework.Packets.Send.Data
         /// </summary>
         protected override void PutBody()
         {
-            BodyWriter.Write(new byte[] {0x00, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00});
+            BodyWriter.Write(new byte[] { 0x00, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00 });
             var data = "{\"t1\":" + Util.GetTimeSeconds(DateTime.Now) + "}";
             BodyWriter.WriteKey(Util.GetBytes(data));
         }

@@ -35,7 +35,7 @@ namespace QQ.Framework.Packets.Send.Login
             Writer.BeWrite(User.TXProtocol.EcdhVer);
             Writer.BeWrite((ushort) 0x19);
             Writer.Write(User.TXProtocol.BufDhPublicKey);
-            Writer.Write(new byte[] {0x00, 0x00, 0x00, 0x10});
+            Writer.Write(new byte[] { 0x00, 0x00, 0x00, 0x10 });
             Writer.Write(User.QQPacket0836Key1);
         }
 

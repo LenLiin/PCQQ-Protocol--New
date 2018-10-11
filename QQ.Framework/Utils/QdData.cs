@@ -24,7 +24,7 @@ namespace QQ.Framework.Utils
                 data.Write((byte) 0);
                 data.BeWrite(user.TXProtocol.WQdCsCmdNo);
                 data.Write(user.TXProtocol.CQdCcSubNo);
-                data.Write(new byte[] {0x0E, 0x88}); //xrand(0xFFFF) + 1
+                data.Write(new byte[] { 0x0E, 0x88 }); //xrand(0xFFFF) + 1
                 data.BeWrite(0); //四个0
                 data.Write(user.TXProtocol.BufComputerIdEx);
                 data.Write(user.TXProtocol.COsType);

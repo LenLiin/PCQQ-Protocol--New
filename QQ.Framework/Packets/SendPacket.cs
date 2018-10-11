@@ -188,11 +188,11 @@ namespace QQ.Framework.Packets
                             }
 
                             //表情
-                            bw.Write(new byte[] {0x02, 0x00, 0x14, 0x01, 0x00, 0x01});
+                            bw.Write(new byte[] { 0x02, 0x00, 0x14, 0x01, 0x00, 0x01 });
                             bw.Write(faceIndex);
-                            bw.Write(new byte[] {0xFF, 0x00, 0x02, 0x14});
+                            bw.Write(new byte[] { 0xFF, 0x00, 0x02, 0x14 });
                             bw.Write((byte) (faceIndex + 65));
-                            bw.Write(new byte[] {0x0B, 0x00, 0x08, 0x00, 0x01, 0x00, 0x04, 0x52, 0xCC, 0x85, 0x50});
+                            bw.Write(new byte[] { 0x0B, 0x00, 0x08, 0x00, 0x01, 0x00, 0x04, 0x52, 0xCC, 0x85, 0x50 });
                         }
                         else if (!string.IsNullOrEmpty(group))
                         {
@@ -215,9 +215,9 @@ namespace QQ.Framework.Packets
         [Obsolete("请使用BinaryWriter.Write(Richtext)方法。")]
         public static void ConstructMessage(BinaryWriter writer, byte[] groupMsg)
         {
-            writer.Write(new byte[] {0x01});
+            writer.Write(new byte[] { 0x01 });
             writer.BeWrite((ushort) (groupMsg.Length + 3));
-            writer.Write(new byte[] {0x01});
+            writer.Write(new byte[] { 0x01 });
             writer.BeWrite((ushort) groupMsg.Length);
             writer.Write(groupMsg);
         }
@@ -240,16 +240,16 @@ namespace QQ.Framework.Packets
         {
             var bw = new BinaryWriter(new MemoryStream());
             bw.Write(Util.RandomKey(4));
-            bw.Write(new byte[] {0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00});
-            bw.Write(new byte[] {0x00, 0x0C});
-            bw.Write(new byte[] {0xE5, 0xBE, 0xAE, 0xE8, 0xBD, 0xAF, 0xE9, 0x9B, 0x85, 0xE9, 0xBB, 0x91});
-            bw.Write(new byte[] {0x00, 0x00, 0x14});
+            bw.Write(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x86, 0x00 });
+            bw.Write(new byte[] { 0x00, 0x0C });
+            bw.Write(new byte[] { 0xE5, 0xBE, 0xAE, 0xE8, 0xBD, 0xAF, 0xE9, 0x9B, 0x85, 0xE9, 0xBB, 0x91 });
+            bw.Write(new byte[] { 0x00, 0x00, 0x14 });
             bw.BeWrite((ushort) (compressMsg.Length + 11));
             bw.Write((byte) 0x01);
             bw.BeWrite((ushort) (compressMsg.Length + 1));
             bw.Write((byte) 0x01);
             bw.Write(compressMsg);
-            bw.Write(new byte[] {0x02, 0x00, 0x04, 0x00, 0x00, 0x00, 0x4D});
+            bw.Write(new byte[] { 0x02, 0x00, 0x04, 0x00, 0x00, 0x00, 0x4D });
             return bw.BaseStream.ToBytesArray();
         }
 
