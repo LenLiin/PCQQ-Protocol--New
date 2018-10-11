@@ -772,32 +772,45 @@ namespace QQ.Framework.Utils
                     {
 
                     }
+                    else if (_messageType == 0x14)//XML
+                    {
+                        var XmlReader = new BinaryReader(new MemoryStream(MessageData));
+                        XmlReader.ReadByte();
+                        result.Snippets.Add(new TextSnippet()
+                        {
+                            Content = GZipByteArray.DecompressString(XmlReader.ReadBytes((int)(XmlReader.BaseStream.Length - 1))),
+                            Type = Framework.MessageType.Xml
+                        });
+                    }
                     else if (_messageType == 0x19)//红包秘钥段
                     {
                         var RedBagReader = new BinaryReader(new MemoryStream(MessageData));
-                        RedBagReader.ReadBytes(20);
-                        RedBagReader.ReadBytes(RedBagReader.ReadByte());//恭喜发财
-                        RedBagReader.ReadByte();
-                        RedBagReader.ReadBytes(RedBagReader.ReadByte());//赶紧点击拆开吧
-                        RedBagReader.ReadByte();
-                        RedBagReader.ReadBytes(RedBagReader.ReadByte());//QQ红包
-                        RedBagReader.ReadBytes(5);
-                        RedBagReader.ReadBytes(RedBagReader.ReadByte());//[QQ红包]恭喜发财
-                        RedBagReader.ReadBytes(22);
-                        var RedId = Encoding.UTF8.GetString(RedBagReader.ReadBytes(32));//redid
-                        RedBagReader.ReadBytes(12);
-                        RedBagReader.ReadBytes(RedBagReader.BeReadChar());
-                        RedBagReader.ReadBytes(0x10);
-                        var Key1 = Encoding.UTF8.GetString(RedBagReader.ReadBytes(RedBagReader.ReadByte()));//Key1
-                        RedBagReader.BeReadChar();
-                        var Key2 = Encoding.UTF8.GetString(RedBagReader.ReadBytes(RedBagReader.ReadByte()));//Key2
-                        result.Snippets.Add(new RedBagSnippet
+                        if (RedBagReader.ReadByte() == 0xC2)
                         {
-                            RedId = RedId,
-                            Key1 = Key1,
-                            Key2 = Key2,
-                            Type = Framework.MessageType.RedBag
-                        });
+                            RedBagReader.ReadBytes(19);
+                            RedBagReader.ReadBytes(RedBagReader.ReadByte());//恭喜发财
+                            RedBagReader.ReadByte();
+                            RedBagReader.ReadBytes(RedBagReader.ReadByte());//赶紧点击拆开吧
+                            RedBagReader.ReadByte();
+                            RedBagReader.ReadBytes(RedBagReader.ReadByte());//QQ红包
+                            RedBagReader.ReadBytes(5);
+                            RedBagReader.ReadBytes(RedBagReader.ReadByte());//[QQ红包]恭喜发财
+                            RedBagReader.ReadBytes(22);
+                            var RedId = Encoding.UTF8.GetString(RedBagReader.ReadBytes(32));//redid
+                            RedBagReader.ReadBytes(12);
+                            RedBagReader.ReadBytes(RedBagReader.BeReadChar());
+                            RedBagReader.ReadBytes(0x10);
+                            var Key1 = Encoding.UTF8.GetString(RedBagReader.ReadBytes(RedBagReader.ReadByte()));//Key1
+                            RedBagReader.BeReadChar();
+                            var Key2 = Encoding.UTF8.GetString(RedBagReader.ReadBytes(RedBagReader.ReadByte()));//Key2
+                            result.Snippets.Add(new RedBagSnippet
+                            {
+                                RedId = RedId,
+                                Key1 = Key1,
+                                Key2 = Key2,
+                                Type = Framework.MessageType.RedBag
+                            });
+                        }
                     }
                     var MessageType = Reader.ReadByte();
                     //如果没有结束继续解析消息内容
