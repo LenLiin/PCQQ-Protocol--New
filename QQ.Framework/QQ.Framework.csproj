@@ -218,7 +218,6 @@
     <Compile Include="Sockets\TimersInvoke.cs" />
     <Compile Include="TlvLib\Tlv.cs" />
     <Compile Include="TXProtocol.cs" />
-    <Compile Include="Utils\AtSnippet.cs" />
     <Compile Include="Utils\CRC32.cs" />
     <Compile Include="Utils\DispatchPacketToCommand.cs" />
     <Compile Include="Utils\GZipByteArray.cs" />
@@ -228,7 +227,6 @@
     <Compile Include="Utils\ImageHelper.cs" />
     <Compile Include="Utils\QdData.cs" />
     <Compile Include="Utils\QQTea.cs" />
-    <Compile Include="Utils\RedBagSnippet.cs" />
     <Compile Include="Utils\ResponsePacketProcessor.cs" />
     <Compile Include="Utils\Richtext.cs" />
     <Compile Include="Utils\StringHandlingPackets.cs" />
@@ -252,6 +250,9 @@
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>11.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="System.ValueTuple">
+      <Version>4.5.0</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

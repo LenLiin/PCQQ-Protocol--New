@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -10,10 +11,109 @@ namespace QQ.Framework.Utils
         public List<TextSnippet> Snippets = new List<TextSnippet>();
         public int Length => Snippets.Sum(s => s.Length);
 
-        public static Richtext Parse(byte[] message)
+        public static Richtext Parse(BinaryReader reader)
         {
+            var result = new Richtext();
             // TODO: 解析富文本
-            return Encoding.UTF8.GetString(message);
+            try
+            {
+                var messageType = reader.ReadByte();
+                var dataLength = reader.BeReadChar();
+                while (reader.BaseStream.Position + dataLength < reader.BaseStream.Length)
+                {
+                    reader.ReadByte();
+                    var messageData = reader.ReadBytes(reader.BeReadChar());
+                    switch (messageType)
+                    {
+                        case 0x01: //文本消息
+                        {
+                            var messageStr = Encoding.UTF8.GetString(messageData);
+                            if (messageStr.Contains("@"))
+                            {
+                                //Reader.ReadBytes(10);
+                                //var AtQQ = Util.GetQQNumRetUint(Util.ToHex(Reader.ReadBytes(4)));//被At人的QQ号
+                                result.Snippets.Add(new TextSnippet
+                                {
+                                    Content = messageStr,
+                                    Type = MessageType.At
+                                });
+                            }
+                            else
+                            {
+                                result.Snippets.Add(new TextSnippet
+                                {
+                                    Content = messageStr,
+                                    Type = MessageType.Normal
+                                });
+                            }
+
+                            break;
+                        }
+
+                        case 0x02: //小黄豆表情
+                        {
+                            result.Snippets.Add(new TextSnippet
+                            {
+                                Content = Util.GetQQNumRetUint(Util.ToHex(messageData)).ToString(),
+                                Type = MessageType.Emoji
+                            });
+                            break;
+                        }
+                        case 0x03: //图片
+                        {
+                            result.Snippets.Add(new TextSnippet
+                            {
+                                Content = Encoding.UTF8.GetString(messageData),
+                                Type = MessageType.Picture
+                            });
+                            break;
+                        }
+                        case 0x0A: //音频
+                        {
+                            result.Snippets.Add(new TextSnippet
+                            {
+                                Content = Encoding.UTF8.GetString(messageData),
+                                Type = MessageType.Audio
+                            });
+                            break;
+                        }
+                        case 0x0E: //未知
+                        {
+                            break;
+                        }
+                        case 0x19: //红包秘钥段
+                        {
+                            var redBagReader = new BinaryReader(new MemoryStream(messageData));
+                            redBagReader.ReadBytes(20);
+                            redBagReader.ReadBytes(redBagReader.ReadByte()); //恭喜发财
+                            redBagReader.ReadByte();
+                            redBagReader.ReadBytes(redBagReader.ReadByte()); //赶紧点击拆开吧
+                            redBagReader.ReadByte();
+                            redBagReader.ReadBytes(redBagReader.ReadByte()); //QQ红包
+                            redBagReader.ReadBytes(5);
+                            redBagReader.ReadBytes(redBagReader.ReadByte()); //[QQ红包]恭喜发财
+                            redBagReader.ReadBytes(22);
+                            var redId = Encoding.UTF8.GetString(redBagReader.ReadBytes(32)); //redid
+                            redBagReader.ReadBytes(12);
+                            redBagReader.ReadBytes(redBagReader.BeReadChar());
+                            redBagReader.ReadBytes(0x10);
+                            var key1 = Encoding.UTF8.GetString(redBagReader.ReadBytes(redBagReader.ReadByte())); //Key1
+                            redBagReader.BeReadChar();
+                            var key2 = Encoding.UTF8.GetString(redBagReader.ReadBytes(redBagReader.ReadByte())); //Key2
+                            result.Snippets.Add(new TextSnippet("", MessageType.RedBag, ("RedId", redId),
+                                ("Key1", key1), ("Key2", key2)));
+                            break;
+                        }
+                    }
+                    messageType = reader.ReadByte();
+                    dataLength = reader.BeReadChar();
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+
+            return result;
         }
 
         public static Richtext FromLiteral(string message)
@@ -51,11 +151,26 @@ namespace QQ.Framework.Utils
     {
         public string Content;
         public MessageType Type;
+        private Dictionary<string, object> _data;
 
-        public TextSnippet(string message = "", MessageType type = MessageType.Normal)
+        public T Get<T>(string name, T value = default(T))
+        {
+            return (T)_data[name];
+        }
+
+        public void Set<T>(string name, T value)
+        {
+            _data[name] = value;
+        }
+
+        public TextSnippet(string message = "", MessageType type = MessageType.Normal, params (string name, object value)[] data)
         {
             Content = message;
             Type = type;
+            foreach (var valueTuple in data)
+            {
+                Set(valueTuple.name, valueTuple.value);
+            }
         }
 
         public int Length

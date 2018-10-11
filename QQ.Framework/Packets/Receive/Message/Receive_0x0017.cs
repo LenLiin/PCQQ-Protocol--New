@@ -23,11 +23,6 @@ namespace QQ.Framework.Packets.Receive.Message
         public long Group { get; set; }
 
         /// <summary>
-        ///     消息类型
-        /// </summary>
-        public byte MessageType { get; set; }
-
-        /// <summary>
         ///     消息
         /// </summary>
         public Richtext Message { get; set; } = new Richtext();
@@ -79,8 +74,7 @@ namespace QQ.Framework.Packets.Receive.Message
                 Font = Reader.ReadBytes(Reader.BeReadChar()); //字体
                 Reader.ReadByte();
                 Reader.ReadByte();
-                MessageType = Reader.ReadByte(); //消息类型
-                Reader.ReadRichtext(MessageType, Message);
+                Message = Reader.ReadRichtext();
             }
         }
     }

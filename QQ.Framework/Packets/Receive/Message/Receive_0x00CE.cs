@@ -79,8 +79,7 @@ namespace QQ.Framework.Packets.Receive.Message
             FontStyle = Reader.ReadBytes(Reader.BeReadChar());
             Reader.ReadByte();
             Reader.ReadByte();
-            MessageType = Reader.ReadByte(); //消息类型
-            Reader.ReadRichtext(MessageType, Message);
+            Message = Reader.ReadRichtext();
         }
     }
 }
