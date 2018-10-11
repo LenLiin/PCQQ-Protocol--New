@@ -1,4 +1,4 @@
-﻿using QQ.Framework.Events;
+using QQ.Framework.Events;
 using QQ.Framework.Packets.Receive.Data;
 using QQ.Framework.Packets.Send.Data;
 
@@ -7,6 +7,7 @@ namespace QQ.Framework.Domains.Commands.ResponseCommands.Data
     [ResponsePacketCommand(QQCommand.Data0X0134)]
     public class Data0X0134Command : ResponseCommand<Receive_0X0134>
     {
+        // 未完成
         public Data0X0134Command(QQEventArgs<Receive_0X0134> args) : base(args)
         {
         }

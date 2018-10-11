@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using QQ.Framework.Domains.Observers;
 using QQ.Framework.Utils;
 

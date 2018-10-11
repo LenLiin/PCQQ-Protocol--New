@@ -1,4 +1,4 @@
-﻿using QQ.Framework.Packets;
+using QQ.Framework.Packets;
 
 namespace QQ.Framework.Domains
 {

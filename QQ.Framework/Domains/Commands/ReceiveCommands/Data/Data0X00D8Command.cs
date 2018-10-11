@@ -1,4 +1,4 @@
-﻿using QQ.Framework.Events;
+using QQ.Framework.Events;
 using QQ.Framework.Packets.Receive.Data;
 
 namespace QQ.Framework.Domains.Commands.ReceiveCommands.Data
@@ -6,6 +6,7 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Data
     [ReceivePacketCommand(QQCommand.Data0X00D8)]
     public class Data0X00D8Command : ReceiveCommand<Receive_0X00D8>
     {
+        // 未完成
         public Data0X00D8Command(byte[] data, ISocketService service, IServerMessageSubject transponder, QQUser user) :
             base(data, service, transponder, user)
         {

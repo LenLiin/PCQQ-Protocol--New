@@ -1,4 +1,4 @@
-﻿namespace QQ.Framework.Domains.Observers
+namespace QQ.Framework.Domains.Observers
 {
     /// <summary>
     ///     响应接收到的消息。

@@ -1,4 +1,4 @@
-﻿namespace QQ.Framework.Domains
+namespace QQ.Framework.Domains
 {
     public interface IPacketProcessor<T>
     {

@@ -1,10 +1,11 @@
-﻿using QQ.Framework.Events;
+using QQ.Framework.Events;
 using QQ.Framework.Packets.Receive.Message;
 
 namespace QQ.Framework.Domains.Commands.ReceiveCommands
 {
     public class DefaultReceiveCommand : ReceiveCommand<ReceiveCurrency>
     {
+        // 未完成
         public DefaultReceiveCommand(byte[] data, ISocketService service, IServerMessageSubject transponder,
             QQUser user)
             : base(data, service, transponder, user)

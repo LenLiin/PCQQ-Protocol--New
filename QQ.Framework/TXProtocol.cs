@@ -59,32 +59,32 @@ namespace QQ.Framework
         public byte[] BufMacGuid { get; set; } =
             {0x21, 0x4B, 0x1A, 0x04, 0x09, 0xED, 0x19, 0x70, 0x98, 0x75, 0x51, 0xBB, 0x2D, 0x3A, 0x7E, 0x0A};
 
-        #region ÓÃ»§Ïà¹Ø
+        #region ç”¨æˆ·ç›¸å…³
 
         /// <summary>
-        ///     ¼Ç×¡ÃÜÂë
+        ///     è®°ä½å¯†ç 
         /// </summary>
         public byte BRememberPwdLogin { get; set; } = 0x00;
 
         public byte CPingType { get; set; } = 0x01;
 
         /// <summary>
-        ///     ÖØ¶¨ÏòIP¼ÇÂ¼
+        ///     é‡å®šå‘IPè®°å½•
         /// </summary>
         public List<byte[]> RedirectIP { get; set; } = new List<byte[]>();
 
         /// <summary>
-        ///     ¼ÆËã»úÃû
+        ///     è®¡ç®—æœºå
         /// </summary>
         public string BufComputerName { get; set; } = Dns.GetHostName();
 
         /// <summary>
-        ///     SSOÖ÷°æ±¾ºÅ
+        ///     SSOä¸»ç‰ˆæœ¬å·
         /// </summary>
         public byte CMainVer = 0x37;
 
         /// <summary>
-        ///     SSO´Î°æ±¾ºÅ
+        ///     SSOæ¬¡ç‰ˆæœ¬å·
         /// </summary>
         public byte CSubVer = 0x09;
 
@@ -97,16 +97,16 @@ namespace QQ.Framework
         public byte XxooB = 0x01;
 
         /// <summary>
-        ///     ¿Í»§¶ËÀàĞÍ
+        ///     å®¢æˆ·ç«¯ç±»å‹
         /// </summary>
         public byte[] DwClientType = {0x00, 0x01, 0x01, 0x01};
 
         /// <summary>
-        ///     ·¢ĞĞ°æ±¾ºÅ
+        ///     å‘è¡Œç‰ˆæœ¬å·
         /// </summary>
         public byte[] DwPubNo = {0x00, 0x00, 0x68, 0x1C};
 
-        #region QdData Ïà¹Ø²ÎÊı
+        #region QdData ç›¸å…³å‚æ•°
 
         public ushort CQdProtocolVer = 0x0063;
         public long DwQdVerion = 0x02040404;
@@ -114,24 +114,24 @@ namespace QQ.Framework
         public byte CQdCcSubNo = 0x00;
 
         /// <summary>
-        ///     ÏµÍ³ÀàĞÍ
+        ///     ç³»ç»Ÿç±»å‹
         /// </summary>
         internal byte COsType = 0x03;
 
         /// <summary>
-        ///     ÊÇ·ñx64
+        ///     æ˜¯å¦x64
         /// </summary>
         internal byte BIsWow64 = 0x01;
 
         public long DwDrvVersionInfo = 0x01020000;
 
         /// <summary>
-        ///     TSSafeEdit.datµÄ"ÎÄ¼ş°æ±¾"
+        ///     TSSafeEdit.datçš„"æ–‡ä»¶ç‰ˆæœ¬"
         /// </summary>
         public byte[] BufVersionTsSafeEditDat = {0x07, 0xdf, 0x00, 0x0a, 0x00, 0x0c, 0x00, 0x01};
 
         /// <summary>
-        ///     QScanEngine.dllµÄ"ÎÄ¼ş°æ±¾"
+        ///     QScanEngine.dllçš„"æ–‡ä»¶ç‰ˆæœ¬"
         /// </summary>
         public byte[] BufVersionQScanEngineDll = {0x00, 0x04, 0x00, 0x03, 0x00, 0x04, 0x20, 0x5c};
 
@@ -148,17 +148,17 @@ namespace QQ.Framework
 
         #endregion
 
-        #region È«¾Ö
+        #region å…¨å±€
 
         /// <summary>
-        ///     Ö÷°æ±¾ºÅ
+        ///     ä¸»ç‰ˆæœ¬å·
         /// </summary>
         public uint DwSsoVersion { get; set; } = 0x00000453;
 
         public uint DwServiceId { get; set; } = 0x00000001;
 
         /// <summary>
-        ///     ¿Í»§¶Ë°æ±¾
+        ///     å®¢æˆ·ç«¯ç‰ˆæœ¬
         /// </summary>
         public uint DwClientVer { get; set; } = 0x00001585;
 
@@ -174,14 +174,14 @@ namespace QQ.Framework
 
         #endregion
 
-        #region ¿Í»§¶Ë
+        #region å®¢æˆ·ç«¯
 
         public ushort WClientPort { get; set; }
         public string DwClientIP { get; set; }
         public DateTime DwServerTime { get; set; }
 
         /// <summary>
-        ///     ÖØ¶¨Ïò´ÎÊı
+        ///     é‡å®šå‘æ¬¡æ•°
         /// </summary>
         public ushort WRedirectCount { get; set; }
 

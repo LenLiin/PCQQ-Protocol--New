@@ -3,7 +3,7 @@ namespace QQ.Framework.Packets.Receive.Interactive
     public class Receive_0X0115 : ReceivePacket
     {
         /// <summary>
-        ///     ·¢ËÍÌí¼ÓºÃÓÑÏûÏ¢»ØÖ´
+        ///     å‘é€æ·»åŠ å¥½å‹æ¶ˆæ¯å›æ‰§
         /// </summary>
         public Receive_0X0115(byte[] byteBuffer, QQUser user)
             : base(byteBuffer, user, user.TXProtocol.SessionKey)

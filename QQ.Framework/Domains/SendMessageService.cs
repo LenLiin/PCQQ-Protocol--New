@@ -1,4 +1,4 @@
-﻿using QQ.Framework.Utils;
+using QQ.Framework.Utils;
 
 namespace QQ.Framework.Domains
 {

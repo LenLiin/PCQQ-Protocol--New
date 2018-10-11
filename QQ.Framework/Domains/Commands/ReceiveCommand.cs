@@ -1,4 +1,4 @@
-﻿using QQ.Framework.Events;
+using QQ.Framework.Events;
 using QQ.Framework.Packets;
 using QQ.Framework.Utils;
 

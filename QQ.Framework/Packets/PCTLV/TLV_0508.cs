@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.PCTLV

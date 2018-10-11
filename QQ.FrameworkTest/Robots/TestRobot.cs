@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using QQ.Framework;
 using QQ.Framework.Domains;
 using QQ.Framework.Utils;

@@ -1,4 +1,4 @@
-﻿using QQ.Framework.Domains.Observers;
+using QQ.Framework.Domains.Observers;
 using QQ.Framework.Utils;
 
 namespace QQ.Framework.Domains

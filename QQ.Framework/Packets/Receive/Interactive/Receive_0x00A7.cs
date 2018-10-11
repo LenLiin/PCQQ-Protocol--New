@@ -14,7 +14,7 @@ namespace QQ.Framework.Packets.Receive.Interactive
         protected override void ParseBody()
         {
             Decrypt(User.TXProtocol.SessionKey);
-            //ÏìÓ¦Âğ£¨00£ºÎŞĞèÑéÖ¤ĞÅÏ¢£¬01£ºĞèÒªÑéÖ¤ĞÅÏ¢£¬99£º¶Ô·½ÒÑ¾­ÊÇÄãµÄºÃÓÑ£¬03»ò04£ºÌí¼ÓÊ§°Ü£©
+            //å“åº”å—ï¼ˆ00ï¼šæ— éœ€éªŒè¯ä¿¡æ¯ï¼Œ01ï¼šéœ€è¦éªŒè¯ä¿¡æ¯ï¼Œ99ï¼šå¯¹æ–¹å·²ç»æ˜¯ä½ çš„å¥½å‹ï¼Œ03æˆ–04ï¼šæ·»åŠ å¤±è´¥ï¼‰
             ResultCode = (byte) Reader.Read();
         }
     }

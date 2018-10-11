@@ -1,4 +1,4 @@
-﻿using QQ.Framework.Events;
+using QQ.Framework.Events;
 using QQ.Framework.Packets.Receive.Login;
 
 namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
@@ -6,6 +6,7 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
     [ReceivePacketCommand(QQCommand.Login0X0839)]
     public class LogonCollection : ReceiveCommand<Receive_0X0839>
     {
+        // 未完成
         public LogonCollection(byte[] data, ISocketService service, IServerMessageSubject transponder, QQUser user) :
             base(data, service, transponder, user)
         {

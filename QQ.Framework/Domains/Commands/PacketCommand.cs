@@ -1,4 +1,4 @@
-﻿namespace QQ.Framework.Domains.Commands
+namespace QQ.Framework.Domains.Commands
 {
     public interface IPacketCommand
     {

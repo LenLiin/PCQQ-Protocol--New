@@ -16,7 +16,7 @@ namespace QQ.Framework.Packets.Receive.Interactive
             Decrypt(User.TXProtocol.SessionKey);
             if (GetPacketLength() == 159)
             {
-                User.MessageLog("±§Ç¸£¬ÓÉÓÚÄã²Ù×÷¹ıÓÚÆµ·±»òÕË»§´æÔÚ²»°²È«ÒòËØ£¬Ìí¼ÓºÃÓÑ¹¦ÄÜÔİ±»Í£Ö¹Ê¹ÓÃ£¬ÇëÉÔºóÔÙÊÔ");
+                User.MessageLog("æŠ±æ­‰ï¼Œç”±äºä½ æ“ä½œè¿‡äºé¢‘ç¹æˆ–è´¦æˆ·å­˜åœ¨ä¸å®‰å…¨å› ç´ ï¼Œæ·»åŠ å¥½å‹åŠŸèƒ½æš‚è¢«åœæ­¢ä½¿ç”¨ï¼Œè¯·ç¨åå†è¯•");
             }
         }
     }
