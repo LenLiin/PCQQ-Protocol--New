@@ -81,6 +81,32 @@ namespace QQ.Framework.Utils
                         {
                             break;
                         }
+                        case 0x14: //XML
+                        {
+                            var xmlReader = new BinaryReader(new MemoryStream(messageData));
+                            xmlReader.ReadByte();
+                            result.Snippets.Add(new TextSnippet
+                            {
+                                Content = GZipByteArray.DecompressString(
+                                    xmlReader.ReadBytes((int) (xmlReader.BaseStream.Length - 1))),
+                                Type = MessageType.Xml
+                            });
+                            break;
+                        }
+                        case 0x18: //群文件
+                        {
+                            var xmlReader = new BinaryReader(new MemoryStream(messageData));
+                            xmlReader.ReadBytes(3);
+                            var fileName = xmlReader.ReadBytes(xmlReader.ReadByte()); //文件名称
+                            xmlReader.ReadByte();
+                            xmlReader.ReadBytes(xmlReader.ReadByte()); //文件大小
+                            result.Snippets.Add(new TextSnippet
+                            {
+                                Content = Encoding.UTF8.GetString(fileName),
+                                Type = MessageType.OfflineFile
+                            });
+                            break;
+                        }
                         case 0x19: //红包秘钥段
                         {
                             var redBagReader = new BinaryReader(new MemoryStream(messageData));
@@ -105,6 +131,7 @@ namespace QQ.Framework.Utils
                             break;
                         }
                     }
+
                     messageType = reader.ReadByte();
                     dataLength = reader.BeReadChar();
                 }
@@ -155,7 +182,7 @@ namespace QQ.Framework.Utils
 
         public T Get<T>(string name, T value = default(T))
         {
-            return (T)_data[name];
+            return (T) _data[name];
         }
 
         public void Set<T>(string name, T value)
@@ -163,7 +190,8 @@ namespace QQ.Framework.Utils
             _data[name] = value;
         }
 
-        public TextSnippet(string message = "", MessageType type = MessageType.Normal, params (string name, object value)[] data)
+        public TextSnippet(string message = "", MessageType type = MessageType.Normal,
+            params (string name, object value)[] data)
         {
             Content = message;
             Type = type;
