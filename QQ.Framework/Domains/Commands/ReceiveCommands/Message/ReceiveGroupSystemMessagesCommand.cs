@@ -24,7 +24,7 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Message
         {
             Response();
             //除了自己消息以外的消息进行转发
-            if (!_user.GroupSendMessages.Where(c => c.Sequence == _packet.Sequence).Any())
+            if (_user.GroupSendMessages.All(c => c.Sequence != _packet.Sequence))
             {
                 // 将收到的群/系统消息转发给所有机器人
                 _transponder.ReceiveGroupMessage(_packet.Group, _packet.FromQQ, _packet.Message);

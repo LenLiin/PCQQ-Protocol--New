@@ -21,7 +21,7 @@ namespace QQ.Framework.Domains.Commands.ResponseCommands.Message
             if (!string.IsNullOrEmpty(_packet.Message.ToString()))
             {
                 //只处理没有处理过的消息
-                if (!_user.FriendReceiveMessages.Where(c => c.Sequence == _packet.Sequence).Any())
+                if (_user.FriendReceiveMessages.All(c => c.Sequence != _packet.Sequence))
                 {
                     if (!QQGlobal.DebugLog && _packet.Message.ToString().Count(c => c == '\0') > 5)
                     {

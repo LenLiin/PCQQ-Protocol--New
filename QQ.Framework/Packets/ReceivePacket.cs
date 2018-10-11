@@ -136,7 +136,7 @@ namespace QQ.Framework.Packets
                             var tlvClass = Assembly.GetExecutingAssembly().CreateInstance(type.FullName, true);
 
                             var methodinfo = type.GetMethod("Parser_Tlv");
-                            methodinfo.Invoke(tlvClass, new object[] {User, Reader});
+                            methodinfo.Invoke(tlvClass, new object[] { User, Reader });
                         }
                     }
                     catch (Exception ex)

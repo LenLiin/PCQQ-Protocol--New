@@ -18,12 +18,12 @@ namespace QQ.Framework.Utils
 
         public static Richtext FromLiteral(string message)
         {
-            return new Richtext {Snippets = new List<TextSnippet> {new TextSnippet(message ?? "")}};
+            return new Richtext { Snippets = new List<TextSnippet> { new TextSnippet(message ?? "") } };
         }
 
         public static Richtext FromSnippets(params TextSnippet[] message)
         {
-            return new Richtext {Snippets = message.ToList()};
+            return new Richtext { Snippets = message.ToList() };
         }
 
         public override string ToString()

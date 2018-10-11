@@ -30,10 +30,10 @@ namespace QQ.Framework.Packets.Send.Message
         protected override void PutHeader()
         {
             base.PutHeader();
-            Writer.Write(new byte[] {0x04, 0x00, 0x00});
+            Writer.Write(new byte[] { 0x04, 0x00, 0x00 });
             Writer.Write(User.TXProtocol.DwClientType);
             Writer.Write(User.TXProtocol.DwPubNo);
-            Writer.Write(new byte[] {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00});
+            Writer.Write(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace QQ.Framework.Packets.Send.Message
         /// </summary>
         protected override void PutBody()
         {
-            BodyWriter.Write(new byte[] {0x00, 0x00, 0x00, 0x07});
+            BodyWriter.Write(new byte[] { 0x00, 0x00, 0x00, 0x07 });
             var data = new BinaryWriter(new MemoryStream());
             var data_0a = new BinaryWriter(new MemoryStream());
             data_0a.Write((byte) 0x08);
@@ -54,18 +54,18 @@ namespace QQ.Framework.Packets.Send.Message
             data_0a.Write(
                 Util.HexStringToByteArray(
                     Util.PB_toLength(Convert.ToInt64(Util.ToHex(MessageTime).Replace(" ", ""), 16))));
-            data_0a.Write(new byte[] {0x30});
+            data_0a.Write(new byte[] { 0x30 });
             data_0a.Write(
                 Util.HexStringToByteArray(
                     Util.PB_toLength(Convert.ToInt64(Util.ToHex(_messageId).Replace(" ", ""), 16)))); //消息Id
-            data_0a.Write(new byte[] {0x38, 0x01, 0x40, 0x00, 0x48, 0x00});
+            data_0a.Write(new byte[] { 0x38, 0x01, 0x40, 0x00, 0x48, 0x00 });
             data.Write((byte) 0x0A);
             data.Write((byte) data_0a.BaseStream.Length); //length
             data.Write(data_0a.BaseStream.ToBytesArray());
-            data.Write(new byte[] {0x10, 0x01, 0x18, 0x01, 0x20, 0x00, 0x2a, 0x04, 0x08, 0x00, 0x10, 0x00});
+            data.Write(new byte[] { 0x10, 0x01, 0x18, 0x01, 0x20, 0x00, 0x2a, 0x04, 0x08, 0x00, 0x10, 0x00 });
             //数据长度
             BodyWriter.BeWrite(data.BaseStream.Length);
-            BodyWriter.Write(new byte[] {0x08, 0x01, 0x12, 0x03, 0x98, 0x01, 0x00});
+            BodyWriter.Write(new byte[] { 0x08, 0x01, 0x12, 0x03, 0x98, 0x01, 0x00 });
             //数据
             BodyWriter.Write(data.BaseStream.ToBytesArray());
         }

@@ -22,11 +22,11 @@ namespace QQ.Framework.Packets.Send.Login
         protected override void PutHeader()
         {
             base.PutHeader();
-            Writer.Write(new byte[] {0x03, 0x00, 0x00});
+            Writer.Write(new byte[] { 0x03, 0x00, 0x00 });
             Writer.Write(User.TXProtocol.DwClientType);
             Writer.Write(User.TXProtocol.DwPubNo);
             Writer.BeWrite(0);
-            Writer.Write(new byte[] {0x00, 0x30, 0x00, 0x3a});
+            Writer.Write(new byte[] { 0x00, 0x30, 0x00, 0x3a });
             Writer.WriteKey(User.TXProtocol.BufSigSession);
         }
 

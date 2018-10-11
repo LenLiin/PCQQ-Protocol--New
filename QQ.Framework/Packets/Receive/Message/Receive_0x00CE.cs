@@ -44,10 +44,12 @@ namespace QQ.Framework.Packets.Receive.Message
         ///     消息内容
         /// </summary>
         public Richtext Message { get; set; } = new Richtext();
+
         /// <summary>
         ///     消息id
         /// </summary>
         public byte[] MessageId { get; set; }
+
         public string Key1 { get; set; }
         public string Key2 { get; set; }
         public string RedId { get; set; }
@@ -55,7 +57,7 @@ namespace QQ.Framework.Packets.Receive.Message
         protected override void ParseBody()
         {
             Decrypt(User.TXProtocol.SessionKey);
-            FromQQ = (long)Util.GetQQNumRetUint(Util.ToHex(Reader.ReadBytes(4)));
+            FromQQ = (long) Util.GetQQNumRetUint(Util.ToHex(Reader.ReadBytes(4)));
             Reader.ReadBytes(4); //自己的QQ
             Reader.ReadBytes(10);
             Reader.ReadBytes(2);
@@ -77,7 +79,7 @@ namespace QQ.Framework.Packets.Receive.Message
             FontStyle = Reader.ReadBytes(Reader.BeReadChar());
             Reader.ReadByte();
             Reader.ReadByte();
-            MessageType = Reader.ReadByte();//消息类型
+            MessageType = Reader.ReadByte(); //消息类型
             Reader.ReadRichtext(MessageType, Message);
         }
     }

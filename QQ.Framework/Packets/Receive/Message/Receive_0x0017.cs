@@ -66,11 +66,11 @@ namespace QQ.Framework.Packets.Receive.Message
             Reader.BeReadChar();
             Reader.ReadBytes(2);
             Reader.ReadBytes(Reader.BeReadChar());
-            Group = (long)Util.GetQQNumRetUint(Util.ToHex(Reader.ReadBytes(4))); //群号
+            Group = (long) Util.GetQQNumRetUint(Util.ToHex(Reader.ReadBytes(4))); //群号
             if (Reader.ReadByte() == 0x01)
             {
-                FromQQ = (long)Util.GetQQNumRetUint(Util.ToHex(Reader.ReadBytes(4))); //发消息人的QQ
-                MessageIndex = Reader.ReadBytes(4);//姑且叫消息索引吧
+                FromQQ = (long) Util.GetQQNumRetUint(Util.ToHex(Reader.ReadBytes(4))); //发消息人的QQ
+                MessageIndex = Reader.ReadBytes(4); //姑且叫消息索引吧
                 ReceiveTime = Reader.ReadBytes(4); //接收时间  
                 Reader.ReadBytes(24);
                 SendTime = Reader.ReadBytes(4); //发送时间 
@@ -79,7 +79,7 @@ namespace QQ.Framework.Packets.Receive.Message
                 Font = Reader.ReadBytes(Reader.BeReadChar()); //字体
                 Reader.ReadByte();
                 Reader.ReadByte();
-                MessageType = Reader.ReadByte();//消息类型
+                MessageType = Reader.ReadByte(); //消息类型
                 Reader.ReadRichtext(MessageType, Message);
             }
         }

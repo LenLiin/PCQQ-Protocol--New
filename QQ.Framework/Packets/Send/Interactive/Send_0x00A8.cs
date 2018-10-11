@@ -55,7 +55,7 @@ namespace QQ.Framework.Packets.Send.Interactive
                     BodyWriter.Write(User.AddFriend0020Value);
                 }
 
-                BodyWriter.Write(new byte[] {0x10, 0x00});
+                BodyWriter.Write(new byte[] { 0x10, 0x00 });
             }
             else
             {
@@ -70,7 +70,7 @@ namespace QQ.Framework.Packets.Send.Interactive
                 });
                 BodyWriter.BeWrite((ushort) User.AddFriend0020Value.Length);
                 BodyWriter.Write(User.AddFriend0020Value);
-                BodyWriter.Write(new byte[] {0x10, 0x00});
+                BodyWriter.Write(new byte[] { 0x10, 0x00 });
                 BodyWriter.BeWrite((ushort) Message.Length);
                 BodyWriter.Write(Message);
             }

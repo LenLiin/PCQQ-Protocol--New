@@ -6,8 +6,8 @@ namespace QQ.Framework.Packets.Send.Message
 {
     public class Send_0X0391 : SendPacket
     {
-        private long _groupQQ { get; set; }
-        private byte[] _messageIndex { get; set; }
+        private long _groupQQ { get; }
+        private byte[] _messageIndex { get; }
 
         /// <summary>
         /// </summary>
@@ -46,10 +46,12 @@ namespace QQ.Framework.Packets.Send.Message
             BodyWriter.Write(new byte[] { 0x08, 0x01, 0x12, 0x09 });
 
             var data_12 = new BinaryWriter(new MemoryStream());
-            data_12.Write(Util.HexStringToByteArray(Util.PB_toLength(Convert.ToInt64(Util.ToHex(_messageIndex).Replace(" ", ""), 16))));
+            data_12.Write(
+                Util.HexStringToByteArray(
+                    Util.PB_toLength(Convert.ToInt64(Util.ToHex(_messageIndex).Replace(" ", ""), 16))));
             data_12.Write(new byte[] { 0x88, 0x01, 0x04, 0x98, 0x01, 0x00 });
 
-            BodyWriter.Write((byte)data_12.BaseStream.Length);
+            BodyWriter.Write((byte) data_12.BaseStream.Length);
             BodyWriter.Write(data_12.BaseStream.ToBytesArray());
 
             //数据

@@ -401,21 +401,22 @@ namespace QQ.Framework
         #endregion
 
         /// <summary>
-        /// 好友发送消息合集
+        ///     好友发送消息合集
         /// </summary>
         public List<Send_0X00Cd> FriendSendMessages { get; set; } = new List<Send_0X00Cd>();
+
         /// <summary>
-        /// 群发送消息合集
+        ///     群发送消息合集
         /// </summary>
         public List<Send_0X0002> GroupSendMessages { get; set; } = new List<Send_0X0002>();
 
         /// <summary>
-        /// 好友接收消息合集
+        ///     好友接收消息合集
         /// </summary>
         public List<Receive_0X00Ce> FriendReceiveMessages { get; set; } = new List<Receive_0X00Ce>();
 
         /// <summary>
-        /// 群接收消息合集
+        ///     群接收消息合集
         /// </summary>
         public List<Receive_0X0017> GroupReceiveMessages { get; set; } = new List<Receive_0X0017>();
     }
