@@ -118,30 +118,23 @@ namespace QQ.Framework.Packets
         internal void TlvExecutionProcessing(ICollection<Tlv> tlvs)
         {
             var types = Assembly.GetExecutingAssembly().GetTypes();
-            foreach (var tlv in tlvs)
+            foreach (var type in types)
             {
-                foreach (var type in types)
+                var attributes = type.GetCustomAttributes();
+                if (!attributes.Any(attr => attr is TlvTagAttribute))
                 {
-                    try
-                    {
-                        var attributes = type.GetCustomAttributes();
-                        if (!attributes.Any(attr => attr is TlvTagAttribute))
-                        {
-                            continue;
-                        }
+                    continue;
+                }
 
-                        var attribute = attributes.First(attr => attr is TlvTagAttribute) as TlvTagAttribute;
-                        if ((int) attribute.Tag == tlv.Tag)
-                        {
-                            var tlvClass = Assembly.GetExecutingAssembly().CreateInstance(type.FullName, true);
-
-                            var methodinfo = type.GetMethod("Parser_Tlv");
-                            methodinfo.Invoke(tlvClass, new object[] {User, Reader});
-                        }
-                    }
-                    catch (Exception ex)
+                foreach (var tlv in tlvs)
+                {
+                    var attribute = attributes.First(attr => attr is TlvTagAttribute) as TlvTagAttribute;
+                    if ((int) attribute.Tag == tlv.Tag)
                     {
-                        throw ex;
+                        var tlvClass = Assembly.GetExecutingAssembly().CreateInstance(type.FullName, true);
+
+                        var methodinfo = type.GetMethod("Parser_Tlv");
+                        methodinfo.Invoke(tlvClass, new object[] { User, Reader });
                     }
                 }
             }

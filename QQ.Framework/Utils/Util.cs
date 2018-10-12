@@ -593,9 +593,9 @@ namespace QQ.Framework.Utils
                         {
                             var pos = bw.BaseStream.Position;
                             bw.BaseStream.Position = 0;
-                            bw.Write(new byte[] {0x01});
+                            bw.Write(new byte[] { 0x01 });
                             bw.BeWrite((ushort) (pos - 3)); // 本来是+3和0的，但是提前预留了6个byte给它们，所以变成了-3和-6。下同理。
-                            bw.Write(new byte[] {0x01});
+                            bw.Write(new byte[] { 0x01 });
                             bw.BeWrite((ushort) (pos - 6));
                             bw.BaseStream.Position = pos;
                             ret.Add(bw.BaseStream.ToBytesArray());
@@ -611,9 +611,9 @@ namespace QQ.Framework.Utils
                     {
                         var pos = bw.BaseStream.Position;
                         bw.BaseStream.Position = 0;
-                        bw.Write(new byte[] {0x01});
+                        bw.Write(new byte[] { 0x01 });
                         bw.BeWrite((ushort) (pos - 3));
-                        bw.Write(new byte[] {0x01});
+                        bw.Write(new byte[] { 0x01 });
                         bw.BeWrite((ushort) (pos - 6));
                         bw.BaseStream.Position = pos;
                     }
@@ -634,11 +634,11 @@ namespace QQ.Framework.Utils
                         faceIndex = 0;
                     }
 
-                    bw.Write(new byte[] {0x02, 0x00, 0x14, 0x01, 0x00, 0x01});
+                    bw.Write(new byte[] { 0x02, 0x00, 0x14, 0x01, 0x00, 0x01 });
                     bw.Write(faceIndex);
-                    bw.Write(new byte[] {0xFF, 0x00, 0x02, 0x14});
+                    bw.Write(new byte[] { 0xFF, 0x00, 0x02, 0x14 });
                     bw.Write((byte) (faceIndex + 65));
-                    bw.Write(new byte[] {0x0B, 0x00, 0x08, 0x00, 0x01, 0x00, 0x04, 0x52, 0xCC, 0x85, 0x50});
+                    bw.Write(new byte[] { 0x0B, 0x00, 0x08, 0x00, 0x01, 0x00, 0x04, 0x52, 0xCC, 0x85, 0x50 });
                     break;
                 }
                 case MessageType.Picture:
@@ -709,135 +709,9 @@ namespace QQ.Framework.Utils
             return ret;
         }
 
-        public static Richtext ReadRichtext(this BinaryReader Reader, byte _messageType, Richtext result)
+        public static Richtext ReadRichtext(this BinaryReader reader)
         {
-            // TODO: 解析富文本
-            try
-            {
-                var DataLength = Reader.BeReadChar();
-                if (Reader.BaseStream.Length - Reader.BaseStream.Position >= DataLength)
-                {
-                    var Data = Reader.ReadBytes(DataLength);
-                    var subReader = new BinaryReader(new MemoryStream(Data));
-                    subReader.ReadByte();
-                    var MessageData = subReader.ReadBytes(subReader.BeReadChar());
-                    if (_messageType == 0x01)//文本消息
-                    {
-                        var MessageStr = Encoding.UTF8.GetString(MessageData);
-                        if (MessageStr.Contains("@"))
-                        {
-                            //Reader.ReadBytes(10);
-                            //var AtQQ = Util.GetQQNumRetUint(Util.ToHex(Reader.ReadBytes(4)));//被At人的QQ号
-                            result.Snippets.Add(new AtSnippet()
-                            {
-                                Content = MessageStr,
-                                //AtQQ = AtQQ,
-                                //Type=Framework.MessageType.At
-                            });
-                        }
-                        else
-                        {
-                            result.Snippets.Add(new TextSnippet()
-                            {
-                                Content = MessageStr,
-                                Type = Framework.MessageType.Normal
-                            });
-                        }
-                    }
-                    else if (_messageType == 0x02)//小黄豆表情
-                    {
-                        result.Snippets.Add(new TextSnippet()
-                        {
-                            Content = Util.GetQQNumRetUint(Util.ToHex(MessageData)).ToString(),
-                            Type = Framework.MessageType.Emoji
-                        });
-                    }
-                    else if (_messageType == 0x03)//图片
-                    {
-                        result.Snippets.Add(new TextSnippet()
-                        {
-                            Content = Encoding.UTF8.GetString(MessageData),
-                            Type = Framework.MessageType.Picture
-                        });
-                    }
-                    else if (_messageType == 0x0A)//音频
-                    {
-                        result.Snippets.Add(new TextSnippet()
-                        {
-                            Content = Encoding.UTF8.GetString(MessageData),
-                            Type = Framework.MessageType.Audio
-                        });
-                    }
-                    else if (_messageType == 0x0E)//未知
-                    {
-
-                    }
-                    else if (_messageType == 0x14)//XML
-                    {
-                        var XmlReader = new BinaryReader(new MemoryStream(MessageData));
-                        XmlReader.ReadByte();
-                        result.Snippets.Add(new TextSnippet()
-                        {
-                            Content = GZipByteArray.DecompressString(XmlReader.ReadBytes((int)(XmlReader.BaseStream.Length - 1))),
-                            Type = Framework.MessageType.Xml
-                        });
-                    }
-                    else if (_messageType == 0x18)//群文件
-                    {
-                        var XmlReader = new BinaryReader(new MemoryStream(MessageData));
-                        XmlReader.ReadBytes(3);
-                        var FileName = XmlReader.ReadBytes(XmlReader.ReadByte());//文件名称
-                        XmlReader.ReadByte();
-                        XmlReader.ReadBytes(XmlReader.ReadByte());//文件大小
-                        result.Snippets.Add(new TextSnippet()
-                        {
-                            Content = Encoding.UTF8.GetString(FileName),
-                            Type = Framework.MessageType.OfflineFile
-                        });
-                    }
-                    else if (_messageType == 0x19)//红包秘钥段
-                    {
-                        var RedBagReader = new BinaryReader(new MemoryStream(MessageData));
-                        if (RedBagReader.ReadByte() == 0xC2)
-                        {
-                            RedBagReader.ReadBytes(19);
-                            RedBagReader.ReadBytes(RedBagReader.ReadByte());//恭喜发财
-                            RedBagReader.ReadByte();
-                            RedBagReader.ReadBytes(RedBagReader.ReadByte());//赶紧点击拆开吧
-                            RedBagReader.ReadByte();
-                            RedBagReader.ReadBytes(RedBagReader.ReadByte());//QQ红包
-                            RedBagReader.ReadBytes(5);
-                            RedBagReader.ReadBytes(RedBagReader.ReadByte());//[QQ红包]恭喜发财
-                            RedBagReader.ReadBytes(22);
-                            var RedId = Encoding.UTF8.GetString(RedBagReader.ReadBytes(32));//redid
-                            RedBagReader.ReadBytes(12);
-                            RedBagReader.ReadBytes(RedBagReader.BeReadChar());
-                            RedBagReader.ReadBytes(0x10);
-                            var Key1 = Encoding.UTF8.GetString(RedBagReader.ReadBytes(RedBagReader.ReadByte()));//Key1
-                            RedBagReader.BeReadChar();
-                            var Key2 = Encoding.UTF8.GetString(RedBagReader.ReadBytes(RedBagReader.ReadByte()));//Key2
-                            result.Snippets.Add(new RedBagSnippet
-                            {
-                                RedId = RedId,
-                                Key1 = Key1,
-                                Key2 = Key2,
-                                Type = Framework.MessageType.RedBag
-                            });
-                        }
-                    }
-                    var MessageType = Reader.ReadByte();
-                    //如果没有结束继续解析消息内容
-                    if (Reader.BaseStream.Length - Reader.BaseStream.Position > 2)
-                    {
-                        Reader.ReadRichtext(MessageType, result);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-
-            }
-            return result;
+            return Richtext.Parse(reader);
         }
 
         #endregion

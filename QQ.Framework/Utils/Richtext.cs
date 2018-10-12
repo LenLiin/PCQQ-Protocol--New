@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -10,20 +11,121 @@ namespace QQ.Framework.Utils
         public List<TextSnippet> Snippets = new List<TextSnippet>();
         public int Length => Snippets.Sum(s => s.Length);
 
-        public static Richtext Parse(byte[] message)
+        public static Richtext Parse(BinaryReader reader)
         {
+            var result = new Richtext();
             // TODO: 解析富文本
-            return Encoding.UTF8.GetString(message);
+            try
+            {
+                var messageType = reader.ReadByte();
+                var dataLength = reader.BeReadChar();
+                while (reader.BaseStream.Position + dataLength < reader.BaseStream.Length)
+                {
+                    reader.ReadByte();
+                    switch (messageType)
+                    {
+                        case 0x01: //文本消息
+                        {
+                            var messageStr = Encoding.UTF8.GetString(reader.ReadBytes(reader.BeReadChar()));
+                            if (messageStr.Contains("@"))
+                            {
+                                //Reader.ReadBytes(10);
+                                //var AtQQ = Util.GetQQNumRetUint(Util.ToHex(Reader.ReadBytes(4)));//被At人的QQ号
+                                result.Snippets.Add(new TextSnippet(messageStr, MessageType.At));
+                            }
+                            else
+                            {
+                                result.Snippets.Add(messageStr);
+                            }
+
+                            break;
+                        }
+
+                        case 0x02: //小黄豆表情
+                        {
+                            result.Snippets.Add(new TextSnippet(
+                                Util.GetQQNumRetUint(Util.ToHex(reader.ReadBytes(reader.BeReadChar()))).ToString(),
+                                MessageType.Emoji));
+                            break;
+                        }
+                        case 0x03: //图片
+                        {
+                            result.Snippets.Add(new TextSnippet(
+                                Encoding.UTF8.GetString(reader.ReadBytes(reader.BeReadChar())), MessageType.Picture));
+                            break;
+                        }
+                        case 0x0A: //音频
+                        {
+                            result.Snippets.Add(new TextSnippet(Encoding.UTF8.GetString(reader.ReadBytes(reader.BeReadChar())), MessageType.Audio));
+                            break;
+                        }
+                        case 0x0E: //未知
+                        {
+                            break;
+                        }
+                        case 0x14: //XML
+                        {
+                           reader.ReadByte();
+                            result.Snippets.Add(new TextSnippet( GZipByteArray.DecompressString(reader.ReadBytes((int) (reader.BaseStream.Length - 1))), MessageType.Xml));
+                            break;
+                        }
+                        case 0x18: //群文件
+                        {
+                            reader.ReadBytes(3);
+                            var fileName = reader.ReadBytes(reader.ReadByte()); //文件名称
+                            reader.ReadByte();
+                            reader.ReadBytes(reader.ReadByte()); //文件大小
+                            result.Snippets.Add(new TextSnippet(Encoding.UTF8.GetString(fileName),
+                                MessageType.OfflineFile));
+                            break;
+                        }
+                        case 0x19: //红包秘钥段
+                        {
+                            if (reader.ReadByte() != 0xC2)
+                            {
+                                break;
+                            }
+                            reader.ReadBytes(19);
+                            reader.ReadBytes(reader.ReadByte()); //恭喜发财
+                            reader.ReadByte();
+                            reader.ReadBytes(reader.ReadByte()); //赶紧点击拆开吧
+                            reader.ReadByte();
+                            reader.ReadBytes(reader.ReadByte()); //QQ红包
+                            reader.ReadBytes(5);
+                            reader.ReadBytes(reader.ReadByte()); //[QQ红包]恭喜发财
+                            reader.ReadBytes(22);
+                            var redId = Encoding.UTF8.GetString(reader.ReadBytes(32)); //redid
+                            reader.ReadBytes(12);
+                            reader.ReadBytes(reader.BeReadChar());
+                            reader.ReadBytes(0x10);
+                            var key1 = Encoding.UTF8.GetString(reader.ReadBytes(reader.ReadByte())); //Key1
+                            reader.BeReadChar();
+                            var key2 = Encoding.UTF8.GetString(reader.ReadBytes(reader.ReadByte())); //Key2
+                            result.Snippets.Add(new TextSnippet("", MessageType.RedBag, ("RedId", redId),
+                                ("Key1", key1), ("Key2", key2)));
+                            break;
+                        }
+                    }
+
+                    messageType = reader.ReadByte();
+                    dataLength = reader.BeReadChar();
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+
+            return result;
         }
 
         public static Richtext FromLiteral(string message)
         {
-            return new Richtext {Snippets = new List<TextSnippet> {new TextSnippet(message ?? "")}};
+            return new Richtext { Snippets = new List<TextSnippet> { new TextSnippet(message ?? "") } };
         }
 
         public static Richtext FromSnippets(params TextSnippet[] message)
         {
-            return new Richtext {Snippets = message.ToList()};
+            return new Richtext { Snippets = message.ToList() };
         }
 
         public override string ToString()
@@ -51,11 +153,27 @@ namespace QQ.Framework.Utils
     {
         public string Content;
         public MessageType Type;
+        private Dictionary<string, object> _data;
 
-        public TextSnippet(string message = "", MessageType type = MessageType.Normal)
+        public T Get<T>(string name, T value = default(T))
+        {
+            return (T) _data[name];
+        }
+
+        public void Set<T>(string name, T value)
+        {
+            _data[name] = value;
+        }
+
+        public TextSnippet(string message = "", MessageType type = MessageType.Normal,
+            params (string name, object value)[] data)
         {
             Content = message;
             Type = type;
+            foreach (var valueTuple in data)
+            {
+                Set(valueTuple.name, valueTuple.value);
+            }
         }
 
         public int Length

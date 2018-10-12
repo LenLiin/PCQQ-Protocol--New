@@ -18,9 +18,10 @@ namespace QQ.Framework.Domains.Commands.ResponseCommands.Message
             if (!string.IsNullOrEmpty(_packet.Message))
             {
                 //当收到消息包序为自己发送的消息包序时更新消息Id
-                if (_user.GroupSendMessages.Where(c => c.Sequence == _packet.Sequence).Any())
+                if (_user.GroupSendMessages.Any(c => c.Sequence == _packet.Sequence))
                 {
-                    var messageSend = _user.GroupSendMessages.Where(c => c.Sequence == _packet.Sequence).FirstOrDefault();
+                    var messageSend = _user.GroupSendMessages
+                        .FirstOrDefault(c => c.Sequence == _packet.Sequence);
                     if (messageSend != null)
                     {
                         messageSend.MessageId = _packet.MessageId;
@@ -29,7 +30,7 @@ namespace QQ.Framework.Domains.Commands.ResponseCommands.Message
                 }
                 else
                 {
-                    if (!_user.GroupReceiveMessages.Where(c => c.Sequence == _packet.Sequence).Any())
+                    if (_user.GroupReceiveMessages.All(c => c.Sequence != _packet.Sequence))
                     {
                         if (!QQGlobal.DebugLog && _packet.Message.ToString().Count(c => c == '\0') > 5)
                         {
@@ -40,9 +41,8 @@ namespace QQ.Framework.Domains.Commands.ResponseCommands.Message
 
                         //添加到已处理消息列表
                         _user.GroupReceiveMessages.Add(_packet);
-
-
                     }
+
                     //查看群消息确认
                     if (_packet.ReceiveTime != null)
                     {
@@ -50,16 +50,11 @@ namespace QQ.Framework.Domains.Commands.ResponseCommands.Message
                     }
                 }
             }
-            else
-            {
-                //_service.MessageLog($"收到群{_packet.Group}的{_packet.FromQQ}的空消息。");
-            }
 
             //提取数据
             var dataReader = new BinaryReader(new MemoryStream(_packet.BodyDecrypted));
 
             _service.Send(new Send_0X0017(_user, dataReader.ReadBytes(0x10), _packet.Sequence));
-
         }
     }
 }

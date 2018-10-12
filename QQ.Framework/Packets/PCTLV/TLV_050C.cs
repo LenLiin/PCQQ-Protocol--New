@@ -15,34 +15,35 @@ namespace QQ.Framework.Packets.PCTLV
 
         public byte[] Get_Tlv(QQUser user)
         {
-            var Buf = new BinaryWriter(new MemoryStream());
-            var _dataTime = DateTime.Now;
-            Buf.BeWrite(0);
-            Buf.BeWrite(user.QQ);
-            Buf.Write(new byte[] {0x76, 0x71, 0x01, 0x9d});
-            Buf.BeWrite(Util.GetTimeMillis(_dataTime));
-            Buf.BeWrite(user.TXProtocol.DwServiceId);
-            Buf.Write(new byte[] {0x77, 0x69, 0x6e, 0x64, 0x6f, 0x77, 0x73, 0x00, 0x04, 0x5f, 0x80, 0x33, 0x01, 0x01});
-            Buf.BeWrite(user.TXProtocol.DwClientVer);
-            Buf.Write(new byte[]
-                {0x66, 0x35, 0x4d, 0xf1, 0xab, 0xdc, 0x98, 0xf0, 0x70, 0x69, 0xfc, 0x2a, 0x2b, 0x86, 0x06, 0x1b});
-            Buf.BeWrite(user.TXProtocol.SubVer);
+            var buf = new BinaryWriter(new MemoryStream());
+            var dataTime = DateTime.Now;
+            buf.BeWrite(0);
+            buf.BeWrite(user.QQ);
+            buf.Write(new byte[] { 0x76, 0x71, 0x01, 0x9d });
+            buf.BeWrite(Util.GetTimeMillis(dataTime));
+            buf.BeWrite(user.TXProtocol.DwServiceId);
+            buf.Write(new byte[]
+                { 0x77, 0x69, 0x6e, 0x64, 0x6f, 0x77, 0x73, 0x00, 0x04, 0x5f, 0x80, 0x33, 0x01, 0x01 });
+            buf.BeWrite(user.TXProtocol.DwClientVer);
+            buf.Write(new byte[]
+                { 0x66, 0x35, 0x4d, 0xf1, 0xab, 0xdc, 0x98, 0xf0, 0x70, 0x69, 0xfc, 0x2a, 0x2b, 0x86, 0x06, 0x1b });
+            buf.BeWrite(user.TXProtocol.SubVer);
 
-            var Data = new BinaryWriter(new MemoryStream());
-            Data.BeWrite(0);
-            Data.BeWrite(user.QQ);
-            Data.Write(new byte[] {0x76, 0x71, 0x01, 0x9d});
-            Data.BeWrite(Util.GetTimeMillis(_dataTime));
-            Data.Write(user.TXProtocol.DwPubNo);
+            var data = new BinaryWriter(new MemoryStream());
+            data.BeWrite(0);
+            data.BeWrite(user.QQ);
+            data.Write(new byte[] { 0x76, 0x71, 0x01, 0x9d });
+            data.BeWrite(Util.GetTimeMillis(dataTime));
+            data.Write(user.TXProtocol.DwPubNo);
 
-            Buf.Write((byte) Data.BaseStream.Length * 3);
-            Buf.Write(Data.BaseStream.ToBytesArray());
-            Buf.Write(Data.BaseStream.ToBytesArray());
-            Buf.Write(Data.BaseStream.ToBytesArray());
+            buf.Write((byte) data.BaseStream.Length * 3);
+            buf.Write(data.BaseStream.ToBytesArray());
+            buf.Write(data.BaseStream.ToBytesArray());
+            buf.Write(data.BaseStream.ToBytesArray());
 
 
             FillHead(Command);
-            FillBody(Buf.BaseStream.ToBytesArray(), Buf.BaseStream.Length);
+            FillBody(buf.BaseStream.ToBytesArray(), buf.BaseStream.Length);
             SetLength();
             return GetBuffer();
         }

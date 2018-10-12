@@ -24,8 +24,8 @@ namespace QQ.Framework.Packets.PCTLV
         {
             var type = buf.BeReadUInt16(); //type
             var length = buf.BeReadUInt16(); //length
-            var Data = buf.ReadBytes(length);
-            var bufData = new BinaryReader(new MemoryStream(Data));
+            var data = buf.ReadBytes(length);
+            var bufData = new BinaryReader(new MemoryStream(data));
             WSubVer = bufData.BeReadUInt16(); //wSubVer
             if (WSubVer == 0x0001)
             {

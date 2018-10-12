@@ -30,9 +30,9 @@ namespace QQ.Framework.Packets.Send.Login
         /// </summary>
         protected override void PutBody()
         {
-            BodyWriter.Write(new byte[] {0x01, 0x00});
+            BodyWriter.Write(new byte[] { 0x01, 0x00 });
             BodyWriter.Write(_loginStatus);
-            BodyWriter.Write(new byte[] {0x00, 0x01, 0x00, 0x01, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00});
+            BodyWriter.Write(new byte[] { 0x00, 0x01, 0x00, 0x01, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00 });
         }
     }
 }
