@@ -221,7 +221,7 @@ namespace QQ.Framework.Utils
                 case MessageType.Emoji:
                     return $"[表情{Content}]";
                 case MessageType.At:
-                    return $"[@{Content}]";
+                    return $"[{Content}]";
                 case MessageType.Audio:
                     return $"[音频{Content}]";
                 case MessageType.Video:
