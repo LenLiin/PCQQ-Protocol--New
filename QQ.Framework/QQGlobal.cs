@@ -6,6 +6,10 @@ namespace QQ.Framework
     public static class QQGlobal
     {
         /// <summary>
+        /// 消息包记录列表过期时间(分钟)
+        /// </summary>
+        public const int MessagesExpiredMinutes = 15;
+        /// <summary>
         ///     包最大大小
         /// </summary>
         public const int QQPacketMaxSize = 65535;

@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using QQ.Framework.Events;
@@ -30,6 +31,8 @@ namespace QQ.Framework.Domains.Commands.ResponseCommands.Message
 
                     _service.MessageLog($"收到好友{_packet.FromQQ}的消息:{_packet.Message}");
 
+                    //清除15分钟以上的消息
+                    _user.FriendReceiveMessages = _user.FriendReceiveMessages.Where(c => c.DateTime > DateTime.Now.AddMinutes(QQGlobal.MessagesExpiredMinutes)).ToList();
                     //添加到已处理消息列表
                     _user.FriendReceiveMessages.Add(_packet);
                 }
