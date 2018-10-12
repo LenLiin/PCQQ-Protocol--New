@@ -110,32 +110,36 @@ namespace QQ.Framework.Packets
                 "https://gchat.qpic.cn/gchatpic_new/807977219/485750189-2603962136-64ECA8CA06FC5B0CE6F047FEB66768B0/0?vuin=417085811&term=2addtime=1515123740";
         }
 
-
+        private Dictionary<int, Type> _tlvTypes;
         /// <summary>
         ///     通过反射执行TLV返回包解析
         /// </summary>
         /// <param name="tlvs"></param>
         internal void TlvExecutionProcessing(ICollection<Tlv> tlvs)
         {
-            var types = Assembly.GetExecutingAssembly().GetTypes();
-            foreach (var type in types)
+            if (_tlvTypes == null)
             {
-                var attributes = type.GetCustomAttributes();
-                if (!attributes.Any(attr => attr is TlvTagAttribute))
+                var types = Assembly.GetExecutingAssembly().GetTypes();
+                _tlvTypes = new Dictionary<int, Type>();
+                foreach (var type in types)
                 {
-                    continue;
-                }
-
-                foreach (var tlv in tlvs)
-                {
-                    var attribute = attributes.First(attr => attr is TlvTagAttribute) as TlvTagAttribute;
-                    if ((int) attribute.Tag == tlv.Tag)
+                    var attributes = type.GetCustomAttributes();
+                    if (!attributes.Any(attr => attr is TlvTagAttribute))
                     {
-                        var tlvClass = Assembly.GetExecutingAssembly().CreateInstance(type.FullName, true);
-
-                        var methodinfo = type.GetMethod("Parser_Tlv");
-                        methodinfo.Invoke(tlvClass, new object[] { User, Reader });
+                        continue;
                     }
+
+                    var attribute = attributes.First(attr => attr is TlvTagAttribute) as TlvTagAttribute;
+                    _tlvTypes.Add((int) attribute.Tag, type);
+                }
+            }
+            foreach (var tlv in tlvs)
+            {
+                if (_tlvTypes.ContainsKey(tlv.Tag))
+                {
+                    var tlvClass = Assembly.GetExecutingAssembly().CreateInstance(_tlvTypes[tlv.Tag].FullName, true);
+                    var methodinfo = _tlvTypes[tlv.Tag].GetMethod("Parser_Tlv");
+                    methodinfo.Invoke(tlvClass, new object[] { User, Reader });
                 }
             }
         }
