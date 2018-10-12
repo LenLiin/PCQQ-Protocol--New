@@ -64,6 +64,10 @@ namespace QQ.Framework.Utils
                         {
                             break;
                         }
+                        case 0x12://群名片
+                        {
+                            break;
+                        }
                         case 0x14: //XML
                         {
                            reader.ReadByte();
