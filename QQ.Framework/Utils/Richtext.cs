@@ -19,7 +19,8 @@ namespace QQ.Framework.Utils
             {
                 var messageType = reader.ReadByte();
                 var dataLength = reader.BeReadChar();
-                while (reader.BaseStream.Position + dataLength < reader.BaseStream.Length)
+                var pos = reader.BaseStream.Position;
+                while (pos + dataLength < reader.BaseStream.Length)
                 {
                     reader.ReadByte();
                     switch (messageType)
@@ -107,8 +108,10 @@ namespace QQ.Framework.Utils
                         }
                     }
 
+                    reader.ReadBytes((int) (pos + dataLength - reader.BaseStream.Position));
                     messageType = reader.ReadByte();
                     dataLength = reader.BeReadChar();
+                    pos = reader.BaseStream.Position;
                 }
             }
             catch (Exception ex)
