@@ -17,15 +17,16 @@ namespace QQ.Framework.Packets.PCTLV
         {
             var type = buf.BeReadUInt16(); //type
             var length = buf.BeReadUInt16(); //length
-            WSubVer = buf.BeReadUInt16(); //wSubVer
+            var Reader = new BinaryReader(new MemoryStream(buf.ReadBytes(length)));
+            WSubVer = Reader.BeReadUInt16(); //wSubVer
             if (WSubVer == 0x0001)
             {
-                long timeMillis = buf.BeReadUInt32();
+                long timeMillis = Reader.BeReadUInt32();
                 user.TXProtocol.DwServerTime = Util.GetDateTimeFromMillis(timeMillis);
                 user.TXProtocol.TimeDifference = (uint.MaxValue & timeMillis) - Util.CurrentTimeMillis() / 1000;
-                user.TXProtocol.DwClientIP = Util.GetIpStringFromBytes(buf.ReadBytes(4));
-                user.TXProtocol.WClientPort = buf.BeReadUInt16();
-                buf.BeReadUInt16(); //UNKNOW
+                user.TXProtocol.DwClientIP = Util.GetIpStringFromBytes(Reader.ReadBytes(4));
+                user.TXProtocol.WClientPort = Reader.BeReadUInt16();
+                //buf.BeReadUInt16(); //UNKNOW
             }
             else
             {
