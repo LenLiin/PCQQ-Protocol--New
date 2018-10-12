@@ -156,11 +156,16 @@ namespace QQ.Framework.Utils
     {
         public string Content;
         public MessageType Type;
-        private Dictionary<string, object> _data;
+        private Dictionary<string, object> _data = new Dictionary<string, object>();
 
         public T Get<T>(string name, T value = default(T))
         {
-            return (T) _data[name];
+            if (_data.ContainsKey(name))
+            {
+                return (T)_data[name];
+            }
+
+            return value;
         }
 
         public void Set<T>(string name, T value)
