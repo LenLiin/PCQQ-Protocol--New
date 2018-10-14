@@ -28,11 +28,11 @@ namespace QQ.Framework.Utils
                         case 0x01: //文本消息
                         {
                             var messageStr = Encoding.UTF8.GetString(reader.ReadBytes(reader.BeReadChar()));
-                            if (messageStr.Contains("@"))
+                            if (messageStr.StartsWith("@") && pos + dataLength - reader.BaseStream.Position == 16)
                             {
-                                //Reader.ReadBytes(10);
-                                //var AtQQ = Util.GetQQNumRetUint(Util.ToHex(Reader.ReadBytes(4)));//被At人的QQ号
-                                result.Snippets.Add(new TextSnippet(messageStr, MessageType.At));
+                                reader.ReadBytes(10);
+                                result.Snippets.Add(new TextSnippet(messageStr, MessageType.At,
+                                    ("Target", reader.BeReadUInt32())));
                             }
                             else
                             {
@@ -57,21 +57,24 @@ namespace QQ.Framework.Utils
                         }
                         case 0x0A: //音频
                         {
-                            result.Snippets.Add(new TextSnippet(Encoding.UTF8.GetString(reader.ReadBytes(reader.BeReadChar())), MessageType.Audio));
+                            result.Snippets.Add(new TextSnippet(
+                                Encoding.UTF8.GetString(reader.ReadBytes(reader.BeReadChar())), MessageType.Audio));
                             break;
                         }
                         case 0x0E: //未知
                         {
                             break;
                         }
-                        case 0x12://群名片
+                        case 0x12: //群名片
                         {
                             break;
                         }
                         case 0x14: //XML
                         {
-                           reader.ReadByte();
-                            result.Snippets.Add(new TextSnippet( GZipByteArray.DecompressString(reader.ReadBytes((int) (reader.BaseStream.Length - 1))), MessageType.Xml));
+                            reader.ReadByte();
+                            result.Snippets.Add(new TextSnippet(
+                                GZipByteArray.DecompressString(reader.ReadBytes((int) (reader.BaseStream.Length - 1))),
+                                MessageType.Xml));
                             break;
                         }
                         case 0x18: //群文件
@@ -90,6 +93,7 @@ namespace QQ.Framework.Utils
                             {
                                 break;
                             }
+
                             reader.ReadBytes(19);
                             reader.ReadBytes(reader.ReadByte()); //恭喜发财
                             reader.ReadByte();
@@ -160,13 +164,13 @@ namespace QQ.Framework.Utils
     {
         public string Content;
         public MessageType Type;
-        private Dictionary<string, object> _data = new Dictionary<string, object>();
+        private readonly Dictionary<string, object> _data = new Dictionary<string, object>();
 
         public T Get<T>(string name, T value = default(T))
         {
             if (_data.ContainsKey(name))
             {
-                return (T)_data[name];
+                return (T) _data[name];
             }
 
             return value;
