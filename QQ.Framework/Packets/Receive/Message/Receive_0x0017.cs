@@ -58,20 +58,20 @@ namespace QQ.Framework.Packets.Receive.Message
             Reader.ReadBytes(4);
             Reader.ReadBytes(4); //自己的QQ
             Reader.ReadBytes(10);
-            Reader.BeReadChar();
+            Reader.BeReadUInt16();
             Reader.ReadBytes(2);
-            Reader.ReadBytes(Reader.BeReadChar());
+            Reader.ReadBytes(Reader.BeReadUInt16());
             Group = (long) Util.GetQQNumRetUint(Util.ToHex(Reader.ReadBytes(4))); //群号
             if (Reader.ReadByte() == 0x01)
             {
-                FromQQ = (long) Util.GetQQNumRetUint(Util.ToHex(Reader.ReadBytes(4))); //发消息人的QQ
+                FromQQ = Reader.ReadUInt32(); // (long) Util.GetQQNumRetUint(Util.ToHex(Reader.ReadBytes(4))); //发消息人的QQ
                 MessageIndex = Reader.ReadBytes(4); //姑且叫消息索引吧
                 ReceiveTime = Reader.ReadBytes(4); //接收时间  
                 Reader.ReadBytes(24);
                 SendTime = Reader.ReadBytes(4); //发送时间 
                 MessageId = Reader.ReadBytes(4); //消息 id
                 Reader.ReadBytes(8);
-                Font = Reader.ReadBytes(Reader.BeReadChar()); //字体
+                Font = Reader.ReadBytes(Reader.BeReadUInt16()); //字体
                 Reader.ReadByte();
                 Reader.ReadByte();
                 Message = Reader.ReadRichtext();

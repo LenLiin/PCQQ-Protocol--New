@@ -7,7 +7,7 @@ namespace QQ.Framework.Packets.Send.Message
         /// <param name="user"></param>
         /// <param name="data">要发送的数据内容</param>
         /// <param name="sequence">序号</param>
-        public Send_0X00Ce(QQUser user, byte[] data, char sequence)
+        public Send_0X00Ce(QQUser user, byte[] data, ushort sequence)
             : base(user)
         {
             Sequence = sequence;

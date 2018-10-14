@@ -538,11 +538,6 @@ namespace QQ.Framework.Utils
             bw.Write(BitConverter.GetBytes((uint) v).Reverse().ToArray());
         }
 
-        public static char BeReadChar(this BinaryReader br)
-        {
-            return (char) br.BeReadUInt16();
-        }
-
         public static ushort BeReadUInt16(this BinaryReader br)
         {
             return (ushort) ((br.ReadByte() << 8) + br.ReadByte());
@@ -556,6 +551,12 @@ namespace QQ.Framework.Utils
         public static uint BeReadUInt32(this BinaryReader br)
         {
             return (uint) ((br.ReadByte() << 24) | (br.ReadByte() << 16) | (br.ReadByte() << 8) | br.ReadByte());
+        }
+
+        public static string ReadString(this BinaryReader br, Encoding encoding = null)
+        {
+            encoding = encoding ?? Encoding.UTF8;
+            return encoding.GetString(br.ReadBytes(br.BeReadUInt16()));
         }
 
         /// <summary>

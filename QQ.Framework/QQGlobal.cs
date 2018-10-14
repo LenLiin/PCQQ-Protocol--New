@@ -74,12 +74,12 @@ namespace QQ.Framework
         /// <summary>
         ///     程序缺省使用的客户端版本号
         /// </summary>
-        public const char QQClientVersion = QQClientVersion_0E1B;
+        public const ushort QQClientVersion = QQClientVersion_0E1B;
 
         /// <summary>
         ///     客户端版本号标志 - TIM1.0
         /// </summary>
-        public const char QQClientVersion_0E1B = (char) 0x3713;
+        public const ushort QQClientVersion_0E1B = 0x3713;
 
         /// <summary>
         ///     QQ UDP缺省端口
@@ -140,7 +140,7 @@ namespace QQ.Framework
         ///     不一定真的是表示服务器端版本号，似乎和发出的包不同，这个有其他的含义，
         ///     感觉像是包的类型标志
         /// </summary>
-        public const char QQServerVersion0100 = (char) 0x0100;
+        public const ushort QQServerVersion0100 = 0x0100;
 
         /// <summary>
         ///     是否打开控制台日志

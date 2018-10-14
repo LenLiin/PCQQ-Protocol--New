@@ -61,14 +61,14 @@ namespace QQ.Framework.Packets.Receive.Message
             Reader.ReadBytes(4); //自己的QQ
             Reader.ReadBytes(10);
             Reader.ReadBytes(2);
-            Reader.BeReadChar();
-            Reader.ReadBytes(Reader.BeReadChar()); //未知
-            Reader.BeReadChar(); //消息来源QQ的版本号
+            Reader.BeReadUInt16();
+            Reader.ReadBytes(Reader.BeReadUInt16()); //未知
+            Reader.BeReadUInt16(); //消息来源QQ的版本号
             Reader.ReadBytes(4); //FromQQ
             Reader.ReadBytes(4); //自己的QQ
             Reader.ReadBytes(20);
             MessageDateTime = Reader.ReadBytes(4);
-            Reader.BeReadChar(); //00
+            Reader.BeReadUInt16(); //00
             Reader.ReadBytes(4); //MessageDateTime
             Reader.ReadBytes(5); //00
             Reader.ReadBytes(3);
@@ -76,7 +76,7 @@ namespace QQ.Framework.Packets.Receive.Message
             Reader.ReadBytes(4); //MessageDateTime
             MessageId = Reader.ReadBytes(4);
             Reader.ReadBytes(8);
-            FontStyle = Reader.ReadBytes(Reader.BeReadChar());
+            FontStyle = Reader.ReadBytes(Reader.BeReadUInt16());
             Reader.ReadByte();
             Reader.ReadByte();
             Message = Reader.ReadRichtext();

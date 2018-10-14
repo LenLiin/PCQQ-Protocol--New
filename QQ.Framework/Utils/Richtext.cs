@@ -18,7 +18,7 @@ namespace QQ.Framework.Utils
             try
             {
                 var messageType = reader.ReadByte();
-                var dataLength = reader.BeReadChar();
+                var dataLength = reader.BeReadUInt16();
                 var pos = reader.BaseStream.Position;
                 while (pos + dataLength < reader.BaseStream.Length)
                 {
@@ -27,7 +27,7 @@ namespace QQ.Framework.Utils
                     {
                         case 0x01: //文本消息
                         {
-                            var messageStr = Encoding.UTF8.GetString(reader.ReadBytes(reader.BeReadChar()));
+                            var messageStr = reader.ReadString();
                             if (messageStr.StartsWith("@") && pos + dataLength - reader.BaseStream.Position == 16)
                             {
                                 reader.ReadBytes(10);
@@ -41,24 +41,20 @@ namespace QQ.Framework.Utils
 
                             break;
                         }
-
                         case 0x02: //小黄豆表情
                         {
-                            result.Snippets.Add(new TextSnippet(
-                                Util.GetQQNumRetUint(Util.ToHex(reader.ReadBytes(reader.BeReadChar()))).ToString(),
-                                MessageType.Emoji));
+                            reader.BeReadUInt16(); // 这里的数字貌似总是1：系统表情只有208个。
+                            result.Snippets.Add(new TextSnippet("", MessageType.Emoji, ("Type", reader.ReadByte())));
                             break;
                         }
                         case 0x03: //图片
                         {
-                            result.Snippets.Add(new TextSnippet(
-                                Encoding.UTF8.GetString(reader.ReadBytes(reader.BeReadChar())), MessageType.Picture));
+                            result.Snippets.Add(new TextSnippet(reader.ReadString(), MessageType.Picture));
                             break;
                         }
                         case 0x0A: //音频
                         {
-                            result.Snippets.Add(new TextSnippet(
-                                Encoding.UTF8.GetString(reader.ReadBytes(reader.BeReadChar())), MessageType.Audio));
+                            result.Snippets.Add(new TextSnippet(reader.ReadString(), MessageType.Audio));
                             break;
                         }
                         case 0x0E: //未知
@@ -79,15 +75,15 @@ namespace QQ.Framework.Utils
                         }
                         case 0x18: //群文件
                         {
-                            reader.ReadBytes(3);
-                            var fileName = reader.ReadBytes(reader.ReadByte()); //文件名称
+                            reader.ReadBytes(5);
+                            var fileName = reader.ReadBytes(reader.ReadByte()); // 文件名称... 长度总是一个byte
                             reader.ReadByte();
-                            reader.ReadBytes(reader.ReadByte()); //文件大小
+                            reader.ReadBytes(reader.ReadByte()); // 文件大小
                             result.Snippets.Add(new TextSnippet(Encoding.UTF8.GetString(fileName),
                                 MessageType.OfflineFile));
                             break;
                         }
-                        case 0x19: //红包秘钥段
+                        case 0x19: // 红包秘钥段
                         {
                             if (reader.ReadByte() != 0xC2)
                             {
@@ -95,20 +91,20 @@ namespace QQ.Framework.Utils
                             }
 
                             reader.ReadBytes(19);
-                            reader.ReadBytes(reader.ReadByte()); //恭喜发财
+                            reader.ReadBytes(reader.ReadByte()); // 恭喜发财
                             reader.ReadByte();
-                            reader.ReadBytes(reader.ReadByte()); //赶紧点击拆开吧
+                            reader.ReadBytes(reader.ReadByte()); // 赶紧点击拆开吧
                             reader.ReadByte();
-                            reader.ReadBytes(reader.ReadByte()); //QQ红包
+                            reader.ReadBytes(reader.ReadByte()); // QQ红包
                             reader.ReadBytes(5);
-                            reader.ReadBytes(reader.ReadByte()); //[QQ红包]恭喜发财
+                            reader.ReadBytes(reader.ReadByte()); // [QQ红包]恭喜发财
                             reader.ReadBytes(22);
                             var redId = Encoding.UTF8.GetString(reader.ReadBytes(32)); //redid
                             reader.ReadBytes(12);
-                            reader.ReadBytes(reader.BeReadChar());
+                            reader.ReadBytes(reader.BeReadUInt16());
                             reader.ReadBytes(0x10);
                             var key1 = Encoding.UTF8.GetString(reader.ReadBytes(reader.ReadByte())); //Key1
-                            reader.BeReadChar();
+                            reader.BeReadUInt16();
                             var key2 = Encoding.UTF8.GetString(reader.ReadBytes(reader.ReadByte())); //Key2
                             result.Snippets.Add(new TextSnippet("", MessageType.RedBag, ("RedId", redId),
                                 ("Key1", key1), ("Key2", key2)));
@@ -118,7 +114,7 @@ namespace QQ.Framework.Utils
 
                     reader.ReadBytes((int) (pos + dataLength - reader.BaseStream.Position));
                     messageType = reader.ReadByte();
-                    dataLength = reader.BeReadChar();
+                    dataLength = reader.BeReadUInt16();
                     pos = reader.BaseStream.Position;
                 }
             }

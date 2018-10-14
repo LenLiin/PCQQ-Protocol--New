@@ -10,7 +10,7 @@ namespace QQLoginTest
     {
         private static void Main(string[] args)
         {
-            var user = new QQUser(0, "");
+            var user = new QQUser(2822952499, "5uXTB44BbsLJ");
             var socketServer = new SocketServiceImpl(user);
             var transponder = new Transponder();
             var sendService = new SendMessageServiceImpl(socketServer, user);

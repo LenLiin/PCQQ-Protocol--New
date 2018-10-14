@@ -11,7 +11,7 @@ namespace QQ.Framework.Packets
         /// <summary>
         ///     包起始序列号
         /// </summary>
-        protected static char _seq = (char) 0x3635; // (char)Util.Random.Next();
+        protected static ushort _seq = 0x3635; // (char)Util.Random.Next();
 
         public MemoryStream BodyStream;
         public BinaryWriter BodyWriter;
@@ -67,12 +67,12 @@ namespace QQ.Framework.Packets
             Writer.Write(User.TXProtocol.XxooD);
         }
 
-        protected static char GetNextSeq()
+        protected static ushort GetNextSeq()
         {
             _seq++;
             // 为了兼容iQQ
             // iQQ把序列号的高位都为0，如果为1，它可能会拒绝，wqfox称是因为TX是这样做的
-            _seq &= (char) 0x7FFF;
+            _seq &= 0x7FFF;
             if (_seq == 0)
             {
                 _seq++;
