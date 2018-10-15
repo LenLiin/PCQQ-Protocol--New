@@ -255,9 +255,9 @@ namespace QQ.Framework.Utils
                 case MessageType.Json:
                     return $"[JSON代码{Content}]";
                 case MessageType.Emoji:
-                    return $"[表情{Content}]";
+                    return $"[表情{this["Type"]}]";
                 case MessageType.At:
-                    return $"[{Content}]";
+                    return $"[{this["Target"]}]";
                 case MessageType.Audio:
                     return $"[音频{Content}]";
                 case MessageType.Video:

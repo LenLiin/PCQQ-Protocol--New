@@ -257,7 +257,7 @@ namespace QQ.Framework
                             .Replace("},\"max_count\"", "],\"max_count\"");
                     }
 
-                    MessageLog($"获取群{externalId}成员列表成功:{text}");
+                    MessageLog($"获取群{externalId}成员列表成功:{(text.Length > 200 ? text.Substring(0, 200) : text)}");
                     return JsonConvert.DeserializeObject<GroupMembers>(text);
                 }
             }
