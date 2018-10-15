@@ -26,7 +26,8 @@ namespace QQ.Framework.Domains
             }
 
             //清除15分钟以上的消息
-            _user.FriendSendMessages = _user.FriendSendMessages.Where(c => c.DateTime > DateTime.Now.AddMinutes(QQGlobal.MessagesExpiredMinutes)).ToList();
+            var expTime = DateTime.Now.AddMinutes(-QQGlobal.MessagesExpiredMinutes);
+            _user.FriendSendMessages.RemoveAll(c => c.DateTime < expTime);
             _user.FriendSendMessages.Add(message); //添加到消息列表
         }
 
@@ -40,7 +41,8 @@ namespace QQ.Framework.Domains
             }
 
             //清除15分钟以上的消息
-            _user.GroupSendMessages = _user.GroupSendMessages.Where(c => c.DateTime > DateTime.Now.AddMinutes(QQGlobal.MessagesExpiredMinutes)).ToList();
+            var expTime = DateTime.Now.AddMinutes(-QQGlobal.MessagesExpiredMinutes);
+            _user.GroupSendMessages.RemoveAll(c => c.DateTime < expTime);
             _user.GroupSendMessages.Add(message); //添加到消息列表
         }
     }
