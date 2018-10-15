@@ -1,3 +1,4 @@
+using System;
 using System.Timers;
 using QQ.Framework.Domains;
 using QQ.Framework.Packets.Send.Message;
@@ -41,6 +42,17 @@ namespace QQ.Framework.Sockets
         public void InvokeFailMsg(object sender, ElapsedEventArgs e)
         {
             _service.Send(new Send_0X0058(_user));
+
+            
+            //定时清除15分钟以上的消息
+            var expTime = DateTime.Now.AddMinutes(-QQGlobal.MessagesExpiredMinutes);
+            _user.FriendReceiveMessages.RemoveAll(c => c.DateTime <= expTime);
+
+            _user.GroupReceiveMessages.RemoveAll(c => c.DateTime <= expTime);
+
+            _user.FriendSendMessages.RemoveAll(c => c.DateTime < expTime);
+
+            _user.GroupSendMessages.RemoveAll(c => c.DateTime < expTime);
         }
     }
 }
