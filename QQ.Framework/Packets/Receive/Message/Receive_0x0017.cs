@@ -1,3 +1,6 @@
+using System;
+using System.Diagnostics;
+using System.Linq;
 using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.Receive.Message
@@ -62,19 +65,36 @@ namespace QQ.Framework.Packets.Receive.Message
             Reader.ReadBytes(2);
             Reader.ReadBytes(Reader.BeReadUInt16());
             Group = (long) Util.GetQQNumRetUint(Util.ToHex(Reader.ReadBytes(4))); //群号
-            if (Reader.ReadByte() == 0x01)
+            var type = Reader.ReadByte();
+            switch (type)
             {
-                FromQQ = Reader.ReadUInt32(); // (long) Util.GetQQNumRetUint(Util.ToHex(Reader.ReadBytes(4))); //发消息人的QQ
-                MessageIndex = Reader.ReadBytes(4); //姑且叫消息索引吧
-                ReceiveTime = Reader.ReadBytes(4); //接收时间  
-                Reader.ReadBytes(24);
-                SendTime = Reader.ReadBytes(4); //发送时间 
-                MessageId = Reader.ReadBytes(4); //消息 id
-                Reader.ReadBytes(8);
-                Font = Reader.ReadBytes(Reader.BeReadUInt16()); //字体
-                Reader.ReadByte();
-                Reader.ReadByte();
-                Message = Reader.ReadRichtext();
+                case 0x01: // 群消息、被拉进/踢出群
+                {
+                    FromQQ = Reader.ReadUInt32(); //发消息人的QQ
+                    MessageIndex = Reader.ReadBytes(4); //姑且叫消息索引吧
+                    ReceiveTime = Reader.ReadBytes(4); //接收时间  
+                    Reader.ReadBytes(24);
+                    SendTime = Reader.ReadBytes(4); //发送时间 
+                    MessageId = Reader.ReadBytes(4); //消息 id
+                    Reader.ReadBytes(8);
+                    Font = Reader.ReadBytes(Reader.BeReadUInt16()); //字体
+                    Reader.ReadByte();
+                    Reader.ReadByte();
+                    Message = Reader.ReadRichtext();
+                    break;
+                }
+                case 0x0C: // 被塞口球
+                {
+                    Reader.ReadByte(); // 01?
+                    var muter = Reader.BeReadUInt32();
+                    Reader.ReadBytes(4); // 疑似时间？
+                    Reader.ReadBytes(2); // 00 01?
+                    var victim = Reader.BeReadUInt32();
+                    var time = Reader.BeReadUInt32();
+                    Message = new TextSnippet("", MessageType.Mute, ("Muter", muter), ("Victim", victim),
+                        ("Time", time));
+                    break;
+                }
             }
         }
     }

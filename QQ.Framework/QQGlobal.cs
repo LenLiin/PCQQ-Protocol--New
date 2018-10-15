@@ -482,7 +482,12 @@ namespace QQ.Framework
         /// <summary>
         ///     加群
         /// </summary>
-        AddGroup
+        AddGroup,
+
+        /// <summary>
+        ///     塞口球
+        /// </summary>
+        Mute
     }
 
     public static class LoginStatus

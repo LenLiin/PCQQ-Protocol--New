@@ -79,7 +79,10 @@ namespace QQ.Framework.Utils
         {
             byte[] array =
             {
-                0, 0, 0, (byte) (int) paramLong
+                0,
+                0,
+                0,
+                (byte) (int) paramLong
             };
             array[2] = (byte) (int) (paramLong >> 8);
             array[1] = (byte) (int) (paramLong >> 16);
@@ -594,9 +597,15 @@ namespace QQ.Framework.Utils
                         {
                             var pos = bw.BaseStream.Position;
                             bw.BaseStream.Position = 0;
-                            bw.Write(new byte[] { 0x01 });
+                            bw.Write(new byte[]
+                            {
+                                0x01
+                            });
                             bw.BeWrite((ushort) (pos - 3)); // 本来是+3和0的，但是提前预留了6个byte给它们，所以变成了-3和-6。下同理。
-                            bw.Write(new byte[] { 0x01 });
+                            bw.Write(new byte[]
+                            {
+                                0x01
+                            });
                             bw.BeWrite((ushort) (pos - 6));
                             bw.BaseStream.Position = pos;
                             ret.Add(bw.BaseStream.ToBytesArray());
@@ -612,9 +621,15 @@ namespace QQ.Framework.Utils
                     {
                         var pos = bw.BaseStream.Position;
                         bw.BaseStream.Position = 0;
-                        bw.Write(new byte[] { 0x01 });
+                        bw.Write(new byte[]
+                        {
+                            0x01
+                        });
                         bw.BeWrite((ushort) (pos - 3));
-                        bw.Write(new byte[] { 0x01 });
+                        bw.Write(new byte[]
+                        {
+                            0x01
+                        });
                         bw.BeWrite((ushort) (pos - 6));
                         bw.BaseStream.Position = pos;
                     }
@@ -635,11 +650,38 @@ namespace QQ.Framework.Utils
                         faceIndex = 0;
                     }
 
-                    bw.Write(new byte[] { 0x02, 0x00, 0x14, 0x01, 0x00, 0x01 });
+                    bw.Write(new byte[]
+                    {
+                        0x02,
+                        0x00,
+                        0x14,
+                        0x01,
+                        0x00,
+                        0x01
+                    });
                     bw.Write(faceIndex);
-                    bw.Write(new byte[] { 0xFF, 0x00, 0x02, 0x14 });
+                    bw.Write(new byte[]
+                    {
+                        0xFF,
+                        0x00,
+                        0x02,
+                        0x14
+                    });
                     bw.Write((byte) (faceIndex + 65));
-                    bw.Write(new byte[] { 0x0B, 0x00, 0x08, 0x00, 0x01, 0x00, 0x04, 0x52, 0xCC, 0x85, 0x50 });
+                    bw.Write(new byte[]
+                    {
+                        0x0B,
+                        0x00,
+                        0x08,
+                        0x00,
+                        0x01,
+                        0x00,
+                        0x04,
+                        0x52,
+                        0xCC,
+                        0x85,
+                        0x50
+                    });
                     break;
                 }
                 case MessageType.Picture:
@@ -716,5 +758,51 @@ namespace QQ.Framework.Utils
         }
 
         #endregion
+
+#if DEBUG
+        /// <summary>
+        ///     读取所有字节且不改变Position。
+        /// </summary>
+        public static byte[] ReadRest(this BinaryReader br)
+        {
+            var pos = br.BaseStream.Position;
+            var data = br.ReadBytes((int) (br.BaseStream.Length - br.BaseStream.Position));
+            br.BaseStream.Position = pos;
+            return data;
+        }
+
+        /// <summary>
+        ///     搜索byte[]以快速定位特征。
+        /// </summary>
+        public static int AobScan(byte[] data, byte[] toSearch)
+        {
+            if (data.Length < toSearch.Length)
+            {
+                return -1;
+            }
+
+            for (var i = 0; i < data.Length; i++)
+            {
+                // var match = !toSearch.Where((t, j) => data[i + j] != t).Any();
+                // ReSharper转换出的看不懂的LINQ代码...
+                var match = true;
+                for (var j = 0; j < toSearch.Length; j++)
+                {
+                    if (data[i + j] != toSearch[j])
+                    {
+                        match = false;
+                        break;
+                    }
+                }
+
+                if (match)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+#endif
     }
 }

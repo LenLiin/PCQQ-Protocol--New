@@ -233,6 +233,7 @@ namespace QQ.Framework.Utils
                     case MessageType.Audio:
                     case MessageType.Video:
                     case MessageType.OfflineFile:
+                    case MessageType.Mute:
                         return 0;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -249,19 +250,19 @@ namespace QQ.Framework.Utils
                 case MessageType.Shake:
                     return "[窗口抖动]";
                 case MessageType.Picture:
-                    return $"[图片{Content}]";
+                    return $"[图片:{Content}]";
                 case MessageType.Xml:
-                    return $"[XML代码{Content}]";
+                    return $"[XML代码:{Content}]";
                 case MessageType.Json:
-                    return $"[JSON代码{Content}]";
+                    return $"[JSON代码:{Content}]";
                 case MessageType.Emoji:
-                    return $"[表情{this["Type"]}]";
+                    return $"[表情:{this["Type"]}]";
                 case MessageType.At:
-                    return $"[{this["Target"]}]";
+                    return $"[@{this["Target"]}]";
                 case MessageType.Audio:
-                    return $"[音频{Content}]";
+                    return $"[音频:{Content}]";
                 case MessageType.Video:
-                    return $"[视频{Content}]";
+                    return $"[视频:{Content}]";
                 case MessageType.ExitGroup:
                     return "[退出群]";
                 case MessageType.GetGroupImformation:
@@ -269,7 +270,13 @@ namespace QQ.Framework.Utils
                 case MessageType.AddGroup:
                     return "[加群]";
                 case MessageType.OfflineFile:
-                    return $"[离线文件{Content}]";
+                    return $"[离线文件:{Content}]";
+                case MessageType.RedBag:
+                    return "[红包]";
+                case MessageType.Mute:
+                    return (uint) this["Time"] > 0
+                        ? $"[禁言:{this["Muter"]}=>{this["Victim"]}({this["Time"]})]"
+                        : $"[解除禁言:{this["Muter"]}=>{this["Victim"]}]";
                 default:
                     return "[特殊代码]";
             }
