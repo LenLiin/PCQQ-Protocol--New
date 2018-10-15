@@ -40,9 +40,10 @@ namespace QQ.Framework.Domains.Commands.ResponseCommands.Message
 
                         _service.MessageLog($"收到群{_packet.Group}的{_packet.FromQQ}的消息:{_packet.Message}");
 
-
+                        // TODO: 性能优化：将每次收到消息都LINQ所有消息改成定时什么的？
                         //清除15分钟以上的消息
-                        _user.GroupReceiveMessages = _user.GroupReceiveMessages.Where(c => c.DateTime > DateTime.Now.AddMinutes(QQGlobal.MessagesExpiredMinutes)).ToList();
+                        var expTime = DateTime.Now.AddMinutes(-QQGlobal.MessagesExpiredMinutes);
+                        _user.GroupReceiveMessages.RemoveAll(c => c.DateTime <= expTime);
                         //添加到已处理消息列表
                         _user.GroupReceiveMessages.Add(_packet);
                     }

@@ -25,7 +25,7 @@ namespace QQ.Framework.Utils
                     reader.ReadByte();
                     switch (messageType)
                     {
-                        case 0x01: //文本消息
+                        case 0x01: // 纯文本消息、@
                         {
                             var messageStr = reader.ReadString();
                             if (messageStr.StartsWith("@") && pos + dataLength - reader.BaseStream.Position == 16)
@@ -41,31 +41,31 @@ namespace QQ.Framework.Utils
 
                             break;
                         }
-                        case 0x02: //小黄豆表情
+                        case 0x02: // Emoji(系统表情)
                         {
                             reader.BeReadUInt16(); // 这里的数字貌似总是1：系统表情只有208个。
                             result.Snippets.Add(new TextSnippet("", MessageType.Emoji, ("Type", reader.ReadByte())));
                             break;
                         }
-                        case 0x03: //图片
+                        case 0x03: // 图片
                         {
                             result.Snippets.Add(new TextSnippet(reader.ReadString(), MessageType.Picture));
                             break;
                         }
-                        case 0x0A: //音频
+                        case 0x0A: // 音频
                         {
                             result.Snippets.Add(new TextSnippet(reader.ReadString(), MessageType.Audio));
                             break;
                         }
-                        case 0x0E: //未知
+                        case 0x0E: // 未知
                         {
                             break;
                         }
-                        case 0x12: //群名片
+                        case 0x12: // 群名片
                         {
                             break;
                         }
-                        case 0x14: //XML
+                        case 0x14: // XML
                         {
                             reader.ReadByte();
                             result.Snippets.Add(new TextSnippet(
@@ -73,14 +73,13 @@ namespace QQ.Framework.Utils
                                 MessageType.Xml));
                             break;
                         }
-                        case 0x18: //群文件
+                        case 0x18: // 群文件
                         {
                             reader.ReadBytes(5);
-                            var fileName = reader.ReadBytes(reader.ReadByte()); // 文件名称... 长度总是一个byte
+                            var fileName = reader.ReadString(); // 文件名称... 长度总是一个byte
                             reader.ReadByte();
                             reader.ReadBytes(reader.ReadByte()); // 文件大小
-                            result.Snippets.Add(new TextSnippet(Encoding.UTF8.GetString(fileName),
-                                MessageType.OfflineFile));
+                            result.Snippets.Add(new TextSnippet(fileName, MessageType.OfflineFile));
                             break;
                         }
                         case 0x19: // 红包秘钥段
@@ -122,17 +121,35 @@ namespace QQ.Framework.Utils
             {
             }
 
-            return result;
+            // 移除所有空白的片段
+            result.Snippets.RemoveAll(s => s.Type == MessageType.Normal && string.IsNullOrEmpty(s.Content));
+
+            // 若长度大于1，那么应该只含有普通文本、At、表情、图片。
+            // 虽然我看着别人好像视频也能通过转发什么的弄进来，但是反正我们现在不支持接收音视频，所以不管了
+            return result.Snippets.Count > 1 && result.Snippets.Any(s =>
+                       s.Type != MessageType.Normal && s.Type != MessageType.At &&
+                       s.Type != MessageType.Emoji && s.Type != MessageType.Picture)
+                ? throw new NotSupportedException("富文本中包含多个非聊天代码")
+                : result;
         }
 
         public static Richtext FromLiteral(string message)
         {
-            return new Richtext { Snippets = new List<TextSnippet> { new TextSnippet(message ?? "") } };
+            return new Richtext
+            {
+                Snippets = new List<TextSnippet>
+                {
+                    new TextSnippet(message ?? "")
+                }
+            };
         }
 
         public static Richtext FromSnippets(params TextSnippet[] message)
         {
-            return new Richtext { Snippets = message.ToList() };
+            return new Richtext
+            {
+                Snippets = message.ToList()
+            };
         }
 
         public override string ToString()
@@ -161,6 +178,12 @@ namespace QQ.Framework.Utils
         public string Content;
         public MessageType Type;
         private readonly Dictionary<string, object> _data = new Dictionary<string, object>();
+
+        public object this[string key]
+        {
+            get => Get<object>(key);
+            set => Set(key, value);
+        }
 
         public T Get<T>(string name, T value = default(T))
         {
@@ -206,6 +229,10 @@ namespace QQ.Framework.Utils
                     case MessageType.ExitGroup:
                     case MessageType.GetGroupImformation:
                     case MessageType.AddGroup:
+                    case MessageType.RedBag:
+                    case MessageType.Audio:
+                    case MessageType.Video:
+                    case MessageType.OfflineFile:
                         return 0;
                     default:
                         throw new ArgumentOutOfRangeException();
