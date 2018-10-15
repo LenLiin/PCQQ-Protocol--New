@@ -64,7 +64,7 @@ namespace QQ.Framework.Packets
         /// <summary>
         ///     版本标志
         /// </summary>
-        public char Version { get; set; }
+        public ushort Version { get; set; }
 
         /// <summary>
         ///     包命令, 如：0x0825
@@ -75,7 +75,7 @@ namespace QQ.Framework.Packets
         /// <summary>
         ///     包序号
         /// </summary>
-        public char Sequence { get; set; }
+        public ushort Sequence { get; set; }
 
         /// <summary>
         ///     包的接收时间或发送时间
@@ -139,7 +139,7 @@ namespace QQ.Framework.Packets
         /// <param name="sequence">The sequence.</param>
         /// <param name="command">The command.</param>
         /// <returns></returns>
-        public static int Hash(char sequence, QQCommand command)
+        public static int Hash(ushort sequence, QQCommand command)
         {
             return (sequence << 16) | (ushort) command;
         }

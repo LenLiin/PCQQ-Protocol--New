@@ -24,13 +24,13 @@ namespace QQ.Framework.Packets.Receive.Login
         {
             Decrypt(SecretKey);
             VerifyType = Reader.ReadByte();
-            Reader.BeReadChar();
+            Reader.BeReadUInt16();
             Status = Reader.ReadByte();
             Reader.ReadBytes(4);
-            User.TXProtocol.BufSigPic = Reader.ReadBytes(Reader.BeReadChar());
+            User.TXProtocol.BufSigPic = Reader.ReadBytes(Reader.BeReadUInt16());
             if (VerifyType == 0x13)
             {
-                VerifyCode = Reader.ReadBytes(Reader.BeReadChar());
+                VerifyCode = Reader.ReadBytes(Reader.BeReadUInt16());
                 VerifyCommand = Reader.ReadByte();
                 if (VerifyCommand == 0x00)
                 {
@@ -53,8 +53,8 @@ namespace QQ.Framework.Packets.Receive.Login
                     User.QQPacket00BaVerifyCode = resultArr;
                 }
 
-                User.TXProtocol.PngToken = Reader.ReadBytes(Reader.BeReadChar());
-                Reader.ReadBytes(Reader.BeReadChar());
+                User.TXProtocol.PngToken = Reader.ReadBytes(Reader.BeReadUInt16());
+                Reader.ReadBytes(Reader.BeReadUInt16());
             }
         }
     }

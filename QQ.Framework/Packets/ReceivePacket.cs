@@ -97,9 +97,9 @@ namespace QQ.Framework.Packets
         protected virtual void ParseHeader()
         {
             Header = Reader.ReadByte();
-            Version = Reader.BeReadChar();
+            Version = Reader.BeReadUInt16();
             Command = (QQCommand) Reader.BeReadUInt16();
-            Sequence = Reader.BeReadChar();
+            Sequence = Reader.BeReadUInt16();
             QQ = Reader.BeReadInt32();
             Reader.ReadBytes(3);
         }

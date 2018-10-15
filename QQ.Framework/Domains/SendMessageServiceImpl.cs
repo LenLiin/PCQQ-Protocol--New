@@ -1,5 +1,7 @@
 using QQ.Framework.Packets.Send.Message;
 using QQ.Framework.Utils;
+using System;
+using System.Linq;
 
 namespace QQ.Framework.Domains
 {
@@ -23,6 +25,8 @@ namespace QQ.Framework.Domains
                 _socketService.Send(packet);
             }
 
+            //清除15分钟以上的消息
+            _user.FriendSendMessages = _user.FriendSendMessages.Where(c => c.DateTime > DateTime.Now.AddMinutes(QQGlobal.MessagesExpiredMinutes)).ToList();
             _user.FriendSendMessages.Add(message); //添加到消息列表
         }
 
@@ -35,6 +39,8 @@ namespace QQ.Framework.Domains
                 _socketService.Send(packet);
             }
 
+            //清除15分钟以上的消息
+            _user.GroupSendMessages = _user.GroupSendMessages.Where(c => c.DateTime > DateTime.Now.AddMinutes(QQGlobal.MessagesExpiredMinutes)).ToList();
             _user.GroupSendMessages.Add(message); //添加到消息列表
         }
     }

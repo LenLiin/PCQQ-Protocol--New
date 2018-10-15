@@ -15,7 +15,7 @@ namespace QQ.Framework.Packets.PCTLV
         }
 
         public string ErrorMsg { get; private set; }
-        public char PacketCommand { get; private set; }
+        public ushort PacketCommand { get; private set; }
 
         public void Parser_Tlv(QQUser user, BinaryReader buf)
         {
@@ -29,9 +29,9 @@ namespace QQ.Framework.Packets.PCTLV
             WSubVer = buf.BeReadUInt16(); //wSubVer
             if (WSubVer == 0x0001)
             {
-                PacketCommand = (char) buf.BeReadUInt16();
+                PacketCommand = buf.BeReadUInt16();
                 var errorCode = buf.BeReadUInt32();
-                ErrorMsg = Encoding.UTF8.GetString(buf.ReadBytes(buf.BeReadUInt16()));
+                ErrorMsg = buf.ReadString();
             }
             else
             {
