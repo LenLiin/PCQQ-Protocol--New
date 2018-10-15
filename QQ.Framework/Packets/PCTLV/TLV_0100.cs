@@ -31,7 +31,7 @@ namespace QQ.Framework.Packets.PCTLV
             {
                 PacketCommand = buf.BeReadUInt16();
                 var errorCode = buf.BeReadUInt32();
-                ErrorMsg = buf.ReadString();
+                ErrorMsg = buf.BeReadString();
             }
             else
             {

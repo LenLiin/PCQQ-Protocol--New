@@ -27,7 +27,7 @@ namespace QQ.Framework.Utils
                     {
                         case 0x01: // 纯文本消息、@
                         {
-                            var messageStr = reader.ReadString();
+                            var messageStr = reader.BeReadString();
                             if (messageStr.StartsWith("@") && pos + dataLength - reader.BaseStream.Position == 16)
                             {
                                 reader.ReadBytes(10);
@@ -49,12 +49,12 @@ namespace QQ.Framework.Utils
                         }
                         case 0x03: // 图片
                         {
-                            result.Snippets.Add(new TextSnippet(reader.ReadString(), MessageType.Picture));
+                            result.Snippets.Add(new TextSnippet(reader.BeReadString(), MessageType.Picture));
                             break;
                         }
                         case 0x0A: // 音频
                         {
-                            result.Snippets.Add(new TextSnippet(reader.ReadString(), MessageType.Audio));
+                            result.Snippets.Add(new TextSnippet(reader.BeReadString(), MessageType.Audio));
                             break;
                         }
                         case 0x0E: // 未知
@@ -76,7 +76,7 @@ namespace QQ.Framework.Utils
                         case 0x18: // 群文件
                         {
                             reader.ReadBytes(5);
-                            var fileName = reader.ReadString(); // 文件名称... 长度总是一个byte
+                            var fileName = reader.BeReadString(); // 文件名称... 长度总是一个byte
                             reader.ReadByte();
                             reader.ReadBytes(reader.ReadByte()); // 文件大小
                             result.Snippets.Add(new TextSnippet(fileName, MessageType.OfflineFile));
