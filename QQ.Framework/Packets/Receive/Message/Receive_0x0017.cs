@@ -70,7 +70,7 @@ namespace QQ.Framework.Packets.Receive.Message
             {
                 case 0x01: // 群消息、被拉进/踢出群
                 {
-                    FromQQ = Reader.ReadUInt32(); //发消息人的QQ
+                    FromQQ = (long)Util.GetQQNumRetUint(Util.ToHex(Reader.ReadBytes(4))); //发消息人的QQ
                     MessageIndex = Reader.ReadBytes(4); //姑且叫消息索引吧
                     ReceiveTime = Reader.ReadBytes(4); //接收时间  
                     Reader.ReadBytes(24);
