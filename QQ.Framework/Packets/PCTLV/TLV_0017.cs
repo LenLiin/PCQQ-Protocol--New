@@ -21,7 +21,7 @@ namespace QQ.Framework.Packets.PCTLV
             WSubVer = Reader.BeReadUInt16(); //wSubVer
             if (WSubVer == 0x0001)
             {
-                long timeMillis = Reader.BeReadUInt32();
+                long timeMillis = Reader.BeReadLong32();
                 user.TXProtocol.DwServerTime = Util.GetDateTimeFromMillis(timeMillis);
                 user.TXProtocol.TimeDifference = (uint.MaxValue & timeMillis) - Util.CurrentTimeMillis() / 1000;
                 user.TXProtocol.DwClientIP = Util.GetIpStringFromBytes(Reader.ReadBytes(4));

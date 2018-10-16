@@ -57,7 +57,7 @@ namespace QQ.Framework.Packets.Receive.Message
         protected override void ParseBody()
         {
             Decrypt(User.TXProtocol.SessionKey);
-            FromQQ = (long) Util.GetQQNumRetUint(Util.ToHex(Reader.ReadBytes(4)));
+            FromQQ = Reader.BeReadLong32();
             Reader.ReadBytes(4); //自己的QQ
             Reader.ReadBytes(10);
             Reader.ReadBytes(2);

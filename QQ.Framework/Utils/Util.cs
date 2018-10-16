@@ -556,6 +556,11 @@ namespace QQ.Framework.Utils
             return (uint) ((br.ReadByte() << 24) | (br.ReadByte() << 16) | (br.ReadByte() << 8) | br.ReadByte());
         }
 
+        public static long BeReadLong32(this BinaryReader br)
+        {
+            return ((long) br.ReadByte() << 24) | (br.ReadByte() << 16) | (br.ReadByte() << 8) | br.ReadByte();
+        }
+
         public static string BeReadString(this BinaryReader br, Encoding encoding = null)
         {
             encoding = encoding ?? Encoding.UTF8;

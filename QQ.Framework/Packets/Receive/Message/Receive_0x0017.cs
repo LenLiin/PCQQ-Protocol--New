@@ -64,13 +64,13 @@ namespace QQ.Framework.Packets.Receive.Message
             Reader.BeReadUInt16();
             Reader.ReadBytes(2);
             Reader.ReadBytes(Reader.BeReadUInt16());
-            Group = (long) Util.GetQQNumRetUint(Util.ToHex(Reader.ReadBytes(4))); //群号
+            Group = Reader.BeReadLong32(); //群号
             var type = Reader.ReadByte();
             switch (type)
             {
                 case 0x01: // 群消息、被拉进/踢出群
                 {
-                    FromQQ = (long)Util.GetQQNumRetUint(Util.ToHex(Reader.ReadBytes(4))); //发消息人的QQ
+                    FromQQ = Reader.BeReadLong32(); //发消息人的QQ
                     MessageIndex = Reader.ReadBytes(4); //姑且叫消息索引吧
                     ReceiveTime = Reader.ReadBytes(4); //接收时间  
                     Reader.ReadBytes(24);
@@ -86,11 +86,11 @@ namespace QQ.Framework.Packets.Receive.Message
                 case 0x0C: // 被塞口球
                 {
                     Reader.ReadByte(); // 01?
-                    var muter = Reader.BeReadUInt32();
+                    var muter = Reader.BeReadLong32();
                     Reader.ReadBytes(4); // 疑似时间？
                     Reader.ReadBytes(2); // 00 01?
-                    var victim = Reader.BeReadUInt32();
-                    var time = Reader.BeReadUInt32();
+                    var victim = Reader.BeReadLong32();
+                    var time = Reader.BeReadLong32();
                     Message = new TextSnippet("", MessageType.Mute, ("Muter", muter), ("Victim", victim),
                         ("Time", time));
                     break;

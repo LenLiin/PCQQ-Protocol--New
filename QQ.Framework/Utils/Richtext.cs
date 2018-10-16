@@ -32,7 +32,7 @@ namespace QQ.Framework.Utils
                             {
                                 reader.ReadBytes(10);
                                 result.Snippets.Add(new TextSnippet(messageStr, MessageType.At,
-                                    ("Target", reader.BeReadUInt32())));
+                                    ("Target", reader.BeReadLong32())));
                             }
                             else
                             {
