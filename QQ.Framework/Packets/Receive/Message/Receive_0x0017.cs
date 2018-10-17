@@ -1,6 +1,3 @@
-using System;
-using System.Diagnostics;
-using System.Linq;
 using QQ.Framework.Utils;
 
 namespace QQ.Framework.Packets.Receive.Message
@@ -58,17 +55,17 @@ namespace QQ.Framework.Packets.Receive.Message
         protected override void ParseBody()
         {
             Decrypt(User.TXProtocol.SessionKey);
-            Reader.ReadBytes(4);
+            Reader.ReadBytes(4); // 疑似群号
             Reader.ReadBytes(4); //自己的QQ
             Reader.ReadBytes(10);
-            Reader.BeReadUInt16();
-            Reader.ReadBytes(2);
-            Reader.ReadBytes(Reader.BeReadUInt16());
+            var type = Reader.BeReadUInt16();
+            Reader.ReadBytes(Reader.BeReadInt32());
             Group = Reader.BeReadLong32(); //群号
-            var type = Reader.ReadByte();
+            var flag = Reader.ReadByte();
+            // TODO: 把系统消息接口分出来
             switch (type)
             {
-                case 0x01: // 群消息、被拉进/踢出群
+                case 0x52 when flag == 0x01: // 群消息、被拉进/踢出群
                 {
                     FromQQ = Reader.BeReadLong32(); //发消息人的QQ
                     MessageIndex = Reader.ReadBytes(4); //姑且叫消息索引吧
@@ -83,16 +80,32 @@ namespace QQ.Framework.Packets.Receive.Message
                     Message = Reader.ReadRichtext();
                     break;
                 }
-                case 0x0C: // 被塞口球
+                case 0x21:
+                case 0x22:
                 {
-                    Reader.ReadByte(); // 01?
-                    var muter = Reader.BeReadLong32();
-                    Reader.ReadBytes(4); // 疑似时间？
-                    Reader.ReadBytes(2); // 00 01?
-                    var victim = Reader.BeReadLong32();
-                    var time = Reader.BeReadLong32();
-                    Message = new TextSnippet("", MessageType.Mute, ("Muter", muter), ("Victim", victim),
-                        ("Time", time));
+                    Reader.ReadBytes(5);
+                    FromQQ = Reader.BeReadLong32(); // 邀请人/踢人QQ
+                    break;
+                }
+                case 0x2C:
+                {
+                    // 群管理变更
+                    break;
+                }
+                default:
+                {
+                    if (flag == 0x0C) // 被塞口球
+                    {
+                        Reader.ReadByte(); // 01?
+                        var muter = Reader.BeReadLong32();
+                        Reader.ReadBytes(4); // 疑似时间？
+                        Reader.ReadBytes(2); // 00 01?
+                        var victim = Reader.BeReadLong32();
+                        var time = Reader.BeReadLong32();
+                        Message = new TextSnippet("", MessageType.Mute, ("Muter", muter), ("Victim", victim),
+                            ("Time", time));
+                    }
+
                     break;
                 }
             }
