@@ -17,7 +17,7 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
         {
             if (_packet.Result != (byte) ResultCode.成功)
             {
-		_service.MessageLog(_packet.ErrorMsg);
+                _service.MessageLog(_packet.ErrorMsg);
             }
 
             Response();

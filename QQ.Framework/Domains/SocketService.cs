@@ -38,8 +38,8 @@ namespace QQ.Framework.Domains
         /// <summary>
         ///     处理登录结果
         /// </summary>
-	/// <param name="isSuccess">是否成功</param>
-	/// <param name="message">消息</param>
+        /// <param name="isSuccess">是否成功</param>
+        /// <param name="message">消息</param>
         void LoginCallback(bool isSuccess, string message);
 
         /// <summary>
@@ -47,7 +47,5 @@ namespace QQ.Framework.Domains
         /// </summary>
         /// <param name="data"></param>
         void ReceiveVerifyCode(byte[] data);
-
-	
     }
 }

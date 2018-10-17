@@ -77,12 +77,12 @@ namespace QQ.Framework.Domains
         }
 
         public void LoginCallback(bool isSuccess, string message) {
-	    if(isSuccess) {
-		MessageLog($"登录成功: {message}");
-	    } else {
-		MessageLog($"登录失败: {message}");
-	    }
-	}
+            if(isSuccess) {
+        	MessageLog($"登录成功: {message}");
+            } else {
+        	MessageLog($"登录失败: {message}");
+            }
+        }
 
         public void ReceiveVerifyCode(byte[] data)
         {
