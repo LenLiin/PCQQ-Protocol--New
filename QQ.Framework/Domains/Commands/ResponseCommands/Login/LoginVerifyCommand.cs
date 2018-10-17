@@ -33,7 +33,10 @@ namespace QQ.Framework.Domains.Commands.ResponseCommands.Login
                 _service.Send(new Send_0X0828(_user));
 
 		_service.LoginCallback(true, "");
-            }
+            } else {
+		// 未处理的登录失败，通知应用层
+		_service.LoginCallback(false, _packet.ErrorMsg);
+	    }
         }
     }
 }

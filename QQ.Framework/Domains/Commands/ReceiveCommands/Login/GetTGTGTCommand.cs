@@ -17,12 +17,7 @@ namespace QQ.Framework.Domains.Commands.ReceiveCommands.Login
         {
             if (_packet.Result != (byte) ResultCode.成功)
             {
-		// _service.MessageLog(_packet.ErrorMsg);
-		if(_packet.Result != (byte) ResultCode.需要更新TGTGT
-		   && _packet.Result != (byte) ResultCode.需要重新CheckTGTGT) {
-		    // 忽略二次登录
-		    _service.LoginCallback(false, _packet.ErrorMsg);
-		}
+		_service.MessageLog(_packet.ErrorMsg);
             }
 
             Response();
