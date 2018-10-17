@@ -49,7 +49,7 @@ namespace QQ.Framework.Packets
 
         public long QQ { get; set; }
 
-        public void Decrypt(byte[] key)
+        public byte[] Decrypt(byte[] key)
         {
             BodyDecrypted = QQTea.Decrypt(Buffer, (int) Reader.BaseStream.Position,
                 (int) (Buffer.Length - Reader.BaseStream.Position - 1), key);
@@ -59,6 +59,7 @@ namespace QQ.Framework.Packets
             }
 
             Reader = new BinaryReader(new MemoryStream(BodyDecrypted));
+            return Reader.ReadRest();
         }
 
         /// <summary>

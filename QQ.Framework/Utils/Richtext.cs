@@ -273,10 +273,10 @@ namespace QQ.Framework.Utils
                     return $"[离线文件:{Content}]";
                 case MessageType.RedBag:
                     return "[红包]";
+                case MessageType.Mute when (long) this["Time"] > 0:
+                    return $"[禁言:{this["Muter"]}=>{this["Victim"]}({this["Time"]})]";
                 case MessageType.Mute:
-                    return (uint) this["Time"] > 0
-                        ? $"[禁言:{this["Muter"]}=>{this["Victim"]}({this["Time"]})]"
-                        : $"[解除禁言:{this["Muter"]}=>{this["Victim"]}]";
+                    return $"[解除禁言:{this["Muter"]}=>{this["Victim"]}]";
                 default:
                     return "[特殊代码]";
             }
