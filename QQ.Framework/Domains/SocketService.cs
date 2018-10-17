@@ -36,9 +36,18 @@ namespace QQ.Framework.Domains
         void Login();
 
         /// <summary>
+        ///     处理登录结果
+        /// </summary>
+	/// <param name="isSuccess">是否成功</param>
+	/// <param name="message">消息</param>
+        void LoginCallback(bool isSuccess, string message);
+
+        /// <summary>
         ///     接收验证码
         /// </summary>
         /// <param name="data"></param>
         void ReceiveVerifyCode(byte[] data);
+
+	
     }
 }
