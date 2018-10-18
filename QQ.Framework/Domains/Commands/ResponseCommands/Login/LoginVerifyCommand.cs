@@ -31,7 +31,12 @@ namespace QQ.Framework.Domains.Commands.ResponseCommands.Login
                 _service.MessageLog("登陆成功获取个人基本信息");
                 _service.MessageLog($"账号：{_user.QQ}，昵称：{_user.NickName}，年龄：{_user.Age}，性别：{_user.Gender}");
                 _service.Send(new Send_0X0828(_user));
-            }
+
+		_service.LoginCallback(true, "");
+            } else {
+		// 未处理的登录失败，通知应用层
+		_service.LoginCallback(false, _packet.ErrorMsg);
+	    }
         }
     }
 }

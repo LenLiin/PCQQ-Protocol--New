@@ -76,6 +76,14 @@ namespace QQ.Framework.Domains
             MessageLog($"登录服务器{_host}");
         }
 
+        public void LoginCallback(bool isSuccess, string message) {
+            if(isSuccess) {
+        	MessageLog($"登录成功: {message}");
+            } else {
+        	MessageLog($"登录失败: {message}");
+            }
+        }
+
         public void ReceiveVerifyCode(byte[] data)
         {
             var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "yanzhengma");
