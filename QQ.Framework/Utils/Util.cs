@@ -414,6 +414,29 @@ namespace QQ.Framework.Utils
             return LongToHexString(Convert.ToInt64(temp, 2));
         }
 
+        /// <summary>
+        ///     一个特殊的解密
+        /// </summary>
+        public static string Length_toPB(string d)
+        {
+            var binary = Convert.ToString((long)GetQQNumRetUint(d), 2);
+            var temp = "";
+            while (!string.IsNullOrEmpty(binary))
+            {
+                temp = temp + binary.Substring(binary.Length - 7, 7);
+                if (binary.Length >= 8)
+                {
+                    binary = binary.Substring(0, binary.Length - 8);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return LongToHexString(Convert.ToInt64(temp, 2));
+        }
+
         public static byte[] ToBytesArray(this Stream stream)
         {
             return ((MemoryStream) stream).ToArray();

@@ -58,6 +58,7 @@
     <Compile Include="Domains\Commands\ReceiveCommands\Login\PreLoginCommand.cs" />
     <Compile Include="Domains\Commands\ReceiveCommands\Login\VerifyCodeCommand.cs" />
     <Compile Include="Domains\Commands\ReceiveCommands\Message\KeepAliveCommand.cs" />
+    <Compile Include="Domains\Commands\ReceiveCommands\Message\PictureCommand.cs" />
     <Compile Include="Domains\Commands\ReceiveCommands\Message\RecallGroupMessagesCommand.cs" />
     <Compile Include="Domains\Commands\ReceiveCommands\Message\RecallQQFriendMessagesCommand.cs" />
     <Compile Include="Domains\Commands\ReceiveCommands\Message\ReceiveGroupSystemMessagesCommand.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="Domains\Commands\ResponseCommands\Login\VerifyCodeResponseCommand.cs" />
     <Compile Include="Domains\Commands\ResponseCommands\Message\ResponseGroupOrSystemMessageCommand.cs" />
     <Compile Include="Domains\Commands\ResponseCommands\Message\ResponseKeepliveCommand.cs" />
+    <Compile Include="Domains\Commands\ResponseCommands\Message\ResponsePictureCommand.cs" />
     <Compile Include="Domains\Commands\ResponseCommands\Message\ResponseReceiveFriendMessageCommand.cs" />
     <Compile Include="Domains\Commands\ResponsePacketCommand.cs" />
     <Compile Include="Domains\CustomRobot.cs" />

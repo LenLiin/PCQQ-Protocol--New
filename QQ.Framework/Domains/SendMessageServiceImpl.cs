@@ -27,17 +27,32 @@ namespace QQ.Framework.Domains
 
             _user.FriendSendMessages.Add(message); //添加到消息列表
         }
-
         public void SendToGroup(long groupNumber, Richtext content)
         {
+            //有图片的时候先不发消息
             var message = new Send_0X0002(_user, content, groupNumber);
-            _socketService.Send(message);
-            foreach (var packet in message.Following)
+            if (content.Snippets.Any(c => c.Type == MessageType.Picture))
             {
-                _socketService.Send(packet);
-            }
+                var PictureSnippets = content.Snippets.Where(c => c.Type == MessageType.Picture).ToList();
 
-            _user.GroupSendMessages.Add(message); //添加到消息列表
+                foreach (var pictureSnippet in PictureSnippets)
+                {
+                    //发送图片
+                    var picture = new Send_0X0388(_user, pictureSnippet, groupNumber);
+                    picture.Sequence = message.Sequence;
+                    _socketService.Send(picture);
+                }
+            }
+            else
+            {
+                _socketService.Send(message);
+                foreach (var packet in message.Following)
+                {
+                    _socketService.Send(packet);
+                }
+
+            }
+            _user.GroupSendMessages.Add(message);//添加到消息列表
         }
     }
 }
