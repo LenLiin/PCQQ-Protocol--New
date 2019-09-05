@@ -787,7 +787,7 @@ namespace QQ.Framework.Utils
 
         #endregion
 
-#if DEBUG
+
         /// <summary>
         ///     读取所有字节且不改变Position。
         /// </summary>
@@ -798,6 +798,8 @@ namespace QQ.Framework.Utils
             br.BaseStream.Position = pos;
             return data;
         }
+
+#if DEBUG
 
         /// <summary>
         ///     搜索byte[]以快速定位特征。
